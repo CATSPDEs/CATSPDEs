@@ -15,10 +15,10 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\FEM\CRSMatrix.h">
+    <ClInclude Include="CRSMatrix.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\FEM\real.h">
+    <ClInclude Include="real.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

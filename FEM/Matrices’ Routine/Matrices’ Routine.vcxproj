@@ -18,6 +18,10 @@
       <Platform>x64</Platform>
     </ProjectConfiguration>
   </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="CRSMatrix.h" />
+    <ClInclude Include="real.h" />
+  </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{2A6CDCC0-D0D2-46B3-B6CF-F7B601829DC3}</ProjectGuid>
     <RootNamespace>Matrices’Routine</RootNamespace>
@@ -117,10 +121,6 @@
       <OptimizeReferences>true</OptimizeReferences>
     </Link>
   </ItemDefinitionGroup>
-  <ItemGroup>
-    <ClInclude Include="..\FEM\CRSMatrix.h" />
-    <ClInclude Include="..\FEM\real.h" />
-  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
