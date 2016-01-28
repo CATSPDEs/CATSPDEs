@@ -3,13 +3,10 @@
 using std::vector;
 class Matrix
 {
-	unsigned int n;
-	vector<int> diag;
-	vector<REAL> upper;
-	vector<REAL> lower;
+	unsigned int n;							
+	vector<REAL> val; //matrix is stored in CRS format
+	vector<int> col;
 	vector<int> ptr;
-	vector<int> rc;
-
 private:
-	friend float scalar(Matrix, std::vector<REAL>);
+	friend float scalar(Matrix&, std::vector<REAL>&);
 };
