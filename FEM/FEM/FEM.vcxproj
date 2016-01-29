@@ -19,7 +19,11 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="BVP.cpp" />
     <ClCompile Include="user.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="BVP.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{F57FB2EE-E6DF-47A7-AD1B-D100BDA20AE9}</ProjectGuid>
