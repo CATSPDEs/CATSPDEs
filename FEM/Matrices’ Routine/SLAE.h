@@ -7,8 +7,7 @@ class SLAE
 {
 	CRSMatrix A;
 	std::vector<REAL> f;
-	std::vector<REAL> MSG(void);
-
+	std::vector<REAL> CG(REAL, unsigned); //conjugate gradients method
 public:
 	SLAE(CRSMatrix&, std::vector<REAL>&);
 
