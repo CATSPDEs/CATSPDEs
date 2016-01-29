@@ -6,29 +6,21 @@ std::vector<REAL> operator*(const REAL c, const std::vector<REAL>& v)
 {
 	std::vector<REAL> res(v.size);
 	for (int i = 0;i < v.size;i++)
-	{
 		res[i] = c*v[i];
-	}
 }
 
 std::vector<REAL> operator+(const std::vector<REAL>& v1, const std::vector<REAL>& v2)
 {
 	std::vector<REAL> res(v1.size);
 	for (int i = 0;i < v1.size;i++)
-	{
 		res[i] = v1[i]+v2[i];
-	}
 }
 
 std::vector<REAL> operator-(const std::vector<REAL>& v1, const std::vector<REAL>& v2)
 {
 	std::vector<REAL> res(v1.size);
 	for (int i = 0;i < v1.size;i++)
-	{
 		res[i] = v1[i] - v2[i];
-
-
-	}
 }
 
 std::vector<REAL> SLAE::_CG(REAL e, unsigned iCount)
