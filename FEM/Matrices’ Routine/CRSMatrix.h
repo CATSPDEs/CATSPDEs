@@ -12,6 +12,7 @@ class CRSMatrix // matrix is stored in comressed row storage format (http://netl
 						  _ptr; // ptr := locations in the val vector that start a row
 public:
 	friend std::vector<REAL> operator*(const CRSMatrix&, const std::vector<REAL>&); // multiply matrix by vector
+	friend CRSMatrix operator*(const CRSMatrix&, const CRSMatrix&); //multuply matrix by vector
 };
 
 #endif
