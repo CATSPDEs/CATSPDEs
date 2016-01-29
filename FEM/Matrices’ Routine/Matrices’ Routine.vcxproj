@@ -23,6 +23,13 @@
     <ClInclude Include="real.h" />
     <ClInclude Include="SLAE.h" />
   </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="CRSMatrix.cpp" />
+    <ClCompile Include="user.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="matrix.txt" />
+  </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{2A6CDCC0-D0D2-46B3-B6CF-F7B601829DC3}</ProjectGuid>
     <RootNamespace>Matrices’Routine</RootNamespace>
@@ -92,6 +99,7 @@
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
+      <SubSystem>Console</SubSystem>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
