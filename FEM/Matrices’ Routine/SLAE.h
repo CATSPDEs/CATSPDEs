@@ -5,11 +5,11 @@
 
 class SLAE
 {
-	CRSMatrix A;
-	std::vector<REAL> f;
-	std::vector<REAL> CG(REAL, unsigned); //conjugate gradients method
+	CRSMatrix _A;
+	std::vector<REAL> _f;
+	std::vector<REAL> _CG(REAL, unsigned); //conjugate gradients method
 public:
 	SLAE(CRSMatrix&, std::vector<REAL>&);
-
+	std::vector<REAL> solve();
 };
 #endif

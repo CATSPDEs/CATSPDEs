@@ -31,32 +31,40 @@ std::vector<REAL> operator-(const std::vector<REAL>& v1, const std::vector<REAL>
 	}
 }
 
-std::vector<REAL> SLAE::CG(REAL e, unsigned iCount)
+std::vector<REAL> SLAE::_CG(REAL e, unsigned iCount)
 {
 	unsigned n = 0;
-	std::vector<REAL> x(this->A.n,0);
-	std::vector<REAL> r(this->A.n);
+	std::vector<REAL> x(this->_A.n,0);
+	std::vector<REAL> r(this->_A.n);
 	std::vector<REAL> z;
 	REAL a, b, dotProdR, dotProdF;
-	r = this->f - A*x;
+	r = this->_f - this->_A*x;
 	z = r;
 	dotProdR = std::inner_product(r.begin, r.end, r.begin, 0);
-	dotProdF = std::inner_product(this->f.begin, this->f.end, this->f.begin, 0);
+	dotProdF = std::inner_product(this->_f.begin, this->_f.end, this->_f.begin, 0);
 	while ((sqrt(dotProdR)/sqrt(dotProdF))>e &&n<iCount)
 	{
-		a = dotProdR/ std::inner_product((this->A*z).begin, (this->A*z).end, z.begin, .0);
+		a = dotProdR/ std::inner_product((this->_A*z).begin, (this->_A*z).end, z.begin, .0);
 		x = x + a*z;
-		r = r - a*(this->A*z);
+		r = r - a*(this->_A*z);
 		b = dotProdR;
 		dotProdR= std::inner_product(r.begin, r.end, r.begin, 0);
 		b = dotProdR / b;
 		z = r + b*z;
 		n++;
 	}
+	return x;
 }
 
 SLAE::SLAE(CRSMatrix & A, std::vector<REAL>& f)
 {
-	this->A = A;
-	this->f = f;
+	this->_A = A;
+	this->_f = f;
+}
+
+std::vector<REAL> SLAE::solve()
+{
+	unsigned n = 10000000;
+	REAL e = 1e-14;
+	return _CG(e,n);
 }
