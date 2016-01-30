@@ -1,4 +1,4 @@
-#include "SLAE.h"
+﻿#include "SLAE.h"
 #include <numeric>
 #include <cmath>
 
