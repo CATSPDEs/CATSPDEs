@@ -63,7 +63,7 @@ void CRSMatrix::print() const {
 
 // friend functions
 
-std::vector<REAL> operator*(const CRSMatrix& A, const std::vector<REAL>& u) { // return product v = A.u
+std::vector<REAL> operator*(CRSMatrix const & A, std::vector<REAL> const & u) { // return product v = A.u
 	std::vector<REAL> v(A._n, 0.);
 	size_t i, j;
 	for (i = 0; i < A._n; ++i)
@@ -72,8 +72,9 @@ std::vector<REAL> operator*(const CRSMatrix& A, const std::vector<REAL>& u) { //
 	return v;
 }
 
-CRSMatrix operator*(const CRSMatrix& A, const CRSMatrix& B) { // return product C = A.B
+CRSMatrix operator*(CRSMatrix const & A, CRSMatrix const & B) { // return product N = A.B
 	size_t n = A._n;
-	CRSMatrix C(n);
-	return C;
+	CRSMatrix N(n);
+	// …
+	return N;
 }

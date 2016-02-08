@@ -12,14 +12,14 @@ class CRSMatrix { // matrix is stored in comressed row storage format (http://ne
 	std::vector<size_t> _col, // col := column indices of the elements in the val vector
 						_ptr; // ptr := locations in the val vector that start a row
 public:
-	CRSMatrix(size_t);
-	CRSMatrix(std::ifstream&); // construct from file 
+	explicit CRSMatrix(size_t);
+	explicit CRSMatrix(std::ifstream&); // construct from file
 	~CRSMatrix();
 	size_t getOrder() const;
 	void print() const;
 	REAL operator()(size_t, size_t) const; // get value of element using indicies of traditional form of matrix
 	REAL& operator()(size_t, size_t); // set —‘‘—
-	friend std::vector<REAL> operator*(const CRSMatrix&, const std::vector<REAL>&); // matrix-vector product
-	friend CRSMatrix operator*(const CRSMatrix&, const CRSMatrix&); // matrix-matrix product
+	friend std::vector<REAL> operator*(CRSMatrix const &, std::vector<REAL> const &); // matrix-vector product
+	friend CRSMatrix operator*(CRSMatrix const &, CRSMatrix const &); // matrix-matrix product
 	friend class SLAE;
 };
