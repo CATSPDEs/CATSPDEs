@@ -2,8 +2,10 @@
 
 int main() {
 	std::ifstream inputMatrix("matrix.txt");
-	CRSMatrix A(inputMatrix);
-	unsigned i, n = A.getOrder();
+	size_t order, nonzeros;
+	inputMatrix >> order >> nonzeros;
+	CRSMatrix A(order, nonzeros);
+	inputMatrix >> A;
 	A(1, 1) = 56.;
 	//std::vector<REAL> x(n), b(n, 0.);
 	//b[0] = 1.;

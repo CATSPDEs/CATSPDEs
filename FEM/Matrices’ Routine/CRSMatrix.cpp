@@ -3,25 +3,12 @@
 #include <iostream>
 #include "CRSMatrix.h"
 
-CRSMatrix::CRSMatrix(size_t n)
+CRSMatrix::CRSMatrix(size_t n, size_t nnz)
 	: _n(n)
 	, _ptr(n + 1)
-	{
-}
-
-CRSMatrix::CRSMatrix(std::ifstream& input) {
-	size_t i, m;
-	input >> _n;
-	_ptr.resize(_n + 1);
-	for (i = 0; i <= _n; ++i)
-		input >> _ptr[i];
-	m = _ptr[_n];
-	_val.resize(m);
-	_col.resize(m);
-	for (i = 0; i < m; ++i)
-		input >> _val[i];
-	for (i = 0; i < m; ++i)
-		input >> _col[i];
+	, _col(nnz)
+	, _val(nnz) {
+	_ptr[n] = nnz;
 }
 
 CRSMatrix::~CRSMatrix() {
@@ -63,6 +50,18 @@ void CRSMatrix::print() const {
 
 // friend functions
 
+std::istream& operator>>(std::istream& input, CRSMatrix& A) {
+	size_t i, max = A._n;
+	for (i = 0; i < max; ++i)
+		input >> A._ptr[i];
+	max = A._ptr[max];
+	for (i = 0; i < max; ++i)
+		input >> A._col[i];
+	for (i = 0; i < max; ++i)
+		input >> A._val[i];
+	return input;
+}
+
 std::vector<REAL> operator*(CRSMatrix const & A, std::vector<REAL> const & u) { // return product v = A.u
 	std::vector<REAL> v(A._n, 0.);
 	size_t i, j;
@@ -73,8 +72,9 @@ std::vector<REAL> operator*(CRSMatrix const & A, std::vector<REAL> const & u) { 
 }
 
 CRSMatrix operator*(CRSMatrix const & A, CRSMatrix const & B) { // return product N = A.B
-	size_t n = A._n;
-	CRSMatrix N(n);
+	size_t n = A._n,
+		   nnz = A._ptr[n];
+	CRSMatrix N(n, nnz);
 	// …
 	return N;
 }
