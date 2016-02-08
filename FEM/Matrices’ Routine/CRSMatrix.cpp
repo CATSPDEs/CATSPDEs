@@ -3,13 +3,14 @@
 #include <iostream>
 #include "CRSMatrix.h"
 
-CRSMatrix::CRSMatrix(unsigned n) :
-	_n(n) {
-	_ptr.resize(_n + 1);
+CRSMatrix::CRSMatrix(size_t n)
+	: _n(n)
+	, _ptr(n + 1)
+	{
 }
 
-CRSMatrix::CRSMatrix(std::istream &input) {
-	unsigned i, m;
+CRSMatrix::CRSMatrix(std::ifstream& input) {
+	size_t i, m;
 	input >> _n;
 	_ptr.resize(_n + 1);
 	for (i = 0; i <= _n; ++i)
@@ -30,26 +31,32 @@ CRSMatrix::~CRSMatrix() {
 
 // public methods
 
-unsigned CRSMatrix::getOrder() const {
+size_t CRSMatrix::getOrder() const {
 	return _n;
 }
 
-REAL CRSMatrix::operator()(const unsigned i, const unsigned j) const {
-	unsigned k;
-	for (k = _ptr[i]; k < _ptr[i + 1]; ++k)
+REAL CRSMatrix::operator()(size_t i, size_t j) const {
+	for (size_t k = _ptr[i]; k < _ptr[i + 1]; ++k)
 		if (_col[k] == j) return _val[k];
 		else if (_col[k] > j) break;
 	return 0.;
 }
 
+REAL& CRSMatrix::operator()(size_t i, size_t j) {
+	for (size_t k = _ptr[i]; k < _ptr[i + 1]; ++k)
+		if (_col[k] == j) return _val[k];
+		else if (_col[k] > j) break;
+	throw 0; // TODO "element w/ inicies (i, j) is zero and cannot be changed—you cannot change portrait of the matrix";
+}
+
 void CRSMatrix::print() const {
-	unsigned i, j;
+	size_t i, j;
 	if (sizeof(REAL) == 4) std::cout.precision(6);
 	else std::cout.precision(14);
 	std::cout << std::scientific;
 	for (i = 0; i < _n; ++i) {
-		for (j = 0; j < _n; ++j) std::cout << (*this)(i, j) << " ";
-		std::cout << std::endl;
+		for (j = 0; j < _n; ++j) std::cout << (*this)(i, j) << ' ';
+		std::cout << '\n';
 	}
 	std::cout << std::endl;
 }
@@ -58,7 +65,7 @@ void CRSMatrix::print() const {
 
 std::vector<REAL> operator*(const CRSMatrix& A, const std::vector<REAL>& u) { // return product v = A.u
 	std::vector<REAL> v(A._n, 0.);
-	unsigned i, j;
+	size_t i, j;
 	for (i = 0; i < A._n; ++i)
 		for (j = A._ptr[i]; j < A._ptr[i + 1]; ++j)
 			v[i] += A._val[j] * u[A._col[j]];
@@ -66,7 +73,7 @@ std::vector<REAL> operator*(const CRSMatrix& A, const std::vector<REAL>& u) { //
 }
 
 CRSMatrix operator*(const CRSMatrix& A, const CRSMatrix& B) { // return product C = A.B
-	unsigned n = A._n;
+	size_t n = A._n;
 	CRSMatrix C(n);
 	return C;
 }
