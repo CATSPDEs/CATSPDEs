@@ -11,6 +11,14 @@ std::vector<T> operator*(T c, std::vector<T> const & v)
 }
 
 template <typename T>
+T operator*(std::vector<T> const & u, std::vector<T> const & v) { // dot product
+	T dotProduct = 0;
+	for (size_t i = 0; i < u.size(); ++i)
+		dotProduct += u[i] * v[i];
+	return dotProduct;
+}
+
+template <typename T>
 std::vector<T> operator+(const std::vector<T>& v1, const std::vector<T>& v2)
 {
 	std::vector<T> res(v1.size());

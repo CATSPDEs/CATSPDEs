@@ -46,15 +46,15 @@ std::vector<REAL> CRSMatrix::CG(std::vector<REAL> const & f, REAL e, unsigned iC
 	REAL a, b, dotProdR, dotProdF;
 	r = f - A * x;
 	z = r;
-	dotProdR = std::inner_product(r.begin(), r.end(), r.begin(), .0);
-	dotProdF = std::inner_product(f.begin(), f.end(), f.begin(), .0);
+	dotProdR = r * r;
+	dotProdF = f * f;
 	while ((sqrt(dotProdR) / sqrt(dotProdF)) > e && n < iCount)
 	{
-		a = dotProdR / std::inner_product((A*z).begin(), (A*z).end(), z.begin(), .0);
+		a = dotProdR / ((A*z) * z);
 		x = x + a*z;
 		r = r - a*(A*z);
 		b = dotProdR;
-		dotProdR = std::inner_product(r.begin(), r.end(), r.begin(), .0);
+		dotProdR = r * r;
 		b = dotProdR / b;
 		z = r + b*z;
 		n++;
