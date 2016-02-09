@@ -21,9 +21,6 @@
     <ClInclude Include="real.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="SLAE.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="CRSMatrix.cpp">
@@ -32,8 +29,8 @@
     <ClCompile Include="user.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="SLAE.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="vector.h">
+      <Filter>Header Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

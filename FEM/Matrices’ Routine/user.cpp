@@ -1,4 +1,5 @@
-#include "SLAE.h"
+#include <fstream>
+#include "CRSMatrix.h"
 
 int main() {
 	std::ifstream inputMatrix("matrix.txt");
@@ -7,11 +8,11 @@ int main() {
 	CRSMatrix A(order, nonzeros);
 	inputMatrix >> A;
 	A(1, 1) = 56.;
-	//std::vector<REAL> x(n), b(n, 0.);
-	//b[0] = 1.;
-	//b[n - 1] = 1.;
-	//SLAE system(A, b);
-	//x = system.solve();
-	A.print();
+	std::cout << A;
+	// TODO:
+	// std::vector<REAL> x(order), b(order, 0.);
+	// b[0] = 1.;
+	// b[order - 1] = 1.;
+	// x = A.CG(b); // or x = b / A
 	return 0;
 }

@@ -21,12 +21,11 @@
   <ItemGroup>
     <ClInclude Include="CRSMatrix.h" />
     <ClInclude Include="real.h" />
-    <ClInclude Include="SLAE.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="CRSMatrix.cpp" />
-    <ClCompile Include="SLAE.cpp" />
     <ClCompile Include="user.cpp" />
+    <ClCompile Include="vector.h" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="matrix.txt" />

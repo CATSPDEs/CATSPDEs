@@ -1,6 +1,7 @@
 // implementation of CRSMatrix
 
-#include <iostream>
+#include <numeric> // inner product
+#include <cmath> // sqrt
 #include "CRSMatrix.h"
 
 CRSMatrix::CRSMatrix(size_t n, size_t nnz)
@@ -36,16 +37,29 @@ REAL& CRSMatrix::operator()(size_t i, size_t j) {
 	throw 0; // TODO "element w/ inicies (i, j) is zero and cannot be changed—you cannot change portrait of the matrix";
 }
 
-void CRSMatrix::print() const {
-	size_t i, j;
-	if (sizeof(REAL) == 4) std::cout.precision(6);
-	else std::cout.precision(14);
-	std::cout << std::scientific;
-	for (i = 0; i < _n; ++i) {
-		for (j = 0; j < _n; ++j) std::cout << (*this)(i, j) << ' ';
-		std::cout << '\n';
+std::vector<REAL> CRSMatrix::CG(std::vector<REAL> const & f, REAL e, unsigned iCount) const {
+	unsigned n = 0;
+	CRSMatrix const & A = *this; // synonim
+	std::vector<REAL> x(_n, .0);
+	std::vector<REAL> r(_n);
+	std::vector<REAL> z;
+	REAL a, b, dotProdR, dotProdF;
+	r = f - A * x;
+	z = r;
+	dotProdR = std::inner_product(r.begin(), r.end(), r.begin(), .0);
+	dotProdF = std::inner_product(f.begin(), f.end(), f.begin(), .0);
+	while ((sqrt(dotProdR) / sqrt(dotProdF)) > e && n < iCount)
+	{
+		a = dotProdR / std::inner_product((A*z).begin(), (A*z).end(), z.begin(), .0);
+		x = x + a*z;
+		r = r - a*(A*z);
+		b = dotProdR;
+		dotProdR = std::inner_product(r.begin(), r.end(), r.begin(), .0);
+		b = dotProdR / b;
+		z = r + b*z;
+		n++;
 	}
-	std::cout << std::endl;
+	return x;
 }
 
 // friend functions
@@ -60,6 +74,19 @@ std::istream& operator>>(std::istream& input, CRSMatrix& A) {
 	for (i = 0; i < max; ++i)
 		input >> A._val[i];
 	return input;
+}
+
+std::ostream& operator<<(std::ostream& output, CRSMatrix const & A) {
+	size_t i, j, n = A._n;
+	if (sizeof(REAL) == 4) output.precision(6);
+	else output.precision(14);
+	output << std::scientific;
+	for (i = 0; i < n; ++i) {
+		for (j = 0; j < n; ++j) output << A(i, j) << ' ';
+		output << '\n';
+	}
+	output << std::endl;
+	return output;
 }
 
 std::vector<REAL> operator*(CRSMatrix const & A, std::vector<REAL> const & u) { // return product v = A.u
@@ -77,4 +104,10 @@ CRSMatrix operator*(CRSMatrix const & A, CRSMatrix const & B) { // return produc
 	CRSMatrix N(n, nnz);
 	// …
 	return N;
+}
+
+std::vector<REAL> operator/(std::vector<REAL> const & b, CRSMatrix const & A) { // solve A.x = b
+	// magic goes here
+	// e.g., CG
+	return A.CG(b);
 }
