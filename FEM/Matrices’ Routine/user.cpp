@@ -1,5 +1,5 @@
 #include <fstream>
-#include "CRSMatrix.h"
+#include "CRSMatrix.hpp"
 
 int main() {
 	std::ifstream inputMatrix("matrix.txt");

@@ -3,8 +3,8 @@
 #pragma once
 #include <iostream>
 #include <cstddef> // size_t
-#include "real.h"
-#include "vector.h"
+#include "real.hpp"
+#include "vector.hpp"
 
 class CRSMatrix { // matrix is stored in comressed row storage format (http://netlib.org/linalg/html_templates/node91.html)
 	size_t _n; // n := order of square matrix

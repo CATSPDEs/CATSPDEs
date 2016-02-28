@@ -2,7 +2,7 @@
 
 #include <numeric> // inner product
 #include <cmath> // sqrt
-#include "CRSMatrix.h"
+#include "CRSMatrix.hpp"
 
 CRSMatrix::CRSMatrix(size_t n, size_t nnz)
 	: _n(n)

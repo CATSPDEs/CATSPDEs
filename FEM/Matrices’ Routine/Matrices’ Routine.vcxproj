@@ -19,13 +19,13 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="CRSMatrix.h" />
-    <ClInclude Include="real.h" />
+    <ClInclude Include="CRSMatrix.hpp" />
+    <ClInclude Include="real.hpp" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="CRSMatrix.cpp" />
     <ClCompile Include="user.cpp" />
-    <ClCompile Include="vector.h" />
+    <ClCompile Include="vector.hpp" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="matrix.txt" />

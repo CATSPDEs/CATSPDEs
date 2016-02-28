@@ -15,10 +15,10 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="CRSMatrix.h">
+    <ClInclude Include="CRSMatrix.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="real.h">
+    <ClInclude Include="real.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -29,7 +29,7 @@
     <ClCompile Include="user.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="vector.h">
+    <ClCompile Include="vector.hpp">
       <Filter>Header Files</Filter>
     </ClCompile>
   </ItemGroup>
