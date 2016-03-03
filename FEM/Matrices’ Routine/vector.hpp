@@ -35,3 +35,10 @@ std::vector<T> operator-(const std::vector<T>& v1, const std::vector<T>& v2)
 		res[i] = v1[i] - v2[i];
 	return res;
 }
+
+template <typename T>
+std::ostream& operator<<(std::ostream& output, std::vector<T> const & u) {
+	for (size_t i = 0; i < u.size(); ++i)
+		output << u[i] << ' ';
+	return output << std::endl;
+}

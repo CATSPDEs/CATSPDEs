@@ -1,26 +1,22 @@
 // implementation of CRSMatrix
 
-#include <numeric> // inner product
 #include <cmath> // sqrt
 #include "CRSMatrix.hpp"
 
 CRSMatrix::CRSMatrix(size_t n, size_t nnz)
-	: _n(n)
+	: AbstractSquareMatrix(n)
 	, _ptr(n + 1)
 	, _col(nnz)
 	, _val(nnz) {
 	_ptr[n] = nnz;
 }
 
-CRSMatrix::~CRSMatrix() {
-}
-
-// private methods
-
 // public methods
 
-size_t CRSMatrix::getOrder() const {
-	return _n;
+std::vector<REAL> CRSMatrix::solve(std::vector<REAL> const & b) const { // solve A.x = b
+	// magic goes here
+	// e.g., CG
+	return CG(b);
 }
 
 REAL CRSMatrix::operator()(size_t i, size_t j) const {
@@ -35,6 +31,32 @@ REAL& CRSMatrix::operator()(size_t i, size_t j) {
 		if (_col[k] == j) return _val[k];
 		else if (_col[k] > j) break;
 	throw 0; // TODO "element w/ inicies (i, j) is zero and cannot be changed—you cannot change portrait of the matrix";
+}
+
+std::istream& CRSMatrix::load(std::istream& input) {
+	size_t i, max = _n;
+	for (i = 0; i < max; ++i)
+		input >> _ptr[i];
+	max = _ptr[max];
+	for (i = 0; i < max; ++i)
+		input >> _col[i];
+	for (i = 0; i < max; ++i)
+		input >> _val[i];
+	return input;
+}
+
+std::ostream& CRSMatrix::save(std::ostream& output) const {
+	size_t i;
+	output << _n << ' ' << _ptr[_n] << '\n';
+	for (i = 0; i < _n; ++i)
+		output << _ptr[i] << ' ';
+	output << '\n';
+	for (i = 0; i < _ptr[_n]; ++i)
+		output << _col[i] << ' ';
+	output << '\n';
+	for (i = 0; i < _ptr[_n]; ++i)
+		output << _val[i] << ' ';
+	return output << std::endl;
 }
 
 std::vector<REAL> CRSMatrix::CG(std::vector<REAL> const & f, REAL e, unsigned iCount) const {
@@ -62,41 +84,16 @@ std::vector<REAL> CRSMatrix::CG(std::vector<REAL> const & f, REAL e, unsigned iC
 	return x;
 }
 
-// friend functions
-
-std::istream& operator>>(std::istream& input, CRSMatrix& A) {
-	size_t i, max = A._n;
-	for (i = 0; i < max; ++i)
-		input >> A._ptr[i];
-	max = A._ptr[max];
-	for (i = 0; i < max; ++i)
-		input >> A._col[i];
-	for (i = 0; i < max; ++i)
-		input >> A._val[i];
-	return input;
-}
-
-std::ostream& operator<<(std::ostream& output, CRSMatrix const & A) {
-	size_t i, j, n = A._n;
-	if (sizeof(REAL) == 4) output.precision(6);
-	else output.precision(14);
-	output << std::scientific;
-	for (i = 0; i < n; ++i) {
-		for (j = 0; j < n; ++j) output << A(i, j) << ' ';
-		output << '\n';
-	}
-	output << std::endl;
-	return output;
-}
-
-std::vector<REAL> operator*(CRSMatrix const & A, std::vector<REAL> const & u) { // return product v = A.u
-	std::vector<REAL> v(A._n, 0.);
+std::vector<REAL> CRSMatrix::mult(std::vector<REAL> const & u) const { // return product v = A.u
+	std::vector<REAL> v(_n, 0.);
 	size_t i, j;
-	for (i = 0; i < A._n; ++i)
-		for (j = A._ptr[i]; j < A._ptr[i + 1]; ++j)
-			v[i] += A._val[j] * u[A._col[j]];
+	for (i = 0; i < _n; ++i)
+		for (j = _ptr[i]; j < _ptr[i + 1]; ++j)
+			v[i] += _val[j] * u[_col[j]];
 	return v;
 }
+
+// friends
 
 CRSMatrix operator*(CRSMatrix const & A, CRSMatrix const & B) { // return product N = A.B
 	size_t n = A._n,
@@ -104,10 +101,4 @@ CRSMatrix operator*(CRSMatrix const & A, CRSMatrix const & B) { // return produc
 	CRSMatrix N(n, nnz);
 	// …
 	return N;
-}
-
-std::vector<REAL> operator/(std::vector<REAL> const & b, CRSMatrix const & A) { // solve A.x = b
-	// magic goes here
-	// e.g., CG
-	return A.CG(b);
 }

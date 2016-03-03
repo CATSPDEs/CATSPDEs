@@ -21,6 +21,9 @@
     <ClInclude Include="real.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="AbstractSquareMatrix.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="CRSMatrix.cpp">
@@ -31,6 +34,9 @@
     </ClCompile>
     <ClCompile Include="vector.hpp">
       <Filter>Header Files</Filter>
+    </ClCompile>
+    <ClCompile Include="AbstractSquareMatrix.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

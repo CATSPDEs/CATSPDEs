@@ -21,8 +21,10 @@
   <ItemGroup>
     <ClInclude Include="CRSMatrix.hpp" />
     <ClInclude Include="real.hpp" />
+    <ClInclude Include="AbstractSquareMatrix.hpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="AbstractSquareMatrix.cpp" />
     <ClCompile Include="CRSMatrix.cpp" />
     <ClCompile Include="user.cpp" />
     <ClCompile Include="vector.hpp" />
