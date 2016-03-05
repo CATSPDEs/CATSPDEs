@@ -13,24 +13,24 @@ CRSMatrix::CRSMatrix(size_t n, size_t nnz)
 
 // public methods
 
-std::vector<REAL> CRSMatrix::solve(std::vector<REAL> const & b) const { // solve A.x = b
+REAL& CRSMatrix::set(size_t i, size_t j) {
+	if (i >= _n || j >= _n) throw std::out_of_range("matrix doesn’t contain element w/ these indicies");
+	for (size_t k = _ptr[i]; k < _ptr[i + 1]; ++k)
+		if (_col[k] == j) return _val[k];
+		else if (_col[k] > j) throw std::invalid_argument("portrait of sparse matrix doesn’t allow to change element w/ these indicies");
+}
+
+REAL CRSMatrix::get(size_t i, size_t j) const {
+	if (i >= _n || j >= _n) throw std::out_of_range("matrix doesn’t contain element w/ these indicies");
+	for (size_t k = _ptr[i]; k < _ptr[i + 1]; ++k)
+		if (_col[k] == j) return _val[k];
+		else if (_col[k] > j) return 0.;
+}
+
+std::vector<REAL> CRSMatrix::solve(std::vector<REAL> const & b) { // solve A.x = b
 	// magic goes here
 	// e.g., CG
 	return CG(b);
-}
-
-REAL CRSMatrix::operator()(size_t i, size_t j) const {
-	for (size_t k = _ptr[i]; k < _ptr[i + 1]; ++k)
-		if (_col[k] == j) return _val[k];
-		else if (_col[k] > j) break;
-	return 0.;
-}
-
-REAL& CRSMatrix::operator()(size_t i, size_t j) {
-	for (size_t k = _ptr[i]; k < _ptr[i + 1]; ++k)
-		if (_col[k] == j) return _val[k];
-		else if (_col[k] > j) break;
-	throw 0; // TODO "element w/ inicies (i, j) is zero and cannot be changed—you cannot change portrait of the matrix";
 }
 
 std::istream& CRSMatrix::load(std::istream& input) {

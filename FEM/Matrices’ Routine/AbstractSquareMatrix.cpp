@@ -1,19 +1,23 @@
 #include "AbstractSquareMatrix.hpp"
 
-std::ostream& AbstractSquareMatrix::print(std::ostream& output) const {
+AbstractSquareMatrix::AbstractSquareMatrix(size_t n) : _n(n) {
+	if (_n < 1) throw std::out_of_range("order of matrix must be at least one");
+}
+
+void AbstractSquareMatrix::print() {
 	size_t i, j;
-	if (sizeof(REAL) == 4) output.precision(6);
-	else output.precision(14);
-	output << std::scientific;
+	if (sizeof(REAL) == 4) std::cout.precision(6);
+	else std::cout.precision(14);
+	std::cout << std::scientific;
 	for (i = 0; i < _n; ++i) {
-		for (j = 0; j < _n; ++j) output << (*this)(i, j) << ' ';
-		output << '\n';
+		for (j = 0; j < _n; ++j) 
+			std::cout << get(i, j) << ' ';
+		std::cout << '\n';
 	}
-	output << std::endl;
-	return output;
+	std::cout << std::endl;
 }
 
 std::istream& operator>>(std::istream& from, AbstractSquareMatrix& A) { return A.load(from); }
 std::ostream& operator<<(std::ostream& to, AbstractSquareMatrix const & A) { return A.save(to); }
 std::vector<REAL> operator*(AbstractSquareMatrix const & A, std::vector<REAL> const & b) { return A.mult(b); }
-std::vector<REAL> operator/(std::vector<REAL> const & b, AbstractSquareMatrix const & A) { return A.solve(b); }
+std::vector<REAL> operator/(std::vector<REAL> const & b, AbstractSquareMatrix & A) { return A.solve(b); }

@@ -11,9 +11,9 @@ public:
 	CRSMatrix(size_t, size_t); // order and number of nonzeros
 	~CRSMatrix() {}
 	// virtual methods to be implemented
-	REAL operator()(size_t, size_t) const;
-	REAL& operator()(size_t, size_t);
-	std::vector<REAL> solve(std::vector<REAL> const &) const;
+	REAL& set(size_t, size_t);
+	REAL get(size_t, size_t) const;
+	std::vector<REAL> solve(std::vector<REAL> const &);
 	std::istream& load(std::istream&);
 	std::ostream& save(std::ostream&) const;
 	std::vector<REAL> mult(std::vector<REAL> const &) const;
