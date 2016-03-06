@@ -6,7 +6,7 @@
 int main() {
 	SymmetricMatrix I(3);
 	try {
-		std::cout << I << '\n';
+		std::cout << I.identify() << '\n';
 	}
 	catch (std::exception& e) {
 		std::cout << e.what();

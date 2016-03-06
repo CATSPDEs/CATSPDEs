@@ -10,7 +10,7 @@ protected: // interface for derivative classes
 	size_t _n; // n := order of square matrix
 	size_t _diff(size_t i, size_t j) const { return i > j ? i - j : j - i; }
 public:
-	explicit AbstractSquareMatrix(size_t n);
+	AbstractSquareMatrix(size_t n);
 	virtual ~AbstractSquareMatrix() {}
 	// pure virtual methods
 	virtual REAL& set(size_t, size_t) = 0; // set / get value of element using indicies of traditional form of matrix
