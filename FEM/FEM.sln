@@ -7,6 +7,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "FEM", "FEM\FEM.vcxproj", "{
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Matrices’ Routine", "Matrices’ Routine\Matrices’ Routine.vcxproj", "{2A6CDCC0-D0D2-46B3-B6CF-F7B601829DC3}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "PDEs", "PDEs\PDEs.vcxproj", "{988CDCC6-8000-4815-939C-6622A5EC97A5}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -31,6 +33,14 @@ Global
 		{2A6CDCC0-D0D2-46B3-B6CF-F7B601829DC3}.Release|x64.Build.0 = Release|x64
 		{2A6CDCC0-D0D2-46B3-B6CF-F7B601829DC3}.Release|x86.ActiveCfg = Release|Win32
 		{2A6CDCC0-D0D2-46B3-B6CF-F7B601829DC3}.Release|x86.Build.0 = Release|Win32
+		{988CDCC6-8000-4815-939C-6622A5EC97A5}.Debug|x64.ActiveCfg = Debug|x64
+		{988CDCC6-8000-4815-939C-6622A5EC97A5}.Debug|x64.Build.0 = Debug|x64
+		{988CDCC6-8000-4815-939C-6622A5EC97A5}.Debug|x86.ActiveCfg = Debug|Win32
+		{988CDCC6-8000-4815-939C-6622A5EC97A5}.Debug|x86.Build.0 = Debug|Win32
+		{988CDCC6-8000-4815-939C-6622A5EC97A5}.Release|x64.ActiveCfg = Release|x64
+		{988CDCC6-8000-4815-939C-6622A5EC97A5}.Release|x64.Build.0 = Release|x64
+		{988CDCC6-8000-4815-939C-6622A5EC97A5}.Release|x86.ActiveCfg = Release|Win32
+		{988CDCC6-8000-4815-939C-6622A5EC97A5}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
