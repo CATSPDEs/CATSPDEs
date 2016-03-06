@@ -18,9 +18,6 @@
     <ClInclude Include="CRSMatrix.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="real.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="AbstractSquareMatrix.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -28,6 +25,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="SymmetricMatrix.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="AbstractRealMatrix.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -41,10 +41,10 @@
     <ClCompile Include="vector.hpp">
       <Filter>Header Files</Filter>
     </ClCompile>
-    <ClCompile Include="AbstractSquareMatrix.cpp">
+    <ClCompile Include="BandMatrix.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="BandMatrix.cpp">
+    <ClCompile Include="AbstractRealMatrix.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

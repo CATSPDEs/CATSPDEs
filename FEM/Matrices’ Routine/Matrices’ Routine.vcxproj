@@ -19,14 +19,14 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="AbstractRealMatrix.hpp" />
     <ClInclude Include="BandMatrix.hpp" />
     <ClInclude Include="CRSMatrix.hpp" />
-    <ClInclude Include="real.hpp" />
     <ClInclude Include="AbstractSquareMatrix.hpp" />
     <ClInclude Include="SymmetricMatrix.hpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="AbstractSquareMatrix.cpp" />
+    <ClCompile Include="AbstractRealMatrix.cpp" />
     <ClCompile Include="BandMatrix.cpp" />
     <ClCompile Include="CRSMatrix.cpp" />
     <ClCompile Include="user.cpp" />

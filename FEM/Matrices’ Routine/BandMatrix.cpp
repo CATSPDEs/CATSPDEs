@@ -3,13 +3,13 @@
 #include "BandMatrix.hpp"
 
 BandMatrix::BandMatrix(size_t n, size_t w)
-	: AbstractSquareMatrix(n)
+	: AbstractRealMatrix(n)
 	, _w(w)
 	, _p((w - 1) / 2)
-	, _A(new REAL[n * w])
-	, _L(new REAL*[n])
+	, _A(new double[n * w])
+	, _L(new double*[n])
 	, _D(&_A[n * _p])
-	, _U(new REAL*[n])
+	, _U(new double*[n])
 	, _isDecomposed(false) {
 		if (w < 1) throw std::invalid_argument("width of band must be at least one");
 		if (w % 2 == 0) throw std::invalid_argument("width of band cannot be even");
@@ -32,7 +32,7 @@ BandMatrix::~BandMatrix() {
 bool BandMatrix::_computeLU() {
 	size_t i, j, k, kMin, m;
 	int alj;
-	REALs sumL, sumD, sumU;
+	double sumL, sumD, sumU;
 	/*
 		L[i][j] <—> TraditionalMatrix[ali][alj], ali = i,	      alj = i + j - p
 		U[i][j] <—> TraditionalMatrix[aui][auj], aui = i + j – p, auj = i 
@@ -63,10 +63,10 @@ bool BandMatrix::_computeLU() {
 	return true;
 }
 
-void BandMatrix::_forwardSubst(std::vector<REAL>& y) const { // L.y = b
+void BandMatrix::_forwardSubst(std::vector<double>& y) const { // L.y = b
 	size_t i, j;
 	int aj;
-	REALs sum;
+	double sum;
 	// we’re looking through elements of L continuously, from its begining to the last element 
 	for (i = 0; i < _n; ++i) {
 		sum = 0.;
@@ -79,9 +79,9 @@ void BandMatrix::_forwardSubst(std::vector<REAL>& y) const { // L.y = b
 }
 /* although approach below is more effective since it has no condition checkings,
 we decided to use the one above becuase of clearness and symmetry (look at backSubst method)
-REAL* BandMatrix::_forwardSubst(const REAL* b) const {
+double* BandMatrix::_forwardSubst(const double* b) const {
 	unsigned i, shift;
-	REAL* y = new REAL[_n];
+	double* y = new double[_n];
 	y[0] = b[0];
 	for (i = 1, shift = _p - 1; shift; ++i, --shift)
 		y[i] = b[i] - VectorFunctions::dotProduct(_L[i] + shift, y, i);
@@ -91,7 +91,7 @@ REAL* BandMatrix::_forwardSubst(const REAL* b) const {
 }
 */
 
-void BandMatrix::_backSubst(std::vector<REAL>& x) const { // U.x = y
+void BandMatrix::_backSubst(std::vector<double>& x) const { // U.x = y
 	int i, j, ai;
 	// we’re looking through elements of U continuously, from its end to the first element 
 	for (i = _n - 1; i >= 0; --i) {
@@ -105,7 +105,7 @@ void BandMatrix::_backSubst(std::vector<REAL>& x) const { // U.x = y
 
 // public methods
 
-REAL& BandMatrix::set(size_t i, size_t j) {
+double& BandMatrix::set(size_t i, size_t j) {
 	if (i >= _n || j >= _n) throw std::out_of_range("matrix doesn’t contain element w/ these indicies");
 	if (_diff(i, j) > _p) throw std::invalid_argument("portrait of sparse matrix doesn’t allow to change element w/ these indicies");
 	_isDecomposed = false;
@@ -114,7 +114,7 @@ REAL& BandMatrix::set(size_t i, size_t j) {
 	else return _D[i];
 }
 
-REAL BandMatrix::get(size_t i, size_t j) const {
+double BandMatrix::get(size_t i, size_t j) const {
 	if (i >= _n || j >= _n) std::out_of_range("matrix doesn’t contain element w/ these indicies");
 	if (_diff(i, j) > _p) return 0.;
 	if (i > j) return _L[i][_p - i + j];
@@ -122,8 +122,8 @@ REAL BandMatrix::get(size_t i, size_t j) const {
 	else return _D[i];
 }
 
-std::vector<REAL> BandMatrix::solve(std::vector<REAL> const & b) {
-	std::vector<REAL> x(_n);
+std::vector<double> BandMatrix::solve(std::vector<double> const & b) {
+	std::vector<double> x(_n);
 	size_t i;
 	if (!_isDecomposed)
 		if (!_computeLU()) throw std::runtime_error("LU decomposition doesn’t exist");
@@ -143,16 +143,16 @@ std::ostream& BandMatrix::save(std::ostream& output) const {
 	return output << _n << ' ' << _w << '\n' << _A;
 }
 
-std::vector<REAL> BandMatrix::mult(std::vector<REAL> const & u) const {
-	std::vector<REAL> v(_n, 0.);
+std::vector<double> BandMatrix::mult(std::vector<double> const & u) const {
+	std::vector<double> v(_n, 0.);
 	// …
 	return v;
 }
 /* TODO: update
-REAL* operator*(const BandMatrix& matrix, const REAL* vector) {
+double* operator*(const BandMatrix& matrix, const double* vector) {
 	// TODO: check if U & L are null
 	unsigned i, j, k;
-	REAL* result = new REAL[matrix._n];
+	double* result = new double[matrix._n];
 	for (i = 0, k = matrix._p; k; ++i, --k) {
 		result[i] = matrix._D[i] * vector[i];
 		for (j = k; j < matrix._p; ++j) {

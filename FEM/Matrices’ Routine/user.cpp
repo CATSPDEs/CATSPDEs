@@ -20,7 +20,7 @@ int main() {
 	CRSMatrix A(order, nonzeros);
 	inputMatrixCRS >> A;
 	// mult by vector
-	std::vector<REAL> iVec(order, 1.);
+	std::vector<double> iVec(order, 1.);
 	std::cout << A * iVec << '\n';
 	// modify and print
 	A(1, 1) = 56.;
@@ -30,9 +30,9 @@ int main() {
 	inputMatrixBand >> order >> bandWidth;
 	BandMatrix B(order, bandWidth);
 	inputMatrixBand >> B;
-	std::vector<REAL> x(order), f(order, 0.);
+	std::vector<double> x(order), f(order, 0.);
 	f[0] = 1.;
 	f[order - 1] = 1.;
-	std::cout << f / B; // or x = B.solve(f)
+	std::cout << f / B << std::endl; // or x = B.solve(f)
 	return 0;
 }
