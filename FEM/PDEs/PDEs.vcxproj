@@ -121,10 +121,12 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="..\Matrices’ Routine\AbstractSquareMatrix.cpp" />
+    <ClCompile Include="AbstractElement.cpp" />
     <ClCompile Include="user.cpp" />
     <ClCompile Include="Node.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="AbstractElement.hpp" />
     <ClInclude Include="LinearEllipticPDE.hpp" />
     <ClInclude Include="Node.hpp" />
     <ClInclude Include="Point.hpp" />

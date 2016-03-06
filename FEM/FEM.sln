@@ -1,10 +1,8 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
-VisualStudioVersion = 14.0.23107.0
+VisualStudioVersion = 14.0.24720.0
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "FEM", "FEM\FEM.vcxproj", "{F57FB2EE-E6DF-47A7-AD1B-D100BDA20AE9}"
-EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Matrices’ Routine", "Matrices’ Routine\Matrices’ Routine.vcxproj", "{2A6CDCC0-D0D2-46B3-B6CF-F7B601829DC3}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "PDEs", "PDEs\PDEs.vcxproj", "{988CDCC6-8000-4815-939C-6622A5EC97A5}"
@@ -17,14 +15,6 @@ Global
 		Release|x86 = Release|x86
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{F57FB2EE-E6DF-47A7-AD1B-D100BDA20AE9}.Debug|x64.ActiveCfg = Debug|x64
-		{F57FB2EE-E6DF-47A7-AD1B-D100BDA20AE9}.Debug|x64.Build.0 = Debug|x64
-		{F57FB2EE-E6DF-47A7-AD1B-D100BDA20AE9}.Debug|x86.ActiveCfg = Debug|Win32
-		{F57FB2EE-E6DF-47A7-AD1B-D100BDA20AE9}.Debug|x86.Build.0 = Debug|Win32
-		{F57FB2EE-E6DF-47A7-AD1B-D100BDA20AE9}.Release|x64.ActiveCfg = Release|x64
-		{F57FB2EE-E6DF-47A7-AD1B-D100BDA20AE9}.Release|x64.Build.0 = Release|x64
-		{F57FB2EE-E6DF-47A7-AD1B-D100BDA20AE9}.Release|x86.ActiveCfg = Release|Win32
-		{F57FB2EE-E6DF-47A7-AD1B-D100BDA20AE9}.Release|x86.Build.0 = Release|Win32
 		{2A6CDCC0-D0D2-46B3-B6CF-F7B601829DC3}.Debug|x64.ActiveCfg = Debug|x64
 		{2A6CDCC0-D0D2-46B3-B6CF-F7B601829DC3}.Debug|x64.Build.0 = Debug|x64
 		{2A6CDCC0-D0D2-46B3-B6CF-F7B601829DC3}.Debug|x86.ActiveCfg = Debug|Win32
