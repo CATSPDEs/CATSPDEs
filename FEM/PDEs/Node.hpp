@@ -9,7 +9,7 @@ class Node
 public:
 	Node(unsigned, Point, bool isBoundary = false);
 	Node(unsigned, REAL, REAL, REAL, bool isBoundary = false);
-	void setLocation(Point);
+	void setLocation(Point const &);
 	void setIndex(unsigned);
 	void setAsBoundary(bool value = true);
 	Point getLocation() const;

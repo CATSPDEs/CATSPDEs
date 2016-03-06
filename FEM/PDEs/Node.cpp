@@ -8,7 +8,7 @@ Node::Node(unsigned index, REAL x, REAL y, REAL z,  bool isBoundary): _index(ind
 {
 }
 
-void Node::setLocation(Point location)
+void Node::setLocation(Point const & location)
 {
 	_location = location;
 }
