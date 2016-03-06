@@ -122,6 +122,7 @@
   <ItemGroup>
     <ClCompile Include="..\Matrices’ Routine\AbstractSquareMatrix.cpp" />
     <ClCompile Include="user.cpp" />
+    <ClCompile Include="Node.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="LinearEllipticPDE.hpp" />
