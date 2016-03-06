@@ -30,7 +30,7 @@ Node AbstractElement::getNode(unsigned localIndex)
 		throw std::out_of_range("local index must be in range [0,n), where n is number of nodes in element");
 }
 
-unsigned AbstractElement::getNodesNum()
+unsigned AbstractElement::getNodesNumber()
 {
 	return _nodes.size();
 }

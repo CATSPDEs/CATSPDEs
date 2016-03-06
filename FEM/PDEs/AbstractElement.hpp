@@ -18,5 +18,5 @@ public:
 	void addNode(Node const &);
 	unsigned getIndex();
 	Node getNode(unsigned localIndex); //localIndex [0,n) is the local index of node in element
-	unsigned getNodesNum();
+	unsigned getNodesNumber();
 };
