@@ -40,5 +40,5 @@ template <typename T>
 std::ostream& operator<<(std::ostream& output, std::vector<T> const & u) {
 	for (size_t i = 0; i < u.size(); ++i)
 		output << u[i] << ' ';
-	return output << std::endl;
+	return output;
 }

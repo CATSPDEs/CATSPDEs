@@ -23,6 +23,7 @@
     <ClInclude Include="CRSMatrix.hpp" />
     <ClInclude Include="real.hpp" />
     <ClInclude Include="AbstractSquareMatrix.hpp" />
+    <ClInclude Include="SymmetricMatrix.hpp" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="AbstractSquareMatrix.cpp" />

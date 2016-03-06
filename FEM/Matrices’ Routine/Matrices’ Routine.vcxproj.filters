@@ -27,6 +27,9 @@
     <ClInclude Include="BandMatrix.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="SymmetricMatrix.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="CRSMatrix.cpp">

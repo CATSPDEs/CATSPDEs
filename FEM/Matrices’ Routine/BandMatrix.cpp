@@ -140,9 +140,7 @@ std::istream& BandMatrix::load(std::istream& input) {
 }
 
 std::ostream& BandMatrix::save(std::ostream& output) const {
-	output << _n << ' ' << _w << '\n';
-	for (size_t i = 0; i < _n * _w; ++i) output << _A[i] << ' ';
-	return output << std::endl;
+	return output << _n << ' ' << _w << '\n' << _A;
 }
 
 std::vector<REAL> BandMatrix::mult(std::vector<REAL> const & u) const {

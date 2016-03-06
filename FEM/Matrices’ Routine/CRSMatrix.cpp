@@ -46,17 +46,10 @@ std::istream& CRSMatrix::load(std::istream& input) {
 }
 
 std::ostream& CRSMatrix::save(std::ostream& output) const {
-	size_t i;
-	output << _n << ' ' << _ptr[_n] << '\n';
-	for (i = 0; i < _n; ++i)
-		output << _ptr[i] << ' ';
-	output << '\n';
-	for (i = 0; i < _ptr[_n]; ++i)
-		output << _col[i] << ' ';
-	output << '\n';
-	for (i = 0; i < _ptr[_n]; ++i)
-		output << _val[i] << ' ';
-	return output << std::endl;
+	return output << _n << ' ' << _ptr[_n] << '\n'
+				  << _ptr << '\n'
+				  << _col << '\n'
+				  << _val;
 }
 
 std::vector<REAL> CRSMatrix::CG(std::vector<REAL> const & f, REAL e, unsigned iCount) const {

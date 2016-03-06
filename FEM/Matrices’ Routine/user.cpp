@@ -1,8 +1,17 @@
 #include <fstream>
 #include "CRSMatrix.hpp"
 #include "BandMatrix.hpp"
+#include "SymmetricMatrix.hpp"
 
 int main() {
+	SymmetricMatrix I(3);
+	try {
+		std::cout << I << '\n';
+	}
+	catch (std::exception& e) {
+		std::cout << e.what();
+	}
+
 	std::ifstream inputMatrixCRS("matrix_crs.txt"),
 				  inputMatrixBand("matrix_band.txt");
 	size_t order, nonzeros, bandWidth;
@@ -12,7 +21,7 @@ int main() {
 	inputMatrixCRS >> A;
 	// mult by vector
 	std::vector<REAL> iVec(order, 1.);
-	std::cout << A * iVec;
+	std::cout << A * iVec << '\n';
 	// modify and print
 	A(1, 1) = 56.;
 	A.print(); // trad form

@@ -14,7 +14,6 @@ void AbstractSquareMatrix::print() {
 			std::cout << get(i, j) << ' ';
 		std::cout << '\n';
 	}
-	std::cout << std::endl;
 }
 
 std::istream& operator>>(std::istream& from, AbstractSquareMatrix& A) { return A.load(from); }
