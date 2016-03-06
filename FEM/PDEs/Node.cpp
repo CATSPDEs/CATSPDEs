@@ -4,7 +4,7 @@ Node::Node(unsigned index, Point location, bool isBoundary) : _index(index), _lo
 {
 }
 
-Node::Node(unsigned index, REAL x, REAL y, REAL z,  bool isBoundary): _index(index), _location(x,y,z),_isBoundary(isBoundary)
+Node::Node(unsigned index, double x, double y, double z,  bool isBoundary): _index(index), _location(x,y,z),_isBoundary(isBoundary)
 {
 }
 

@@ -120,14 +120,16 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="..\Matrices’ Routine\AbstractSquareMatrix.cpp" />
+    <ClCompile Include="..\Matrices’ Routine\AbstractRealMatrix.cpp" />
     <ClCompile Include="user.cpp" />
     <ClCompile Include="Node.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="NonLinearEllipticPDE.hpp" />
     <ClInclude Include="LinearEllipticPDE.hpp" />
     <ClInclude Include="Node.hpp" />
     <ClInclude Include="Point.hpp" />
+    <ClInclude Include="SymmetricMatrixOfFunctions.hpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
