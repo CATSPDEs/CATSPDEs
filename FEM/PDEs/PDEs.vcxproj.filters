@@ -18,12 +18,18 @@
     <ClCompile Include="user.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Node.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Point.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="LinearEllipticPDE.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Node.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
