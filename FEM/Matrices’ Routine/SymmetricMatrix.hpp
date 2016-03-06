@@ -4,7 +4,7 @@
 class SymmetricMatrix : public AbstractSquareMatrix {
 	std::vector<REAL> _val;
 public:
-	SymmetricMatrix(size_t n) : AbstractSquareMatrix(n), _val((n * n + n) / 2, 0.) {}
+	explicit SymmetricMatrix(size_t n) : AbstractSquareMatrix(n), _val((n * n + n) / 2, 0.) {}
 	REAL& set(size_t i, size_t j) {
 		if (i > j) std::swap(i, j);
 		if (j >= _n) throw std::out_of_range("matrix doesn’t contain element w/ these indicies");
@@ -24,7 +24,7 @@ public:
 	std::vector<REAL> mult(std::vector<REAL> const &) const { return std::vector<REAL>(_n); }
 	SymmetricMatrix& identify() {
 		std::fill(_val.begin(), _val.end(), 0.);
-		//for (size_t i = 0; i < _n; ++i) set(i, i) = 1.;
+		for (size_t i = 0; i < _n; ++i) set(i, i) = 1.;
 		return *this;
 	}
 };
