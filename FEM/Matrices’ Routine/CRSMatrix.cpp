@@ -4,36 +4,45 @@
 #include "CRSMatrix.hpp"
 
 CRSMatrix::CRSMatrix(size_t n, size_t nnz)
-	: AbstractRealMatrix(n)
+	: AbstractSparseMatrix(n)
 	, _ptr(n + 1)
 	, _col(nnz)
 	, _val(nnz) {
 	_ptr[n] = nnz;
 }
 
-// public methods
+// private methods
 
-double& CRSMatrix::set(size_t i, size_t j) {
-	if (i >= _n || j >= _n) throw std::out_of_range("matrix doesn’t contain element w/ these indicies");
+double& CRSMatrix::_set(size_t i, size_t j) {
 	for (size_t k = _ptr[i]; k < _ptr[i + 1]; ++k)
 		if (_col[k] == j) return _val[k];
 		else if (_col[k] > j) throw std::invalid_argument("portrait of sparse matrix doesn’t allow to change element w/ these indicies");
 }
 
-double CRSMatrix::get(size_t i, size_t j) const {
-	if (i >= _n || j >= _n) throw std::out_of_range("matrix doesn’t contain element w/ these indicies");
+double CRSMatrix::_get(size_t i, size_t j) const {
 	for (size_t k = _ptr[i]; k < _ptr[i + 1]; ++k)
 		if (_col[k] == j) return _val[k];
 		else if (_col[k] > j) return 0.;
 }
 
-std::vector<double> CRSMatrix::solve(std::vector<double> const & b) { // solve A.x = b
+// public methods
+
+std::vector<double> CRSMatrix::mult(std::vector<double> const & u) const { // return product v = A.u
+	std::vector<double> v(_n, 0.);
+	size_t i, j;
+	for (i = 0; i < _n; ++i)
+		for (j = _ptr[i]; j < _ptr[i + 1]; ++j)
+			v[i] += _val[j] * u[_col[j]];
+	return v;
+}
+
+std::vector<double> CRSMatrix::solve(std::vector<double> const & b) {
 	// magic goes here
 	// e.g., CG
 	return CG(b);
 }
 
-std::istream& CRSMatrix::load(std::istream& input) {
+std::istream& CRSMatrix::loadSparse(std::istream& input) {
 	size_t i, max = _n;
 	for (i = 0; i < max; ++i)
 		input >> _ptr[i];
@@ -45,7 +54,7 @@ std::istream& CRSMatrix::load(std::istream& input) {
 	return input;
 }
 
-std::ostream& CRSMatrix::save(std::ostream& output) const {
+std::ostream& CRSMatrix::saveSparse(std::ostream& output) const {
 	return output << _n << ' ' << _ptr[_n] << '\n'
 				  << _ptr << '\n'
 				  << _col << '\n'
@@ -75,15 +84,6 @@ std::vector<double> CRSMatrix::CG(std::vector<double> const & f, double e, unsig
 		n++;
 	}
 	return x;
-}
-
-std::vector<double> CRSMatrix::mult(std::vector<double> const & u) const { // return product v = A.u
-	std::vector<double> v(_n, 0.);
-	size_t i, j;
-	for (i = 0; i < _n; ++i)
-		for (j = _ptr[i]; j < _ptr[i + 1]; ++j)
-			v[i] += _val[j] * u[_col[j]];
-	return v;
 }
 
 // friends

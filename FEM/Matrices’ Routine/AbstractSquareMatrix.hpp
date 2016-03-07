@@ -1,18 +1,46 @@
 #pragma once
+#include <iostream>
 #include <cstddef> // size_t
 #include <stdexcept>
+#include "vector.hpp" // vector operations (*, +, ...)
 
 template <typename T>
 class AbstractSquareMatrix { // abstract class for square matricies
+	virtual T& _set(size_t, size_t) = 0; // set / get value of element using indicies of traditional form of matrix
+	virtual T _get(size_t, size_t) const = 0;
 protected: // interface for derivative classes
 	size_t _n; // n := order of square matrix
-	size_t _diff(size_t i, size_t j) const { return i > j ? i - j : j - i; }
 public:
 	AbstractSquareMatrix(size_t n) : _n(n) {
 		if (_n < 1) throw std::out_of_range("order of matrix must be at least one");
 	}
 	virtual ~AbstractSquareMatrix() {}
-	virtual T& set(size_t, size_t) = 0; // set / get value of element using indicies of traditional form of matrix
-	T& operator()(size_t i, size_t j) { return set(i, j); }
+	T operator()(size_t i, size_t j) const {
+		if (i >= _n || j >= _n) std::out_of_range("matrix doesn’t contain element w/ these indicies");
+		return _get(i, j);
+	}
+	T& operator()(size_t i, size_t j) { 
+		if (i >= _n || j >= _n) std::out_of_range("matrix doesn’t contain element w/ these indicies");
+		return _set(i, j); 
+	}
 	size_t getOrder() const { return _n; }
+	std::ostream& save(std::ostream& output) const {
+		output << _n << '\n';
+		for (size_t i = 0; i < _n; ++i) {
+			for (size_t j = 0; j < _n; ++j)
+				output << _get(i, j) << ' ';
+			output << '\n';
+		}
+		return output;
+	}
+	std::istream& load(std::istream& input) {
+		for (size_t i = 0; i < _n; ++i)
+			for (size_t j = 0; j < _n; ++i)
+				try {
+					T& dummy;
+					input >> dummy;
+					//_set(i, j);
+				} catch (std::invalid_argument const &) {} // you cannot set some values of sparse matrices because they are zeros;
+		return input;
+	}
 };

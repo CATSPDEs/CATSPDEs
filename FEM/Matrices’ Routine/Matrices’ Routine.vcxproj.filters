@@ -24,10 +24,10 @@
     <ClInclude Include="BandMatrix.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="SymmetricMatrix.hpp">
+    <ClInclude Include="IRealMatrix.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="AbstractRealMatrix.hpp">
+    <ClInclude Include="AbstractSparseMatrix.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -42,9 +42,6 @@
       <Filter>Header Files</Filter>
     </ClCompile>
     <ClCompile Include="BandMatrix.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="AbstractRealMatrix.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

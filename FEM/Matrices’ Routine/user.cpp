@@ -1,17 +1,9 @@
 #include <fstream>
+#include "vector.hpp" // vector operations (*, +, ...)
 #include "CRSMatrix.hpp"
 #include "BandMatrix.hpp"
-#include "SymmetricMatrix.hpp"
 
 int main() {
-	SymmetricMatrix I(3);
-	try {
-		std::cout << I.identify() << '\n';
-	}
-	catch (std::exception& e) {
-		std::cout << e.what();
-	}
-
 	std::ifstream inputMatrixCRS("matrix_crs.txt"),
 				  inputMatrixBand("matrix_band.txt");
 	size_t order, nonzeros, bandWidth;
@@ -24,7 +16,7 @@ int main() {
 	std::cout << A * iVec << '\n';
 	// modify and print
 	A(1, 1) = 56.;
-	A.print(); // trad form
+	A.save(std::cout); // trad form
 	std::cout << A << '\n'; // sparse form
 	// Band
 	inputMatrixBand >> order >> bandWidth;
@@ -34,5 +26,7 @@ int main() {
 	f[0] = 1.;
 	f[order - 1] = 1.;
 	std::cout << f / B << std::endl; // or x = B.solve(f)
+	B(1, 0) = 56.;
+	B.save(std::cout); // (almost) LU-decomposition is now stored in B 
 	return 0;
 }

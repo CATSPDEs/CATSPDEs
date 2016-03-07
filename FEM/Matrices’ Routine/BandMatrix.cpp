@@ -1,9 +1,7 @@
-// implementation of BandMatrix
-
 #include "BandMatrix.hpp"
 
 BandMatrix::BandMatrix(size_t n, size_t w)
-	: AbstractRealMatrix(n)
+	: AbstractSparseMatrix(n)
 	, _w(w)
 	, _p((w - 1) / 2)
 	, _A(new double[n * w])
@@ -28,6 +26,21 @@ BandMatrix::~BandMatrix() {
 }
 
 // private methods
+
+double& BandMatrix::_set(size_t i, size_t j) {
+	if (_diff(i, j) > _p) throw std::invalid_argument("portrait of sparse matrix doesn’t allow to change element w/ these indicies");
+	_isDecomposed = false;
+	if (i > j) return _L[i][_p - i + j];
+	else if (i < j) return _U[j][_p - j + i];
+	else return _D[i];
+}
+
+double BandMatrix::_get(size_t i, size_t j) const {
+	if (_diff(i, j) > _p) return 0.;
+	if (i > j) return _L[i][_p - i + j];
+	else if (i < j) return _U[j][_p - j + i];
+	else return _D[i];
+}
 
 bool BandMatrix::_computeLU() {
 	size_t i, j, k, kMin, m;
@@ -105,49 +118,31 @@ void BandMatrix::_backSubst(std::vector<double>& x) const { // U.x = y
 
 // public methods
 
-double& BandMatrix::set(size_t i, size_t j) {
-	if (i >= _n || j >= _n) throw std::out_of_range("matrix doesn’t contain element w/ these indicies");
-	if (_diff(i, j) > _p) throw std::invalid_argument("portrait of sparse matrix doesn’t allow to change element w/ these indicies");
-	_isDecomposed = false;
-	if (i > j) return _L[i][_p - i + j];
-	else if (i < j) return _U[j][_p - j + i];
-	else return _D[i];
+std::vector<double> BandMatrix::solve(std::vector<double> const & x) {
+	std::vector<double> v(x);
+	if (!_isDecomposed && !_computeLU()) throw std::runtime_error("LU decomposition doesn’t exist");
+	_forwardSubst(v); // x <— L.? = x
+	_backSubst(v); // x <— U.? = x
+	return v;
 }
 
-double BandMatrix::get(size_t i, size_t j) const {
-	if (i >= _n || j >= _n) std::out_of_range("matrix doesn’t contain element w/ these indicies");
-	if (_diff(i, j) > _p) return 0.;
-	if (i > j) return _L[i][_p - i + j];
-	else if (i < j) return _U[j][_p - j + i];
-	else return _D[i];
+std::vector<double> BandMatrix::mult(std::vector<double> const & v) const {
+	// ... 
+	return std::vector<double>(_n);
 }
 
-std::vector<double> BandMatrix::solve(std::vector<double> const & b) {
-	std::vector<double> x(_n);
-	size_t i;
-	if (!_isDecomposed)
-		if (!_computeLU()) throw std::runtime_error("LU decomposition doesn’t exist");
-	for (i = 0; i < _n; ++i) x[i] = b[i]; // x <— b
-	_forwardSubst(x); // x <— L.? = x
-	_backSubst(x); // x <— U.? = x
-	return x;
-}
-
-std::istream& BandMatrix::load(std::istream& input) {
+std::istream& BandMatrix::loadSparse(std::istream& input) {
 	_isDecomposed = false;
 	for (size_t i = 0; i < _n * _w; ++i) input >> _A[i];
 	return input;
 }
 
-std::ostream& BandMatrix::save(std::ostream& output) const {
-	return output << _n << ' ' << _w << '\n' << _A;
+std::ostream& BandMatrix::saveSparse(std::ostream& output) const {
+	output << _n << ' ' << _w << '\n';
+	for (size_t i = 0; i < _n * _w; ++i) output << _A[i];
+	return output;
 }
 
-std::vector<double> BandMatrix::mult(std::vector<double> const & u) const {
-	std::vector<double> v(_n, 0.);
-	// …
-	return v;
-}
 /* TODO: update
 double* operator*(const BandMatrix& matrix, const double* vector) {
 	// TODO: check if U & L are null
