@@ -21,9 +21,6 @@
     <ClCompile Include="Node.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\Matrices’ Routine\AbstractRealMatrix.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Point.hpp">
@@ -35,10 +32,10 @@
     <ClInclude Include="Node.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="SymmetricMatrixOfFunctions.hpp">
+    <ClInclude Include="..\Matrices’ Routine\SymmetricContainer.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="NonLinearEllipticPDE.hpp">
+    <ClInclude Include="Function.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

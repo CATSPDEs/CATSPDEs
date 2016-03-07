@@ -112,6 +112,7 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
+      <AdditionalIncludeDirectories>..\Matrices’ Routine</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -120,16 +121,15 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="..\Matrices’ Routine\AbstractRealMatrix.cpp" />
     <ClCompile Include="user.cpp" />
     <ClCompile Include="Node.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="NonLinearEllipticPDE.hpp" />
+    <ClInclude Include="..\Matrices’ Routine\SymmetricContainer.hpp" />
+    <ClInclude Include="Function.hpp" />
     <ClInclude Include="LinearEllipticPDE.hpp" />
     <ClInclude Include="Node.hpp" />
     <ClInclude Include="Point.hpp" />
-    <ClInclude Include="SymmetricMatrixOfFunctions.hpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
