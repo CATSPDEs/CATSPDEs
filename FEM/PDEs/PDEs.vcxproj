@@ -129,6 +129,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Matrices’ Routine\SymmetricContainer.hpp" />
+    <ClInclude Include="BC.hpp" />
     <ClInclude Include="Function.hpp" />
     <ClInclude Include="AbstractElement.hpp" />
     <ClInclude Include="AbstractMesh.hpp" />
