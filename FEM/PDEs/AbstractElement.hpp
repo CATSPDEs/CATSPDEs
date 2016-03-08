@@ -1,5 +1,5 @@
 #pragma once
-#include"Node.hpp"
+#include"AbstractNode.hpp"
 #include<vector>
 #include<stdexcept>
 
@@ -8,15 +8,15 @@ const unsigned INDEX_IS_NOT_USED = 0;
 class AbstractElement
 {
 protected:
-	std::vector<Node> _nodes;
+	std::vector<AbstractNode> _nodes;
 	unsigned _index;
 public:
 	AbstractElement(unsigned index=INDEX_IS_NOT_USED);
-	AbstractElement(unsigned, std::vector<Node> const &);
+	AbstractElement(unsigned, std::vector<AbstractNode> const &);
 	virtual ~AbstractElement();
 	void setIndex(unsigned);
-	void addNode(Node const &);
+	void addNode(AbstractNode const &);
 	unsigned getIndex();
-	Node getNode(unsigned localIndex); //localIndex [0,n) is the local index of node in element
+	AbstractNode getNode(unsigned localIndex); //localIndex [0,n) is the local index of node in element
 	unsigned getNodesNumber();
 };

@@ -7,10 +7,10 @@
     <ClCompile Include="AbstractMesh.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Node.cpp">
+    <ClCompile Include="user.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="user.cpp">
+    <ClCompile Include="AbstractNode.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -27,13 +27,13 @@
     <ClInclude Include="LinearEllipticPDE.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Node.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Point.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\Matrices’ Routine\SymmetricContainer.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="AbstractNode.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

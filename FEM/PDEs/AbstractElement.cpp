@@ -4,7 +4,7 @@ AbstractElement::AbstractElement(unsigned index): _index(index)
 {
 }
 
-AbstractElement::AbstractElement(unsigned index, std::vector<Node> const & nodes) : _nodes(nodes), _index(index)
+AbstractElement::AbstractElement(unsigned index, std::vector<AbstractNode> const & nodes) : _nodes(nodes), _index(index)
 {
 }
 
@@ -22,7 +22,7 @@ unsigned AbstractElement::getIndex()
 	return _index;
 }
 
-Node AbstractElement::getNode(unsigned localIndex)
+AbstractNode AbstractElement::getNode(unsigned localIndex)
 {
 	if (localIndex < _nodes.size())
 		return _nodes[localIndex];
@@ -35,7 +35,7 @@ unsigned AbstractElement::getNodesNumber()
 	return _nodes.size();
 }
 
-void AbstractElement::addNode(Node const & node)
+void AbstractElement::addNode(AbstractNode const & node)
 {
 	_nodes.push_back(node);
 }

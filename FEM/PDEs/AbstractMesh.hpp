@@ -1,15 +1,15 @@
 #pragma once
-#include"Node.hpp"
+#include"AbstractNode.hpp"
 #include<vector>
 #include<stdexcept>
 class AbstractMesh
 {
 protected:
-	std::vector<Node> _nodes;
+	std::vector<AbstractNode> _nodes;
 public:
 	AbstractMesh();
 	virtual ~AbstractMesh();
 	unsigned getNodesNumber() const;
-	Node getNode(unsigned) const;
+	AbstractNode getNode(unsigned) const;
 	virtual unsigned nodeMapping(unsigned) const = 0;
 };
