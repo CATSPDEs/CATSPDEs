@@ -11,7 +11,7 @@ class AbstractNode
 	unsigned short _BCType;
 public:
 	AbstractNode(Point, unsigned BCType=INTERNAL_NODE);
-	AbstractNode(double, double, double, unsigned BCType = INTERNAL_NODE);
+	AbstractNode(double x = 0.0, double y = 0.0, double z = 0.0, unsigned BCType = INTERNAL_NODE);
 	void setLocation(Point const &);
 	void setBCType(unsigned);
 	Point getLocation() const;
