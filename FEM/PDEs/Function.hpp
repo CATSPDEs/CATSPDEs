@@ -8,6 +8,7 @@ typedef double(*Function)(Point const &); // function pointers
 // No sense in reading pointers, so we define our function as constant zero 
 
 inline double zeroFunc(Point const &) { return 0.; }
+inline double oneFunc(Point const &) { return 1.; }
 
 inline std::istream& operator>>(std::istream& input, Function f) {
 	f = zeroFunc;
