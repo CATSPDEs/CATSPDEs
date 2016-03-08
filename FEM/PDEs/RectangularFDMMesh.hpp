@@ -1,5 +1,6 @@
 #pragma once
 #include"AbstractMesh.hpp"
+
 class RectangularFDMMesh : public AbstractMesh
 {
 	double _width;

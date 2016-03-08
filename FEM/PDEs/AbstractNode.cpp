@@ -1,6 +1,6 @@
 #include "AbstractNode.hpp"
 
-AbstractNode::AbstractNode(Point location, unsigned BCType) :  _location(location), _BCType(BCType)
+AbstractNode::AbstractNode(Point const & location, unsigned BCType) :  _location(location), _BCType(BCType)
 {
 }
 
