@@ -1,10 +1,10 @@
 #include "Node.hpp"
 
-Node::Node(unsigned index, Point location, bool isBoundary) : _index(index), _location(location), _isBoundary(isBoundary)
+Node::Node(unsigned index, Point location, unsigned BCType) : _index(index), _location(location), _BCType(BCType)
 {
 }
 
-Node::Node(unsigned index, double x, double y, double z,  bool isBoundary): _index(index), _location(x,y,z),_isBoundary(isBoundary)
+Node::Node(unsigned index, double x, double y, double z, unsigned BCType): _index(index), _location(x,y,z), _BCType(BCType)
 {
 }
 
@@ -18,9 +18,9 @@ void Node::setIndex(unsigned index)
 	_index = index;
 }
 
-void Node::setAsBoundary(bool value)
+void Node::setBCType(unsigned BCType)
 {
-	_isBoundary = value;
+	_BCType = BCType;
 }
 
 Point Node::getLocation() const
@@ -33,7 +33,7 @@ unsigned Node::getIndex() const
 	return _index;
 }
 
-bool Node::isBoundaryNode() const
+unsigned Node::getBCType() const
 {
-	return _isBoundary;
+	return _BCType;
 }
