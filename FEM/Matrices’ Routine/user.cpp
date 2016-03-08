@@ -15,7 +15,12 @@ int main() {
 	std::vector<double> iVec(order, 1.);
 	std::cout << A * iVec << '\n';
 	// modify and print
-	A(1, 1) = 56.;
+	try {
+		A(3, 1) = 56.;
+	}
+	catch (std::exception const & e) {
+		std::cout << e.what();
+	}
 	A.save(std::cout); // trad form
 	std::cout << A << '\n'; // sparse form
 	// Band
