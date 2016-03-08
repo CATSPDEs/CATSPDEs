@@ -16,11 +16,11 @@ public:
 	}
 	virtual ~AbstractSquareMatrix() {}
 	T operator()(size_t i, size_t j) const {
-		if (i >= _n || j >= _n) std::out_of_range("matrix doesn’t contain element w/ these indicies");
+		if (i >= _n || j >= _n) throw std::out_of_range("matrix doesn’t contain element w/ these indicies");
 		return _get(i, j);
 	}
 	T& operator()(size_t i, size_t j) { 
-		if (i >= _n || j >= _n) std::out_of_range("matrix doesn’t contain element w/ these indicies");
+		if (i >= _n || j >= _n) throw std::out_of_range("matrix doesn’t contain element w/ these indicies");
 		return _set(i, j); 
 	}
 	size_t getOrder() const { return _n; }
