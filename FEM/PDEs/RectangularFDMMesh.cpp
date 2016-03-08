@@ -5,11 +5,11 @@ unsigned RectangularFDMMesh::nodeMapping(unsigned) const
 	return 0;  //to be declared
 }
 
-RectangularFDMMesh::RectangularFDMMesh(Point startPoint, Point endPoint, unsigned nX, unsigned nY):_horDotNumber(nX), _vertDotNumber(nY)
+RectangularFDMMesh::RectangularFDMMesh(Point startPoint, Point endPoint, unsigned nX, unsigned nY):_horPointNumber(nX), _verPointNumber(nY)
 {
 	_width = abs(endPoint.x - startPoint.x);
-	_length = abs(endPoint.y - startPoint.y);
-	_hY = _length / nY;
+	_height = abs(endPoint.y - startPoint.y);
+	_hY = _height / nY;
 	_hX = _width / nX;
 	_nodes.reserve(nX*nY);
 	for (int i = 0; i < nX; i++)

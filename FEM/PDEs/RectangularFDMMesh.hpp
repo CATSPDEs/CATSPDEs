@@ -3,9 +3,9 @@
 class RectangularFDMMesh : public AbstractMesh
 {
 	double _width;
-	double _length;
-	unsigned _horDotNumber;
-	unsigned _vertDotNumber;
+	double _height;
+	unsigned _horPointNumber;
+	unsigned _verPointNumber;
 	double _hX;
 	double _hY;
 public:
