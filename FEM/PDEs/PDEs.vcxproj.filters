@@ -21,6 +21,12 @@
     <ClCompile Include="Node.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="AbstractElement.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="AbstractMesh.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Point.hpp">
@@ -36,6 +42,10 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Function.hpp">
+    <ClInclude Include="AbstractElement.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="AbstractMesh.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
