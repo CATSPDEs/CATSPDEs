@@ -4,7 +4,8 @@
 
 typedef double(*Function)(Point const &); // function pointers
 
-// What does in mean to read Function from stdin? 
+// What does it mean to read Function from stdin? 
+// No sense in reading pointers, so we define our function as constant zero 
 
 inline double zeroFunc(Point const &) { return 0.; }
 
