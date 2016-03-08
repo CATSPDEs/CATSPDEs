@@ -34,13 +34,13 @@ public:
 		return output;
 	}
 	std::istream& load(std::istream& input) {
+		T dummy;
 		for (size_t i = 0; i < _n; ++i)
 			for (size_t j = 0; j < _n; ++i)
+				input >> dummy;
 				try {
-					T& dummy;
-					input >> dummy;
-					//_set(i, j);
-				} catch (std::invalid_argument const &) {} // you cannot set some values of sparse matrices because they are zeros;
+					_set(i, j) = dummy;
+				} catch (std::invalid_argument const &) {} // you cannot set some values of sparse matrices because they are zeros
 		return input;
 	}
 };
