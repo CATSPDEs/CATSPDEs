@@ -121,6 +121,7 @@
     <ClInclude Include="AbstractElement.hpp" />
     <ClInclude Include="AbstractMesh.hpp" />
     <ClInclude Include="AbstractNode.hpp" />
+    <ClInclude Include="AbstractPDE.hpp" />
     <ClInclude Include="AbstractSparseMatrix.hpp" />
     <ClInclude Include="AbstractSquareMatrix.hpp" />
     <ClInclude Include="BandMatrix.hpp" />

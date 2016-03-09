@@ -51,9 +51,6 @@
     <ClInclude Include="BC.hpp">
       <Filter>PDEs</Filter>
     </ClInclude>
-    <ClInclude Include="Function.hpp">
-      <Filter>PDEs</Filter>
-    </ClInclude>
     <ClInclude Include="Point.hpp">
       <Filter>PDEs</Filter>
     </ClInclude>
@@ -62,6 +59,12 @@
     </ClInclude>
     <ClInclude Include="LinearEllipticPDE.hpp">
       <Filter>PDEs\Implementations</Filter>
+    </ClInclude>
+    <ClInclude Include="Function.hpp">
+      <Filter>PDEs</Filter>
+    </ClInclude>
+    <ClInclude Include="AbstractPDE.hpp">
+      <Filter>PDEs</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
