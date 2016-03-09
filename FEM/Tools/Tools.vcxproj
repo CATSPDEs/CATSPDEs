@@ -18,25 +18,9 @@
       <Platform>x64</Platform>
     </ProjectConfiguration>
   </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="AbstractSparseMatrix.hpp" />
-    <ClInclude Include="BandMatrix.hpp" />
-    <ClInclude Include="CRSMatrix.hpp" />
-    <ClInclude Include="AbstractSquareMatrix.hpp" />
-    <ClInclude Include="IRealMatrix.hpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClCompile Include="BandMatrix.cpp" />
-    <ClCompile Include="CRSMatrix.cpp" />
-    <ClCompile Include="user.cpp" />
-    <ClCompile Include="vector.hpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <Text Include="matrix.txt" />
-  </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{2A6CDCC0-D0D2-46B3-B6CF-F7B601829DC3}</ProjectGuid>
-    <RootNamespace>Matrices’Routine</RootNamespace>
+    <ProjectGuid>{2CFED6A2-985D-436E-9E3F-D14E7BC838C6}</ProjectGuid>
+    <RootNamespace>Tools</RootNamespace>
     <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
@@ -44,27 +28,27 @@
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <PlatformToolset>v140</PlatformToolset>
-    <CharacterSet>Unicode</CharacterSet>
+    <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
     <PlatformToolset>v140</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
-    <CharacterSet>Unicode</CharacterSet>
+    <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <PlatformToolset>v140</PlatformToolset>
-    <CharacterSet>Unicode</CharacterSet>
+    <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
     <PlatformToolset>v140</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
-    <CharacterSet>Unicode</CharacterSet>
+    <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
   <ImportGroup Label="ExtensionSettings">
@@ -103,7 +87,6 @@
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <SubSystem>Console</SubSystem>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -134,6 +117,31 @@
       <OptimizeReferences>true</OptimizeReferences>
     </Link>
   </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClInclude Include="AbstractElement.hpp" />
+    <ClInclude Include="AbstractMesh.hpp" />
+    <ClInclude Include="AbstractNode.hpp" />
+    <ClInclude Include="AbstractSparseMatrix.hpp" />
+    <ClInclude Include="AbstractSquareMatrix.hpp" />
+    <ClInclude Include="BandMatrix.hpp" />
+    <ClInclude Include="BC.hpp" />
+    <ClInclude Include="CRSMatrix.hpp" />
+    <ClInclude Include="Function.hpp" />
+    <ClInclude Include="IRealMatrix.hpp" />
+    <ClInclude Include="LinearEllipticPDE.hpp" />
+    <ClInclude Include="Point.hpp" />
+    <ClInclude Include="RectangularFDMMesh.hpp" />
+    <ClInclude Include="SymmetricContainer.hpp" />
+    <ClInclude Include="vector.hpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="AbstractElement.cpp" />
+    <ClCompile Include="AbstractMesh.cpp" />
+    <ClCompile Include="AbstractNode.cpp" />
+    <ClCompile Include="BandMatrix.cpp" />
+    <ClCompile Include="CRSMatrix.cpp" />
+    <ClCompile Include="RectangularFDMMesh.cpp" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

@@ -1,5 +1,4 @@
 #include <fstream>
-#include "vector.hpp" // vector operations (*, +, ...)
 #include "CRSMatrix.hpp"
 #include "BandMatrix.hpp"
 

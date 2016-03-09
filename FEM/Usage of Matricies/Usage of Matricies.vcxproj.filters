@@ -15,38 +15,21 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="CRSMatrix.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="AbstractSquareMatrix.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="BandMatrix.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="IRealMatrix.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="AbstractSparseMatrix.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-  </ItemGroup>
-  <ItemGroup>
-    <ClCompile Include="CRSMatrix.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="user.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="vector.hpp">
-      <Filter>Header Files</Filter>
+    <ClCompile Include="..\Tools\BandMatrix.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="BandMatrix.cpp">
+    <ClCompile Include="..\Tools\CRSMatrix.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <Text Include="matrix.txt">
+    <Text Include="matrix_band.txt">
+      <Filter>Resource Files</Filter>
+    </Text>
+    <Text Include="matrix_crs.txt">
       <Filter>Resource Files</Filter>
     </Text>
   </ItemGroup>

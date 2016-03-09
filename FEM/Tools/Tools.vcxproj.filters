@@ -1,0 +1,87 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Matrices">
+      <UniqueIdentifier>{46199121-7262-47ac-a95e-c425709f8aed}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="PDEs">
+      <UniqueIdentifier>{0c4c01e3-9fc7-49ea-a1cf-661e25d54d2b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Matrices\Implementations">
+      <UniqueIdentifier>{adc63939-1a0a-4520-9f27-f2ae39b1edb4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Utilities">
+      <UniqueIdentifier>{817dbbc9-4738-4524-8c28-f43a2b3bf409}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="PDEs\Implementations">
+      <UniqueIdentifier>{76de1918-edbf-4d40-8d92-24834822dc54}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="AbstractSparseMatrix.hpp">
+      <Filter>Matrices</Filter>
+    </ClInclude>
+    <ClInclude Include="AbstractSquareMatrix.hpp">
+      <Filter>Matrices</Filter>
+    </ClInclude>
+    <ClInclude Include="IRealMatrix.hpp">
+      <Filter>Matrices</Filter>
+    </ClInclude>
+    <ClInclude Include="BandMatrix.hpp">
+      <Filter>Matrices\Implementations</Filter>
+    </ClInclude>
+    <ClInclude Include="CRSMatrix.hpp">
+      <Filter>Matrices\Implementations</Filter>
+    </ClInclude>
+    <ClInclude Include="SymmetricContainer.hpp">
+      <Filter>Matrices\Implementations</Filter>
+    </ClInclude>
+    <ClInclude Include="vector.hpp">
+      <Filter>Utilities</Filter>
+    </ClInclude>
+    <ClInclude Include="AbstractElement.hpp">
+      <Filter>PDEs</Filter>
+    </ClInclude>
+    <ClInclude Include="AbstractMesh.hpp">
+      <Filter>PDEs</Filter>
+    </ClInclude>
+    <ClInclude Include="AbstractNode.hpp">
+      <Filter>PDEs</Filter>
+    </ClInclude>
+    <ClInclude Include="BC.hpp">
+      <Filter>PDEs</Filter>
+    </ClInclude>
+    <ClInclude Include="Function.hpp">
+      <Filter>PDEs</Filter>
+    </ClInclude>
+    <ClInclude Include="Point.hpp">
+      <Filter>PDEs</Filter>
+    </ClInclude>
+    <ClInclude Include="RectangularFDMMesh.hpp">
+      <Filter>PDEs\Implementations</Filter>
+    </ClInclude>
+    <ClInclude Include="LinearEllipticPDE.hpp">
+      <Filter>PDEs\Implementations</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="BandMatrix.cpp">
+      <Filter>Matrices\Implementations</Filter>
+    </ClCompile>
+    <ClCompile Include="CRSMatrix.cpp">
+      <Filter>Matrices\Implementations</Filter>
+    </ClCompile>
+    <ClCompile Include="AbstractElement.cpp">
+      <Filter>PDEs</Filter>
+    </ClCompile>
+    <ClCompile Include="AbstractMesh.cpp">
+      <Filter>PDEs</Filter>
+    </ClCompile>
+    <ClCompile Include="AbstractNode.cpp">
+      <Filter>PDEs</Filter>
+    </ClCompile>
+    <ClCompile Include="RectangularFDMMesh.cpp">
+      <Filter>PDEs\Implementations</Filter>
+    </ClCompile>
+  </ItemGroup>
+</Project>
