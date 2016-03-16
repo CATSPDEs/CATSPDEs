@@ -118,6 +118,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="SecondOrderPDE.hpp" />
     <ClInclude Include="AbstractElement.hpp" />
     <ClInclude Include="AbstractMesh.hpp" />
     <ClInclude Include="AbstractNode.hpp" />

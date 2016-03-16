@@ -3,10 +3,10 @@
 #include <stdexcept>
 #include "Point.hpp"
 
-typedef double(*Function)(Point const &, double); // function pointer
+typedef double(*Function)(Point const &); // function pointer
 
-inline double zeroFunc(Point const &, double) { return 0.; }
-inline double oneFunc(Point const &, double) { return 1.; }
+inline double zeroFunc(Point const &) { return 0.; }
+inline double oneFunc(Point const &) { return 1.; }
 
 // What does it mean to read Function from stdin? 
 // No sense in saving pointers

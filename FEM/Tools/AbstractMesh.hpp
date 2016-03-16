@@ -12,6 +12,6 @@ public:
 	AbstractMesh(size_t n) : _n(n), _nodes(n) {}
 	virtual ~AbstractMesh() {}
 	unsigned getNodesNumber() const { return _n; };
-	AbstractNode getNode(unsigned) const;
-	virtual unsigned nodeMapping(unsigned) const = 0;
+	AbstractNode* getNode(size_t);
+	virtual size_t nodeMapping(size_t) const = 0;
 };

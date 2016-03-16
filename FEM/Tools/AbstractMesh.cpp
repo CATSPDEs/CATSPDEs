@@ -1,7 +1,6 @@
 #include "AbstractMesh.hpp"
 
-AbstractNode AbstractMesh::getNode(unsigned localIndex) const
-{
-	unsigned pureLocalIndex = nodeMapping(localIndex);
-	return _nodes[pureLocalIndex];
+AbstractNode* AbstractMesh::getNode(size_t localIndex) {
+	size_t pureLocalIndex = nodeMapping(localIndex);
+	return &_nodes[pureLocalIndex];
 }

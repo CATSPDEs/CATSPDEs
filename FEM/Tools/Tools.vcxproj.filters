@@ -66,6 +66,9 @@
     <ClInclude Include="AbstractPDE.hpp">
       <Filter>PDEs</Filter>
     </ClInclude>
+    <ClInclude Include="SecondOrderPDE.hpp">
+      <Filter>PDEs</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="BandMatrix.cpp">

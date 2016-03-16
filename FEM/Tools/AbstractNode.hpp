@@ -1,5 +1,5 @@
 #pragma once
-#include"Point.hpp"
+#include "Point.hpp"
 const unsigned INTERNAL_NODE = 0;
 const unsigned DIRICHLET_NODE = 1;
 const unsigned NEUMANN_NODE = 2;
