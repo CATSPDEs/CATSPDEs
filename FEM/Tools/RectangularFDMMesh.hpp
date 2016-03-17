@@ -1,8 +1,7 @@
 #pragma once
 #include"AbstractMesh.hpp"
 
-class RectangularFDMMesh : public AbstractMesh
-{
+class RectangularFDMMesh : public AbstractMesh {
 	double _width;
 	double _height;
 	unsigned _horPointNumber;
@@ -10,7 +9,7 @@ class RectangularFDMMesh : public AbstractMesh
 	double _hX;
 	double _hY;
 public:
-	size_t nodeMapping(size_t i) const { return i; } // here we have simple mapping
+	// size_t nodeMapping(size_t i) const { return i; } // here we have simple mapping
 	RectangularFDMMesh(Point, Point, unsigned, unsigned);
 	void setBottomBC(unsigned);
 	void setTopBC(unsigned);

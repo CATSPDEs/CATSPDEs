@@ -20,16 +20,16 @@ void RectangularFDMMesh::setBottomBC(unsigned BCType = DIRICHLET_NODE) {
 }
 
 void RectangularFDMMesh::setTopBC(unsigned BCType = DIRICHLET_NODE) {
-	for (size_t i = _n - 1; i >= _n - _horPointNumber; --i)
+	for (size_t i = _nodes.size() - 1; i >= _nodes.size() - _horPointNumber; --i)
 		getNode(i)->setBCType(BCType);
 }
 
 void RectangularFDMMesh::setLeftBC(unsigned BCType = DIRICHLET_NODE) {
-	for (size_t i = 0; i < _n; i += _horPointNumber)
+	for (size_t i = 0; i < _nodes.size(); i += _horPointNumber)
 		getNode(i)->setBCType(BCType);
 }
 
 void RectangularFDMMesh::setRightBC(unsigned BCType = DIRICHLET_NODE) {
-	for (size_t i = _horPointNumber - 1; i < _n; i += _horPointNumber)
+	for (size_t i = _horPointNumber - 1; i < _nodes.size(); i += _horPointNumber)
 		getNode(i)->setBCType(BCType);
 }
