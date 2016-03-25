@@ -5,6 +5,14 @@ Triangulation::Triangulation(Node const & lb, Node const & rt, double percent) {
 	// w/ left bottom point @lb and right top point @rt
 	// elements will be right-angled triangles
 	// w/ max hypotenuse size := @percent * min of rect sizes
+	// for @lb = origo, @rt = (3,2) and @percent = .9 
+	// it will look something like this:
+	//   ________(3,2)
+	//  |\ |\ |\ |
+	//	|_\|_\|_\|
+	//  |\ |\ |\ |
+	//	|_\|_\|_\|
+	//  (0,0)    
 	if (1 <= percent || percent <= 0) throw invalid_argument("3rd parameter should be el of (0, 1)");
 	Node size = rt - lb;
 	// so x-projection of size is width of our rect and y-projection is height
