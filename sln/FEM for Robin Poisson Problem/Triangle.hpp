@@ -1,18 +1,38 @@
 #pragma once
-#include <stdexcept>
-#include "Node.hpp"
+#include <array>
+
+// ssize_t
+#if __BITS_PER_LONG != 64
+typedef int ssize_t;
+#else
+typedef long ssize_t;
+#endif
+
+using namespace std;
 
 class Triangle {
-	Node* _p1; // counterclockwise! 
-	Node* _p2;
-	Node* _p3;
+	array<size_t, 3> _nodes; // nodes in triangle, counterclockwise! 
+	array<ssize_t, 3> _neighbors; // neighbors of the triangle (they are... triangles!)
+	// ith triangle against ith node in _nodes array
+	// if there is no triangle (i.e. edge is part of boundary), then index is -1
+	// that is why we use ssize_t instead of size_t here
 public:
-	Triangle(Node* p1, Node* p2, Node* p3) : _p1(p1), _p2(p2), _p3(p3) {
-		if (p1 == nullptr || p2 == nullptr || p3 == nullptr) throw std::logic_error("points must exist");
+	explicit Triangle(size_t p1 = 0, size_t p2 = 0, size_t p3 = 0,
+			 ssize_t t1 = -1, ssize_t t2 = -1, ssize_t t3 = -1) 
+		: _nodes{ {p1, p2, p3} }
+		, _neighbors{ {t1, t2, t3} } {}
+	size_t& nodes(size_t i) { return _nodes[i]; }
+	Triangle& nodes(size_t i, size_t j, size_t k) { 
+		_nodes[0] = i;
+		_nodes[1] = j;
+		_nodes[2] = k;
+		return *this; 
 	}
-	double area() { // norm of vector product underhood
-		Node u = *_p2 - *_p1;
-		Node v = *_p3 - *_p1;
-		return u.crossProductNorm(v) / 2;
+	ssize_t& neighbors(size_t i) { return _neighbors[i]; }
+	Triangle& neighbors(ssize_t i, ssize_t j, ssize_t k) {
+		_neighbors[0] = i;
+		_neighbors[1] = j;
+		_neighbors[2] = k;
+		return *this;
 	}
 };
