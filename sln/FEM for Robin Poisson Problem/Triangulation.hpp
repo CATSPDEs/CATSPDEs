@@ -4,13 +4,14 @@
 #include "Node.hpp"
 #include "Triangle.hpp"
 
-class Triangulation { // this data structure is known as Nodes and Triangles
+class Triangulation { // this data structure is known as “Nodes and Triangles”
+	// we have array of nodes := points on the plane and
+	// array of triangles := array of nodes’ indicies + array of adjacent triangles’ indicies
 	// we use because it is easy to:
 	// * implement Delaunay algorithm [well, indeed]
 	// * loop over elements (i.e. triangles) [stiffnes / mass matrix and load vector assembly]
 	// * determine boundary edges [assembly of Robin BCs]
-	// * refine mesh w/o reconstruction [we call it adaptive FEM and it is neat!]
-	//our mesh is 
+	// * refine mesh w/o reconstruction [we call it adaptive FEM and it is neat!] 
 	vector<Node> _nodes; // nodes (i.e. P-matrix),
 	vector<forward_list<size_t>> _neighbors; // nodes’ neighbors [we need to construct it to assemble our CRS matrix],
 	vector<Triangle> _triangles; // triangles (i.e. T-matrix or connectivity matrix), and
