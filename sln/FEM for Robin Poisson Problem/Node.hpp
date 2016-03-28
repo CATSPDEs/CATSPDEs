@@ -27,6 +27,17 @@ public:
 	Node operator-(Node const & p) const {
 		return Node(*this) -= p;
 	}
+	Node& operator*=(double scaler) { // scale
+		_x *= scaler;
+		_y *= scaler;
+		return *this;
+	}
+	Node operator*(double scaler) const { // scale
+		return Node(*this) *= scaler;
+	}
+	friend Node operator*(double scaler, Node const & p) { // for the sake of commutativity
+		return p * scaler;
+	}
 	double operator*(Node const & p) { // dot product
 		return _x * p._x + _y * p._y;
 	}
@@ -35,6 +46,9 @@ public:
 	}
 	double norm() {
 		return sqrt((*this) * (*this));
+	}
+	Node midPoint(Node const & p) const {
+		return .5 * (*this + p);
 	}
 	friend ostream& operator<<(ostream& out, Node const & p) {
 		return out << p._x << ' ' << p._y << '\n';

@@ -1,3 +1,4 @@
+#include <algorithm> // find()
 #include "Triangulation.hpp"
 
 Triangulation::Triangulation(Node const & lb, Node const & rt, double percent) {
@@ -93,9 +94,105 @@ double Triangulation::area(size_t i) { // compute area of ith triangle
 	return u.crossProductNorm(v) / 2;
 }
 
-void Triangulation::save(ostream& outNodes, ostream& outTriangles) {
+Triangulation& Triangulation::save(ostream& outNodes, ostream& outTriangles) {
 	outNodes.precision(15); // double precision
 	outNodes << scientific;
 	for (Node p : _nodes) outNodes << p;
 	for (Triangle t : _triangles) outTriangles << t;
+	return *this;
+}
+
+Triangulation& Triangulation::refine(Indicies& indicies) {
+	// @indicies is vector of indicies in _triangles to be red-refined
+
+	Indicies::iterator iter1, iter2;
+	size_t i, 
+		   p1, p2, p3, 
+		   t1, t2, t3,
+		   rp1, rp2, rp3,
+		   rt1, rt2, rt3,
+		   gpl1, gpl2, gpl3,
+		   gtn; // dummy indicies
+	Triangle old;
+
+	auto green = [&](size_t t, size_t first, size_t splittingNode, size_t second) { // green refinement of tth triangle
+		// w/ @first and @second new neighbors
+		// and new node @splittingNode
+		gpl3 = (gpl2 = (gpl1 = _triangles[t].neighbor2node(i)) + 1) + 1;
+		// gpl1 := first LOCAL node of green triangle, i.e. node against splitted edge
+		// gpl2 is the second (counterclockwise) and gpl3 is the third
+		// edit neighbor of triangle we are about to add
+		gtn = _triangles[t].neighbors(gpl2);
+		if (gtn != -1) // well, if it exists
+			_triangles[gtn].neighbors(_triangles[gtn].neighbor2node(t)) = _triangles.size();
+		_triangles.push_back(Triangle(
+			_triangles[t].nodes(gpl1), splittingNode, _triangles[t].nodes(gpl3), // nodes counterclockwise
+			first, gtn, t // neighbors
+			));
+		// ok, lets edit t
+		_triangles[t]
+			.nodes(_triangles[t].nodes(gpl1), _triangles[t].nodes(gpl2), splittingNode)
+			.neighbors(second, _triangles.size() - 1, _triangles[t].neighbors(gpl3));
+	};
+
+	for (iter1 = indicies.begin(); iter1 != indicies.end(); ++iter1) {
+		i = *iter1;
+		// we will need ith nodes and neighbors later
+		old = _triangles[i];
+		p1 = old.nodes(0); p2 = old.nodes(1); p3 = old.nodes(2);
+		t1 = old.neighbors(0); t2 = old.neighbors(1); t3 = old.neighbors(2);
+		// add new points
+		_nodes.push_back(_nodes[p1].midPoint(_nodes[p2]));
+		_nodes.push_back(_nodes[p2].midPoint(_nodes[p3]));
+		_nodes.push_back(_nodes[p3].midPoint(_nodes[p1]));
+		// rp means red point, i.e. point added after red refinement
+		rp1 = (rp2 = (rp3 = _nodes.size() - 1) - 1) - 1;
+		// and we have also 3 red triangles yet to be added
+		rt3 = (rt2 = (rt1 = _triangles.size()) + 1) + 1;
+		// our ith triangle splits into 4 new ones
+		// central one will take place of the old one
+		_triangles[i]
+			.nodes(rp1, rp2, rp3)
+			// and its neighbors are known (3 other triangles) and will be added soon
+			.neighbors(rt3, rt1, rt2);
+		// now we have to add 3 other triangles
+		// you have to draw them not to get confused w/ numeration
+		// or just TRUST ME I AM A DOCTOR
+		_triangles.push_back(Triangle(p1, rp1, rp3, i, -1, -1));
+		_triangles.push_back(Triangle(rp1, p2, rp2, -1, i, -1));
+		_triangles.push_back(Triangle(rp3, rp2, p3, -1, -1, i));
+		// yet there 6 neighbors to be found
+		// if we were dealing w/ bndry, we are gold (look at -1’s at previous 4 strings of code)
+		// otherwise…
+		if (t1 != -1) {
+			iter2 = find(iter1, indicies.end(), t1);
+			if (iter2 == indicies.end()) { // if we were not going to red-refine t1…
+				// …then we will refine it green!
+				// but first let’s deal w/ neighbors
+				_triangles[rt2].neighbors(0) = _triangles.size(); // this one will be added soon
+				_triangles[rt3].neighbors(0) = t1; // and t1 will be updated to fit in
+				green(t1, rt2, rp2, rt3);
+			}
+			else {} // TODO
+		}
+		if (t2 != -1) {
+			iter2 = find(iter1, indicies.end(), t2);
+			if (iter2 == indicies.end()) {
+				_triangles[rt3].neighbors(1) = _triangles.size();
+				_triangles[rt1].neighbors(1) = t2;
+				green(t2, rt3, rp3, rt1);
+			}
+			else {}
+		}
+		if (t3 != -1) {
+			iter2 = find(iter1, indicies.end(), t3);
+			if (iter2 == indicies.end()) {
+				_triangles[rt1].neighbors(2) = _triangles.size();
+				_triangles[rt2].neighbors(2) = t3;
+				green(t3, rt1, rp1, rt2);
+			}
+			else {}
+		}
+	}
+	return *this;
 }

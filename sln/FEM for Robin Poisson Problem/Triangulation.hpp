@@ -5,6 +5,8 @@
 #include "Node.hpp"
 #include "Triangle.hpp"
 
+typedef forward_list<size_t> Indicies;
+
 class Triangulation { // this data structure is known as “Nodes and Triangles”
 	// we have array of nodes := points on the plane and
 	// array of triangles := array of nodes’ indicies + array of adjacent triangles’ indicies
@@ -14,7 +16,7 @@ class Triangulation { // this data structure is known as “Nodes and Triangles”
 	// * determine boundary edges [assembly of Robin BCs]
 	// * refine mesh w/o reconstruction [we call it adaptive FEM and it is neat!] 
 	vector<Node> _nodes; // nodes (i.e. P-matrix),
-	vector<forward_list<size_t>> _neighbors; // nodes’ neighbors [we need to construct it to assemble our CRS matrix],
+	vector<Indicies> _neighbors; // nodes’ neighbors [we need to construct it to assemble our CRS matrix],
 	vector<Triangle> _triangles; // triangles (i.e. T-matrix or connectivity matrix), and
 	double _h; // max size of triangle edge
 	// we will loop over our elements (i.e. over _triangles vector) to assemble stiffness matrix
@@ -27,5 +29,6 @@ public:
 		return (_nodes[_triangles[t].nodes((i + 1) % 3)] - _nodes[_triangles[t].nodes((i + 2) % 3)]).norm();
 	}
 	double area(size_t); // compute area of ith triangle
-	void save(ostream& nodes = cout, ostream& triangles = cout); // save mesh to std out
+	Triangulation& save(ostream& nodes = cout, ostream& triangles = cout); // save mesh to std out
+	Triangulation& refine(Indicies&); // red-green refinement
 };
