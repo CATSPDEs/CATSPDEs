@@ -92,3 +92,10 @@ double Triangulation::area(size_t i) { // compute area of ith triangle
 	Node v = _nodes[_triangles[i].nodes(2)] - _nodes[_triangles[i].nodes(0)];
 	return u.crossProductNorm(v) / 2;
 }
+
+void Triangulation::save(ostream& outNodes, ostream& outTriangles) {
+	outNodes.precision(15); // double precision
+	outNodes << scientific;
+	for (Node p : _nodes) outNodes << p;
+	for (Triangle t : _triangles) outTriangles << t;
+}

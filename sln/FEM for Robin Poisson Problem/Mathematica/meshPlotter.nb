@@ -1,0 +1,142 @@
+(* Content-type: application/vnd.wolfram.mathematica *)
+
+(*** Wolfram Notebook File ***)
+(* http://www.wolfram.com/nb *)
+
+(* CreatedBy='Mathematica 10.0' *)
+
+(*CacheID: 234*)
+(* Internal cache information:
+NotebookFileLineBreakTest
+NotebookFileLineBreakTest
+NotebookDataPosition[       158,          7]
+NotebookDataLength[      4960,        133]
+NotebookOptionsPosition[      4529,        114]
+NotebookOutlinePosition[      4875,        129]
+CellTagsIndexPosition[      4832,        126]
+WindowFrame->Normal*)
+
+(* Beginning of Notebook Content *)
+Notebook[{
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{"ClearAll", "[", "\"\<Global`*\>\"", "]"}], "\[IndentingNewLine]", 
+  RowBox[{"(*", " ", 
+   RowBox[{"set", " ", "your", " ", "home", " ", "directory"}], " ", 
+   "*)"}]}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"SetDirectory", "[", 
+   RowBox[{"NotebookDirectory", "[", "]"}], "]"}], ";"}]}], "Input",
+ CellChangeTimes->{{3.668165349926426*^9, 3.6681653768637767`*^9}, {
+   3.668165461523141*^9, 3.6681655139834633`*^9}, 3.6681656071284866`*^9}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"(*", " ", 
+   RowBox[{"import", " ", "nodes", " ", "and", " ", "triangles"}], " ", 
+   "*)"}], "\[IndentingNewLine]", 
+  RowBox[{
+   RowBox[{
+    RowBox[{"nodes", "=", 
+     RowBox[{"Import", "[", 
+      RowBox[{"\"\<n.dat\>\"", ",", "\"\<Table\>\""}], "]"}]}], ";"}], 
+   "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{"triangles", "=", 
+     RowBox[{"Import", "[", 
+      RowBox[{"\"\<t.dat\>\"", ",", "\"\<Table\>\""}], "]"}]}], ";"}], 
+   "\[IndentingNewLine]", 
+   RowBox[{"(*", " ", 
+    RowBox[{
+    "Mathematica", " ", "counts", " ", "from", " ", "1", " ", "not", " ", 
+     "0"}], " ", "*)"}], "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{"triangles", "+=", "1"}], ";"}]}]}]], "Input",
+ CellChangeTimes->{{3.6681648107786846`*^9, 3.668164878812313*^9}, {
+  3.6681649190735836`*^9, 3.6681649394584446`*^9}, {3.668165245323753*^9, 
+  3.66816525150686*^9}, {3.6681653482091556`*^9, 3.668165373132949*^9}, {
+  3.6681656275523605`*^9, 3.6681656793529406`*^9}, {3.6681657857356853`*^9, 
+  3.6681658089093013`*^9}}],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"(*", " ", 
+   RowBox[{"our", " ", "triangulation"}], " ", "*)"}], "\[IndentingNewLine]", 
+  RowBox[{"\[ScriptCapitalK]", "=", 
+   RowBox[{"MeshRegion", "[", 
+    RowBox[{"nodes", ",", 
+     RowBox[{"Triangle", "[", "triangles", "]"}]}], "]"}]}]}]], "Input",
+ CellChangeTimes->{{3.668165682378528*^9, 3.668165781016464*^9}, {
+  3.668165880431182*^9, 3.66816588597805*^9}, {3.6681659170408287`*^9, 
+  3.6681659907697153`*^9}, {3.668166041126202*^9, 3.6681660560099936`*^9}, {
+  3.6681663667668114`*^9, 3.6681663676958156`*^9}}],
+
+Cell[BoxData[
+ GraphicsBox[
+  TagBox[
+   DynamicModuleBox[{Typeset`mesh = HoldComplete[
+     MeshRegion[{{0., 0.}, {1., 0.}, {2., 0.}, {3., 0.}, {4., 0.}, {0., 1.}, {
+      1., 1.}, {2., 1.}, {3., 1.}, {4., 1.}, {0., 2.}, {1., 2.}, {2., 2.}, {
+      3., 2.}, {4., 2.}}, {
+       Polygon[{{1, 2, 6}, {2, 7, 6}, {2, 3, 7}, {3, 8, 7}, {3, 4, 8}, {4, 9, 
+        8}, {4, 5, 9}, {5, 10, 9}, {6, 7, 11}, {7, 12, 11}, {7, 8, 12}, {8, 
+        13, 12}, {8, 9, 13}, {9, 14, 13}, {9, 10, 14}, {10, 15, 14}}]}, 
+      Method -> {
+       "EliminateUnusedCoordinates" -> True, "DeleteDuplicateCoordinates" -> 
+        Automatic, "VertexAlias" -> Identity, "CheckOrientation" -> True, 
+        "CoplanarityTolerance" -> Automatic, "CheckIntersections" -> 
+        Automatic, "BoundaryNesting" -> Automatic, "SeparateBoundaries" -> 
+        False, "PropagateMarkers" -> True, "Hash" -> 7468355871648214749}]]}, 
+    TagBox[
+     GraphicsComplexBox[{{0., 0.}, {1., 0.}, {2., 0.}, {3., 0.}, {4., 0.}, {
+      0., 1.}, {1., 1.}, {2., 1.}, {3., 1.}, {4., 1.}, {0., 2.}, {1., 2.}, {
+      2., 2.}, {3., 2.}, {4., 2.}}, 
+      {Hue[0.6, 0.3, 0.95], EdgeForm[Hue[0.6, 0.3, 0.75]], 
+       PolygonBox[{{1, 2, 6}, {2, 7, 6}, {2, 3, 7}, {3, 8, 7}, {3, 4, 8}, {4, 
+        9, 8}, {4, 5, 9}, {5, 10, 9}, {6, 7, 11}, {7, 12, 11}, {7, 8, 12}, {8,
+         13, 12}, {8, 9, 13}, {9, 14, 13}, {9, 10, 14}, {10, 15, 14}}]}],
+     MouseAppearanceTag["LinkHand"]],
+    AllowKernelInitialization->False],
+   "MeshGraphics",
+   AutoDelete->True,
+   Editable->False,
+   Selectable->False],
+  DefaultBaseStyle->{
+   "Graphics", FrontEnd`GraphicsHighlightColor -> 
+    Hue[0.1, 1, 0.7]}]], "Output",
+ CellChangeTimes->{3.6681660460596666`*^9, 3.668166368424001*^9}]
+}, Open  ]],
+
+Cell[BoxData[""], "Input",
+ CellChangeTimes->{{3.6681659433049746`*^9, 3.668165948557312*^9}}]
+},
+WindowSize->{767, 601},
+WindowMargins->{{Automatic, 211}, {29, Automatic}},
+FrontEndVersion->"10.0 for Microsoft Windows (64-bit) (December 4, 2014)",
+StyleDefinitions->"Default.nb"
+]
+(* End of Notebook Content *)
+
+(* Internal cache information *)
+(*CellTagsOutline
+CellTagsIndex->{}
+*)
+(*CellTagsIndex
+CellTagsIndex->{}
+*)
+(*NotebookFileOutline
+Notebook[{
+Cell[558, 20, 486, 10, 72, "Input"],
+Cell[1047, 32, 1056, 26, 112, "Input"],
+Cell[CellGroupData[{
+Cell[2128, 62, 560, 11, 52, "Input"],
+Cell[2691, 75, 1725, 33, 202, "Output"]
+}, Open  ]],
+Cell[4431, 111, 94, 1, 31, "Input"]
+}
+]
+*)
+
+(* End of internal cache information *)

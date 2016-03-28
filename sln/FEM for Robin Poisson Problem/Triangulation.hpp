@@ -1,6 +1,7 @@
 #pragma once
 #include <vector>
 #include <forward_list>
+#include <iostream>
 #include "Node.hpp"
 #include "Triangle.hpp"
 
@@ -26,4 +27,5 @@ public:
 		return (_nodes[_triangles[t].nodes((i + 1) % 3)] - _nodes[_triangles[t].nodes((i + 2) % 3)]).norm();
 	}
 	double area(size_t); // compute area of ith triangle
+	void save(ostream& nodes = cout, ostream& triangles = cout); // save mesh to std out
 };

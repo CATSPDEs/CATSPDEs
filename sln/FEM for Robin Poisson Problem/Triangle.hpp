@@ -35,4 +35,7 @@ public:
 		_neighbors[2] = k;
 		return *this;
 	}
+	friend ostream& operator<<(ostream& out, Triangle const & t) {
+		return out << t._nodes[0] << ' ' << t._nodes[1] << ' ' << t._nodes[2] << '\n';
+	}
 };
