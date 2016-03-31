@@ -1,4 +1,3 @@
-#include <algorithm> // count()
 #include <map>
 #include "Triangulation.hpp"
 
@@ -136,6 +135,7 @@ Triangulation& Triangulation::refine(Indicies& redList) {
 	// RED PART
 	for (Indicies::iterator redListIter = redList.begin(); redListIter != redList.end(); ++redListIter) {
 		i = *redListIter;
+		greenMap.erase(i); // ith triangle should be red-refined
 		// we will need ith nodes and neighbors later
 		p = _triangles[i].nodes();
 		t = _triangles[i].neighbors();
@@ -176,8 +176,7 @@ Triangulation& Triangulation::refine(Indicies& redList) {
 			// if ith has no neighbors or its neighbors were refined earlier, we are gold 
 			// otherwise we have to deal w/ hanging nodes
 			for (j = 0; j < 3; ++j)
-				if (t[j] != -1 && !count(redList.begin(), redList.end(), t[j]))
-					if (++greenMap[t[j]] > 1) { // if we have 2 or 3 hanging nodes,
+				if (t[j] != -1 && ++greenMap[t[j]] > 1) { // if we have 2 or 3 hanging nodes,
 						greenMap.erase(t[j]); // we will not refine _triangle[t[j]] green
 						redList.push_back(t[j]); // we will refine it red instead!
 					}
