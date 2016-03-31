@@ -5,9 +5,9 @@ int main() {
 	Triangulation K(Node(0, 0), Node(4, 2), .9);
 	cout << K.area(0) << ' ' << K.length(0, 0) << '\n'; 
 	Indicies L;
-	L.push_front(14);
-	L.push_front(0);
-	L.push_front(2);
+	L.push_back(12);
+	K.refine(L);
+	L.back() = 11;
 	K.refine(L);
 	K.save(ofstream("Mathematica/n.dat"), ofstream("Mathematica/t.dat"));
 	// area of the very 1st triangle and length of its 1st side

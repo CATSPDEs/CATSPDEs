@@ -1,4 +1,5 @@
-#include <algorithm> // find()
+#include <algorithm> // count()
+#include <map>
 #include "Triangulation.hpp"
 
 Triangulation::Triangulation(Node const & lb, Node const & rt, double percent) {
@@ -97,102 +98,144 @@ double Triangulation::area(size_t i) { // compute area of ith triangle
 Triangulation& Triangulation::save(ostream& outNodes, ostream& outTriangles) {
 	outNodes.precision(15); // double precision
 	outNodes << scientific;
-	for (Node p : _nodes) outNodes << p;
-	for (Triangle t : _triangles) outTriangles << t;
+	for (Node const & p : _nodes) outNodes << p;
+	for (Triangle const & t : _triangles) outTriangles << t;
 	return *this;
 }
 
-Triangulation& Triangulation::refine(Indicies& indicies) {
-	// @indicies is vector of indicies in _triangles to be red-refined
-
-	Indicies::iterator iter1, iter2;
-	size_t i, 
-		   p1, p2, p3, 
-		   t1, t2, t3,
-		   rp1, rp2, rp3,
-		   rt1, rt2, rt3,
-		   gpl1, gpl2, gpl3,
-		   gtn; // dummy indicies
-	Triangle old;
-
-	auto green = [&](size_t t, size_t first, size_t splittingNode, size_t second) { // green refinement of tth triangle
-		// w/ @first and @second new neighbors
-		// and new node @splittingNode
-		gpl3 = (gpl2 = (gpl1 = _triangles[t].neighbor2node(i)) + 1) + 1;
-		// gpl1 := first LOCAL node of green triangle, i.e. node against splitted edge
-		// gpl2 is the second (counterclockwise) and gpl3 is the third
-		// edit neighbor of triangle we are about to add
-		gtn = _triangles[t].neighbors(gpl2);
-		if (gtn != -1) // well, if it exists
-			_triangles[gtn].neighbors(_triangles[gtn].neighbor2node(t)) = _triangles.size();
-		_triangles.push_back(Triangle(
-			_triangles[t].nodes(gpl1), splittingNode, _triangles[t].nodes(gpl3), // nodes counterclockwise
-			first, gtn, t // neighbors
-			));
-		// ok, lets edit t
-		_triangles[t]
-			.nodes(_triangles[t].nodes(gpl1), _triangles[t].nodes(gpl2), splittingNode)
-			.neighbors(second, _triangles.size() - 1, _triangles[t].neighbors(gpl3));
+Triangulation& Triangulation::refine(Indicies& redList) {
+	// @redList is a vector of indicies in _triangles to be red-refined
+	map<size_t, unsigned short> greenMap;
+	// tree of indicies of triangles w/ hanging nodes
+	// we must refine them green later
+	// key is index in _triangles vector,
+	// value is numb of hanging node in (1, 2, or 3)
+	Indicies redNeighborsList;
+	// n <= 6 unknown neighbors of three new red triangles
+	// that were added on previous iterations
+	array<size_t, 3> p, rp;
+	// indicies of nodes of old triangle (i.e. triangle to be refined),
+	// ‘‘ of new (red) nodes to be added,
+	size_t gp; // index of green node
+	array<ssize_t, 3> t, rt;
+	// indicies of neighbor triangles of the old triangle,
+	// ‘‘ of new (red) neighbor triangles
+	//
+	size_t i, j; // dummy indicies
+	auto addExistingRedNodeFrom = [&](size_t t) { // …from triangle _triangles[t]
+		// we will need this function in order to 
+		// organize red refinement if @redList contains neighbor triangles
+		// because we do not want to add same nodes to _nodes vector several times
+		size_t k;
+		for (k = 0; k < 3; ++k) if (_triangles[_triangles[t].neighbors(k)].neighbors(1) != i &&
+									_triangles[_triangles[t].neighbors(k)].neighbors(2) != i) break;
+		redNeighborsList.push_back(_triangles[t].neighbors(k + 1)); // add red neighbors from
+		redNeighborsList.push_back(_triangles[t].neighbors(k + 2)); // previous refinements
+		return _triangles[t].nodes(k);
 	};
-
-	for (iter1 = indicies.begin(); iter1 != indicies.end(); ++iter1) {
-		i = *iter1;
+	// RED PART
+	for (Indicies::iterator redListIter = redList.begin(); redListIter != redList.end(); ++redListIter) {
+		i = *redListIter;
 		// we will need ith nodes and neighbors later
-		old = _triangles[i];
-		p1 = old.nodes(0); p2 = old.nodes(1); p3 = old.nodes(2);
-		t1 = old.neighbors(0); t2 = old.neighbors(1); t3 = old.neighbors(2);
-		// add new points
-		_nodes.push_back(_nodes[p1].midPoint(_nodes[p2]));
-		_nodes.push_back(_nodes[p2].midPoint(_nodes[p3]));
-		_nodes.push_back(_nodes[p3].midPoint(_nodes[p1]));
-		// rp means red point, i.e. point added after red refinement
-		rp1 = (rp2 = (rp3 = _nodes.size() - 1) - 1) - 1;
-		// and we have also 3 red triangles yet to be added
-		rt3 = (rt2 = (rt1 = _triangles.size()) + 1) + 1;
-		// our ith triangle splits into 4 new ones
-		// central one will take place of the old one
+		p = _triangles[i].nodes();
+		t = _triangles[i].neighbors();
+		// let’s deal w/ red points
+		for (j = 0; j < 3; ++j)
+			if (!checkNeighbor(i, j))
+				// if our triangle has a neighbor which has already been red-refined,
+				// then no need in creating a new node
+				// we just have to find out its index
+				rp[j] = addExistingRedNodeFrom(t[j]);
+			else {
+				// otherwise, well, let’s add a node!
+				rp[j] = _nodes.size();
+				_nodes.push_back(_nodes[p[excludeIndex(j)[0]]].midPoint(_nodes[p[excludeIndex(j)[1]]]));
+			}
+			// and we have also 3 red triangles yet to be added
+			rt[2] = (rt[1] = (rt[0] = _triangles.size()) + 1) + 1;
+			// our ith triangle splits into 4 new ones
+			// central one will take place of the old one
+			_triangles[i]
+				.nodes(rp)
+				// and its neighbors are known (3 other triangles) and will be added soon
+				.neighbors(rt);
+			// now we have to add 3 other triangles
+			// you have to draw them not to get confused w/ numeration
+			// or just TRUST ME I AM A DOCTOR
+			_triangles.push_back(Triangle(p[0], rp[2], rp[1], i, t[1], t[2]));
+			_triangles.push_back(Triangle(p[1], rp[0], rp[2], i, t[2], t[0]));
+			_triangles.push_back(Triangle(p[2], rp[1], rp[0], i, t[0], t[1]));
+			// we set neighbors of our new triangles to be neighbors of 
+			// our old (refined) triangle
+			// so there n <= 6 neighbors to be found
+			// if ith neighbors were red-refined previously 
+			for (j = _triangles.size() - 3; j < _triangles.size(); ++j)
+				for (size_t neighbor : redNeighborsList)
+					makeNeighbors(j, neighbor);
+			redNeighborsList.clear(); // we are done w/ neighbors
+			// if ith has no neighbors or its neighbors were refined earlier, we are gold 
+			// otherwise we have to deal w/ hanging nodes
+			for (j = 0; j < 3; ++j)
+				if (t[j] != -1 && !count(redList.begin(), redList.end(), t[j]))
+					if (++greenMap[t[j]] > 1) { // if we have 2 or 3 hanging nodes,
+						greenMap.erase(t[j]); // we will not refine _triangle[t[j]] green
+						redList.push_back(t[j]); // we will refine it red instead!
+					}
+	}
+	// GREEN PART
+	for (auto const & kv : greenMap) {
+		i = kv.first; // index of triangle to be green-refined
+		for (j = 0; j < 3; ++j)
+			if (!checkNeighbor(i, j)) {
+				rt[0] = _triangles[i].neighbors(j); // so _triangles[rt[0]] is red triangle w/ a handing node
+				break;
+			}
+		gp = addExistingRedNodeFrom(rt[0]); // so _nodes[gp] is our hagning node
+		// we want to split our ith triangle into two triangles
+		// one of them we will add 
+		_triangles.push_back(Triangle(_triangles[i].nodes(j), _triangles[i].nodes(j + 1), gp,
+									  -1, i, _triangles[i].neighbors(j + 2)));
+		// and another one will take place of the old one
 		_triangles[i]
-			.nodes(rp1, rp2, rp3)
-			// and its neighbors are known (3 other triangles) and will be added soon
-			.neighbors(rt3, rt1, rt2);
-		// now we have to add 3 other triangles
-		// you have to draw them not to get confused w/ numeration
-		// or just TRUST ME I AM A DOCTOR
-		_triangles.push_back(Triangle(p1, rp1, rp3, i, -1, -1));
-		_triangles.push_back(Triangle(rp1, p2, rp2, -1, i, -1));
-		_triangles.push_back(Triangle(rp3, rp2, p3, -1, -1, i));
-		// yet there 6 neighbors to be found
-		// if we were dealing w/ bndry, we are gold (look at -1’s at previous 4 strings of code)
-		// otherwise…
-		if (t1 != -1) {
-			iter2 = find(iter1, indicies.end(), t1);
-			if (iter2 == indicies.end()) { // if we were not going to red-refine t1…
-				// …then we will refine it green!
-				// but first let’s deal w/ neighbors
-				_triangles[rt2].neighbors(0) = _triangles.size(); // this one will be added soon
-				_triangles[rt3].neighbors(0) = t1; // and t1 will be updated to fit in
-				green(t1, rt2, rp2, rt3);
-			}
-			else {} // TODO
-		}
-		if (t2 != -1) {
-			iter2 = find(iter1, indicies.end(), t2);
-			if (iter2 == indicies.end()) {
-				_triangles[rt3].neighbors(1) = _triangles.size();
-				_triangles[rt1].neighbors(1) = t2;
-				green(t2, rt3, rp3, rt1);
-			}
-			else {}
-		}
-		if (t3 != -1) {
-			iter2 = find(iter1, indicies.end(), t3);
-			if (iter2 == indicies.end()) {
-				_triangles[rt1].neighbors(2) = _triangles.size();
-				_triangles[rt2].neighbors(2) = t3;
-				green(t3, rt1, rp1, rt2);
-			}
-			else {}
-		}
+			.nodes(_triangles[i].nodes(j), gp, _triangles[i].nodes(j + 2))
+			.neighbors(-1, _triangles[i].neighbors(j + 1), _triangles.size() - 1);
+		// finally, lets fix neighbors
+		makeNeighbors(i, redNeighborsList.front());
+		makeNeighbors(_triangles.size() - 1, redNeighborsList.back());
+		redNeighborsList.clear();
 	}
 	return *this;
 }
+
+bool Triangulation::checkNeighbor(size_t t1, localIndex i) {
+	// check if ith neighbor of a t1th triangle also has _triangles[t1] as a neighbor
+	ssize_t t2 = _triangles[t1].neighbors(i);
+	if (t2 == -1) return true;
+	for (i = 0; i < 3; ++i)
+		if (_triangles[t2].neighbors(i) == t1) return true;
+	return false;
+}
+
+bool Triangulation::makeNeighbors(size_t t1, size_t t2) {
+	// make _triangles[@t1] and ‘‘ @t2 neighbors
+	// if they are not adjacent, return false
+	array<array<localIndex, 2>, 2> commonNodes;
+	localIndex i, j, k = 0;
+	for (i = 0; i < 3; ++i)
+		for (j = 0; j < 3; ++j)
+			if (_triangles[t1].nodes(i) == _triangles[t2].nodes(j)) {
+				commonNodes[0][k] = i;
+				commonNodes[1][k++] = j;
+			}
+	if (k < 2) return false; // triangles are not adjacent
+	if (k > 2) { // triangles share… more than 2 nodes?
+		string error("invalid mesh: check out tringles #");
+		throw logic_error(((error += t1) += " and #") += t2);
+	}
+	i = excludeIndicies(commonNodes[0][0], commonNodes[0][1]); // i := node of t1 against common edge 
+	j = excludeIndicies(commonNodes[1][0], commonNodes[1][1]); 
+	_triangles[t1].neighbors(i) = t2;
+	_triangles[t2].neighbors(j) = t1;
+	return true; // we are gold
+}
+

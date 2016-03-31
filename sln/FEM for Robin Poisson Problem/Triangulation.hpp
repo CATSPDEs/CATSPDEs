@@ -1,11 +1,11 @@
 #pragma once
 #include <vector>
-#include <forward_list>
+#include <list>
 #include <iostream>
 #include "Node.hpp"
 #include "Triangle.hpp"
 
-typedef forward_list<size_t> Indicies;
+typedef list<size_t> Indicies;
 
 class Triangulation { // this data structure is known as “Nodes and Triangles”
 	// we have array of nodes := points on the plane and
@@ -25,10 +25,12 @@ class Triangulation { // this data structure is known as “Nodes and Triangles”
 	// in order to construct portrait of CRS-matrix, we also need to store neighbors of ith node 
 public:
 	Triangulation(Node const &, Node const &, double percent = .5); // dummy rect triangulation
-	double length(size_t t, size_t i) { // compute length of ith edge of tth triangle
-		return (_nodes[_triangles[t].nodes((i + 1) % 3)] - _nodes[_triangles[t].nodes((i + 2) % 3)]).norm();
+	double length(size_t t, localIndex i) { // compute length of ith edge of tth triangle
+		return (_nodes[_triangles[t].nodes(i + 1)] - _nodes[_triangles[t].nodes(i + 2)]).norm();
 	}
 	double area(size_t); // compute area of ith triangle
+	bool checkNeighbor(size_t, localIndex); // check if ith neighbor of a tth triangle also has _triangles[t] as a neighbor
+	bool makeNeighbors(size_t, size_t); // make 2 triangles neighbors
 	Triangulation& save(ostream& nodes = cout, ostream& triangles = cout); // save mesh to std out
 	Triangulation& refine(Indicies&); // red-green refinement
 };
