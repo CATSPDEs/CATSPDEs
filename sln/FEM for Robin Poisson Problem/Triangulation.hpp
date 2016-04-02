@@ -28,6 +28,8 @@ public:
 	double length(size_t t, localIndex i) { // compute length of ith edge of tth triangle
 		return (_nodes[_triangles[t].nodes(i + 1)] - _nodes[_triangles[t].nodes(i + 2)]).norm();
 	}
+	size_t numbOfNodes() const { return _nodes.size(); }
+	size_t numbOfTriangles() const { return _triangles.size(); }
 	double area(size_t); // compute area of ith triangle
 	bool checkNeighbor(size_t, localIndex); // check if ith neighbor of a tth triangle also has _triangles[t] as a neighbor
 	bool makeNeighbors(size_t, size_t); // make 2 triangles neighbors

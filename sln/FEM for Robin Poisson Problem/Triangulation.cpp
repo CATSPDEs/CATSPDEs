@@ -1,4 +1,5 @@
 #include <map>
+#include <algorithm>
 #include "Triangulation.hpp"
 
 Triangulation::Triangulation(Node const & lb, Node const & rt, double percent) {
@@ -115,7 +116,7 @@ Triangulation& Triangulation::refine(Indicies& redList) {
 	array<size_t, 3> p, rp;
 	// indicies of nodes of old triangle (i.e. triangle to be refined),
 	// ‘‘ of new (red) nodes to be added,
-	size_t gp; // index of green node
+	size_t gp, gt; // index of green node and green neighbor
 	array<ssize_t, 3> t, rt;
 	// indicies of neighbor triangles of the old triangle,
 	// ‘‘ of new (red) neighbor triangles
@@ -135,7 +136,6 @@ Triangulation& Triangulation::refine(Indicies& redList) {
 	// RED PART
 	for (Indicies::iterator redListIter = redList.begin(); redListIter != redList.end(); ++redListIter) {
 		i = *redListIter;
-		greenMap.erase(i); // ith triangle should be red-refined
 		// we will need ith nodes and neighbors later
 		p = _triangles[i].nodes();
 		t = _triangles[i].neighbors();
@@ -176,7 +176,8 @@ Triangulation& Triangulation::refine(Indicies& redList) {
 			// if ith has no neighbors or its neighbors were refined earlier, we are gold 
 			// otherwise we have to deal w/ hanging nodes
 			for (j = 0; j < 3; ++j)
-				if (t[j] != -1 && ++greenMap[t[j]] > 1) { // if we have 2 or 3 hanging nodes,
+				if (t[j] != -1 && !count(redList.begin(), redList.end(), t[j]) && ++greenMap[t[j]] >= 2) { 
+						// if we have 2 or 3 hanging nodes,
 						greenMap.erase(t[j]); // we will not refine _triangle[t[j]] green
 						redList.push_back(t[j]); // we will refine it red instead!
 					}
@@ -191,10 +192,13 @@ Triangulation& Triangulation::refine(Indicies& redList) {
 			}
 		gp = addExistingRedNodeFrom(rt[0]); // so _nodes[gp] is our hagning node
 		// we want to split our ith triangle into two triangles
-		// one of them we will add 
+		// one of them we will add… 
 		_triangles.push_back(Triangle(_triangles[i].nodes(j), _triangles[i].nodes(j + 1), gp,
-									  -1, i, _triangles[i].neighbors(j + 2)));
-		// and another one will take place of the old one
+									  -1, i, -1));
+		// …(fix green neighbor)…
+		if (_triangles[i].neighbors(j + 2) != -1) 
+			makeNeighbors(_triangles.size() - 1, _triangles[i].neighbors(j + 2));
+		// …and another one will take place of the old one
 		_triangles[i]
 			.nodes(_triangles[i].nodes(j), gp, _triangles[i].nodes(j + 2))
 			.neighbors(-1, _triangles[i].neighbors(j + 1), _triangles.size() - 1);
@@ -223,14 +227,14 @@ bool Triangulation::makeNeighbors(size_t t1, size_t t2) {
 	for (i = 0; i < 3; ++i)
 		for (j = 0; j < 3; ++j)
 			if (_triangles[t1].nodes(i) == _triangles[t2].nodes(j)) {
+				if (k > 1) { // triangles share… more than 2 nodes?
+					string error("invalid mesh: check out tringles #");
+					throw logic_error(((error += t1) += " and #") += t2);
+				}
 				commonNodes[0][k] = i;
 				commonNodes[1][k++] = j;
 			}
 	if (k < 2) return false; // triangles are not adjacent
-	if (k > 2) { // triangles share… more than 2 nodes?
-		string error("invalid mesh: check out tringles #");
-		throw logic_error(((error += t1) += " and #") += t2);
-	}
 	i = excludeIndicies(commonNodes[0][0], commonNodes[0][1]); // i := node of t1 against common edge 
 	j = excludeIndicies(commonNodes[1][0], commonNodes[1][1]); 
 	_triangles[t1].neighbors(i) = t2;
