@@ -109,7 +109,7 @@ Triangulation& Triangulation::refine(Indicies& redList) {
 	// tree of indicies of triangles w/ hanging nodes
 	// we must refine them green later
 	// key is index in _triangles vector,
-	// value is numb of hanging node in (1, 2, or 3)
+	// value is numb of hanging nodes in (1, 2, or 3)
 	Indicies redNeighborsList;
 	// n <= 6 unknown neighbors of three new red triangles
 	// that were added on previous iterations
@@ -120,7 +120,6 @@ Triangulation& Triangulation::refine(Indicies& redList) {
 	array<ssize_t, 3> t, rt;
 	// indicies of neighbor triangles of the old triangle,
 	// ‘‘ of new (red) neighbor triangles
-	//
 	size_t i, j; // dummy indicies
 	auto addExistingRedNodeFrom = [&](size_t t) { // …from triangle _triangles[t]
 		// we will need this function in order to 
