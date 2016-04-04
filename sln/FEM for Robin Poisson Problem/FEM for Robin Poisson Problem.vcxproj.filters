@@ -15,10 +15,10 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="user.cpp">
+    <ClCompile Include="Triangulation.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Triangulation.cpp">
+    <ClCompile Include="timing.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

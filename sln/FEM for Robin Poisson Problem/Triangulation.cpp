@@ -120,36 +120,45 @@ Triangulation& Triangulation::refine(Indicies& redList) {
 	array<ssize_t, 3> t, rt;
 	// indicies of neighbor triangles of the old triangle,
 	// ‘‘ of new (red) neighbor triangles
-	size_t i, j; // dummy indicies
+	size_t i, j, k; // dummy indicies
 	auto addExistingRedNodeFrom = [&](size_t t) { // …from triangle _triangles[t]
 		// we will need this function in order to 
 		// organize red refinement if @redList contains neighbor triangles
 		// because we do not want to add same nodes to _nodes vector several times
-		size_t k;
-		for (k = 0; k < 3; ++k) if (_triangles[_triangles[t].neighbors(k)].neighbors(1) != i &&
-									_triangles[_triangles[t].neighbors(k)].neighbors(2) != i) break;
-		redNeighborsList.push_back(_triangles[t].neighbors(k + 1)); // add red neighbors from
-		redNeighborsList.push_back(_triangles[t].neighbors(k + 2)); // previous refinements
-		return _triangles[t].nodes(k);
+		size_t m;
+		for (m = 0; m < 3; ++m) if (_triangles[_triangles[t].neighbors(m)].neighbors(1) != i &&
+									_triangles[_triangles[t].neighbors(m)].neighbors(2) != i) break;
+		redNeighborsList.push_back(_triangles[t].neighbors(m + 1)); // add red neighbors from
+		redNeighborsList.push_back(_triangles[t].neighbors(m + 2)); // previous refinements
+		return _triangles[t].nodes(m);
 	};
 	// RED PART
-	for (Indicies::iterator redListIter = redList.begin(); redListIter != redList.end(); ++redListIter) {
-		i = *redListIter;
+	Indicies::iterator redListIter = redList.begin(),
+					   searchStartIter = prev(redList.end()), 
+					   searchIter;
+	while (redListIter != redList.end()) {
+		// well, since this iteration
+		// _triangles[i] sholuld not ever be added to redList again
+		greenMap[i = *redListIter] = 3; 
 		// we will need ith nodes and neighbors later
 		p = _triangles[i].nodes();
 		t = _triangles[i].neighbors();
 		// let’s deal w/ red points
-		for (j = 0; j < 3; ++j)
-			if (!checkNeighbor(i, j))
+		for (j = 0, k = 0; j < 3; ++j)
+			if (!checkNeighbor(i, j)) {
 				// if our triangle has a neighbor which has already been red-refined,
 				// then no need in creating a new node
 				// we just have to find out its index
 				rp[j] = addExistingRedNodeFrom(t[j]);
+				++k; // how many nodes we do not need to create
+			}
 			else {
 				// otherwise, well, let’s add a node!
 				rp[j] = _nodes.size();
 				_nodes.push_back(_nodes[p[excludeIndex(j)[0]]].midPoint(_nodes[p[excludeIndex(j)[1]]]));
 			}
+			if (k > 1 && (searchIter = find(next(searchStartIter), redList.end(), i)) != redList.end()) 
+				redList.erase(searchIter); // if k equals 2 or 3
 			// and we have also 3 red triangles yet to be added
 			rt[2] = (rt[1] = (rt[0] = _triangles.size()) + 1) + 1;
 			// our ith triangle splits into 4 new ones
@@ -175,15 +184,19 @@ Triangulation& Triangulation::refine(Indicies& redList) {
 			// if ith has no neighbors or its neighbors were refined earlier, we are gold 
 			// otherwise we have to deal w/ hanging nodes
 			for (j = 0; j < 3; ++j)
-				if (t[j] != -1 && !count(redList.begin(), redList.end(), t[j]) && ++greenMap[t[j]] >= 2) { 
-						// if we have 2 or 3 hanging nodes,
-						greenMap.erase(t[j]); // we will not refine _triangle[t[j]] green
+				if (t[j] != -1 && ++greenMap[t[j]] == 2) 
+						// if we have 2 (or 3 actually) hanging nodes,
+						// we will not refine _triangle[t[j]] green
 						redList.push_back(t[j]); // we will refine it red instead!
-					}
+			// we do not want to search from the very begining
+			// because O(n^2) is too slow
+			// so we use this smart hack
+			if (redListIter++ == searchStartIter) searchStartIter = prev(redList.end());
 	}
 	// GREEN PART
-	for (auto const & kv : greenMap) {
-		i = kv.first; // index of triangle to be green-refined
+	for (auto const & keyValue : greenMap) {
+		if (keyValue.second > 1) continue; // we should do green refinement iff there’s only one hanging node
+		i = keyValue.first; // index of triangle to be green-refined
 		for (j = 0; j < 3; ++j)
 			if (!checkNeighbor(i, j)) {
 				rt[0] = _triangles[i].neighbors(j); // so _triangles[rt[0]] is red triangle w/ a handing node
