@@ -87,6 +87,14 @@ Triangulation::Triangulation(Node const & lb, Node const & rt, double percent) {
 		}
 }
 
+Triangulation::Triangulation(vector<Node> const & nodes, vector<Triangle> const & triangles,
+	vector<Curve> const & curves, vector<CurvilinearEdge> const & edges) 
+	: _nodes(nodes)
+	, _triangles(triangles)
+	, _curves(curves)
+	, _edges(edges) {
+}
+
 double Triangulation::area(size_t i) { // compute area of ith triangle
 	// we have norm of vector product underhood
 	// neat!!
@@ -120,12 +128,11 @@ Triangulation& Triangulation::refine(Indicies& redList) {
 	array<ssize_t, 3> t, rt;
 	// indicies of neighbor triangles of the old triangle,
 	// ‘‘ of new (red) neighbor triangles
-	size_t i, j, k; // dummy indicies
+	size_t i, j, k, m; // dummy indicies
 	auto addExistingRedNodeFrom = [&](size_t t) { // …from triangle _triangles[t]
 		// we will need this function in order to 
 		// organize red refinement if @redList contains neighbor triangles
 		// because we do not want to add same nodes to _nodes vector several times
-		size_t m;
 		for (m = 0; m < 3; ++m) if (_triangles[_triangles[t].neighbors(m)].neighbors(1) != i &&
 									_triangles[_triangles[t].neighbors(m)].neighbors(2) != i) break;
 		redNeighborsList.push_back(_triangles[t].neighbors(m + 1)); // add red neighbors from
@@ -155,7 +162,13 @@ Triangulation& Triangulation::refine(Indicies& redList) {
 			else {
 				// otherwise, well, let’s add a node!
 				rp[j] = _nodes.size();
-				_nodes.push_back(_nodes[p[excludeIndex(j)[0]]].midPoint(_nodes[p[excludeIndex(j)[1]]]));
+				if (t[j] < -1) { // curvilinear edges
+					m = neighbor2edge(t[j]);
+					_nodes.push_back(_curves[_edges[m].curveIndex()](_edges[m].thetaMiddle()));
+					_edges.push_back(CurvilinearEdge(_edges[m].thetaMiddle(), _edges[m].thetaEnd(), _edges[m].curveIndex()));
+					_edges[m].thetaEnd() = _edges[m].thetaMiddle();
+				}
+				else _nodes.push_back(_nodes[p[excludeIndex(j)[0]]].midPoint(_nodes[p[excludeIndex(j)[1]]]));
 			}
 			if (k > 1 && (searchIter = find(next(searchStartIter), redList.end(), i)) != redList.end()) 
 				redList.erase(searchIter); // if k equals 2 or 3
@@ -173,6 +186,11 @@ Triangulation& Triangulation::refine(Indicies& redList) {
 			_triangles.push_back(Triangle(p[0], rp[2], rp[1], i, t[1], t[2]));
 			_triangles.push_back(Triangle(p[1], rp[0], rp[2], i, t[2], t[0]));
 			_triangles.push_back(Triangle(p[2], rp[1], rp[0], i, t[0], t[1]));
+			// fix curvilinear edges
+			j = _edges.size();
+			for (size_t newTriangle : { _triangles.size() - 2, _triangles.size() - 3, _triangles.size() - 1 })
+				if (_triangles[newTriangle].neighbors(1) < -1) 
+					_triangles[newTriangle].neighbors(1) = neighbor2edge(--j);
 			// we set neighbors of our new triangles to be neighbors of 
 			// our old (refined) triangle
 			// so there n <= 6 neighbors to be found
@@ -184,7 +202,7 @@ Triangulation& Triangulation::refine(Indicies& redList) {
 			// if ith has no neighbors or its neighbors were refined earlier, we are gold 
 			// otherwise we have to deal w/ hanging nodes
 			for (j = 0; j < 3; ++j)
-				if (t[j] != -1 && ++greenMap[t[j]] == 2) 
+				if (t[j] > -1 && ++greenMap[t[j]] == 2) 
 						// if we have 2 (or 3 actually) hanging nodes,
 						// we will not refine _triangle[t[j]] green
 						redList.push_back(t[j]); // we will refine it red instead!
@@ -208,7 +226,7 @@ Triangulation& Triangulation::refine(Indicies& redList) {
 		_triangles.push_back(Triangle(_triangles[i].nodes(j), _triangles[i].nodes(j + 1), gp,
 									  -1, i, -1));
 		// …(fix green neighbor)…
-		if (_triangles[i].neighbors(j + 2) != -1) 
+		if (_triangles[i].neighbors(j + 2) > -1) 
 			makeNeighbors(_triangles.size() - 1, _triangles[i].neighbors(j + 2));
 		// …and another one will take place of the old one
 		_triangles[i]
@@ -225,7 +243,7 @@ Triangulation& Triangulation::refine(Indicies& redList) {
 bool Triangulation::checkNeighbor(size_t t1, localIndex i) {
 	// check if ith neighbor of a t1th triangle also has _triangles[t1] as a neighbor
 	ssize_t t2 = _triangles[t1].neighbors(i);
-	if (t2 == -1) return true;
+	if (t2 < 0) return true;
 	for (i = 0; i < 3; ++i)
 		if (_triangles[t2].neighbors(i) == t1) return true;
 	return false;
@@ -252,5 +270,11 @@ bool Triangulation::makeNeighbors(size_t t1, size_t t2) {
 	_triangles[t1].neighbors(i) = t2;
 	_triangles[t2].neighbors(j) = t1;
 	return true; // we are gold
+}
+
+ssize_t Triangulation::neighbor2edge(ssize_t i) {
+	// convert @i := _triangles[*].neighbor(**) to
+	// index in _edges vector
+	return -i - 2;
 }
 

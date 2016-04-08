@@ -18,7 +18,10 @@
     <ClCompile Include="Triangulation.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="timing.cpp">
+    <ClCompile Include="Curve.hpp">
+      <Filter>Header Files</Filter>
+    </ClCompile>
+    <ClCompile Include="curvilinearExample.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -30,6 +33,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Node.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="CurvilinearEdge.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

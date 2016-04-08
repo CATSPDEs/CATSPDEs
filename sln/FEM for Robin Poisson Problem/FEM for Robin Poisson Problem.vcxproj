@@ -120,10 +120,12 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Curve.hpp" />
+    <ClCompile Include="curvilinearExample.cpp" />
     <ClCompile Include="Triangulation.cpp" />
-    <ClCompile Include="timing.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="CurvilinearEdge.hpp" />
     <ClInclude Include="Node.hpp" />
     <ClInclude Include="Triangle.hpp" />
     <ClInclude Include="Triangulation.hpp" />

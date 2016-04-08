@@ -4,6 +4,8 @@
 #include <iostream>
 #include "Node.hpp"
 #include "Triangle.hpp"
+#include "Curve.hpp"
+#include "CurvilinearEdge.hpp"
 
 typedef list<size_t> Indicies;
 
@@ -19,6 +21,8 @@ class Triangulation { // this data structure is known as “Nodes and Triangles”
 	vector<Indicies> _neighbors; // nodes’ neighbors [we need to construct it to assemble our CRS matrix],
 	vector<Triangle> _triangles; // triangles (i.e. T-matrix or connectivity matrix), and
 	double _h; // max size of triangle edge
+	vector<Curve> _curves; // curves that make the boundary
+	vector<CurvilinearEdge> _edges;
 	// we will loop over our elements (i.e. over _triangles vector) to assemble stiffness matrix
 	// no need to loop over boundary edges to assemble Robin BCs
 	// because we can easily determine bndry while looping over elements (look at Triangle data structure!) 
@@ -28,6 +32,8 @@ public:
 	double length(size_t t, localIndex i) { // compute length of ith edge of tth triangle
 		return (_nodes[_triangles[t].nodes(i + 1)] - _nodes[_triangles[t].nodes(i + 2)]).norm();
 	}
+	Triangulation(vector<Node> const &, vector<Triangle> const &, 
+				  vector<Curve> const &, vector<CurvilinearEdge> const &);
 	size_t numbOfNodes() const { return _nodes.size(); }
 	size_t numbOfTriangles() const { return _triangles.size(); }
 	double area(size_t); // compute area of ith triangle
@@ -35,4 +41,5 @@ public:
 	bool makeNeighbors(size_t, size_t); // make 2 triangles neighbors
 	Triangulation& save(ostream& nodes = cout, ostream& triangles = cout); // save mesh to std out
 	Triangulation& refine(Indicies&); // red-green refinement
+	ssize_t neighbor2edge(ssize_t); // mapping between indicies
 };
