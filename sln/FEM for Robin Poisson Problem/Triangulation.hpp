@@ -29,11 +29,15 @@ class Triangulation { // this data structure is known as “Nodes and Triangles”
 	// in order to construct portrait of CRS-matrix, we also need to store neighbors of ith node 
 public:
 	Triangulation(Node const &, Node const &, double percent = .5); // dummy rect triangulation
-	double length(size_t t, localIndex i) { // compute length of ith edge of tth triangle
-		return (_nodes[_triangles[t].nodes(i + 1)] - _nodes[_triangles[t].nodes(i + 2)]).norm();
-	}
 	Triangulation(vector<Node> const &, vector<Triangle> const &, 
 				  vector<Curve> const &, vector<CurvilinearEdge> const &);
+	double length(size_t t, localIndex i) { // O(1)
+											// compute length of ith edge of tth triangle
+		return (_nodes[_triangles[t].nodes(i + 1)] - _nodes[_triangles[t].nodes(i + 2)]).norm();
+	}
+	double perimeter(size_t t) { // O(1)
+		return length(t, 0) + length(t, 1) + length(t, 2);
+	}
 	size_t numbOfNodes() const { return _nodes.size(); }
 	size_t numbOfTriangles() const { return _triangles.size(); }
 	double area(size_t); // compute area of ith triangle
@@ -43,4 +47,10 @@ public:
 	Triangulation& refine(Indicies&); // red-green refinement
 	Triangulation& refine(unsigned numbOfRefinements = 1); // uniform refinement
 	ssize_t neighbor2edge(ssize_t); // mapping between indicies
+	// mesh quality measures
+	vector<double> longestEdges(); // O(n), n := _triangles.size()
+	// compute vector of longest edges of all triangles
+	vector<double> inscribedDiameters(); // O(n), n := _triangles.size()
+	// compute vector of diameters of inscribed circles of all triangles
+	vector<double> qualityMeasure(); // O(n)
 };

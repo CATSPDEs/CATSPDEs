@@ -10,10 +10,10 @@
 NotebookFileLineBreakTest
 NotebookFileLineBreakTest
 NotebookDataPosition[       158,          7]
-NotebookDataLength[    175867,       3097]
-NotebookOptionsPosition[    174643,       3054]
-NotebookOutlinePosition[    174989,       3069]
-CellTagsIndexPosition[    174946,       3066]
+NotebookDataLength[    181129,       3237]
+NotebookOptionsPosition[    179608,       3186]
+NotebookOutlinePosition[    179952,       3201]
+CellTagsIndexPosition[    179909,       3198]
 WindowFrame->Normal*)
 
 (* Beginning of Notebook Content *)
@@ -182,6 +182,48 @@ Cell[BoxData[{
   3.669120155572775*^9, 3.669120187928372*^9}, {3.669120337058155*^9, 
   3.6691203447449074`*^9}}],
 
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{"header", "=", 
+   RowBox[{"{", 
+    RowBox[{
+    "\"\<Mesh\>\"", ",", 
+     "\"\<Min quality measure of \[CapitalDelta]\[CloseCurlyQuote]s\>\"", 
+     ",", "\"\<Mean quality measure of \
+\[CapitalDelta]\[CloseCurlyQuote]s\>\""}], "}"}]}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"data", "=", 
+   RowBox[{"Import", "[", 
+    RowBox[{"\"\<quality.dat\>\"", ",", "\"\<List\>\""}], "]"}]}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"K", " ", "=", 
+   RowBox[{"{", 
+    RowBox[{"\"\<\[ScriptCapitalK]\>\"", ",", 
+     RowBox[{"data", "[", 
+      RowBox[{"[", "1", "]"}], "]"}], ",", 
+     RowBox[{"data", "[", 
+      RowBox[{"[", "2", "]"}], "]"}]}], "}"}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"M", "=", 
+   RowBox[{"{", 
+    RowBox[{"\"\<\[ScriptCapitalM]\>\"", ",", 
+     RowBox[{"data", "[", 
+      RowBox[{"[", "3", "]"}], "]"}], ",", 
+     RowBox[{"data", "[", 
+      RowBox[{"[", "4", "]"}], "]"}]}], "}"}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"table", "=", 
+   RowBox[{"Grid", "[", 
+    RowBox[{
+     RowBox[{"{", 
+      RowBox[{"header", ",", "K", ",", "M"}], "}"}], ",", 
+     RowBox[{"Frame", "\[Rule]", "All"}], ",", 
+     RowBox[{"Spacings", "\[Rule]", " ", 
+      RowBox[{"{", 
+       RowBox[{"1", ",", "1"}], "}"}]}]}], "]"}]}], ";"}]}], "Input"],
+
 Cell[TextData[{
  StyleBox["(1) Curvilinear region\n", "Subtitle"],
  StyleBox["Our meshes are supposed to approximate it taking ", "Subsubtitle"],
@@ -328,7 +370,8 @@ L89NrMh8VtBU0dBFzqaQzs2eVNDRRtJi5SHvvw==
      Scaled[0.02], 
      Scaled[0.02]}},
   Ticks->{Automatic, Automatic}]], "Output",
- CellChangeTimes->{3.6691212151809587`*^9, 3.669121247518366*^9}]
+ CellChangeTimes->{3.6691212151809587`*^9, 3.669121247518366*^9, 
+  3.669129145875943*^9}]
 }, Open  ]],
 
 Cell[TextData[{
@@ -490,7 +533,7 @@ L89NrMh8VtBU0dBFzqaQzs2eVNDRRtJi5SHvvw==
   Ticks->{Automatic, Automatic}]], "Output",
  CellChangeTimes->{{3.669120428348414*^9, 3.6691204503679476`*^9}, {
    3.6691205068268156`*^9, 3.6691205971737647`*^9}, 3.6691208668270516`*^9, 
-   3.6691212475724554`*^9}]
+   3.6691212475724554`*^9, 3.6691291459675307`*^9}]
 }, Open  ]],
 
 Cell[TextData[StyleBox["Mesh after 3 uniform refinements:", "Subsubtitle"]], \
@@ -744,7 +787,8 @@ FjOe2GG9D/tLcc39UMx4YvCfS4pARg==
  CellChangeTimes->{
   3.669118260044111*^9, 3.6691183536763363`*^9, 3.669119054249349*^9, {
    3.6691207024926643`*^9, 3.6691207210443697`*^9}, 3.669120866909356*^9, 
-   3.6691212476255455`*^9},ImageCache->GraphicsData["CompressedBitmap", "\<\
+   3.6691212476255455`*^9, 
+   3.6691291460476103`*^9},ImageCache->GraphicsData["CompressedBitmap", "\<\
 eJzsvQmwXtdxHvgbbwdFSnbs2PESK949XmInsccZJ463cjJV4yrPVKUqU1Ou
 iitjjl0T7x7FtqiFpIh9BwGQAB6Ah52PC7iCO/AWbARAPhIkCHGnJErQFq2m
 ZAnvvX/O16f73D59+t5/AeWaqXKVABHnLv+993Sf08vXX//27/3lH/z+H/3e
@@ -1834,7 +1878,8 @@ L89NrMh8VtBU0dBFzqaQzs2eVNDRRtJi5SHvvw==
   Ticks->{Automatic, Automatic}]], "Output",
  CellChangeTimes->{
   3.669118353711883*^9, 3.6691190542942047`*^9, {3.669120774299858*^9, 
-   3.6691208001574574`*^9}, 3.6691208669819517`*^9, 3.669121247677635*^9}]
+   3.6691208001574574`*^9}, 3.6691208669819517`*^9, 3.669121247677635*^9, 
+   3.6691291461307793`*^9}]
 }, Open  ]],
 
 Cell[TextData[StyleBox["Mesh after 3 uniform refinements:", "Subsubtitle"]], \
@@ -2117,7 +2162,8 @@ YM9j9nhR9rrz2yv5ONj78s3KecFdn3s+2LkAB3tm52LftJyR3Qduknzcgnke
      Scaled[0.02]}},
   Ticks->{Automatic, Automatic}]], "Output",
  CellChangeTimes->{{3.669120972924859*^9, 3.6691209868543215`*^9}, 
-   3.6691212477494016`*^9},ImageCache->GraphicsData["CompressedBitmap", "\<\
+   3.6691212477494016`*^9, 
+   3.6691291461989264`*^9},ImageCache->GraphicsData["CompressedBitmap", "\<\
 eJzsvQmMXtd1JviH9ddCynacdNJJZ+m4s+9LdyeTniydxEG6Z4AAQQ8a6MYg
 g2QaEZIBGj2TMRqTxBtlW2RxFfe1SBZ3FilqoURLtiTWwkUiRRZFcZFEbbZk
 UV7lfWPV/8/9zj3nvnPPO+/9C2ljBgiQYqz77nv/e/eec8/+nT/9y/f89V/9
@@ -3050,10 +3096,96 @@ omfro6darqFpXdRL4H/aSv8FrdV+pNIUqi0+/ZsZIWf70Wbbj3noWO01qfl1
 3CXl+1a/INpZa1mV9po2bOFqXtPEIko25NejpUavl/br3/m7167qtT+rt4Pa
 8fO7bfntf+13W/r/7rVmWzqDv3xIHI4tv/ffURjCNQ==\
 \>"]]
+}, Open  ]],
+
+Cell[TextData[{
+ StyleBox["(4) Quality measure of meshes\n", "Subtitle"],
+ StyleBox["Indeed, a priori errors of FEM depend on meshes", "Subsubtitle"],
+ "\[CloseCurlyQuote]",
+ StyleBox[" quality.\nWe define quality of triangle as", "Subsubtitle"]
+}], "Text",
+ CellChangeTimes->{
+  3.6691182301816792`*^9, {3.6691182786730924`*^9, 3.6691182867466755`*^9}, {
+   3.6691203667836485`*^9, 3.669120376363693*^9}, {3.669121029791173*^9, 
+   3.6691211052567263`*^9}, {3.669121140561022*^9, 3.6691211595500164`*^9}, {
+   3.6691305276034484`*^9, 3.6691305479424143`*^9}, {3.6691305796797843`*^9, 
+   3.6691307642623205`*^9}, {3.6691307982555585`*^9, 3.6691308407877536`*^9}}],
+
+Cell[BoxData[
+ FormBox[
+  RowBox[{
+   RowBox[{
+    SubscriptBox["q", 
+     RowBox[{"\[CapitalDelta]", " ", "\[Element]", " ", "Mesh"}]], ":=", " ", 
+    RowBox[{
+     RowBox[{"\[Sqrt]", "3"}], " ", 
+     FractionBox[
+      SubscriptBox["d", "\[CapitalDelta]"], 
+      SubscriptBox["h", "\[CapitalDelta]"]]}]}], ",", 
+   RowBox[{
+    SubscriptBox["d", "\[CapitalDelta]"], ":=", 
+    RowBox[{"diameter", " ", "of", " ", "inscribed", " ", "circle"}]}], ",", 
+   RowBox[{
+    SubscriptBox["h", "\[CapitalDelta]"], ":=", 
+    RowBox[{"length", " ", "of", " ", "the", " ", "londest", " ", 
+     RowBox[{"edge", ".", 
+      StyleBox[" ", "InlineFormula"]}]}]}]}], 
+  TraditionalForm]], "DisplayFormulaNumbered",
+ CellChangeTimes->{{3.6691308634453964`*^9, 3.669130970426509*^9}}],
+
+Cell[TextData[{
+ StyleBox["So ", "Subsubtitle"],
+ StyleBox[Cell[BoxData[
+  FormBox[
+   RowBox[{"0", "<", 
+    SubscriptBox["q", 
+     RowBox[{"\[CapitalDelta]", " "}]], "\[LessEqual]", "1"}], 
+   TraditionalForm]], "Subsubtitle",
+  CellChangeTimes->{{3.6691308634453964`*^9, 3.669130970426509*^9}}], 
+  "Subsubtitle"],
+ StyleBox[", ideal triangles have measure unity, poor \
+(\[OpenCurlyDoubleQuote]skinny\[CloseCurlyDoubleQuote]) triangles have very \
+small measure.\nIt is clear now that mesh \[ScriptCapitalM] is much poorer \
+(in terms of ", "Subsubtitle"],
+ Cell[BoxData[
+  FormBox[
+   SubscriptBox["q", "\[CapitalDelta]"], TraditionalForm]],
+  FormatType->"TraditionalForm"],
+ StyleBox[") than \[ScriptCapitalK].", "Subsubtitle"]
+}], "Text",
+ CellChangeTimes->{
+  3.6691182301816792`*^9, {3.6691182786730924`*^9, 3.6691182867466755`*^9}, {
+   3.6691203667836485`*^9, 3.669120376363693*^9}, {3.669121029791173*^9, 
+   3.6691211052567263`*^9}, {3.669121140561022*^9, 3.6691211595500164`*^9}, {
+   3.6691305276034484`*^9, 3.6691305479424143`*^9}, {3.6691305796797843`*^9, 
+   3.6691307642623205`*^9}, {3.6691307982555585`*^9, 
+   3.6691308407877536`*^9}, {3.6691309845519643`*^9, 
+   3.6691311468468933`*^9}, {3.669131218446062*^9, 3.669131329521488*^9}}],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"Print", "[", "table", "]"}]], "Input",
+ CellChangeTimes->{{3.6691313317350297`*^9, 3.66913135342819*^9}}],
+
+Cell[BoxData[
+ TagBox[GridBox[{
+    {"\<\"Mesh\"\>", "\<\"Min quality measure of \[CapitalDelta]\
+\[CloseCurlyQuote]s\"\>", "\<\"Mean quality measure of \[CapitalDelta]\
+\[CloseCurlyQuote]s\"\>"},
+    {"\<\"\[ScriptCapitalK]\"\>", "0.601478`", "0.810963`"},
+    {"\<\"\[ScriptCapitalM]\"\>", "0.0425195`", "0.76577`"}
+   },
+   AutoDelete->False,
+   GridBoxFrame->{"Columns" -> {{True}}, "Rows" -> {{True}}},
+   GridBoxItemSize->{"Columns" -> {{Automatic}}, "Rows" -> {{Automatic}}},
+   GridBoxSpacings->{"Columns" -> {{1}}, "Rows" -> {{1}}}],
+  "Grid"]], "Print",
+ CellChangeTimes->{3.669131354104472*^9}]
 }, Open  ]]
 },
-WindowSize->{1366, 685},
-WindowMargins->{{-8, Automatic}, {Automatic, -8}},
+WindowSize->{681, 676},
+WindowMargins->{{-7, Automatic}, {Automatic, 0}},
 FrontEndVersion->"10.0 for Microsoft Windows (64-bit) (December 4, 2014)",
 StyleDefinitions->"Default.nb"
 ]
@@ -3069,35 +3201,43 @@ CellTagsIndex->{}
 (*NotebookFileOutline
 Notebook[{
 Cell[558, 20, 342, 8, 72, "Input"],
-Cell[903, 30, 2295, 60, 212, "Input"],
+Cell[903, 30, 2295, 60, 252, "Input"],
 Cell[3201, 92, 1401, 39, 172, "Input"],
 Cell[4605, 133, 1897, 49, 91, "Input"],
-Cell[6505, 184, 457, 8, 62, "Text"],
+Cell[6505, 184, 1352, 40, 132, "Input"],
+Cell[7860, 226, 457, 8, 62, "Text"],
 Cell[CellGroupData[{
-Cell[6987, 196, 139, 2, 31, "Input"],
-Cell[7129, 200, 7252, 130, 364, "Output"]
+Cell[8342, 238, 139, 2, 31, "Input"],
+Cell[8484, 242, 7277, 131, 364, "Output"]
 }, Open  ]],
-Cell[14396, 333, 362, 8, 62, "Text"],
+Cell[15776, 376, 362, 8, 62, "Text"],
 Cell[CellGroupData[{
-Cell[14783, 345, 302, 6, 31, "Input"],
-Cell[15088, 353, 7730, 139, 364, "Output"]
+Cell[16163, 388, 302, 6, 31, "Input"],
+Cell[16468, 396, 7754, 139, 364, "Output"]
 }, Open  ]],
-Cell[22833, 495, 130, 2, 32, "Text"],
+Cell[24237, 538, 130, 2, 32, "Text"],
 Cell[CellGroupData[{
-Cell[22988, 501, 286, 5, 31, "Input"],
-Cell[23277, 508, 70099, 1165, 364, 13418, 234, "CachedBoxData", "BoxData", \
+Cell[24392, 544, 286, 5, 31, "Input"],
+Cell[24681, 551, 70127, 1166, 364, 13418, 234, "CachedBoxData", "BoxData", \
 "Output"]
 }, Open  ]],
-Cell[93391, 1676, 407, 8, 62, "Text"],
+Cell[94823, 1720, 407, 8, 62, "Text"],
 Cell[CellGroupData[{
-Cell[93823, 1688, 254, 5, 31, "Input"],
-Cell[94080, 1695, 7848, 141, 364, "Output"]
+Cell[95255, 1732, 254, 5, 31, "Input"],
+Cell[95512, 1739, 7876, 142, 364, "Output"]
 }, Open  ]],
-Cell[101943, 1839, 128, 2, 32, "Text"],
+Cell[103403, 1884, 128, 2, 32, "Text"],
 Cell[CellGroupData[{
-Cell[102096, 1845, 178, 3, 31, "Input"],
-Cell[102277, 1850, 72350, 1201, 397, 15423, 267, "CachedBoxData", "BoxData", \
+Cell[103556, 1890, 178, 3, 31, "Input"],
+Cell[103737, 1895, 72378, 1202, 364, 15423, 267, "CachedBoxData", "BoxData", \
 "Output"]
+}, Open  ]],
+Cell[176130, 3100, 664, 11, 83, "Text"],
+Cell[176797, 3113, 772, 20, 53, "DisplayFormulaNumbered"],
+Cell[177572, 3135, 1258, 27, 76, "Text"],
+Cell[CellGroupData[{
+Cell[178855, 3166, 129, 2, 31, "Input"],
+Cell[178987, 3170, 605, 13, 78, "Print"]
 }, Open  ]]
 }
 ]

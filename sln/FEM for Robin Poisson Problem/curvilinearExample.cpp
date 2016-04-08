@@ -1,4 +1,5 @@
 #include <fstream>
+#include <numeric> // accumulate()
 #include "Triangulation.hpp"
 
 inline Node parabolaCurve(double theta) {
@@ -30,16 +31,28 @@ int main() {
 	};
 	Triangulation K(nodes, triangles, curves, edges);
 	Triangulation M(K);
-	// “good” mesh example
+	vector<double> q;
+	double mean, minElement;
+	ofstream quality("Mathematica/quality.dat");
+	// (1) “good” mesh example
 	Indicies L = { 0, 1 }; // smart hack — we will not get “bad” triangles now
 	K.refine(L);
 	K.save(ofstream("Mathematica/nGoodIni.dat"), ofstream("Mathematica/tGoodIni.dat"));
 	K.refine(3); // refine 3 times
 	K.save(ofstream("Mathematica/nGood.dat"), ofstream("Mathematica/tGood.dat"));
-	// “bad” example
+	// quality measures
+	q = K.qualityMeasure();
+	minElement = *min_element(q.begin(), q.end());
+	mean = accumulate(q.begin(), q.end(), 0.) / q.size();
+	quality << minElement << '\n' << mean << '\n';
+	// (2) “bad” example
 	M.refine();
 	M.save(ofstream("Mathematica/nBadIni.dat"), ofstream("Mathematica/tBadIni.dat"));
 	M.refine(3); 
 	M.save(ofstream("Mathematica/nBad.dat"), ofstream("Mathematica/tBad.dat"));
+	q = M.qualityMeasure();
+	minElement = *min_element(q.begin(), q.end());
+	mean = accumulate(q.begin(), q.end(), 0.) / q.size();
+	quality << minElement << '\n' << mean;
 	return 0;
 }

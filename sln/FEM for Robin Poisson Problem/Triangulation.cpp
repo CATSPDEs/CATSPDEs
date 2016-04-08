@@ -124,7 +124,7 @@ Triangulation& Triangulation::refine(Indicies& redList) {
 	array<size_t, 3> p, rp;
 	// indicies of nodes of old triangle (i.e. triangle to be refined),
 	// ‘‘ of new (red) nodes to be added,
-	size_t gp, gt; // index of green node and green neighbor
+	size_t gp; // index of green node and green neighbor
 	array<ssize_t, 3> t, rt;
 	// indicies of neighbor triangles of the old triangle,
 	// ‘‘ of new (red) neighbor triangles
@@ -330,5 +330,31 @@ ssize_t Triangulation::neighbor2edge(ssize_t i) {
 	// convert @i := _triangles[*].neighbor(**) to
 	// index in _edges vector
 	return -i - 2;
+}
+
+vector<double> Triangulation::longestEdges() {
+	vector<double> v(_triangles.size());
+	for (size_t i = 0; i < _triangles.size(); ++i) {
+		v[i] = max(length(i, 0), length(i, 1));
+		v[i] = max(v[i], length(i, 2));
+	}
+	return v;
+}
+
+vector<double> Triangulation::inscribedDiameters() {
+	vector<double> v(_triangles.size());
+	for (size_t i = 0; i < _triangles.size(); ++i)
+		v[i] = 4 * area(i) / perimeter(i);
+	return v;
+}
+
+vector<double> Triangulation::qualityMeasure() {
+	vector<double> v(_triangles.size()),
+				   h(longestEdges()),
+				   d(inscribedDiameters());
+	for (size_t i = 0; i < _triangles.size(); ++i)
+		v[i] = sqrt(3) * d[i] / h[i]; 
+	// we multiply by sqrt(3), so ideal triangles have quality measure = 1
+	return v;
 }
 
