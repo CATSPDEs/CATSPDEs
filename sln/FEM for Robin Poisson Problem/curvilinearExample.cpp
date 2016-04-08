@@ -29,12 +29,17 @@ int main() {
 		Triangle(0, 4, 1, -4, 0, -3)
 	};
 	Triangulation K(nodes, triangles, curves, edges);
-	Indicies L = { 0, 1, 2 };
+	Triangulation M(K);
+	// “good” mesh example
+	Indicies L = { 0, 1 }; // smart hack — we will not get “bad” triangles now
 	K.refine(L);
-	for (unsigned i = 0; i < 1; ++i) {
-		while (L.back() < K.numbOfTriangles() - 1) L.push_back(L.back() + 1);
-		K.refine(L);
-	}
-	K.save(ofstream("Mathematica/nCurve.dat"), ofstream("Mathematica/tCurve.dat"));
+	K.save(ofstream("Mathematica/nGoodIni.dat"), ofstream("Mathematica/tGoodIni.dat"));
+	K.refine(3); // refine 3 times
+	K.save(ofstream("Mathematica/nGood.dat"), ofstream("Mathematica/tGood.dat"));
+	// “bad” example
+	M.refine();
+	M.save(ofstream("Mathematica/nBadIni.dat"), ofstream("Mathematica/tBadIni.dat"));
+	M.refine(3); 
+	M.save(ofstream("Mathematica/nBad.dat"), ofstream("Mathematica/tBad.dat"));
 	return 0;
 }

@@ -224,7 +224,7 @@ Triangulation& Triangulation::refine(Indicies& redList) {
 		// we want to split our ith triangle into two triangles
 		// one of them we will add… 
 		_triangles.push_back(Triangle(_triangles[i].nodes(j), _triangles[i].nodes(j + 1), gp,
-									  -1, i, -1));
+									  -1, i, _triangles[i].neighbors(j + 2)));
 		// …(fix green neighbor)…
 		if (_triangles[i].neighbors(j + 2) > -1) 
 			makeNeighbors(_triangles.size() - 1, _triangles[i].neighbors(j + 2));
@@ -236,6 +236,60 @@ Triangulation& Triangulation::refine(Indicies& redList) {
 		makeNeighbors(i, redNeighborsList.front());
 		makeNeighbors(_triangles.size() - 1, redNeighborsList.back());
 		redNeighborsList.clear();
+	}
+	return *this;
+}
+
+Triangulation& Triangulation::refine(unsigned numbOfRefinements) {
+	// uniform refinement
+	// works just like red green refinement, but 
+	// ALL triangles will be refined in red fashion
+	// so we do not need stuff like redList, greenMap etc. here
+	Indicies redNeighborsList;
+	array<size_t, 3> p, rp;
+	array<ssize_t, 3> t, rt;
+	size_t i, j, m, n;
+	auto addExistingRedNodeFrom = [&](size_t t) {
+		for (m = 0; m < 3; ++m) if (_triangles[_triangles[t].neighbors(m)].neighbors(1) != i &&
+			_triangles[_triangles[t].neighbors(m)].neighbors(2) != i) break;
+		redNeighborsList.push_back(_triangles[t].neighbors(m + 1));
+		redNeighborsList.push_back(_triangles[t].neighbors(m + 2));
+		return _triangles[t].nodes(m);
+	};
+	for (unsigned k = 0; k < numbOfRefinements; ++k) {
+		n = _triangles.size();
+		for (i = 0; i < n; ++i) {
+			p = _triangles[i].nodes();
+			t = _triangles[i].neighbors();
+			for (j = 0; j < 3; ++j)
+				if (!checkNeighbor(i, j))
+					rp[j] = addExistingRedNodeFrom(t[j]);
+				else {
+					rp[j] = _nodes.size();
+					if (t[j] < -1) {
+						m = neighbor2edge(t[j]);
+						_nodes.push_back(_curves[_edges[m].curveIndex()](_edges[m].thetaMiddle()));
+						_edges.push_back(CurvilinearEdge(_edges[m].thetaMiddle(), _edges[m].thetaEnd(), _edges[m].curveIndex()));
+						_edges[m].thetaEnd() = _edges[m].thetaMiddle();
+					}
+					else _nodes.push_back(_nodes[p[excludeIndex(j)[0]]].midPoint(_nodes[p[excludeIndex(j)[1]]]));
+				}
+				rt[2] = (rt[1] = (rt[0] = _triangles.size()) + 1) + 1;
+				_triangles[i]
+					.nodes(rp)
+					.neighbors(rt);
+				_triangles.push_back(Triangle(p[0], rp[2], rp[1], i, t[1], t[2]));
+				_triangles.push_back(Triangle(p[1], rp[0], rp[2], i, t[2], t[0]));
+				_triangles.push_back(Triangle(p[2], rp[1], rp[0], i, t[0], t[1]));
+				j = _edges.size();
+				for (size_t newTriangle : { _triangles.size() - 2, _triangles.size() - 3, _triangles.size() - 1 })
+					if (_triangles[newTriangle].neighbors(1) < -1)
+						_triangles[newTriangle].neighbors(1) = neighbor2edge(--j);
+				for (j = _triangles.size() - 3; j < _triangles.size(); ++j)
+					for (size_t neighbor : redNeighborsList)
+						makeNeighbors(j, neighbor);
+				redNeighborsList.clear();
+		}
 	}
 	return *this;
 }

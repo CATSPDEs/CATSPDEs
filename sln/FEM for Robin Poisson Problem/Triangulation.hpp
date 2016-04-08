@@ -41,5 +41,6 @@ public:
 	bool makeNeighbors(size_t, size_t); // make 2 triangles neighbors
 	Triangulation& save(ostream& nodes = cout, ostream& triangles = cout); // save mesh to std out
 	Triangulation& refine(Indicies&); // red-green refinement
+	Triangulation& refine(unsigned numbOfRefinements = 1); // uniform refinement
 	ssize_t neighbor2edge(ssize_t); // mapping between indicies
 };
