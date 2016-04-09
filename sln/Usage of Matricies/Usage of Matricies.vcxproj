@@ -124,6 +124,7 @@
   <ItemGroup>
     <ClCompile Include="..\Tools\BandMatrix.cpp" />
     <ClCompile Include="..\Tools\CRSMatrix.cpp" />
+    <ClCompile Include="..\Tools\DenseMatrix.cpp" />
     <ClCompile Include="user.cpp" />
   </ItemGroup>
   <ItemGroup>

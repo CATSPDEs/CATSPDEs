@@ -24,7 +24,7 @@ public:
 		return _set(i, j); 
 	}
 	size_t getOrder() const { return _n; }
-	std::ostream& save(std::ostream& output) const {
+	std::ostream& save(std::ostream& output = std::cout) const {
 		output << _n << '\n';
 		for (size_t i = 0; i < _n; ++i) {
 			for (size_t j = 0; j < _n; ++j)
@@ -33,7 +33,7 @@ public:
 		}
 		return output;
 	}
-	std::istream& load(std::istream& input) {
+	std::istream& load(std::istream& input = std::cin) {
 		T dummy;
 		for (size_t i = 0; i < _n; ++i)
 			for (size_t j = 0; j < _n; ++i)

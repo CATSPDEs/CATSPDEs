@@ -118,6 +118,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="DenseMatrix.hpp" />
     <ClInclude Include="SecondOrderPDE.hpp" />
     <ClInclude Include="AbstractElement.hpp" />
     <ClInclude Include="AbstractMesh.hpp" />
@@ -142,6 +143,7 @@
     <ClCompile Include="AbstractNode.cpp" />
     <ClCompile Include="BandMatrix.cpp" />
     <ClCompile Include="CRSMatrix.cpp" />
+    <ClCompile Include="DenseMatrix.cpp" />
     <ClCompile Include="RectangularFDMMesh.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

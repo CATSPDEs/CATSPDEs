@@ -24,6 +24,9 @@
     <ClCompile Include="..\Tools\CRSMatrix.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="..\Tools\DenseMatrix.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Text Include="matrix_band.txt">

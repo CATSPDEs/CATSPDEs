@@ -69,6 +69,9 @@
     <ClInclude Include="SecondOrderPDE.hpp">
       <Filter>PDEs</Filter>
     </ClInclude>
+    <ClInclude Include="DenseMatrix.hpp">
+      <Filter>Matrices\Implementations</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="BandMatrix.cpp">
@@ -88,6 +91,9 @@
     </ClCompile>
     <ClCompile Include="RectangularFDMMesh.cpp">
       <Filter>PDEs\Implementations</Filter>
+    </ClCompile>
+    <ClCompile Include="DenseMatrix.cpp">
+      <Filter>Matrices\Implementations</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
