@@ -10,10 +10,10 @@
 NotebookFileLineBreakTest
 NotebookFileLineBreakTest
 NotebookDataPosition[       158,          7]
-NotebookDataLength[    181129,       3237]
-NotebookOptionsPosition[    179608,       3186]
-NotebookOutlinePosition[    179952,       3201]
-CellTagsIndexPosition[    179909,       3198]
+NotebookDataLength[    181182,       3238]
+NotebookOptionsPosition[    179659,       3187]
+NotebookOutlinePosition[    180005,       3202]
+CellTagsIndexPosition[    179962,       3199]
 WindowFrame->Normal*)
 
 (* Beginning of Notebook Content *)
@@ -3127,11 +3127,12 @@ Cell[BoxData[
     RowBox[{"diameter", " ", "of", " ", "inscribed", " ", "circle"}]}], ",", 
    RowBox[{
     SubscriptBox["h", "\[CapitalDelta]"], ":=", 
-    RowBox[{"length", " ", "of", " ", "the", " ", "londest", " ", 
+    RowBox[{"length", " ", "of", " ", "the", " ", "longest", " ", 
      RowBox[{"edge", ".", 
       StyleBox[" ", "InlineFormula"]}]}]}]}], 
   TraditionalForm]], "DisplayFormulaNumbered",
- CellChangeTimes->{{3.6691308634453964`*^9, 3.669130970426509*^9}}],
+ CellChangeTimes->{{3.6691308634453964`*^9, 3.669130970426509*^9}, {
+  3.6692077828984838`*^9, 3.669207783260192*^9}}],
 
 Cell[TextData[{
  StyleBox["So ", "Subsubtitle"],
@@ -3184,8 +3185,8 @@ Cell[BoxData[
  CellChangeTimes->{3.669131354104472*^9}]
 }, Open  ]]
 },
-WindowSize->{681, 676},
-WindowMargins->{{-7, Automatic}, {Automatic, 0}},
+WindowSize->{1366, 685},
+WindowMargins->{{-8, Automatic}, {Automatic, -8}},
 FrontEndVersion->"10.0 for Microsoft Windows (64-bit) (December 4, 2014)",
 StyleDefinitions->"Default.nb"
 ]
@@ -3201,10 +3202,10 @@ CellTagsIndex->{}
 (*NotebookFileOutline
 Notebook[{
 Cell[558, 20, 342, 8, 72, "Input"],
-Cell[903, 30, 2295, 60, 252, "Input"],
+Cell[903, 30, 2295, 60, 212, "Input"],
 Cell[3201, 92, 1401, 39, 172, "Input"],
 Cell[4605, 133, 1897, 49, 91, "Input"],
-Cell[6505, 184, 1352, 40, 132, "Input"],
+Cell[6505, 184, 1352, 40, 112, "Input"],
 Cell[7860, 226, 457, 8, 62, "Text"],
 Cell[CellGroupData[{
 Cell[8342, 238, 139, 2, 31, "Input"],
@@ -3233,11 +3234,11 @@ Cell[103737, 1895, 72378, 1202, 364, 15423, 267, "CachedBoxData", "BoxData", \
 "Output"]
 }, Open  ]],
 Cell[176130, 3100, 664, 11, 83, "Text"],
-Cell[176797, 3113, 772, 20, 53, "DisplayFormulaNumbered"],
-Cell[177572, 3135, 1258, 27, 76, "Text"],
+Cell[176797, 3113, 823, 21, 53, "DisplayFormulaNumbered"],
+Cell[177623, 3136, 1258, 27, 55, "Text"],
 Cell[CellGroupData[{
-Cell[178855, 3166, 129, 2, 31, "Input"],
-Cell[178987, 3170, 605, 13, 78, "Print"]
+Cell[178906, 3167, 129, 2, 31, "Input"],
+Cell[179038, 3171, 605, 13, 78, "Print"]
 }, Open  ]]
 }
 ]
