@@ -53,7 +53,7 @@ public:
 };
 
 inline array<localIndex, 2> excludeIndex(localIndex i) { 
-	// exclude i from <0, 1, 2> countclockwise		
+	// exclude i from <0, 1, 2> counterclockwise		
 	//   _____<_____
 	//  |     2	    |
 	//  |   /   \	|

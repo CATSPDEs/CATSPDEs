@@ -8,6 +8,7 @@
 #include "CurvilinearEdge.hpp"
 
 typedef list<size_t> Indicies;
+typedef list<unsigned short> LocalIndicies;
 
 class Triangulation { // this data structure is known as “Nodes and Triangles”
 	// we have array of nodes := points on the plane and
@@ -34,6 +35,22 @@ public:
 	double length(size_t t, localIndex i) { // O(1)
 											// compute length of ith edge of tth triangle
 		return (_nodes[_triangles[t].nodes(i + 1)] - _nodes[_triangles[t].nodes(i + 2)]).norm();
+	}
+	Node getNode(size_t t, localIndex i){
+		return _nodes[_triangles[t].nodes(i)];
+	}
+	array<Node, 3> getNodes(size_t t) {
+		return{ _nodes[_triangles[t].nodes(0)],_nodes[_triangles[t].nodes(1)],_nodes[_triangles[t].nodes(2)] };
+	}
+	array<size_t, 3> loc2glob(size_t t) {
+		return _triangles[t].nodes();
+	}
+	LocalIndicies getBoundaryIndicies(size_t t) {
+		LocalIndicies b;
+		for (localIndex i = 0;i < 3;i++)
+			if (_triangles[t].neighbors(i) < 0)
+				b.push_back(i);
+		return b;
 	}
 	double perimeter(size_t t) { // O(1)
 		return length(t, 0) + length(t, 1) + length(t, 2);

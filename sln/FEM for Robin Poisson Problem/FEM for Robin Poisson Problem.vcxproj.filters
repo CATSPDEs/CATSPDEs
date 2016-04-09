@@ -21,7 +21,10 @@
     <ClCompile Include="Curve.hpp">
       <Filter>Header Files</Filter>
     </ClCompile>
-    <ClCompile Include="curvilinearExample.cpp">
+    <ClCompile Include="FEM.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Tools\DenseMatrix.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

@@ -14,8 +14,11 @@ double DenseMatrix::_get(size_t i, size_t j) const {
 
 DenseMatrix::DenseMatrix(size_t n) :
 	AbstractSquareMatrix(n), _A(new double*[n]), _beg(new double[n * n]) {
-	for (size_t i = 0; i < n; ++i)
+	size_t i;
+	for (i = 0; i < n; ++i)
 		_A[i] = _beg + i * n;
+	for (i = 0; i < n * n; ++i)
+		_beg[i] = 0.;
 }
 
 DenseMatrix::~DenseMatrix() {
