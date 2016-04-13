@@ -41,5 +41,8 @@
     <ClInclude Include="CurvilinearEdge.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Function.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

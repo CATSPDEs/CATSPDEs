@@ -129,6 +129,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CurvilinearEdge.hpp" />
+    <ClInclude Include="Function.hpp" />
     <ClInclude Include="Node.hpp" />
     <ClInclude Include="Triangle.hpp" />
     <ClInclude Include="Triangulation.hpp" />
