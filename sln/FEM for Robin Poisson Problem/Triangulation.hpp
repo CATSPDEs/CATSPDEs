@@ -33,21 +33,21 @@ public:
 	Triangulation(vector<Node> const &, vector<Triangle> const &, 
 				  vector<Curve> const &, vector<CurvilinearEdge> const &);
 	double length(size_t t, localIndex i) { // O(1)
-											// compute length of ith edge of tth triangle
+		// compute length of ith edge of tth triangle
 		return (_nodes[_triangles[t].nodes(i + 1)] - _nodes[_triangles[t].nodes(i + 2)]).norm();
 	}
 	Node getNode(size_t t, localIndex i){
 		return _nodes[_triangles[t].nodes(i)];
 	}
 	array<Node, 3> getNodes(size_t t) {
-		return{ _nodes[_triangles[t].nodes(0)],_nodes[_triangles[t].nodes(1)],_nodes[_triangles[t].nodes(2)] };
+		return { _nodes[_triangles[t].nodes(0)],_nodes[_triangles[t].nodes(1)],_nodes[_triangles[t].nodes(2)] };
 	}
-	array<size_t, 3> loc2glob(size_t t) {
+	array<size_t, 3> l2g(size_t t) { // local to global nodes numeration
 		return _triangles[t].nodes();
 	}
 	LocalIndicies getBoundaryIndicies(size_t t) {
 		LocalIndicies b;
-		for (localIndex i = 0;i < 3;i++)
+		for (localIndex i = 0; i < 3; i++)
 			if (_triangles[t].neighbors(i) < 0)
 				b.push_back(i);
 		return b;
@@ -71,3 +71,7 @@ public:
 	// compute vector of diameters of inscribed circles of all triangles
 	vector<double> qualityMeasure(); // O(n)
 };
+
+inline localIndex nextIndex(localIndex i) {
+	return (i + 1) % 3;
+}

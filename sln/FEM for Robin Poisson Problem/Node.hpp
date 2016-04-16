@@ -38,6 +38,14 @@ public:
 	friend Node operator*(double scaler, Node const & p) { // for the sake of commutativity
 		return p * scaler;
 	}
+	Node& operator/=(double scaler) { // scale (division)
+		_x *= 1 / scaler;
+		_y *= 1 / scaler;
+		return *this;
+	}
+	Node operator/(double scaler) const { // scale (division)
+		return Node(*this) /= scaler;
+	}
 	double operator*(Node const & p) { // dot product
 		return _x * p._x + _y * p._y;
 	}
