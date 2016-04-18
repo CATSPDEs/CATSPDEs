@@ -1,5 +1,6 @@
 ###############################################################################
-# Set default behavior to automatically normalize line endings.
+# Set default behavior to automatically normalize line endings
+# (auto detect text files and perform LF normalization). 
 ###############################################################################
 * text=auto
 
