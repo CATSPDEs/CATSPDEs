@@ -36,7 +36,7 @@ int main() {
 		vector<double> xi(Omega.numbOfNodes()); // descrete solution
 		// our model problem:
 		//
-		// –nabla . (a nabla u) = f,				  if (x, y) in Omega,
+		// –nabla . (a nabla u) = f,                  if (x, y) in Omega,
 		// –n . (a nabla u) = kappa (u – g_D) – g_N,  if (x, y) in bndry of Omega,
 		//
 		// where a > 0, kappa > 0, f, g_D, and g_N are given R × R —> R functions

@@ -11,9 +11,9 @@ Triangulation::Triangulation(Node const & lb, Node const & rt, double percent) {
 	// it will look something like this:
 	//   ________(3,2)
 	//  |\ |\ |\ |
-	//	|_\|_\|_\|
+	//  |_\|_\|_\|
 	//  |\ |\ |\ |
-	//	|_\|_\|_\|
+	//  |_\|_\|_\|
 	//  (0,0)    
 	if (1 <= percent || percent <= 0) throw invalid_argument("3rd parameter should be el of (0, 1)");
 	Node size = rt - lb;
@@ -35,7 +35,7 @@ Triangulation::Triangulation(Node const & lb, Node const & rt, double percent) {
 	//  NW __ N
 	//    \   | \
 	//     \  |  \
-    //      \ |   \
+	//      \ |   \
 	//        O __ E
 	//
 	bool canGoNorth, canGoNorther, canGoWest, canGoEast, canGoSouth; 
