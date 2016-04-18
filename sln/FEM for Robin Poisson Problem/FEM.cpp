@@ -33,7 +33,7 @@ int main() {
 		vector<double> loadVector(Omega.numbOfNodes(), 0); // load vector
 		array<double, 3> loadVectorLoc; // and its
 		array<double, 2> robinVectorLoc; // element friends
-		vector<double> xi(Omega.numbOfNodes()); // descrete solution
+		vector<double> xi(Omega.numbOfNodes()); // discrete solution
 		// our model problem:
 		//
 		// –nabla . (a nabla u) = f,                  if (x, y) in Omega,
@@ -41,7 +41,7 @@ int main() {
 		//
 		// where a > 0, kappa > 0, f, g_D, and g_N are given R × R —> R functions
 		//
-		// we convert our problem into a descrete one:
+		// we convert our problem into a discrete one:
 		//
 		// (stiffnessMatrix + robinMatrix) . xi = loadVector + robinVector,
 		//
