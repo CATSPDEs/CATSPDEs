@@ -75,6 +75,9 @@
     <ClInclude Include="array.hpp">
       <Filter>Utilities</Filter>
     </ClInclude>
+    <ClInclude Include="SkylineMatrix.hpp">
+      <Filter>Matrices\Implementations</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="BandMatrix.cpp">
@@ -96,6 +99,9 @@
       <Filter>PDEs\Implementations</Filter>
     </ClCompile>
     <ClCompile Include="DenseMatrix.cpp">
+      <Filter>Matrices\Implementations</Filter>
+    </ClCompile>
+    <ClCompile Include="SkylineMatrix.cpp">
       <Filter>Matrices\Implementations</Filter>
     </ClCompile>
   </ItemGroup>
