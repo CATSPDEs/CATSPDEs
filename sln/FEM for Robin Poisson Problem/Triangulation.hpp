@@ -42,6 +42,9 @@ public:
 	array<Node, 3> getNodes(size_t t) {
 		return { _nodes[_triangles[t].nodes(0)],_nodes[_triangles[t].nodes(1)],_nodes[_triangles[t].nodes(2)] };
 	}
+	array<size_t, 3> getNodesIndicies(size_t t) const {
+		return _triangles[t].nodes();
+	}
 	array<size_t, 3> l2g(size_t t) { // local to global nodes numeration
 		return _triangles[t].nodes();
 	}

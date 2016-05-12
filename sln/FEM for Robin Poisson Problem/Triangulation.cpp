@@ -357,4 +357,3 @@ vector<double> Triangulation::qualityMeasure() {
 	// we multiply by sqrt(3), so ideal triangles have quality measure = 1
 	return v;
 }
-

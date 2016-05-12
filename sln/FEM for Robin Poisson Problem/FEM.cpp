@@ -2,6 +2,7 @@
 #include "SymmetricContainer.hpp"
 #include "Triangulation.hpp"
 #include "array.hpp"
+#include<set>
 
 inline double a(Node const& p) { // a > 0
 	return 1.;
@@ -23,9 +24,29 @@ inline double kappa(Node const& p) { // kappa > 0
 	return 1.;
 }
 
+vector<set<int>> generateAdjList(Triangulation const& Omega) {
+	vector<set<int>> adjList(Omega.numbOfNodes());
+	for (size_t i = 0;i < Omega.numbOfTriangles();i++) {
+		auto elementNodesIndicies = Omega.getNodesIndicies(i);
+		sort(elementNodesIndicies.begin(), elementNodesIndicies.end());
+		adjList[elementNodesIndicies[2]].insert(elementNodesIndicies[1]);
+		adjList[elementNodesIndicies[2]].insert(elementNodesIndicies[0]);
+		adjList[elementNodesIndicies[1]].insert(elementNodesIndicies[0]);
+		//auto maxInd = *max_element(elementNodesIndicies.begin(), elementNodesIndicies.end());
+		//for (auto ind : elementNodesIndicies)
+		//	if (ind != maxInd)
+		//		adjList[maxInd].insert(ind);
+	}
+	return adjList;
+}
+
 int main() {
 	try {
 		Triangulation Omega(Node(-1, -1), Node(1, 1), .99); // simple square mesh
+		auto adjList = generateAdjList(Omega);
+		Indicies l = { 0,1,6 };
+		Omega.refine(l);
+		adjList = generateAdjList(Omega);
 		// stiffness matrix and load vector data structures
 		DenseMatrix stiffnessMatrix(Omega.numbOfNodes()); // in dense format (for simplicity—will be changed soon)
 		SymmetricContainer<double> stiffnessMatrixLoc(3); // for hat functions on triangles we have 3 × 3 element matricies

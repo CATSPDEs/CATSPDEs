@@ -23,7 +23,7 @@ public:
 					  ssize_t t1 = -1, ssize_t t2 = -1, ssize_t t3 = -1) 
 		: _nodes{ {p1, p2, p3} }
 		, _neighbors{ {t1, t2, t3} } {}
-	array<size_t, 3> nodes() { return _nodes; }
+	array<size_t, 3> nodes() const { return _nodes; }
 	Triangle& nodes(array<size_t, 3> const & newNodes) {
 		_nodes = newNodes;
 		return *this;
