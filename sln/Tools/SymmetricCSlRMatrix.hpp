@@ -1,14 +1,13 @@
 ﻿#pragma once
+#include <set>
 #include "AbstractSparseMatrix.hpp"
 #include "IRealMatrix.hpp"
-#include<set>
-#include<vector>
 
 typedef std::vector<std::set<int>> AdjacencyList;
 
 class SymmetricCSlRMatrix : public AbstractSparseMatrix<double>, public IRealMatrix {
 	// fancy name, yeah
-	// this format is also known as symmetric CSlR—Compressed Sparse (lower triangular) Row
+	// stands for Symmetric Compressed Sparse (lower triangular) Row
 	std::vector<double> _lval, // vector of elements of lower triangular part of matrix (raw by raw)
 						_diag; // vector of diagonal elements (for FEM / FVM is always > 0, 
 	                           // so we store it explicitly)
@@ -39,7 +38,7 @@ class SymmetricCSlRMatrix : public AbstractSparseMatrix<double>, public IRealMat
 	double _get(size_t, size_t) const;
 public:
 	SymmetricCSlRMatrix(size_t, size_t);
-	SymmetricCSlRMatrix(AdjacencyList);
+	SymmetricCSlRMatrix(AdjacencyList const &); // generate matrix portrait from adjacency list of mesh nodes 
 	~SymmetricCSlRMatrix() {}
 	std::vector<double> solve(std::vector<double> const &);
 	std::vector<double> mult(std::vector<double> const &) const;

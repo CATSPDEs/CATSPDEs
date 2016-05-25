@@ -1,8 +1,7 @@
-#include "SymmetricContainer.hpp"
-#include "Triangulation.hpp"
-#include "array.hpp"
-#include "SymmetricCSlRMatrix.hpp"
-#include <set>
+#include "SymmetricContainer.hpp" // for local matrices
+#include "SymmetricCSlRMatrix.hpp" // for final linear system matrix
+#include "Triangulation.hpp" // our mesh
+#include "array.hpp" // utility for array operations
 
 // our model problem:
 //
@@ -26,6 +25,8 @@
 //
 // where hatFunction_i denotes linear basis function taking unity on ith node and zero elsewhere
 // so we have to solve n × n linear system, n := numb of nodes of the mesh Omega
+
+// input R × R —> R functions:
 
 inline double a(Node const& p) { // a > 0
 	return 1.;
@@ -51,7 +52,7 @@ inline double kappa(Node const& p) { // kappa > 0
 	return 1.;
 }
 
-AdjacencyList generateAdjList(Triangulation const& Omega) {
+AdjacencyList generateAdjList(Triangulation const & Omega) {
 	AdjacencyList adjList(Omega.numbOfNodes());
 	for (size_t i = 0;i < Omega.numbOfTriangles();i++) {
 		auto elementNodesIndicies = Omega.getNodesIndicies(i);
@@ -59,10 +60,6 @@ AdjacencyList generateAdjList(Triangulation const& Omega) {
 		adjList[elementNodesIndicies[2]].insert(elementNodesIndicies[1]);
 		adjList[elementNodesIndicies[2]].insert(elementNodesIndicies[0]);
 		adjList[elementNodesIndicies[1]].insert(elementNodesIndicies[0]);
-		//auto maxInd = *max_element(elementNodesIndicies.begin(), elementNodesIndicies.end());
-		//for (auto ind : elementNodesIndicies)
-		//	if (ind != maxInd)
-		//		adjList[maxInd].insert(ind);
 	}
 	return adjList;
 }
@@ -70,11 +67,11 @@ AdjacencyList generateAdjList(Triangulation const& Omega) {
 int main() {
 	try {
 		Triangulation Omega(Node(-1, -1), Node(1, 1), .99); // simple square mesh
-		// data structures for final linear system A.xi = b
-		auto adjList = generateAdjList(Omega);
-		SymmetricCSlRMatrix A(adjList);
+		// data structures for final linear system A.xi = b:
+		SymmetricCSlRMatrix A(generateAdjList(Omega)); // build final matrix portrait
 		vector<double> b(Omega.numbOfNodes(), 0), // load vector
-		               xi(Omega.numbOfNodes()); // discrete solution			   
+		               xi(Omega.numbOfNodes()); // discrete solution	
+		// data structures for assemby of A and b:
 		SymmetricContainer<double> massMatrixLoc(3), // for hat functions on triangles 
 		                           stiffnessMatrixLoc(3), // we have 3 × 3 element matricies
 		                           robinMatrixLoc(2); // and 2 × 2 element matricies for Robin BCs (just like element matrix in 1D)
@@ -82,8 +79,7 @@ int main() {
 		array<double, 2> robinVectorLoc; // friends, element vectors
 		array<Node, 3> elementNodes; // nodes of current triangle
 		Node leftNode, rightNode; // dummy nodes
-		double elementArea, // area of ith triangle
-		       edgeLength; // length of bndry edge of ith thiangle
+		double measure; // area of ith triangle / length of bndry edge of ith thiangle
 		array<size_t, 3> l2g; // local to global mapping of nodes
 		// dummy indicies
 		size_t i;
@@ -95,15 +91,15 @@ int main() {
 			// in order to assemble stiffness matrix and load vector,
 			// it is convinient to iterate over mesh elements (i.e. triangles)
 			elementNodes = Omega.getNodes(i); // get nodes of ith triangle
-			elementArea = Omega.area(i); // compute area of ith triangle
+			measure = Omega.area(i); // compute area of ith triangle
 			l2g = Omega.l2g(i); // local to global mapping of nodes of ith element
 			// (1.1) compute local mass matrix
-			massMatrixLoc(0, 0) = elementArea * (6 * c(elementNodes[0]) + 2 * c(elementNodes[1]) + 2 * c(elementNodes[2])) / 60.;
-			massMatrixLoc(0, 1) = elementArea * (2 * c(elementNodes[0]) + 2 * c(elementNodes[1]) +     c(elementNodes[2])) / 60.;
-			massMatrixLoc(0, 2) = elementArea * (3 * c(elementNodes[0]) +     c(elementNodes[1]) + 2 * c(elementNodes[2])) / 60.;
-			massMatrixLoc(1, 1) = elementArea * (2 * c(elementNodes[0]) + 6 * c(elementNodes[1]) + 2 * c(elementNodes[2])) / 60.;
-			massMatrixLoc(1, 2) = elementArea * (    c(elementNodes[0]) + 2 * c(elementNodes[1]) + 2 * c(elementNodes[2])) / 60.;
-			massMatrixLoc(2, 2) = elementArea * (2 * c(elementNodes[0]) + 2 * c(elementNodes[1]) + 6 * c(elementNodes[2])) / 60.;
+			massMatrixLoc(0, 0) = measure * (6 * c(elementNodes[0]) + 2 * c(elementNodes[1]) + 2 * c(elementNodes[2])) / 60.;
+			massMatrixLoc(0, 1) = measure * (2 * c(elementNodes[0]) + 2 * c(elementNodes[1]) +     c(elementNodes[2])) / 60.;
+			massMatrixLoc(0, 2) = measure * (3 * c(elementNodes[0]) +     c(elementNodes[1]) + 2 * c(elementNodes[2])) / 60.;
+			massMatrixLoc(1, 1) = measure * (2 * c(elementNodes[0]) + 6 * c(elementNodes[1]) + 2 * c(elementNodes[2])) / 60.;
+			massMatrixLoc(1, 2) = measure * (    c(elementNodes[0]) + 2 * c(elementNodes[1]) + 2 * c(elementNodes[2])) / 60.;
+			massMatrixLoc(2, 2) = measure * (2 * c(elementNodes[0]) + 2 * c(elementNodes[1]) + 6 * c(elementNodes[2])) / 60.;
 			// (1.2) compute local stiffness matrix
 			stiffnessMatrixLoc(0, 0) = (elementNodes[1].x() - elementNodes[2].x()) * (elementNodes[1].x() - elementNodes[2].x()) + 
 		                               (elementNodes[1].y() - elementNodes[2].y()) * (elementNodes[1].y() - elementNodes[2].y());
@@ -119,16 +115,16 @@ int main() {
 			                           (elementNodes[0].y() - elementNodes[1].y()) * (elementNodes[0].y() - elementNodes[1].y());
 			for (j = 0; j < 3; ++j)
 				for (k = j; k < 3; ++k)
-					stiffnessMatrixLoc(j, k) *= (a(elementNodes[0]) + a(elementNodes[1]) + a(elementNodes[2])) / elementArea / 12.;
+					stiffnessMatrixLoc(j, k) *= (a(elementNodes[0]) + a(elementNodes[1]) + a(elementNodes[2])) / measure / 12.;
 			// (1.3) compute local load vector
 			(loadVectorLoc = { 
 				2 * f(elementNodes[0]) +     f(elementNodes[1]) + 2 * f(elementNodes[2]),
 				    f(elementNodes[0]) + 2 * f(elementNodes[1]) +     f(elementNodes[2]),
 				    f(elementNodes[0]) +     f(elementNodes[1]) + 2 * f(elementNodes[2])
-			}) *= elementArea / 12.;
+			}) *= measure / 12.;
 			// (1.4) assemble contributions
 			for (j = 0; j < 3; ++j) {
-				for (k = 0; k < 3; ++k)
+				for (k = j; k < 3; ++k)
 					A(l2g[j], l2g[k]) += massMatrixLoc(j, k) + stiffnessMatrixLoc(j, k);
 				b[l2g[j]] += loadVectorLoc[j];
 			}
@@ -140,13 +136,13 @@ int main() {
 				// if edgeIndex = 2, then the edge against second node of ith triangle
 				// is part of the boundary
 				// so we need to assemble BCs here
-				edgeLength = Omega.length(i, edgeIndex);
+				measure = Omega.length(i, edgeIndex);
 				leftNode = elementNodes[nextIndex(edgeIndex)]; // these are nodes that 
 				rightNode = elementNodes[nextIndex(nextIndex(edgeIndex))]; // define the edge
 				// (2.1) compute local Robin matrix
-				robinMatrixLoc(0, 0) = edgeLength * (3 * kappa(leftNode) +     kappa(rightNode)) / 12.;
-				robinMatrixLoc(0, 1) = edgeLength * (    kappa(leftNode) +     kappa(rightNode)) / 12.;
-				robinMatrixLoc(1, 1) = edgeLength * (    kappa(leftNode) + 3 * kappa(rightNode)) / 12.;
+				robinMatrixLoc(0, 0) = measure * (3 * kappa(leftNode) +     kappa(rightNode)) / 12.;
+				robinMatrixLoc(0, 1) = measure * (    kappa(leftNode) +     kappa(rightNode)) / 12.;
+				robinMatrixLoc(1, 1) = measure * (    kappa(leftNode) + 3 * kappa(rightNode)) / 12.;
 				// (2.2) compute local Robin vector
 				(robinVectorLoc = {
 					4 * g_N(leftNode) + 2 * g_N(rightNode) + 
@@ -155,19 +151,20 @@ int main() {
 					2 * g_N(leftNode) + 4 * g_N(rightNode) +
 					g_D(leftNode) * (kappa(leftNode) + kappa(rightNode)) +
 					g_D(rightNode) * (kappa(leftNode) + 3 * kappa(rightNode)),
-				}) *= edgeLength / 12.;
+				}) *= measure / 12.;
 				// (2.3) assemble contributions
 				for (j = 0; j < 2; ++j) {
-					for (k = 0; k < 2; ++k)
+					for (k = j; k < 2; ++k)
 						A(l2g[j], l2g[k]) += robinMatrixLoc(j, k);
 					b[l2g[j]] += robinVectorLoc[j];
 				}
 			}
 		}
-		xi = b / A; // compute our desrete solution
+		// xi = b / A; // compute our desrete solution
+		cout << "system matrix:\n";
 		A.save();
-		cout << b << "\n\n";
-		cout << xi << endl;
+		cout << "\nRHS-vector:\n" << b << "\n\n";
+		// cout << xi << endl;
 	}
 	catch (exception const & e) {
 		cout << e.what() << endl;

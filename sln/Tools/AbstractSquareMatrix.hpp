@@ -27,7 +27,7 @@ public:
 	size_t getOrder() const { return _n; }
 	std::ostream& save(std::ostream& output = std::cout) const {
 		output << _n << '\n';
-		output << std::setprecision(15) << std::scientific << std::showpos;
+		output << std::setprecision(6/*15*/) << std::scientific << std::showpos;
 		for (size_t i = 0; i < _n; ++i) {
 			for (size_t j = 0; j < _n; ++j)
 				output << _get(i, j) << ' ';
@@ -38,11 +38,10 @@ public:
 	std::istream& load(std::istream& input = std::cin) {
 		T dummy;
 		for (size_t i = 0; i < _n; ++i)
-			for (size_t j = 0; j < _n; ++i)
+			for (size_t j = 0; j < _n; ++i) {
 				input >> dummy;
-				try {
-					_set(i, j) = dummy;
-				} catch (std::invalid_argument const &) {} // you cannot set some values of sparse matrices because they are zeros
+				if (dummy) _set(i, j) = dummy;
+			}
 		return input;
 	}
 };

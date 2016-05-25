@@ -1,5 +1,46 @@
 #include "SymmetricCSlRMatrix.hpp"
 
+SymmetricCSlRMatrix::SymmetricCSlRMatrix(size_t n, size_t nnz)
+	: AbstractSparseMatrix(n)
+	, _iptr(n + 1)
+	, _jptr(nnz)
+	, _lval(nnz) {
+	_iptr[n] = nnz;
+}
+
+SymmetricCSlRMatrix::SymmetricCSlRMatrix(AdjacencyList const & adjList) 
+	: AbstractSparseMatrix(adjList.size())
+	, _iptr(adjList.size() + 1)
+	, _diag(adjList.size()) {
+	for (size_t i = 0;i < adjList.size();i++)
+		_iptr[i + 1] = _iptr[i] + adjList[i].size();
+	_jptr.reserve(_iptr[_n]);
+	for (size_t i = 0;i < adjList.size();i++)
+		for (auto neighbour : adjList[i])
+			_jptr.emplace_back(neighbour);
+	_lval.resize(_iptr[_n]);
+}
+
+// private methods
+
+double& SymmetricCSlRMatrix::_set(size_t i, size_t j) {
+	if (i == j) return _diag[i];
+	if (i < j) std::swap(i, j); // lower triangular part
+	for (size_t k = _iptr[i]; k < _iptr[i + 1]; ++k)
+		if (_jptr[k] == j) return _lval[k];
+		else if (_jptr[k] > j) throw std::invalid_argument("portrait of sparse matrix doesn’t allow to change element w/ these indicies");
+}
+
+double SymmetricCSlRMatrix::_get(size_t i, size_t j) const {
+	if (i == j) return _diag[i];
+	if (i < j) std::swap(i, j);
+	for (size_t k = _iptr[i]; k < _iptr[i + 1]; ++k)
+		if (_jptr[k] == j) return _lval[k];
+		else if (_jptr[k] > j) return 0.;
+}
+
+// public methods
+
 std::istream & SymmetricCSlRMatrix::loadSparse(std::istream& input) {
 	// we know matrix size (_n) and numb of nonzeroes 
 	// in lower triangular part (_iptr[_n])
@@ -24,8 +65,7 @@ std::istream & SymmetricCSlRMatrix::loadSparse(std::istream& input) {
 	return input;
 }
 
-std::ostream& SymmetricCSlRMatrix::saveSparse(std::ostream& output) const
-{
+std::ostream& SymmetricCSlRMatrix::saveSparse(std::ostream& output) const {
 	return output << _n << ' ' << _iptr[_n] << '\n'
 		<< std::vector<size_t>(_iptr.begin(), _iptr.end() - 1) << '\n' 
 		// we do not want last element to be written—we already have it
@@ -34,47 +74,12 @@ std::ostream& SymmetricCSlRMatrix::saveSparse(std::ostream& output) const
 		<< _diag;
 }
 
-double & SymmetricCSlRMatrix::_set(size_t, size_t)
-{
-	//placeholder
-	return _lval[0];
-}
-
-double SymmetricCSlRMatrix::_get(size_t, size_t) const
-{
-	//placeholder
-	return 0.0;
-}
-
-SymmetricCSlRMatrix::SymmetricCSlRMatrix(size_t n, size_t nnz)
-	: AbstractSparseMatrix(n)
-	, _iptr(n + 1)
-	, _jptr(nnz)
-	, _lval(nnz) {
-	_iptr[n] = nnz;
-}
-
-SymmetricCSlRMatrix::SymmetricCSlRMatrix(AdjacencyList adjList):
-	AbstractSparseMatrix(adjList.size()),
-	_iptr(adjList.size()+1),
-	_diag(adjList.size()){
-	for (size_t i = 0;i < adjList.size();i++) 
-		_iptr[i + 1] = _iptr[i] + adjList[i].size();
-	_jptr.reserve(_iptr[_n]);
-	for (size_t i = 0;i < adjList.size();i++)
-		for (auto neighbour : adjList[i])
-			_jptr.emplace_back(neighbour);
-	_lval.resize(_iptr[_n]);
-}
-
-std::vector<double> SymmetricCSlRMatrix::solve(std::vector<double> const &)
-{
+std::vector<double> SymmetricCSlRMatrix::solve(std::vector<double> const &) {
 	//placeholder
 	return std::vector<double>();
 }
 
-std::vector<double> SymmetricCSlRMatrix::mult(std::vector<double> const &) const
-{
+std::vector<double> SymmetricCSlRMatrix::mult(std::vector<double> const &) const {
 	//placeholder
 	return std::vector<double>();
 }
