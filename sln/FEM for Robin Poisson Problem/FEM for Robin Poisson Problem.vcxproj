@@ -123,6 +123,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="..\Tools\DenseMatrix.cpp" />
+    <ClCompile Include="..\Tools\SymmetricSkylineMatrix.cpp" />
     <ClCompile Include="Curve.hpp" />
     <ClCompile Include="FEM.cpp" />
     <ClCompile Include="Triangulation.cpp" />

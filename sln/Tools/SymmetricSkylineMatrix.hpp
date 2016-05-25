@@ -1,6 +1,10 @@
 ﻿#pragma once
 #include "AbstractSparseMatrix.hpp"
 #include "IRealMatrix.hpp"
+#include<set>
+#include<vector>
+
+typedef std::vector<std::set<int>> AdjacencyList;
 
 class SymmetricSkylineMatrix : public AbstractSparseMatrix<double>, public IRealMatrix {
 	// fancy name, yeah
@@ -35,6 +39,7 @@ class SymmetricSkylineMatrix : public AbstractSparseMatrix<double>, public IReal
 	double _get(size_t, size_t) const;
 public:
 	SymmetricSkylineMatrix(size_t, size_t);
+	SymmetricSkylineMatrix(AdjacencyList);
 	~SymmetricSkylineMatrix() {}
 	std::vector<double> solve(std::vector<double> const &);
 	std::vector<double> mult(std::vector<double> const &) const;

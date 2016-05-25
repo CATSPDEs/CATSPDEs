@@ -33,3 +33,52 @@ std::ostream& SymmetricSkylineMatrix::saveSparse(std::ostream& output) const
 		<< _lval << '\n'
 		<< _diag;
 }
+
+double & SymmetricSkylineMatrix::_set(size_t, size_t)
+{
+	//placeholder
+	return _lval[0];
+}
+
+double SymmetricSkylineMatrix::_get(size_t, size_t) const
+{
+	//placeholder
+	return 0.0;
+}
+
+SymmetricSkylineMatrix::SymmetricSkylineMatrix(size_t n, size_t nnz)
+	: AbstractSparseMatrix(n)
+	, _iptr(n + 1)
+	, _jptr(nnz)
+	, _lval(nnz) {
+	_iptr[n] = nnz;
+}
+
+SymmetricSkylineMatrix::SymmetricSkylineMatrix(AdjacencyList adjList):
+	AbstractSparseMatrix(adjList.size()),
+	_iptr(adjList.size()+1),
+	_diag(adjList.size()){
+	size_t nnz = 0;
+	_jptr.reserve((_n*_n)/2);
+	for (size_t i = 0;i < adjList.size();i++) {
+		_iptr[i + 1] = _iptr[i] + adjList[i].size();
+		for (auto neighbour : adjList[i]) {
+			_jptr.push_back(neighbour);
+			nnz++;
+		}
+	}
+	_lval.resize(nnz);
+	_jptr.shrink_to_fit();
+}
+
+std::vector<double> SymmetricSkylineMatrix::solve(std::vector<double> const &)
+{
+	//placeholder
+	return std::vector<double>();
+}
+
+std::vector<double> SymmetricSkylineMatrix::mult(std::vector<double> const &) const
+{
+	//placeholder
+	return std::vector<double>();
+}

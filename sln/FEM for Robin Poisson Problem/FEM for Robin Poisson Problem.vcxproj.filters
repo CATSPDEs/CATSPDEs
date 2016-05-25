@@ -27,6 +27,9 @@
     <ClCompile Include="..\Tools\DenseMatrix.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="..\Tools\SymmetricSkylineMatrix.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Triangulation.hpp">

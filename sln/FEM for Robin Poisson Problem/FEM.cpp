@@ -2,6 +2,7 @@
 #include "SymmetricContainer.hpp"
 #include "Triangulation.hpp"
 #include "array.hpp"
+#include"SymmetricSkylineMatrix.hpp"
 #include<set>
 
 inline double a(Node const& p) { // a > 0
@@ -24,8 +25,8 @@ inline double kappa(Node const& p) { // kappa > 0
 	return 1.;
 }
 
-vector<set<int>> generateAdjList(Triangulation const& Omega) {
-	vector<set<int>> adjList(Omega.numbOfNodes());
+AdjacencyList generateAdjList(Triangulation const& Omega) {
+	AdjacencyList adjList(Omega.numbOfNodes());
 	for (size_t i = 0;i < Omega.numbOfTriangles();i++) {
 		auto elementNodesIndicies = Omega.getNodesIndicies(i);
 		sort(elementNodesIndicies.begin(), elementNodesIndicies.end());
@@ -40,10 +41,13 @@ vector<set<int>> generateAdjList(Triangulation const& Omega) {
 	return adjList;
 }
 
+
+
 int main() {
 	try {
 		Triangulation Omega(Node(-1, -1), Node(1, 1), .99); // simple square mesh
 		auto adjList = generateAdjList(Omega);
+		SymmetricSkylineMatrix mm(adjList);
 		Indicies l = { 0,1,6 };
 		Omega.refine(l);
 		adjList = generateAdjList(Omega);

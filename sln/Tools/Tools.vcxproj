@@ -135,8 +135,8 @@
     <ClInclude Include="LinearEllipticPDE.hpp" />
     <ClInclude Include="Point.hpp" />
     <ClInclude Include="RectangularFDMMesh.hpp" />
-    <ClInclude Include="SkylineMatrix.hpp" />
     <ClInclude Include="SymmetricContainer.hpp" />
+    <ClInclude Include="SymmetricSkylineMatrix.hpp" />
     <ClInclude Include="vector.hpp" />
   </ItemGroup>
   <ItemGroup>
@@ -147,7 +147,7 @@
     <ClCompile Include="CRSMatrix.cpp" />
     <ClCompile Include="DenseMatrix.cpp" />
     <ClCompile Include="RectangularFDMMesh.cpp" />
-    <ClCompile Include="SkylineMatrix.cpp" />
+    <ClCompile Include="SymmetricSkylineMatrix.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
