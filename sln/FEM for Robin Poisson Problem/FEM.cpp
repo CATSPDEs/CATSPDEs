@@ -55,7 +55,7 @@ inline double kappa(Node const& p) { // kappa > 0
 AdjacencyList generateAdjList(Triangulation const & Omega) {
 	AdjacencyList adjList(Omega.numbOfNodes());
 	for (size_t i = 0;i < Omega.numbOfTriangles();i++) {
-		auto elementNodesIndicies = Omega.getNodesIndicies(i);
+		auto elementNodesIndicies = Omega.l2g(i);
 		sort(elementNodesIndicies.begin(), elementNodesIndicies.end());
 		adjList[elementNodesIndicies[2]].insert(elementNodesIndicies[1]);
 		adjList[elementNodesIndicies[2]].insert(elementNodesIndicies[0]);
