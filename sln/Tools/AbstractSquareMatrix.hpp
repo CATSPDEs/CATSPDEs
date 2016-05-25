@@ -27,7 +27,7 @@ public:
 	size_t getOrder() const { return _n; }
 	std::ostream& save(std::ostream& output = std::cout) const {
 		output << _n << '\n';
-		output << std::setprecision(15) << std::scientific << showpos;
+		output << std::setprecision(15) << std::scientific << std::showpos;
 		for (size_t i = 0; i < _n; ++i) {
 			for (size_t j = 0; j < _n; ++j)
 				output << _get(i, j) << ' ';
