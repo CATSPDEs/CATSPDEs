@@ -58,15 +58,13 @@ SymmetricSkylineMatrix::SymmetricSkylineMatrix(AdjacencyList adjList):
 	AbstractSparseMatrix(adjList.size()),
 	_iptr(adjList.size()+1),
 	_diag(adjList.size()){
-	size_t nnz = 0;
-	_jptr.reserve((_n*_n)/2);
-	for (size_t i = 0;i < adjList.size();i++) {
+	for (size_t i = 0;i < adjList.size();i++) 
 		_iptr[i + 1] = _iptr[i] + adjList[i].size();
-		for (auto neighbour : adjList[i]) 
-			_jptr.push_back(neighbour);
-	}
+	_jptr.reserve(_iptr[_n]);
+	for (size_t i = 0;i < adjList.size();i++)
+		for (auto neighbour : adjList[i])
+			_jptr.emplace_back(neighbour);
 	_lval.resize(_iptr[_n]);
-	_jptr.shrink_to_fit();
 }
 
 std::vector<double> SymmetricSkylineMatrix::solve(std::vector<double> const &)
