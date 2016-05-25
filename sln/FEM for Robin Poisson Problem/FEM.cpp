@@ -1,7 +1,7 @@
 #include "SymmetricContainer.hpp"
 #include "Triangulation.hpp"
 #include "array.hpp"
-#include "SymmetricSkylineMatrix.hpp"
+#include "SymmetricCSlRMatrix.hpp"
 #include <set>
 
 // our model problem:
