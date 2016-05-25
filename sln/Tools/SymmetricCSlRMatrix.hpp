@@ -6,7 +6,7 @@
 
 typedef std::vector<std::set<int>> AdjacencyList;
 
-class SymmetricSkylineMatrix : public AbstractSparseMatrix<double>, public IRealMatrix {
+class SymmetricCSlRMatrix : public AbstractSparseMatrix<double>, public IRealMatrix {
 	// fancy name, yeah
 	// this format is also known as symmetric CSlR—Compressed Sparse (lower triangular) Row
 	std::vector<double> _lval, // vector of elements of lower triangular part of matrix (raw by raw)
@@ -38,12 +38,12 @@ class SymmetricSkylineMatrix : public AbstractSparseMatrix<double>, public IReal
 	double& _set(size_t, size_t);
 	double _get(size_t, size_t) const;
 public:
-	SymmetricSkylineMatrix(size_t, size_t);
-	SymmetricSkylineMatrix(AdjacencyList);
-	~SymmetricSkylineMatrix() {}
+	SymmetricCSlRMatrix(size_t, size_t);
+	SymmetricCSlRMatrix(AdjacencyList);
+	~SymmetricCSlRMatrix() {}
 	std::vector<double> solve(std::vector<double> const &);
 	std::vector<double> mult(std::vector<double> const &) const;
 	std::istream& loadSparse(std::istream&); // look at implementation for istream / ostream structure
 	std::ostream& saveSparse(std::ostream&) const;
-	friend SymmetricSkylineMatrix operator*(SymmetricSkylineMatrix const &, SymmetricSkylineMatrix const &);
+	friend SymmetricCSlRMatrix operator*(SymmetricCSlRMatrix const &, SymmetricCSlRMatrix const &);
 };

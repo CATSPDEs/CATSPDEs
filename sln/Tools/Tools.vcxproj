@@ -129,14 +129,14 @@
     <ClInclude Include="AbstractSquareMatrix.hpp" />
     <ClInclude Include="BandMatrix.hpp" />
     <ClInclude Include="BC.hpp" />
-    <ClInclude Include="CRSMatrix.hpp" />
+    <ClInclude Include="CSRMatrix.hpp" />
     <ClInclude Include="Function.hpp" />
     <ClInclude Include="IRealMatrix.hpp" />
     <ClInclude Include="LinearEllipticPDE.hpp" />
     <ClInclude Include="Point.hpp" />
     <ClInclude Include="RectangularFDMMesh.hpp" />
     <ClInclude Include="SymmetricContainer.hpp" />
-    <ClInclude Include="SymmetricSkylineMatrix.hpp" />
+    <ClInclude Include="SymmetricCSlRMatrix.hpp" />
     <ClInclude Include="vector.hpp" />
   </ItemGroup>
   <ItemGroup>
@@ -144,10 +144,10 @@
     <ClCompile Include="AbstractMesh.cpp" />
     <ClCompile Include="AbstractNode.cpp" />
     <ClCompile Include="BandMatrix.cpp" />
-    <ClCompile Include="CRSMatrix.cpp" />
+    <ClCompile Include="CSRMatrix.cpp" />
     <ClCompile Include="DenseMatrix.cpp" />
     <ClCompile Include="RectangularFDMMesh.cpp" />
-    <ClCompile Include="SymmetricSkylineMatrix.cpp" />
+    <ClCompile Include="SymmetricCSlRMatrix.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

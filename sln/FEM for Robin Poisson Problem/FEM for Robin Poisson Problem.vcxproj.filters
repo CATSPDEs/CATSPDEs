@@ -27,7 +27,7 @@
     <ClCompile Include="..\Tools\DenseMatrix.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\Tools\SymmetricSkylineMatrix.cpp">
+    <ClCompile Include="..\Tools\SymmetricCSlRMatrix.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

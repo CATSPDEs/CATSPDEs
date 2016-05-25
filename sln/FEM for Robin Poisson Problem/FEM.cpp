@@ -72,7 +72,7 @@ int main() {
 		Triangulation Omega(Node(-1, -1), Node(1, 1), .99); // simple square mesh
 		// data structures for final linear system A.xi = b
 		auto adjList = generateAdjList(Omega);
-		SymmetricSkylineMatrix A(adjList);
+		SymmetricCSlRMatrix A(adjList);
 		vector<double> b(Omega.numbOfNodes(), 0), // load vector
 		               xi(Omega.numbOfNodes()); // discrete solution			   
 		SymmetricContainer<double> massMatrixLoc(3), // for hat functions on triangles 

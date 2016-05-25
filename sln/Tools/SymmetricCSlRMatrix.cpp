@@ -1,6 +1,6 @@
-#include "SymmetricSkylineMatrix.hpp"
+#include "SymmetricCSlRMatrix.hpp"
 
-std::istream & SymmetricSkylineMatrix::loadSparse(std::istream& input) {
+std::istream & SymmetricCSlRMatrix::loadSparse(std::istream& input) {
 	// we know matrix size (_n) and numb of nonzeroes 
 	// in lower triangular part (_iptr[_n])
 	// so here is istream structure:
@@ -24,7 +24,7 @@ std::istream & SymmetricSkylineMatrix::loadSparse(std::istream& input) {
 	return input;
 }
 
-std::ostream& SymmetricSkylineMatrix::saveSparse(std::ostream& output) const
+std::ostream& SymmetricCSlRMatrix::saveSparse(std::ostream& output) const
 {
 	return output << _n << ' ' << _iptr[_n] << '\n'
 		<< std::vector<size_t>(_iptr.begin(), _iptr.end() - 1) << '\n' 
@@ -34,19 +34,19 @@ std::ostream& SymmetricSkylineMatrix::saveSparse(std::ostream& output) const
 		<< _diag;
 }
 
-double & SymmetricSkylineMatrix::_set(size_t, size_t)
+double & SymmetricCSlRMatrix::_set(size_t, size_t)
 {
 	//placeholder
 	return _lval[0];
 }
 
-double SymmetricSkylineMatrix::_get(size_t, size_t) const
+double SymmetricCSlRMatrix::_get(size_t, size_t) const
 {
 	//placeholder
 	return 0.0;
 }
 
-SymmetricSkylineMatrix::SymmetricSkylineMatrix(size_t n, size_t nnz)
+SymmetricCSlRMatrix::SymmetricCSlRMatrix(size_t n, size_t nnz)
 	: AbstractSparseMatrix(n)
 	, _iptr(n + 1)
 	, _jptr(nnz)
@@ -54,7 +54,7 @@ SymmetricSkylineMatrix::SymmetricSkylineMatrix(size_t n, size_t nnz)
 	_iptr[n] = nnz;
 }
 
-SymmetricSkylineMatrix::SymmetricSkylineMatrix(AdjacencyList adjList):
+SymmetricCSlRMatrix::SymmetricCSlRMatrix(AdjacencyList adjList):
 	AbstractSparseMatrix(adjList.size()),
 	_iptr(adjList.size()+1),
 	_diag(adjList.size()){
@@ -67,13 +67,13 @@ SymmetricSkylineMatrix::SymmetricSkylineMatrix(AdjacencyList adjList):
 	_lval.resize(_iptr[_n]);
 }
 
-std::vector<double> SymmetricSkylineMatrix::solve(std::vector<double> const &)
+std::vector<double> SymmetricCSlRMatrix::solve(std::vector<double> const &)
 {
 	//placeholder
 	return std::vector<double>();
 }
 
-std::vector<double> SymmetricSkylineMatrix::mult(std::vector<double> const &) const
+std::vector<double> SymmetricCSlRMatrix::mult(std::vector<double> const &) const
 {
 	//placeholder
 	return std::vector<double>();

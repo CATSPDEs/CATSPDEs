@@ -30,9 +30,6 @@
     <ClInclude Include="BandMatrix.hpp">
       <Filter>Matrices\Implementations</Filter>
     </ClInclude>
-    <ClInclude Include="CRSMatrix.hpp">
-      <Filter>Matrices\Implementations</Filter>
-    </ClInclude>
     <ClInclude Include="SymmetricContainer.hpp">
       <Filter>Matrices\Implementations</Filter>
     </ClInclude>
@@ -75,15 +72,15 @@
     <ClInclude Include="array.hpp">
       <Filter>Utilities</Filter>
     </ClInclude>
-    <ClInclude Include="SymmetricSkylineMatrix.hpp">
+    <ClInclude Include="SymmetricCSlRMatrix.hpp">
+      <Filter>Matrices\Implementations</Filter>
+    </ClInclude>
+    <ClInclude Include="CSRMatrix.hpp">
       <Filter>Matrices\Implementations</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="BandMatrix.cpp">
-      <Filter>Matrices\Implementations</Filter>
-    </ClCompile>
-    <ClCompile Include="CRSMatrix.cpp">
       <Filter>Matrices\Implementations</Filter>
     </ClCompile>
     <ClCompile Include="AbstractElement.cpp">
@@ -101,7 +98,10 @@
     <ClCompile Include="DenseMatrix.cpp">
       <Filter>Matrices\Implementations</Filter>
     </ClCompile>
-    <ClCompile Include="SymmetricSkylineMatrix.cpp">
+    <ClCompile Include="SymmetricCSlRMatrix.cpp">
+      <Filter>Matrices\Implementations</Filter>
+    </ClCompile>
+    <ClCompile Include="CSRMatrix.cpp">
       <Filter>Matrices\Implementations</Filter>
     </ClCompile>
   </ItemGroup>
