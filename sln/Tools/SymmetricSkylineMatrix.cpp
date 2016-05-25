@@ -62,12 +62,10 @@ SymmetricSkylineMatrix::SymmetricSkylineMatrix(AdjacencyList adjList):
 	_jptr.reserve((_n*_n)/2);
 	for (size_t i = 0;i < adjList.size();i++) {
 		_iptr[i + 1] = _iptr[i] + adjList[i].size();
-		for (auto neighbour : adjList[i]) {
+		for (auto neighbour : adjList[i]) 
 			_jptr.push_back(neighbour);
-			nnz++;
-		}
 	}
-	_lval.resize(nnz);
+	_lval.resize(_iptr[_n]);
 	_jptr.shrink_to_fit();
 }
 
