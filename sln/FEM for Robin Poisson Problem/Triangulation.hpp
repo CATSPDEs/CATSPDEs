@@ -28,6 +28,14 @@ class Triangulation { // this data structure is known as “Nodes and Triangles”
 	// no need to loop over boundary edges to assemble Robin BCs
 	// because we can easily determine bndry while looping over elements (look at Triangle data structure!) 
 	// in order to construct portrait of CRS-matrix, we also need to store neighbors of ith node 
+	bool _checkNeighbor(size_t, localIndex); // check if ith neighbor of a tth triangle also has _triangles[t] as a neighbor
+	bool _makeNeighbors(size_t, size_t); // make 2 triangles neighbors
+	ssize_t _neighbor2edge(ssize_t); // mapping between indicies
+	// mesh quality measures
+	vector<double> _longestEdges(); // O(n), n := _triangles.size()
+	// compute vector of longest edges of all triangles
+	vector<double> _inscribedDiameters(); // O(n), n := _triangles.size()
+	// compute vector of diameters of inscribed circles of all triangles
 public:
 	Triangulation(Node const &, Node const &, double percent = .5); // dummy rect triangulation
 	Triangulation(vector<Node> const &, vector<Triangle> const &, 
@@ -36,14 +44,8 @@ public:
 		// compute length of ith edge of tth triangle
 		return (_nodes[_triangles[t].nodes(i + 1)] - _nodes[_triangles[t].nodes(i + 2)]).norm();
 	}
-	Node getNode(size_t t, localIndex i){
-		return _nodes[_triangles[t].nodes(i)];
-	}
 	array<Node, 3> getNodes(size_t t) {
 		return { _nodes[_triangles[t].nodes(0)],_nodes[_triangles[t].nodes(1)],_nodes[_triangles[t].nodes(2)] };
-	}
-	array<size_t, 3> getNodesIndicies(size_t t) const {
-		return _triangles[t].nodes();
 	}
 	array<size_t, 3> l2g(size_t t) { // local to global nodes numeration
 		return _triangles[t].nodes();
@@ -61,17 +63,9 @@ public:
 	size_t numbOfNodes() const { return _nodes.size(); }
 	size_t numbOfTriangles() const { return _triangles.size(); }
 	double area(size_t); // compute area of ith triangle
-	bool checkNeighbor(size_t, localIndex); // check if ith neighbor of a tth triangle also has _triangles[t] as a neighbor
-	bool makeNeighbors(size_t, size_t); // make 2 triangles neighbors
 	Triangulation& save(ostream& nodes = cout, ostream& triangles = cout); // save mesh to std out
 	Triangulation& refine(Indicies&); // red-green refinement
 	Triangulation& refine(unsigned numbOfRefinements = 1); // uniform refinement
-	ssize_t neighbor2edge(ssize_t); // mapping between indicies
-	// mesh quality measures
-	vector<double> longestEdges(); // O(n), n := _triangles.size()
-	// compute vector of longest edges of all triangles
-	vector<double> inscribedDiameters(); // O(n), n := _triangles.size()
-	// compute vector of diameters of inscribed circles of all triangles
 	vector<double> qualityMeasure(); // O(n)
 };
 

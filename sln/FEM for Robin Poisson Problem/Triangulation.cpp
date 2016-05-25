@@ -95,6 +95,64 @@ Triangulation::Triangulation(vector<Node> const & nodes, vector<Triangle> const 
 	, _edges(edges) {
 }
 
+// private methods
+
+bool Triangulation::_makeNeighbors(size_t t1, size_t t2) {
+	// make _triangles[@t1] and ‘‘ @t2 neighbors
+	// if they are not adjacent, return false
+	array<array<localIndex, 2>, 2> commonNodes;
+	localIndex i, j, k = 0;
+	for (i = 0; i < 3; ++i)
+		for (j = 0; j < 3; ++j)
+			if (_triangles[t1].nodes(i) == _triangles[t2].nodes(j)) {
+				if (k > 1) { // triangles share… more than 2 nodes?
+					string error("invalid mesh: check out tringles #");
+					throw logic_error(((error += t1) += " and #") += t2);
+				}
+				commonNodes[0][k] = i;
+				commonNodes[1][k++] = j;
+			}
+	if (k < 2) return false; // triangles are not adjacent
+	i = excludeIndicies(commonNodes[0][0], commonNodes[0][1]); // i := node of t1 against common edge 
+	j = excludeIndicies(commonNodes[1][0], commonNodes[1][1]);
+	_triangles[t1].neighbors(i) = t2;
+	_triangles[t2].neighbors(j) = t1;
+	return true; // we are gold
+}
+
+vector<double> Triangulation::_longestEdges() {
+	vector<double> v(_triangles.size());
+	for (size_t i = 0; i < _triangles.size(); ++i) {
+		v[i] = max(length(i, 0), length(i, 1));
+		v[i] = max(v[i], length(i, 2));
+	}
+	return v;
+}
+
+vector<double> Triangulation::_inscribedDiameters() {
+	vector<double> v(_triangles.size());
+	for (size_t i = 0; i < _triangles.size(); ++i)
+		v[i] = 4 * area(i) / perimeter(i);
+	return v;
+}
+
+bool Triangulation::_checkNeighbor(size_t t1, localIndex i) {
+	// check if ith neighbor of a t1th triangle also has _triangles[t1] as a neighbor
+	ssize_t t2 = _triangles[t1].neighbors(i);
+	if (t2 < 0) return true;
+	for (i = 0; i < 3; ++i)
+		if (_triangles[t2].neighbors(i) == t1) return true;
+	return false;
+}
+
+ssize_t Triangulation::_neighbor2edge(ssize_t i) {
+	// convert @i := _triangles[*].neighbor(**) to
+	// index in _edges vector
+	return -i - 2;
+}
+
+// public methods
+
 double Triangulation::area(size_t i) { // compute area of ith triangle
 	// we have norm of vector product underhood
 	// neat!!
@@ -152,7 +210,7 @@ Triangulation& Triangulation::refine(Indicies& redList) {
 		t = _triangles[i].neighbors();
 		// let’s deal w/ red points
 		for (j = 0, k = 0; j < 3; ++j)
-			if (!checkNeighbor(i, j)) {
+			if (!_checkNeighbor(i, j)) {
 				// if our triangle has a neighbor which has already been red-refined,
 				// then no need in creating a new node
 				// we just have to find out its index
@@ -163,7 +221,7 @@ Triangulation& Triangulation::refine(Indicies& redList) {
 				// otherwise, well, let’s add a node!
 				rp[j] = _nodes.size();
 				if (t[j] < -1) { // curvilinear edges
-					m = neighbor2edge(t[j]);
+					m = _neighbor2edge(t[j]);
 					_nodes.push_back(_curves[_edges[m].curveIndex()](_edges[m].thetaMiddle()));
 					_edges.push_back(CurvilinearEdge(_edges[m].thetaMiddle(), _edges[m].thetaEnd(), _edges[m].curveIndex()));
 					_edges[m].thetaEnd() = _edges[m].thetaMiddle();
@@ -190,14 +248,14 @@ Triangulation& Triangulation::refine(Indicies& redList) {
 			j = _edges.size();
 			for (size_t newTriangle : { _triangles.size() - 2, _triangles.size() - 3, _triangles.size() - 1 })
 				if (_triangles[newTriangle].neighbors(1) < -1) 
-					_triangles[newTriangle].neighbors(1) = neighbor2edge(--j);
+					_triangles[newTriangle].neighbors(1) = _neighbor2edge(--j);
 			// we set neighbors of our new triangles to be neighbors of 
 			// our old (refined) triangle
 			// so there n <= 6 neighbors to be found
 			// if ith neighbors were red-refined previously 
 			for (j = _triangles.size() - 3; j < _triangles.size(); ++j)
 				for (size_t neighbor : redNeighborsList)
-					makeNeighbors(j, neighbor);
+					_makeNeighbors(j, neighbor);
 			redNeighborsList.clear(); // we are done w/ neighbors
 			// if ith has no neighbors or its neighbors were refined earlier, we are gold 
 			// otherwise we have to deal w/ hanging nodes
@@ -216,7 +274,7 @@ Triangulation& Triangulation::refine(Indicies& redList) {
 		if (keyValue.second > 1) continue; // we should do green refinement iff there’s only one hanging node
 		i = keyValue.first; // index of triangle to be green-refined
 		for (j = 0; j < 3; ++j)
-			if (!checkNeighbor(i, j)) {
+			if (!_checkNeighbor(i, j)) {
 				rt[0] = _triangles[i].neighbors(j); // so _triangles[rt[0]] is red triangle w/ a handing node
 				break;
 			}
@@ -227,14 +285,14 @@ Triangulation& Triangulation::refine(Indicies& redList) {
 									  -1, i, _triangles[i].neighbors(j + 2)));
 		// …(fix green neighbor)…
 		if (_triangles[i].neighbors(j + 2) > -1) 
-			makeNeighbors(_triangles.size() - 1, _triangles[i].neighbors(j + 2));
+			_makeNeighbors(_triangles.size() - 1, _triangles[i].neighbors(j + 2));
 		// …and another one will take place of the old one
 		_triangles[i]
 			.nodes(_triangles[i].nodes(j), gp, _triangles[i].nodes(j + 2))
 			.neighbors(-1, _triangles[i].neighbors(j + 1), _triangles.size() - 1);
 		// finally, lets fix neighbors
-		makeNeighbors(i, redNeighborsList.front());
-		makeNeighbors(_triangles.size() - 1, redNeighborsList.back());
+		_makeNeighbors(i, redNeighborsList.front());
+		_makeNeighbors(_triangles.size() - 1, redNeighborsList.back());
 		redNeighborsList.clear();
 	}
 	return *this;
@@ -262,12 +320,12 @@ Triangulation& Triangulation::refine(unsigned numbOfRefinements) {
 			p = _triangles[i].nodes();
 			t = _triangles[i].neighbors();
 			for (j = 0; j < 3; ++j)
-				if (!checkNeighbor(i, j))
+				if (!_checkNeighbor(i, j))
 					rp[j] = addExistingRedNodeFrom(t[j]);
 				else {
 					rp[j] = _nodes.size();
 					if (t[j] < -1) {
-						m = neighbor2edge(t[j]);
+						m = _neighbor2edge(t[j]);
 						_nodes.push_back(_curves[_edges[m].curveIndex()](_edges[m].thetaMiddle()));
 						_edges.push_back(CurvilinearEdge(_edges[m].thetaMiddle(), _edges[m].thetaEnd(), _edges[m].curveIndex()));
 						_edges[m].thetaEnd() = _edges[m].thetaMiddle();
@@ -284,74 +342,20 @@ Triangulation& Triangulation::refine(unsigned numbOfRefinements) {
 				j = _edges.size();
 				for (size_t newTriangle : { _triangles.size() - 2, _triangles.size() - 3, _triangles.size() - 1 })
 					if (_triangles[newTriangle].neighbors(1) < -1)
-						_triangles[newTriangle].neighbors(1) = neighbor2edge(--j);
+						_triangles[newTriangle].neighbors(1) = _neighbor2edge(--j);
 				for (j = _triangles.size() - 3; j < _triangles.size(); ++j)
 					for (size_t neighbor : redNeighborsList)
-						makeNeighbors(j, neighbor);
+						_makeNeighbors(j, neighbor);
 				redNeighborsList.clear();
 		}
 	}
 	return *this;
 }
 
-bool Triangulation::checkNeighbor(size_t t1, localIndex i) {
-	// check if ith neighbor of a t1th triangle also has _triangles[t1] as a neighbor
-	ssize_t t2 = _triangles[t1].neighbors(i);
-	if (t2 < 0) return true;
-	for (i = 0; i < 3; ++i)
-		if (_triangles[t2].neighbors(i) == t1) return true;
-	return false;
-}
-
-bool Triangulation::makeNeighbors(size_t t1, size_t t2) {
-	// make _triangles[@t1] and ‘‘ @t2 neighbors
-	// if they are not adjacent, return false
-	array<array<localIndex, 2>, 2> commonNodes;
-	localIndex i, j, k = 0;
-	for (i = 0; i < 3; ++i)
-		for (j = 0; j < 3; ++j)
-			if (_triangles[t1].nodes(i) == _triangles[t2].nodes(j)) {
-				if (k > 1) { // triangles share… more than 2 nodes?
-					string error("invalid mesh: check out tringles #");
-					throw logic_error(((error += t1) += " and #") += t2);
-				}
-				commonNodes[0][k] = i;
-				commonNodes[1][k++] = j;
-			}
-	if (k < 2) return false; // triangles are not adjacent
-	i = excludeIndicies(commonNodes[0][0], commonNodes[0][1]); // i := node of t1 against common edge 
-	j = excludeIndicies(commonNodes[1][0], commonNodes[1][1]); 
-	_triangles[t1].neighbors(i) = t2;
-	_triangles[t2].neighbors(j) = t1;
-	return true; // we are gold
-}
-
-ssize_t Triangulation::neighbor2edge(ssize_t i) {
-	// convert @i := _triangles[*].neighbor(**) to
-	// index in _edges vector
-	return -i - 2;
-}
-
-vector<double> Triangulation::longestEdges() {
-	vector<double> v(_triangles.size());
-	for (size_t i = 0; i < _triangles.size(); ++i) {
-		v[i] = max(length(i, 0), length(i, 1));
-		v[i] = max(v[i], length(i, 2));
-	}
-	return v;
-}
-
-vector<double> Triangulation::inscribedDiameters() {
-	vector<double> v(_triangles.size());
-	for (size_t i = 0; i < _triangles.size(); ++i)
-		v[i] = 4 * area(i) / perimeter(i);
-	return v;
-}
-
 vector<double> Triangulation::qualityMeasure() {
 	vector<double> v(_triangles.size()),
-				   h(longestEdges()),
-				   d(inscribedDiameters());
+				   h(_longestEdges()),
+				   d(_inscribedDiameters());
 	for (size_t i = 0; i < _triangles.size(); ++i)
 		v[i] = sqrt(3) * d[i] / h[i]; 
 	// we multiply by sqrt(3), so ideal triangles have quality measure = 1
