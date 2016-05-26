@@ -79,7 +79,14 @@ std::vector<double> SymmetricCSlRMatrix::solve(std::vector<double> const &) {
 	return std::vector<double>();
 }
 
-std::vector<double> SymmetricCSlRMatrix::mult(std::vector<double> const &) const {
-	//placeholder
-	return std::vector<double>();
+std::vector<double> SymmetricCSlRMatrix::mult(std::vector<double> const &u) const { // compute v := A.u
+	std::vector<double> v(_n, 0.);
+	for (size_t i = 0; i < _n; ++i) {
+		v[i] += u[i] * _diag[i];
+		for (size_t j = _iptr[i]; j < _iptr[i + 1]; ++j) {
+			v[i]        += _lval[j] * u[_jptr[j]];
+			v[_jptr[j]] += _lval[j] * u[i];
+		}
+	}
+	return v;
 }
