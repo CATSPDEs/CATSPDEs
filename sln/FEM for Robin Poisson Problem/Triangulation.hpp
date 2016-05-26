@@ -44,7 +44,10 @@ public:
 		// compute length of ith edge of tth triangle
 		return (_nodes[_triangles[t].nodes(i + 1)] - _nodes[_triangles[t].nodes(i + 2)]).norm();
 	}
-	array<Node, 3> getNodes(size_t t) {
+	Node getNode(size_t i) const {
+		return _nodes[i];
+	}
+	array<Node, 3> getNodes(size_t t) { // ... of tth triangle
 		return { _nodes[_triangles[t].nodes(0)],_nodes[_triangles[t].nodes(1)],_nodes[_triangles[t].nodes(2)] };
 	}
 	array<size_t, 3> l2g(size_t t) const { // local to global nodes numeration

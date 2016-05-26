@@ -28,10 +28,9 @@ std::vector<T> operator+(const std::vector<T>& v1, const std::vector<T>& v2)
 }
 
 template <typename T>
-std::vector<T> operator-(const std::vector<T>& v1, const std::vector<T>& v2)
-{
+std::vector<T> operator-(std::vector<T> const & v1, std::vector<T> const & v2) {
 	std::vector<T> res(v1.size());
-	for (size_t i = 0;i < v1.size();i++)
+	for (size_t i = 0; i < v1.size(); i++)
 		res[i] = v1[i] - v2[i];
 	return res;
 }
