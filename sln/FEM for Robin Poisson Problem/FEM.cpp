@@ -29,26 +29,29 @@
 // input R × R —> R functions:
 
 inline double a(Node& p) { // a > 0
-	return p.x() + 2 * p.y();
+	return p.x() + 2. * p.y() + 3.;
 }
 
 inline double c(Node& p) { // c > c_0 >= 0
-	return 1.;
+	return 4.;
 }
 
 inline double f(Node& p) {
-	return p.x() + p.y() - 3;
+	return 8. * p.x() + 12. * p.y() - 7.;
 }
 
 inline double g_D(Node& p) {
-	return p.x() + p.y();
+	if (p.x() == -1.) return 0.;
+	return 2. * p.x() + 3. * p.y() + 1.;
 }
 
 inline double g_N(Node& p) {
+	if (p.x() == -1.) return - 4 * p.y() - 1;
 	return 0.;
 }
 
 inline double kappa(Node& p) { // kappa > 0
+	if (p.x() == -1.) return 0.;
 	return 10e+50;
 }
 
@@ -66,7 +69,7 @@ AdjacencyList generateAdjList(Triangulation const & Omega) {
 
 int main() {
 	try {
-		Triangulation Omega(Node(-1, -1), Node(1, 1), .6); // simple square mesh
+		Triangulation Omega(Node(-1., -1.), Node(1., 1.), .3); // simple square mesh
 		// data structures for final linear system A.xi = b:
 		SymmetricCSlRMatrix A(generateAdjList(Omega)); // build final matrix portrait
 		vector<double> b(Omega.numbOfNodes(), 0), // load vector
@@ -77,7 +80,8 @@ int main() {
 		                           robinMatrixLoc(2); // and 2 × 2 element matricies for Robin BCs (just like element matrix in 1D)
 		array<double, 3> loadVectorLoc; // and their
 		array<double, 2> robinVectorLoc; // friends, element vectors
-		array<Node, 3> elementNodes; // nodes of current triangle
+		array<Node, 3> elementNodes, // nodes of current triangle
+                       elementMiddleNodes; // and nodes on the middle of edges
 		Node leftNode, rightNode; // dummy nodes
 		double measure; // area of ith triangle / length of bndry edge of ith thiangle
 		array<size_t, 3> l2g_elem; // local to global mapping of nodes on the element
@@ -95,15 +99,40 @@ int main() {
 			measure = Omega.area(i); // compute area of ith triangle
 			l2g_elem = Omega.l2g(i); // local to global mapping of nodes of ith element
 			// (1.1) compute local mass matrix
-			massMatrixLoc(0, 0) = measure * (6 * c(elementNodes[0]) + 2 * c(elementNodes[1]) + 2 * c(elementNodes[2])) / 60.;
-			massMatrixLoc(0, 1) = measure * (2 * c(elementNodes[0]) + 2 * c(elementNodes[1]) +     c(elementNodes[2])) / 60.;
-			massMatrixLoc(0, 2) = measure * (2 * c(elementNodes[0]) +     c(elementNodes[1]) + 2 * c(elementNodes[2])) / 60.;
-			massMatrixLoc(1, 1) = measure * (2 * c(elementNodes[0]) + 6 * c(elementNodes[1]) + 2 * c(elementNodes[2])) / 60.;
-			massMatrixLoc(1, 2) = measure * (    c(elementNodes[0]) + 2 * c(elementNodes[1]) + 2 * c(elementNodes[2])) / 60.;
-			massMatrixLoc(2, 2) = measure * (2 * c(elementNodes[0]) + 2 * c(elementNodes[1]) + 6 * c(elementNodes[2])) / 60.;
+			massMatrixLoc(0, 0) = measure * (6. * c(elementNodes[0]) + 2. * c(elementNodes[1]) + 2. * c(elementNodes[2])) / 60.;
+			massMatrixLoc(0, 1) = measure * (2. * c(elementNodes[0]) + 2. * c(elementNodes[1]) +      c(elementNodes[2])) / 60.;
+			massMatrixLoc(0, 2) = measure * (2. * c(elementNodes[0]) +      c(elementNodes[1]) + 2. * c(elementNodes[2])) / 60.;
+			massMatrixLoc(1, 1) = measure * (2. * c(elementNodes[0]) + 6. * c(elementNodes[1]) + 2. * c(elementNodes[2])) / 60.;
+			massMatrixLoc(1, 2) = measure * (     c(elementNodes[0]) + 2. * c(elementNodes[1]) + 2. * c(elementNodes[2])) / 60.;
+			massMatrixLoc(2, 2) = measure * (2. * c(elementNodes[0]) + 2. * c(elementNodes[1]) + 6. * c(elementNodes[2])) / 60.;
 			// (1.2) compute local stiffness matrix
+			//
+			// quadratures calculated assuming a(x, y) lives in P_1(ith triangle), i.e. a(x, y) is linear combination of {x, y, 1}
+			// we can do better (see below)
+			//
+			//stiffnessMatrixLoc(0, 0) = (elementNodes[1].x() - elementNodes[2].x()) * (elementNodes[1].x() - elementNodes[2].x()) + 
+			//                           (elementNodes[1].y() - elementNodes[2].y()) * (elementNodes[1].y() - elementNodes[2].y());
+			//stiffnessMatrixLoc(0, 1) = (elementNodes[0].x() - elementNodes[2].x()) * (elementNodes[2].x() - elementNodes[1].x()) +
+			//                           (elementNodes[0].y() - elementNodes[2].y()) * (elementNodes[2].y() - elementNodes[1].y());
+			//stiffnessMatrixLoc(0, 2) = (elementNodes[0].x() - elementNodes[1].x()) * (elementNodes[1].x() - elementNodes[2].x()) +
+			//                           (elementNodes[0].y() - elementNodes[1].y()) * (elementNodes[1].y() - elementNodes[2].y());
+			//stiffnessMatrixLoc(1, 1) = (elementNodes[0].x() - elementNodes[2].x()) * (elementNodes[0].x() - elementNodes[2].x()) +
+			//                           (elementNodes[0].y() - elementNodes[2].y()) * (elementNodes[0].y() - elementNodes[2].y());
+			//stiffnessMatrixLoc(1, 2) = (elementNodes[1].x() - elementNodes[0].x()) * (elementNodes[0].x() - elementNodes[2].x()) +
+			//                           (elementNodes[1].y() - elementNodes[0].y()) * (elementNodes[0].y() - elementNodes[2].y());
+			//stiffnessMatrixLoc(2, 2) = (elementNodes[0].x() - elementNodes[1].x()) * (elementNodes[0].x() - elementNodes[1].x()) +
+			//                           (elementNodes[0].y() - elementNodes[1].y()) * (elementNodes[0].y() - elementNodes[1].y());
+			//for (j = 0; j < 3; ++j)
+			//	for (k = j; k < 3; ++k)
+			//		stiffnessMatrixLoc(j, k) *= (a(elementNodes[0]) + a(elementNodes[1]) + a(elementNodes[2])) / measure / 12.;
+			//
+			// quadratures calculated assuming a(x, y) lives in P_2(ith triangle), i.e. a(x, y) is linear combination of {x^2, y^2, xy, x, y, 1}
+			//
+			elementMiddleNodes[0] = elementNodes[1].midPoint(elementNodes[2]);
+			elementMiddleNodes[1] = elementNodes[0].midPoint(elementNodes[2]);
+			elementMiddleNodes[2] = elementNodes[0].midPoint(elementNodes[1]);
 			stiffnessMatrixLoc(0, 0) = (elementNodes[1].x() - elementNodes[2].x()) * (elementNodes[1].x() - elementNodes[2].x()) + 
-		                               (elementNodes[1].y() - elementNodes[2].y()) * (elementNodes[1].y() - elementNodes[2].y());
+			                           (elementNodes[1].y() - elementNodes[2].y()) * (elementNodes[1].y() - elementNodes[2].y());
 			stiffnessMatrixLoc(0, 1) = (elementNodes[0].x() - elementNodes[2].x()) * (elementNodes[2].x() - elementNodes[1].x()) +
 			                           (elementNodes[0].y() - elementNodes[2].y()) * (elementNodes[2].y() - elementNodes[1].y());
 			stiffnessMatrixLoc(0, 2) = (elementNodes[0].x() - elementNodes[1].x()) * (elementNodes[1].x() - elementNodes[2].x()) +
@@ -116,12 +145,12 @@ int main() {
 			                           (elementNodes[0].y() - elementNodes[1].y()) * (elementNodes[0].y() - elementNodes[1].y());
 			for (j = 0; j < 3; ++j)
 				for (k = j; k < 3; ++k)
-					stiffnessMatrixLoc(j, k) *= (a(elementNodes[0]) + a(elementNodes[1]) + a(elementNodes[2])) / measure / 12.;
+					stiffnessMatrixLoc(j, k) *= (a(elementMiddleNodes[0]) + a(elementMiddleNodes[1]) + a(elementMiddleNodes[2])) / measure / 6.;
 			// (1.3) compute local load vector
 			(loadVectorLoc = { 
-				2 * f(elementNodes[0]) +     f(elementNodes[1]) +     f(elementNodes[2]),
-				    f(elementNodes[0]) + 2 * f(elementNodes[1]) +     f(elementNodes[2]),
-				    f(elementNodes[0]) +     f(elementNodes[1]) + 2 * f(elementNodes[2])
+				2. * f(elementNodes[0]) +      f(elementNodes[1]) +      f(elementNodes[2]),
+				     f(elementNodes[0]) + 2. * f(elementNodes[1]) +      f(elementNodes[2]),
+				     f(elementNodes[0]) +      f(elementNodes[1]) + 2. * f(elementNodes[2])
 			}) *= measure / 12.;
 			// (1.4) assemble contributions
 			for (j = 0; j < 3; ++j) {
@@ -139,23 +168,23 @@ int main() {
 				// so we need to assemble BCs here
 				leftNodeIndex = nextIndex(edgeIndex); // local indicies of nodes that
 				rightNodeIndex = nextIndex(leftNodeIndex); // define the edge
-				leftNode = elementNodes[nextIndex(edgeIndex)]; // and the nodes 
-				rightNode = elementNodes[nextIndex(nextIndex(edgeIndex))]; // themselves
+				leftNode = elementNodes[leftNodeIndex]; // and the nodes 
+				rightNode = elementNodes[rightNodeIndex]; // themselves
 				l2g_edge[0] = l2g_elem[leftNodeIndex]; // local to global nodes
 				l2g_edge[1] = l2g_elem[rightNodeIndex]; // numeration mapping 
 				measure = Omega.length(i, edgeIndex);
 				// (2.1) compute local Robin matrix
-				robinMatrixLoc(0, 0) = measure * (3 * kappa(leftNode) +     kappa(rightNode)) / 12.;
-				robinMatrixLoc(0, 1) = measure * (    kappa(leftNode) +     kappa(rightNode)) / 12.;
-				robinMatrixLoc(1, 1) = measure * (    kappa(leftNode) + 3 * kappa(rightNode)) / 12.;
+				robinMatrixLoc(0, 0) = measure * (3. * kappa(leftNode) +      kappa(rightNode)) / 12.;
+				robinMatrixLoc(0, 1) = measure * (     kappa(leftNode) +      kappa(rightNode)) / 12.;
+				robinMatrixLoc(1, 1) = measure * (     kappa(leftNode) + 3. * kappa(rightNode)) / 12.;
 				// (2.2) compute local Robin vector
 				(robinVectorLoc = {
-					4 * g_N(leftNode) + 2 * g_N(rightNode) + 
-					g_D(leftNode) * (3 * kappa(leftNode) + kappa(rightNode)) +
+					4. * g_N(leftNode) + 2. * g_N(rightNode) + 
+					g_D(leftNode) * (3. * kappa(leftNode) + kappa(rightNode)) +
 					g_D(rightNode) * (kappa(leftNode) + kappa(rightNode)),
-					2 * g_N(leftNode) + 4 * g_N(rightNode) +
+					2. * g_N(leftNode) + 4. * g_N(rightNode) +
 					g_D(leftNode) * (kappa(leftNode) + kappa(rightNode)) +
-					g_D(rightNode) * (kappa(leftNode) + 3 * kappa(rightNode)),
+					g_D(rightNode) * (kappa(leftNode) + 3. * kappa(rightNode))
 				}) *= measure / 12.;
 				// (2.3) assemble contributions
 				for (j = 0; j < 2; ++j) {
@@ -172,7 +201,7 @@ int main() {
 		// cout << xi << endl;
 		vector<double> u(Omega.numbOfNodes());
 		for (i = 0; i < u.size(); ++i)
-			u[i] = g_D(Omega.getNode(i));
+			u[i] = 2. * Omega.getNode(i).x() + 3. * Omega.getNode(i).y() + 1.;
 		cout << A * u << "\n\n";
 	}
 	catch (exception const & e) {
