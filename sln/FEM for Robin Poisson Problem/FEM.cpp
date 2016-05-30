@@ -1,8 +1,8 @@
+#include <fstream>
 #include "SymmetricContainer.hpp" // for local matrices
 #include "SymmetricCSlRMatrix.hpp" // for final linear system matrix
-#include "Triangulation.hpp" // our mesh
+#include "krylov.hpp" // conjugate gradients
 #include "array.hpp" // utility for array operations
-
 
 // our model problem:
 //
@@ -27,56 +27,15 @@
 // where hatFunction_i denotes linear basis function taking unity on ith node and zero elsewhere
 // so we have to solve n × n linear system, n := numb of nodes of the mesh Omega
 
-// input R × R —> R functions:
-
-inline double a(Node& p) { // a > 0
-	return p.x() + 2. * p.y() + 3.;
-}
-
-inline double c(Node& p) { // c > c_0 >= 0
-	return 4.;
-}
-
-inline double f(Node& p) {
-	return 8. * p.x() + 12. * p.y() - 7.;
-}
-
-inline double g_D(Node& p) {
-	if (p.x() == -1.) return 0.;
-	return 2. * p.x() + 3. * p.y() + 1.;
-}
-
-inline double g_N(Node& p) {
-	if (p.x() == -1.) return - 4 * p.y() - 1;
-	return 0.;
-}
-
-inline double kappa(Node& p) { // kappa > 0
-	if (p.x() == -1.) return 0.;
-	return 10e+50;
-}
-
-AdjacencyList generateAdjList(Triangulation const & Omega) {
-	AdjacencyList adjList(Omega.numbOfNodes());
-	for (size_t i = 0;i < Omega.numbOfTriangles();i++) {
-		auto elementNodesIndicies = Omega.l2g(i);
-		sort(elementNodesIndicies.begin(), elementNodesIndicies.end());
-		adjList[elementNodesIndicies[2]].insert(elementNodesIndicies[1]);
-		adjList[elementNodesIndicies[2]].insert(elementNodesIndicies[0]);
-		adjList[elementNodesIndicies[1]].insert(elementNodesIndicies[0]);
-	}
-	return adjList;
-}
-
+// input R × R —> R functions (PDE and BCs) and the mesh (domain)
+#include "PureDirichetProblem.hpp"
 
 int main() {
-
 	try {
-		Triangulation Omega(Node(-1., -1.), Node(1., 1.), .3); // simple square mesh
 		// data structures for final linear system A.xi = b:
-		SymmetricCSlRMatrix A(generateAdjList(Omega)); // build final matrix portrait
-		vector<double> b(Omega.numbOfNodes(), 0), // load vector
-		               xi(Omega.numbOfNodes()); // discrete solution	
+		SymmetricCSlRMatrix A(Omega.generateAdjList()); // build final matrix portrait
+		vector<double> b(Omega.numbOfNodes(), 0.), // load vector
+		               xi(Omega.numbOfNodes(), 0.); // discrete solution	
 		// data structures for assemby of A and b:
 		SymmetricContainer<double> massMatrixLoc(3), // for hat functions on triangles 
 		                           stiffnessMatrixLoc(3), // we have 3 × 3 element matricies
@@ -99,6 +58,8 @@ int main() {
 			// in order to assemble stiffness matrix and load vector,
 			// it is convinient to iterate over mesh elements (i.e. triangles)
 			elementNodes = Omega.getNodes(i); // get nodes of ith triangle
+			for (j = 0; j < 3; ++j) // and middle nodes of its edges
+				elementMiddleNodes[j] = elementNodes[k = nextIndex(j)].midPoint(elementNodes[nextIndex(k)]);
 			measure = Omega.area(i); // compute area of ith triangle
 			l2g_elem = Omega.l2g(i); // local to global mapping of nodes of ith element
 			// (1.1) compute local mass matrix
@@ -109,31 +70,6 @@ int main() {
 			massMatrixLoc(1, 2) = measure * (     c(elementNodes[0]) + 2. * c(elementNodes[1]) + 2. * c(elementNodes[2])) / 60.;
 			massMatrixLoc(2, 2) = measure * (2. * c(elementNodes[0]) + 2. * c(elementNodes[1]) + 6. * c(elementNodes[2])) / 60.;
 			// (1.2) compute local stiffness matrix
-			//
-			// quadratures calculated assuming a(x, y) lives in P_1(ith triangle), i.e. a(x, y) is linear combination of {x, y, 1}
-			// we can do better (see below)
-			//
-			//stiffnessMatrixLoc(0, 0) = (elementNodes[1].x() - elementNodes[2].x()) * (elementNodes[1].x() - elementNodes[2].x()) + 
-			//                           (elementNodes[1].y() - elementNodes[2].y()) * (elementNodes[1].y() - elementNodes[2].y());
-			//stiffnessMatrixLoc(0, 1) = (elementNodes[0].x() - elementNodes[2].x()) * (elementNodes[2].x() - elementNodes[1].x()) +
-			//                           (elementNodes[0].y() - elementNodes[2].y()) * (elementNodes[2].y() - elementNodes[1].y());
-			//stiffnessMatrixLoc(0, 2) = (elementNodes[0].x() - elementNodes[1].x()) * (elementNodes[1].x() - elementNodes[2].x()) +
-			//                           (elementNodes[0].y() - elementNodes[1].y()) * (elementNodes[1].y() - elementNodes[2].y());
-			//stiffnessMatrixLoc(1, 1) = (elementNodes[0].x() - elementNodes[2].x()) * (elementNodes[0].x() - elementNodes[2].x()) +
-			//                           (elementNodes[0].y() - elementNodes[2].y()) * (elementNodes[0].y() - elementNodes[2].y());
-			//stiffnessMatrixLoc(1, 2) = (elementNodes[1].x() - elementNodes[0].x()) * (elementNodes[0].x() - elementNodes[2].x()) +
-			//                           (elementNodes[1].y() - elementNodes[0].y()) * (elementNodes[0].y() - elementNodes[2].y());
-			//stiffnessMatrixLoc(2, 2) = (elementNodes[0].x() - elementNodes[1].x()) * (elementNodes[0].x() - elementNodes[1].x()) +
-			//                           (elementNodes[0].y() - elementNodes[1].y()) * (elementNodes[0].y() - elementNodes[1].y());
-			//for (j = 0; j < 3; ++j)
-			//	for (k = j; k < 3; ++k)
-			//		stiffnessMatrixLoc(j, k) *= (a(elementNodes[0]) + a(elementNodes[1]) + a(elementNodes[2])) / measure / 12.;
-			//
-			// quadratures calculated assuming a(x, y) lives in P_2(ith triangle), i.e. a(x, y) is linear combination of {x^2, y^2, xy, x, y, 1}
-			//
-			elementMiddleNodes[0] = elementNodes[1].midPoint(elementNodes[2]);
-			elementMiddleNodes[1] = elementNodes[0].midPoint(elementNodes[2]);
-			elementMiddleNodes[2] = elementNodes[0].midPoint(elementNodes[1]);
 			stiffnessMatrixLoc(0, 0) = (elementNodes[1].x() - elementNodes[2].x()) * (elementNodes[1].x() - elementNodes[2].x()) + 
 			                           (elementNodes[1].y() - elementNodes[2].y()) * (elementNodes[1].y() - elementNodes[2].y());
 			stiffnessMatrixLoc(0, 1) = (elementNodes[0].x() - elementNodes[2].x()) * (elementNodes[2].x() - elementNodes[1].x()) +
@@ -148,7 +84,13 @@ int main() {
 			                           (elementNodes[0].y() - elementNodes[1].y()) * (elementNodes[0].y() - elementNodes[1].y());
 			for (j = 0; j < 3; ++j)
 				for (k = j; k < 3; ++k)
-					stiffnessMatrixLoc(j, k) *= (a(elementMiddleNodes[0]) + a(elementMiddleNodes[1]) + a(elementMiddleNodes[2])) / measure / 6.;
+					// quadratures calculated assuming a(x, y) lives in P_1(ith triangle), 
+					// i.e. a(x, y) is linear combination of {x, y, 1}:
+					// stiffnessMatrixLoc(j, k) *= (a(elementNodes[0]) + a(elementNodes[1]) + a(elementNodes[2])) / measure / 12.;
+					// but we can do better:
+					// quadratures calculated assuming a(x, y) lives in P_2(ith triangle), 
+					// i.e. a(x, y) is linear combination of {x^2, y^2, xy, x, y, 1}:
+					stiffnessMatrixLoc(j, k) *= (a(elementMiddleNodes[0]) + a(elementMiddleNodes[1]) + a(elementMiddleNodes[2])) / measure / 12.;
 			// (1.3) compute local load vector
 			(loadVectorLoc = { 
 				2. * f(elementNodes[0]) +      f(elementNodes[1]) +      f(elementNodes[2]),
@@ -197,15 +139,20 @@ int main() {
 				}
 			}
 		}
-		// xi = b / A; // compute our desrete solution
-		cout << "system matrix:\n";
-		//A.save();
-		cout << "\nRHS-vector:\n" << b << "\n\n";
-		// cout << xi << endl;
+		// now we are ready to compute xi, A.xi = b
+		xi = CG(A, b, xi, 10e-50);
+		ofstream xiOutput("Mathematica/Model Problem Analysis/xi.dat");
+		xiOutput << xi;
+		Omega.save(ofstream("Mathematica/Model Problem Analysis/n.dat"), ofstream("Mathematica/Model Problem Analysis/t.dat"));
+		
 		vector<double> u(Omega.numbOfNodes());
 		for (i = 0; i < u.size(); ++i)
 			u[i] = 2. * Omega.getNode(i).x() + 3. * Omega.getNode(i).y() + 1.;
-		cout << A * u << "\n\n";
+		ofstream bOutput("Mathematica/Model Problem Analysis/RHS.dat");
+		bOutput.precision(15); // double precision
+		bOutput << scientific << showpos;
+		for (i = 0; i < u.size(); ++i)
+			bOutput << b[i] << ' ' << (A * u)[i] << '\n';
 	}
 	catch (exception const & e) {
 		cout << e.what() << endl;

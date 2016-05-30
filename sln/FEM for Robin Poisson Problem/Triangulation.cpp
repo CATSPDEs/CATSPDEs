@@ -153,6 +153,19 @@ ssize_t Triangulation::_neighbor2edge(ssize_t i) {
 
 // public methods
 
+AdjacencyList Triangulation::generateAdjList() {
+	AdjacencyList adjList(numbOfNodes());
+	array<size_t, 3> elementNodesIndicies;
+	for (size_t i = 0; i < numbOfTriangles(); ++i) {
+		elementNodesIndicies = l2g(i);
+		sort(elementNodesIndicies.begin(), elementNodesIndicies.end());
+		adjList[elementNodesIndicies[2]].insert(elementNodesIndicies[1]);
+		adjList[elementNodesIndicies[2]].insert(elementNodesIndicies[0]);
+		adjList[elementNodesIndicies[1]].insert(elementNodesIndicies[0]);
+	}
+	return adjList;
+}
+
 double Triangulation::area(size_t i) { // compute area of ith triangle
 	// we have norm of vector product underhood
 	// neat!!
@@ -163,7 +176,7 @@ double Triangulation::area(size_t i) { // compute area of ith triangle
 
 Triangulation& Triangulation::save(ostream& outNodes, ostream& outTriangles) {
 	outNodes.precision(15); // double precision
-	outNodes << scientific;
+	outNodes << scientific << showpos;
 	for (Node const & p : _nodes) outNodes << p;
 	for (Triangle const & t : _triangles) outTriangles << t;
 	return *this;

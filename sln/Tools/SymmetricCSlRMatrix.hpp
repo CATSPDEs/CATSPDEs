@@ -1,9 +1,7 @@
 ﻿#pragma once
-#include <set>
 #include "AbstractSparseMatrix.hpp"
 #include "IRealMatrix.hpp"
-
-typedef std::vector<std::set<int>> AdjacencyList;
+#include "AdjacencyList.hpp"
 
 class SymmetricCSlRMatrix : public AbstractSparseMatrix<double>, public IRealMatrix {
 	// fancy name, yeah

@@ -1,11 +1,11 @@
 #pragma once
-#include <vector>
 #include <list>
 #include <iostream>
 #include "Node.hpp"
 #include "Triangle.hpp"
 #include "Curve.hpp"
 #include "CurvilinearEdge.hpp"
+#include "AdjacencyList.hpp"
 
 typedef list<size_t> Indicies;
 typedef list<unsigned short> LocalIndicies;
@@ -65,6 +65,7 @@ public:
 	}
 	size_t numbOfNodes() const { return _nodes.size(); }
 	size_t numbOfTriangles() const { return _triangles.size(); }
+	AdjacencyList generateAdjList(); // . . . for matrix portrait
 	double area(size_t); // compute area of ith triangle
 	Triangulation& save(ostream& nodes = cout, ostream& triangles = cout); // save mesh to std out
 	Triangulation& refine(Indicies&); // red-green refinement

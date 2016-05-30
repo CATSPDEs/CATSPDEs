@@ -13,6 +13,9 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="Header Files\Model Problems">
+      <UniqueIdentifier>{6e675834-c81d-4e89-8640-566413663c80}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Triangulation.cpp">
@@ -43,6 +46,9 @@
     </ClInclude>
     <ClInclude Include="CurvilinearEdge.hpp">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="PureDirichetProblem.hpp">
+      <Filter>Header Files\Model Problems</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

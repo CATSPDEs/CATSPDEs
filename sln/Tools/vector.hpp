@@ -44,8 +44,10 @@ std::istream& operator>>(std::istream& input, std::vector<T> & u) {
 
 template <typename T>
 std::ostream& operator<<(std::ostream& output, std::vector<T> const & u) {
+	output.precision(15); // double precision
+	output << std::scientific << std::showpos;
 	for (size_t i = 0; i < u.size(); ++i)
-		output << u[i] << ' ';
+		output << u[i] << '\n';
 	return output;
 }
 

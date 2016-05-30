@@ -81,6 +81,9 @@
     <ClInclude Include="krylov.hpp">
       <Filter>Utilities</Filter>
     </ClInclude>
+    <ClInclude Include="AdjacencyList.hpp">
+      <Filter>PDEs</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="BandMatrix.cpp">
