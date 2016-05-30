@@ -78,6 +78,9 @@
     <ClInclude Include="CSRMatrix.hpp">
       <Filter>Matrices\Implementations</Filter>
     </ClInclude>
+    <ClInclude Include="krylov.hpp">
+      <Filter>Utilities</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="BandMatrix.cpp">

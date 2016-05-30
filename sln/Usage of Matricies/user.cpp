@@ -1,15 +1,27 @@
 #include <fstream>
-#include "CRSMatrix.hpp"
+#include "CSRMatrix.hpp"
 #include "BandMatrix.hpp"
 #include "DenseMatrix.hpp"
+#include "SymmetricCSlRMatrix.hpp"
+#include "krylov.hpp"
 
 int main() {
+	std::ifstream inA("testCG_A.txt");
+	std::ifstream inb("testCG_b.txt");
+	SymmetricCSlRMatrix A_cslr(4, 3);
+	A_cslr.loadSparse(inA);
+	A_cslr.save(std::cout);
+	std::vector<double> b_cslr(4);
+	inb >> b_cslr;
+	std::vector<double> x0(4, 0);
+	std::cout << CG(A_cslr, b_cslr, x0, 10e-7);
+	std::cout << std::endl << std::endl;
 	std::ifstream inputMatrixCRS("matrix_crs.txt"),
 				  inputMatrixBand("matrix_band.txt");
 	size_t order, nonzeros, bandWidth;
 	// CRS
 	inputMatrixCRS >> order >> nonzeros;
-	CRSMatrix A(order, nonzeros);
+	CSRMatrix A(order, nonzeros);
 	inputMatrixCRS >> A;
 	// mult by vector
 	std::vector<double> iVec(order, 1.);

@@ -21,10 +21,13 @@
     <ClCompile Include="..\Tools\BandMatrix.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\Tools\CRSMatrix.cpp">
+    <ClCompile Include="..\Tools\DenseMatrix.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\Tools\DenseMatrix.cpp">
+    <ClCompile Include="..\Tools\CSRMatrix.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Tools\SymmetricCSlRMatrix.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

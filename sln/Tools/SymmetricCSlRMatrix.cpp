@@ -2,6 +2,7 @@
 
 SymmetricCSlRMatrix::SymmetricCSlRMatrix(size_t n, size_t nnz)
 	: AbstractSparseMatrix(n)
+	,_diag(n)
 	, _iptr(n + 1)
 	, _jptr(nnz)
 	, _lval(nnz) {

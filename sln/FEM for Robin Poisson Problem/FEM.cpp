@@ -3,6 +3,7 @@
 #include "Triangulation.hpp" // our mesh
 #include "array.hpp" // utility for array operations
 
+
 // our model problem:
 //
 // –nabla . (a nabla u) + cu = f,             if (x, y) in Omega,
@@ -67,7 +68,9 @@ AdjacencyList generateAdjList(Triangulation const & Omega) {
 	return adjList;
 }
 
+
 int main() {
+
 	try {
 		Triangulation Omega(Node(-1., -1.), Node(1., 1.), .3); // simple square mesh
 		// data structures for final linear system A.xi = b:

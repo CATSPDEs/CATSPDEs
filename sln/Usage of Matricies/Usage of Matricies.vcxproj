@@ -123,8 +123,9 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="..\Tools\BandMatrix.cpp" />
-    <ClCompile Include="..\Tools\CRSMatrix.cpp" />
+    <ClCompile Include="..\Tools\CSRMatrix.cpp" />
     <ClCompile Include="..\Tools\DenseMatrix.cpp" />
+    <ClCompile Include="..\Tools\SymmetricCSlRMatrix.cpp" />
     <ClCompile Include="user.cpp" />
   </ItemGroup>
   <ItemGroup>

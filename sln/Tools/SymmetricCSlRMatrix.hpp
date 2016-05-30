@@ -46,3 +46,4 @@ public:
 	std::ostream& saveSparse(std::ostream&) const;
 	friend SymmetricCSlRMatrix operator*(SymmetricCSlRMatrix const &, SymmetricCSlRMatrix const &);
 };
+
