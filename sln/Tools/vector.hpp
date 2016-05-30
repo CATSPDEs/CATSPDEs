@@ -48,3 +48,9 @@ std::ostream& operator<<(std::ostream& output, std::vector<T> const & u) {
 		output << u[i] << ' ';
 	return output;
 }
+
+template <typename T>
+T norm(std::vector<T> const & v)
+{
+	return sqrt(v*v);
+}
