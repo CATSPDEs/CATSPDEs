@@ -7,9 +7,9 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Tools", "Tools\Tools.vcxpro
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Usage of Matricies", "Usage of Matricies\Usage of Matricies.vcxproj", "{6F91DD91-2987-4AF2-8F8E-92238BC28603}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Solving Laplaces Eqn on Rect Domain (FDM)", "Solving Laplaces Eqn on Rect Domain (FDM)\Solving Laplaces Eqn on Rect Domain (FDM).vcxproj", "{126B5082-4D0C-4FC2-8294-766EC8484C39}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "FEM for Steady–State Diffusion–Reaction Robin Problem", "FEM for Steady–State Diffusion–Reaction Robin Problem\FEM for Robin Poisson Problem.vcxproj", "{342EEBFD-762B-4AAE-B73B-AD86CAA5EB3C}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "FEM for Robin Poisson Problem", "FEM for Robin Poisson Problem\FEM for Robin Poisson Problem.vcxproj", "{342EEBFD-762B-4AAE-B73B-AD86CAA5EB3C}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "FDM for Laplaces Eqation on Rect Domain", "FDM for Laplaces Eqation on Rect Domain\Solving Laplaces Eqn on Rect Domain (FDM).vcxproj", "{126B5082-4D0C-4FC2-8294-766EC8484C39}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -35,14 +35,6 @@ Global
 		{6F91DD91-2987-4AF2-8F8E-92238BC28603}.Release|x64.Build.0 = Release|x64
 		{6F91DD91-2987-4AF2-8F8E-92238BC28603}.Release|x86.ActiveCfg = Release|Win32
 		{6F91DD91-2987-4AF2-8F8E-92238BC28603}.Release|x86.Build.0 = Release|Win32
-		{126B5082-4D0C-4FC2-8294-766EC8484C39}.Debug|x64.ActiveCfg = Debug|x64
-		{126B5082-4D0C-4FC2-8294-766EC8484C39}.Debug|x64.Build.0 = Debug|x64
-		{126B5082-4D0C-4FC2-8294-766EC8484C39}.Debug|x86.ActiveCfg = Debug|Win32
-		{126B5082-4D0C-4FC2-8294-766EC8484C39}.Debug|x86.Build.0 = Debug|Win32
-		{126B5082-4D0C-4FC2-8294-766EC8484C39}.Release|x64.ActiveCfg = Release|x64
-		{126B5082-4D0C-4FC2-8294-766EC8484C39}.Release|x64.Build.0 = Release|x64
-		{126B5082-4D0C-4FC2-8294-766EC8484C39}.Release|x86.ActiveCfg = Release|Win32
-		{126B5082-4D0C-4FC2-8294-766EC8484C39}.Release|x86.Build.0 = Release|Win32
 		{342EEBFD-762B-4AAE-B73B-AD86CAA5EB3C}.Debug|x64.ActiveCfg = Debug|x64
 		{342EEBFD-762B-4AAE-B73B-AD86CAA5EB3C}.Debug|x64.Build.0 = Debug|x64
 		{342EEBFD-762B-4AAE-B73B-AD86CAA5EB3C}.Debug|x86.ActiveCfg = Debug|Win32
@@ -51,6 +43,14 @@ Global
 		{342EEBFD-762B-4AAE-B73B-AD86CAA5EB3C}.Release|x64.Build.0 = Release|x64
 		{342EEBFD-762B-4AAE-B73B-AD86CAA5EB3C}.Release|x86.ActiveCfg = Release|Win32
 		{342EEBFD-762B-4AAE-B73B-AD86CAA5EB3C}.Release|x86.Build.0 = Release|Win32
+		{126B5082-4D0C-4FC2-8294-766EC8484C39}.Debug|x64.ActiveCfg = Debug|x64
+		{126B5082-4D0C-4FC2-8294-766EC8484C39}.Debug|x64.Build.0 = Debug|x64
+		{126B5082-4D0C-4FC2-8294-766EC8484C39}.Debug|x86.ActiveCfg = Debug|Win32
+		{126B5082-4D0C-4FC2-8294-766EC8484C39}.Debug|x86.Build.0 = Debug|Win32
+		{126B5082-4D0C-4FC2-8294-766EC8484C39}.Release|x64.ActiveCfg = Release|x64
+		{126B5082-4D0C-4FC2-8294-766EC8484C39}.Release|x64.Build.0 = Release|x64
+		{126B5082-4D0C-4FC2-8294-766EC8484C39}.Release|x86.ActiveCfg = Release|Win32
+		{126B5082-4D0C-4FC2-8294-766EC8484C39}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

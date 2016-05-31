@@ -5,6 +5,11 @@
 #include "krylov.hpp" // conjugate gradients
 #include "array.hpp" // utility for array operations
 
+// input R × R —> R functions (PDE and BCs) and the mesh (domain)
+//#include "PureRobinProblem.hpp"
+#include "PureNeumannProblem.hpp"
+//#include "PureDirichletProblem.hpp"
+
 // our model problem:
 //
 // –nabla . (a nabla u) + cu = f,             if (x, y) in Omega,
@@ -28,17 +33,12 @@
 // where hatFunction_i denotes linear basis function taking unity on ith node and zero elsewhere
 // so we have to solve n × n linear system, n := numb of nodes of the mesh Omega
 
-// input R × R —> R functions (PDE and BCs) and the mesh (domain)
-#include "PureRobinProblem.hpp"
-//#include "PureNeumannProblem.hpp"
-//#include "PureDirichletProblem.hpp"
-
 int main() {
 	string path("Mathematica/Model Problem Analysis/");
 	try {
 		// we solve the same model problem refCount times,
 		// each time we uniformly refine our mesh
-		for (unsigned refCount = 0; refCount < 4; ++refCount) { 
+		for (unsigned refCount = 0; refCount < 5; ++refCount) { 
 			Omega.refine();
 			// data structures for final linear system A.xi = b:
 			SymmetricCSlRMatrix A(Omega.generateAdjList()); // build final matrix portrait
@@ -100,11 +100,23 @@ int main() {
 						// i.e. a(x, y) is linear combination of {x^2, y^2, xy, x, y, 1}:
 						stiffnessMatrixLoc(j, k) *= (a(elementMiddleNodes[0]) + a(elementMiddleNodes[1]) + a(elementMiddleNodes[2])) / measure / 12.;
 				// (1.3) compute local load vector
+				//
+				// f(x, y) lives in P_1(ith triangle):
+				//(loadVectorLoc = {
+				//2. * f(elementNodes[0]) + f(elementNodes[1]) + f(elementNodes[2]),
+				//     f(elementNodes[0]) + 2. * f(elementNodes[1]) + f(elementNodes[2]),
+				//     f(elementNodes[0]) + f(elementNodes[1]) + 2. * f(elementNodes[2])
+				//}) *= measure / 12.;
+				//
+				// f(x, y) lives in P_2(ith triangle):
 				(loadVectorLoc = {
-					2. * f(elementNodes[0]) + f(elementNodes[1]) + f(elementNodes[2]),
-						 f(elementNodes[0]) + 2. * f(elementNodes[1]) + f(elementNodes[2]),
-						 f(elementNodes[0]) + f(elementNodes[1]) + 2. * f(elementNodes[2])
-				}) *= measure / 12.;
+					2. * f(elementNodes[0]) - f(elementNodes[1]) - f(elementNodes[2]) +
+					4. * f(elementMiddleNodes[0]) + 8. * ( f(elementMiddleNodes[1]) + f(elementMiddleNodes[2]) ),
+					2. * f(elementNodes[1]) - f(elementNodes[0]) - f(elementNodes[2]) +
+					4. * ( 2. * ( f(elementMiddleNodes[0]) + f(elementMiddleNodes[2]) ) + f(elementMiddleNodes[1]) ),
+					2. * (f(elementNodes[2]) + 4. * (f(elementMiddleNodes[0]) + f(elementMiddleNodes[1])) + 2. * f(elementMiddleNodes[2])) -
+					f(elementNodes[0]) - f(elementNodes[1])
+				}) *= measure / 60.;
 				// (1.4) assemble contributions
 				for (j = 0; j < 3; ++j) {
 					for (k = j; k < 3; ++k)

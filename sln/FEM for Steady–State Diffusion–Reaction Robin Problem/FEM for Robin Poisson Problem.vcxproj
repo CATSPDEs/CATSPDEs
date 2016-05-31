@@ -125,18 +125,13 @@
   <ItemGroup>
     <ClCompile Include="..\Tools\DenseMatrix.cpp" />
     <ClCompile Include="..\Tools\SymmetricCSlRMatrix.cpp" />
-    <ClCompile Include="Curve.hpp" />
+    <ClCompile Include="..\Tools\Triangulation.cpp" />
     <ClCompile Include="FEM.cpp" />
-    <ClCompile Include="Triangulation.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="CurvilinearEdge.hpp" />
-    <ClInclude Include="Node.hpp" />
     <ClInclude Include="PureDirichetProblem.hpp" />
     <ClInclude Include="PureNeumannProblem.hpp" />
     <ClInclude Include="PureRobinProblem.hpp" />
-    <ClInclude Include="Triangle.hpp" />
-    <ClInclude Include="Triangulation.hpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
