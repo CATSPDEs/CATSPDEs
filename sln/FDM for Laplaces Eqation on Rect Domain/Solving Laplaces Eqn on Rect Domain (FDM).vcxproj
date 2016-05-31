@@ -22,6 +22,7 @@
     <ProjectGuid>{126B5082-4D0C-4FC2-8294-766EC8484C39}</ProjectGuid>
     <RootNamespace>SolvingLaplacesEqnonRectDomainFDM</RootNamespace>
     <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
+    <ProjectName>FDM for Laplaces Eqation on Rect Domain</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
