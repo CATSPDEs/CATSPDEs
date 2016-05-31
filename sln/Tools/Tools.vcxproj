@@ -120,8 +120,11 @@
   <ItemGroup>
     <ClInclude Include="AdjacencyList.hpp" />
     <ClInclude Include="array.hpp" />
+    <ClInclude Include="Curve.hpp" />
+    <ClInclude Include="CurvilinearEdge.hpp" />
     <ClInclude Include="DenseMatrix.hpp" />
     <ClInclude Include="krylov.hpp" />
+    <ClInclude Include="Node.hpp" />
     <ClInclude Include="SecondOrderPDE.hpp" />
     <ClInclude Include="AbstractElement.hpp" />
     <ClInclude Include="AbstractMesh.hpp" />
@@ -139,6 +142,10 @@
     <ClInclude Include="RectangularFDMMesh.hpp" />
     <ClInclude Include="SymmetricContainer.hpp" />
     <ClInclude Include="SymmetricCSlRMatrix.hpp" />
+    <ClInclude Include="Triangle.hpp" />
+    <ClInclude Include="Triangulation.hpp" />
+    <ClInclude Include="unitCircle.hpp" />
+    <ClInclude Include="unitSquare.hpp" />
     <ClInclude Include="vector.hpp" />
   </ItemGroup>
   <ItemGroup>
@@ -150,6 +157,7 @@
     <ClCompile Include="DenseMatrix.cpp" />
     <ClCompile Include="RectangularFDMMesh.cpp" />
     <ClCompile Include="SymmetricCSlRMatrix.cpp" />
+    <ClCompile Include="Triangulation.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

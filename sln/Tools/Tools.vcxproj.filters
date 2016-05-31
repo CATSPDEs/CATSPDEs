@@ -16,6 +16,15 @@
     <Filter Include="PDEs\Implementations">
       <UniqueIdentifier>{76de1918-edbf-4d40-8d92-24834822dc54}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Meshes">
+      <UniqueIdentifier>{6ed50528-e528-4884-abd6-31c918082dc4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Meshes\Triangulation">
+      <UniqueIdentifier>{c17f61b4-efe3-4565-b502-81b20402b00b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Meshes\Triangulation\Model Domains">
+      <UniqueIdentifier>{1062cd10-0145-4e97-ba61-c9caf24eecef}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AbstractSparseMatrix.hpp">
@@ -84,6 +93,27 @@
     <ClInclude Include="AdjacencyList.hpp">
       <Filter>PDEs</Filter>
     </ClInclude>
+    <ClInclude Include="unitCircle.hpp">
+      <Filter>Meshes\Triangulation\Model Domains</Filter>
+    </ClInclude>
+    <ClInclude Include="Node.hpp">
+      <Filter>Meshes</Filter>
+    </ClInclude>
+    <ClInclude Include="Triangle.hpp">
+      <Filter>Meshes\Triangulation</Filter>
+    </ClInclude>
+    <ClInclude Include="Triangulation.hpp">
+      <Filter>Meshes\Triangulation</Filter>
+    </ClInclude>
+    <ClInclude Include="unitSquare.hpp">
+      <Filter>Meshes\Triangulation\Model Domains</Filter>
+    </ClInclude>
+    <ClInclude Include="CurvilinearEdge.hpp">
+      <Filter>Meshes\Triangulation</Filter>
+    </ClInclude>
+    <ClInclude Include="Curve.hpp">
+      <Filter>Meshes\Triangulation</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="BandMatrix.cpp">
@@ -109,6 +139,9 @@
     </ClCompile>
     <ClCompile Include="CSRMatrix.cpp">
       <Filter>Matrices\Implementations</Filter>
+    </ClCompile>
+    <ClCompile Include="Triangulation.cpp">
+      <Filter>Meshes\Triangulation</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
