@@ -50,5 +50,11 @@
     <ClInclude Include="PureDirichetProblem.hpp">
       <Filter>Header Files\Model Problems</Filter>
     </ClInclude>
+    <ClInclude Include="PureNeumannProblem.hpp">
+      <Filter>Header Files\Model Problems</Filter>
+    </ClInclude>
+    <ClInclude Include="PureRobinProblem.hpp">
+      <Filter>Header Files\Model Problems</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
