@@ -127,9 +127,11 @@
     <ClCompile Include="..\Tools\SymmetricCSlRMatrix.cpp" />
     <ClCompile Include="..\Tools\Triangulation.cpp" />
     <ClCompile Include="FEM.cpp" />
+    <ClCompile Include="user.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="PureDirichetProblem.hpp" />
+    <ClInclude Include="FEM.hpp" />
+    <ClInclude Include="PureDirichletProblem.hpp" />
     <ClInclude Include="PureNeumannProblem.hpp" />
     <ClInclude Include="PureRobinProblem.hpp" />
   </ItemGroup>

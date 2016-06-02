@@ -1,12 +1,12 @@
 #pragma once
 #include <iostream>
 #include <stdexcept>
-#include "Point.hpp"
+#include "Node.hpp"
 
-typedef double(*Function)(Point const &); // function pointer
+typedef double(*Function)(Node&); // function pointer
 
-inline double zeroFunc(Point const &) { return 0.; }
-inline double oneFunc(Point const &) { return 1.; }
+inline double zeroFunc(Node&) { return 0.; }
+inline double oneFunc (Node&) { return 1.; }
 
 // What does it mean to read Function from stdin? 
 // No sense in saving pointers

@@ -54,9 +54,6 @@
     <ClInclude Include="AbstractNode.hpp">
       <Filter>PDEs</Filter>
     </ClInclude>
-    <ClInclude Include="BC.hpp">
-      <Filter>PDEs</Filter>
-    </ClInclude>
     <ClInclude Include="Point.hpp">
       <Filter>PDEs</Filter>
     </ClInclude>
@@ -70,9 +67,6 @@
       <Filter>PDEs</Filter>
     </ClInclude>
     <ClInclude Include="AbstractPDE.hpp">
-      <Filter>PDEs</Filter>
-    </ClInclude>
-    <ClInclude Include="SecondOrderPDE.hpp">
       <Filter>PDEs</Filter>
     </ClInclude>
     <ClInclude Include="DenseMatrix.hpp">
@@ -113,6 +107,12 @@
     </ClInclude>
     <ClInclude Include="Curve.hpp">
       <Filter>Meshes\Triangulation</Filter>
+    </ClInclude>
+    <ClInclude Include="DiffusionReactionEqn.hpp">
+      <Filter>PDEs</Filter>
+    </ClInclude>
+    <ClInclude Include="BoundaryConditions.hpp">
+      <Filter>PDEs</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

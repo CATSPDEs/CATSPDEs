@@ -6,6 +6,7 @@
 inline double g_N(Node& p) {
 	return 0.;
 }
+double u(Node&);
 inline double g_D(Node& p) {
 	return u(p);
 }
