@@ -4,7 +4,7 @@
 #include "DiffusionReactionEqn.hpp"
 // (2) discretized domain (mesh),
 #include "Triangulation.hpp"
-// (3) and BCs that connects (1) and (3)
+// (3) and BCs that connects (1) and (2)
 #include "BoundaryConditions.hpp"
 #include "SymmetricContainer.hpp" // for local matrices
 

@@ -1,0 +1,277 @@
+(* Content-type: application/vnd.wolfram.mathematica *)
+
+(*** Wolfram Notebook File ***)
+(* http://www.wolfram.com/nb *)
+
+(* CreatedBy='Mathematica 10.4' *)
+
+(*CacheID: 234*)
+(* Internal cache information:
+NotebookFileLineBreakTest
+NotebookFileLineBreakTest
+NotebookDataPosition[       158,          7]
+NotebookDataLength[      7560,        269]
+NotebookOptionsPosition[      6864,        242]
+NotebookOutlinePosition[      7211,        257]
+CellTagsIndexPosition[      7168,        254]
+WindowFrame->Normal*)
+
+(* Beginning of Notebook Content *)
+Notebook[{
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{"timeInterval", "=", 
+   RowBox[{"{", 
+    RowBox[{
+     SubscriptBox["t", 
+      RowBox[{"-", "2"}]], ",", 
+     SubscriptBox["t", 
+      RowBox[{"-", "1"}]], ",", 
+     SubscriptBox["t", "0"]}], "}"}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"coef", "=", 
+   RowBox[{"Inverse", "@", 
+    RowBox[{"{", "\[IndentingNewLine]", 
+     RowBox[{
+      RowBox[{"{", 
+       RowBox[{
+        SuperscriptBox[
+         SubscriptBox["t", 
+          RowBox[{"-", "2"}]], "2"], ",", 
+        SuperscriptBox[
+         SubscriptBox["t", 
+          RowBox[{"-", "1"}]], "2"], ",", 
+        SuperscriptBox[
+         SubscriptBox["t", "0"], "2"]}], "}"}], ",", "\[IndentingNewLine]", 
+      RowBox[{"{", 
+       RowBox[{
+        SubscriptBox["t", 
+         RowBox[{"-", "2"}]], ",", 
+        SubscriptBox["t", 
+         RowBox[{"-", "1"}]], ",", 
+        SubscriptBox["t", "0"]}], "}"}], ",", "\[IndentingNewLine]", 
+      RowBox[{"{", 
+       RowBox[{"1", ",", "1", ",", "1"}], "}"}]}], "\[IndentingNewLine]", 
+     "}"}]}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{"Do", "[", 
+  RowBox[{
+   RowBox[{
+    RowBox[{
+     SubscriptBox["\[Eta]", 
+      RowBox[{"-", "i"}]], "[", "v_", "]"}], "=", 
+    RowBox[{"FullSimplify", "[", 
+     RowBox[{
+      RowBox[{"coef", "[", 
+       RowBox[{"[", 
+        RowBox[{"3", "-", "i"}], "]"}], "]"}], ".", 
+      RowBox[{"{", 
+       RowBox[{
+        SuperscriptBox["v", "2"], ",", "v", ",", "1"}], "}"}]}], "]"}]}], ",", 
+   RowBox[{"{", 
+    RowBox[{"i", ",", "2", ",", "0", ",", 
+     RowBox[{"-", "1"}]}], "}"}]}], "]"}]}], "Input",
+ CellChangeTimes->{{3.674218464032318*^9, 3.674218473034998*^9}, 
+   3.6742187558498325`*^9, {3.67421884239526*^9, 3.6742191273738055`*^9}, {
+   3.674219542576003*^9, 3.674219550437933*^9}, 3.674219907081073*^9, {
+   3.6743684794648*^9, 3.674368495888687*^9}, {3.6743687035103064`*^9, 
+   3.6743687166355233`*^9}, {3.674368770901997*^9, 3.6743687979554896`*^9}, {
+   3.674369025822335*^9, 3.6743690345075607`*^9}}],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"Do", "[", "\[IndentingNewLine]", 
+  RowBox[{
+   RowBox[{
+    RowBox[{"Print", "[", 
+     RowBox[{
+      RowBox[{"FullSimplify", "@", 
+       RowBox[{
+        SubscriptBox["\[PartialD]", "v"], 
+        RowBox[{
+         SubscriptBox["\[Eta]", 
+          RowBox[{"-", "i"}]], "[", "v", "]"}]}]}], "/.", 
+      RowBox[{"{", 
+       RowBox[{"v", "\[Rule]", 
+        SubscriptBox["t", "0"]}], "}"}]}], "]"}], ";", "\[IndentingNewLine]", 
+    RowBox[{"Print", "[", 
+     RowBox[{
+      RowBox[{"FullSimplify", "@", 
+       RowBox[{
+        SubscriptBox["\[PartialD]", 
+         RowBox[{"v", ",", "v"}]], 
+        RowBox[{
+         SubscriptBox["\[Eta]", 
+          RowBox[{"-", "i"}]], "[", "v", "]"}]}]}], "/.", 
+      RowBox[{"{", 
+       RowBox[{"v", "\[Rule]", 
+        SubscriptBox["t", "0"]}], "}"}]}], "]"}], ";", "\[IndentingNewLine]", 
+    RowBox[{"Print", "[", "]"}]}], ",", "\[IndentingNewLine]", 
+   RowBox[{"{", 
+    RowBox[{"i", ",", "2", ",", "0", ",", 
+     RowBox[{"-", "1"}]}], "}"}]}], "]"}]], "Input",
+ CellChangeTimes->{{3.6742199082804613`*^9, 3.674219989769696*^9}, {
+  3.6742200356746407`*^9, 3.674220089549571*^9}, {3.674220131070175*^9, 
+  3.6742201401328926`*^9}, {3.674369068929747*^9, 3.674369071252885*^9}, {
+  3.6743691091552052`*^9, 3.6743691459213643`*^9}}],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"-", 
+  FractionBox[
+   RowBox[{
+    SubscriptBox["t", 
+     RowBox[{"-", "1"}]], "-", 
+    SubscriptBox["t", "0"]}], 
+   RowBox[{
+    RowBox[{"(", 
+     RowBox[{
+      SubscriptBox["t", 
+       RowBox[{"-", "2"}]], "-", 
+      SubscriptBox["t", 
+       RowBox[{"-", "1"}]]}], ")"}], " ", 
+    RowBox[{"(", 
+     RowBox[{
+      SubscriptBox["t", 
+       RowBox[{"-", "2"}]], "-", 
+      SubscriptBox["t", "0"]}], ")"}]}]]}]], "Print",
+ CellChangeTimes->{3.674369147467613*^9}],
+
+Cell[BoxData[
+ FractionBox["2", 
+  RowBox[{
+   RowBox[{"(", 
+    RowBox[{
+     SubscriptBox["t", 
+      RowBox[{"-", "2"}]], "-", 
+     SubscriptBox["t", 
+      RowBox[{"-", "1"}]]}], ")"}], " ", 
+   RowBox[{"(", 
+    RowBox[{
+     SubscriptBox["t", 
+      RowBox[{"-", "2"}]], "-", 
+     SubscriptBox["t", "0"]}], ")"}]}]]], "Print",
+ CellChangeTimes->{3.6743691475026712`*^9}],
+
+Cell[BoxData["\<\"\"\>"], "Print",
+ CellChangeTimes->{3.6743691475136538`*^9}],
+
+Cell[BoxData[
+ FractionBox[
+  RowBox[{
+   SubscriptBox["t", 
+    RowBox[{"-", "2"}]], "-", 
+   SubscriptBox["t", "0"]}], 
+  RowBox[{
+   RowBox[{"(", 
+    RowBox[{
+     SubscriptBox["t", 
+      RowBox[{"-", "2"}]], "-", 
+     SubscriptBox["t", 
+      RowBox[{"-", "1"}]]}], ")"}], " ", 
+   RowBox[{"(", 
+    RowBox[{
+     SubscriptBox["t", 
+      RowBox[{"-", "1"}]], "-", 
+     SubscriptBox["t", "0"]}], ")"}]}]]], "Print",
+ CellChangeTimes->{3.674369147629323*^9}],
+
+Cell[BoxData[
+ FractionBox["2", 
+  RowBox[{
+   RowBox[{"(", 
+    RowBox[{
+     SubscriptBox["t", 
+      RowBox[{"-", "2"}]], "-", 
+     SubscriptBox["t", 
+      RowBox[{"-", "1"}]]}], ")"}], " ", 
+   RowBox[{"(", 
+    RowBox[{
+     RowBox[{"-", 
+      SubscriptBox["t", 
+       RowBox[{"-", "1"}]]}], "+", 
+     SubscriptBox["t", "0"]}], ")"}]}]]], "Print",
+ CellChangeTimes->{3.6743691476443744`*^9}],
+
+Cell[BoxData["\<\"\"\>"], "Print",
+ CellChangeTimes->{3.6743691476568866`*^9}],
+
+Cell[BoxData[
+ FractionBox[
+  RowBox[{
+   SubscriptBox["t", 
+    RowBox[{"-", "2"}]], "+", 
+   SubscriptBox["t", 
+    RowBox[{"-", "1"}]], "-", 
+   RowBox[{"2", " ", 
+    SubscriptBox["t", "0"]}]}], 
+  RowBox[{
+   RowBox[{"(", 
+    RowBox[{
+     SubscriptBox["t", 
+      RowBox[{"-", "2"}]], "-", 
+     SubscriptBox["t", "0"]}], ")"}], " ", 
+   RowBox[{"(", 
+    RowBox[{
+     RowBox[{"-", 
+      SubscriptBox["t", 
+       RowBox[{"-", "1"}]]}], "+", 
+     SubscriptBox["t", "0"]}], ")"}]}]]], "Print",
+ CellChangeTimes->{3.674369147783266*^9}],
+
+Cell[BoxData[
+ FractionBox["2", 
+  RowBox[{
+   RowBox[{"(", 
+    RowBox[{
+     SubscriptBox["t", 
+      RowBox[{"-", "2"}]], "-", 
+     SubscriptBox["t", "0"]}], ")"}], " ", 
+   RowBox[{"(", 
+    RowBox[{
+     SubscriptBox["t", 
+      RowBox[{"-", "1"}]], "-", 
+     SubscriptBox["t", "0"]}], ")"}]}]]], "Print",
+ CellChangeTimes->{3.6743691477975583`*^9}],
+
+Cell[BoxData["\<\"\"\>"], "Print",
+ CellChangeTimes->{3.674369147809952*^9}]
+}, Open  ]]
+}, Open  ]]
+},
+WindowSize->{872, 676},
+WindowMargins->{{Automatic, 181}, {Automatic, 33}},
+FrontEndVersion->"10.4 for Microsoft Windows (64-bit) (February 25, 2016)",
+StyleDefinitions->"Default.nb"
+]
+(* End of Notebook Content *)
+
+(* Internal cache information *)
+(*CellTagsOutline
+CellTagsIndex->{}
+*)
+(*CellTagsIndex
+CellTagsIndex->{}
+*)
+(*NotebookFileOutline
+Notebook[{
+Cell[558, 20, 2021, 57, 161, "Input"],
+Cell[CellGroupData[{
+Cell[2604, 81, 1308, 34, 112, "Input"],
+Cell[CellGroupData[{
+Cell[3937, 119, 499, 19, 41, "Print"],
+Cell[4439, 140, 378, 14, 42, "Print"],
+Cell[4820, 156, 78, 1, 23, "Print"],
+Cell[4901, 159, 465, 18, 41, "Print"],
+Cell[5369, 179, 401, 15, 42, "Print"],
+Cell[5773, 196, 78, 1, 23, "Print"],
+Cell[5854, 199, 544, 21, 42, "Print"],
+Cell[6401, 222, 356, 13, 42, "Print"],
+Cell[6760, 237, 76, 1, 23, "Print"]
+}, Open  ]]
+}, Open  ]]
+}
+]
+*)
+

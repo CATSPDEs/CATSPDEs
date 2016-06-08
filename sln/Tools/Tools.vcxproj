@@ -123,6 +123,9 @@
     <ClInclude Include="Curve.hpp" />
     <ClInclude Include="CurvilinearEdge.hpp" />
     <ClInclude Include="DenseMatrix.hpp" />
+    <ClInclude Include="FEM.hpp" />
+    <ClInclude Include="HyperbolicPDE.hpp" />
+    <ClInclude Include="InitialBoundaryConditions.hpp" />
     <ClInclude Include="krylov.hpp" />
     <ClInclude Include="Node.hpp" />
     <ClInclude Include="DiffusionReactionEqn.hpp" />
@@ -142,6 +145,7 @@
     <ClInclude Include="RectangularFDMMesh.hpp" />
     <ClInclude Include="SymmetricContainer.hpp" />
     <ClInclude Include="SymmetricCSlRMatrix.hpp" />
+    <ClInclude Include="TimeFunction.hpp" />
     <ClInclude Include="Triangle.hpp" />
     <ClInclude Include="Triangulation.hpp" />
     <ClInclude Include="unitCircle.hpp" />
@@ -155,6 +159,7 @@
     <ClCompile Include="BandMatrix.cpp" />
     <ClCompile Include="CSRMatrix.cpp" />
     <ClCompile Include="DenseMatrix.cpp" />
+    <ClCompile Include="FEM.cpp" />
     <ClCompile Include="RectangularFDMMesh.cpp" />
     <ClCompile Include="SymmetricCSlRMatrix.cpp" />
     <ClCompile Include="Triangulation.cpp" />

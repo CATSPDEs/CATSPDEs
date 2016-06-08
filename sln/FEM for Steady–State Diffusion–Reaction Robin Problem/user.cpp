@@ -3,8 +3,8 @@
 #include "FEM.hpp"
 
 // input R × R —> R functions (PDE and BCs) and the mesh (domain)
-#include "PureRobinProblem.hpp"
-//#include "PureNeumannProblem.hpp"
+//#include "PureRobinProblem.hpp"
+#include "PureNeumannProblem.hpp"
 //#include "PureDirichletProblem.hpp"
 
 int main() {

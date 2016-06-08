@@ -18,11 +18,16 @@
       <Platform>x64</Platform>
     </ProjectConfiguration>
   </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="FEMt.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="FEMt.hpp" />
+  </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{342EEBFD-762B-4AAE-B73B-AD86CAA5EB3C}</ProjectGuid>
-    <RootNamespace>FEMforRobinPoissonProblem</RootNamespace>
+    <ProjectGuid>{D25E37AF-1CEE-4C9D-8475-C472DA1CA69C}</ProjectGuid>
+    <RootNamespace>FEMforHyperbolicPDE</RootNamespace>
     <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
-    <ProjectName>FEM for Steady–State Diffusion–Reaction Robin Problem</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -89,7 +94,6 @@
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <SubSystem>Console</SubSystem>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -119,21 +123,8 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <SubSystem>Console</SubSystem>
     </Link>
   </ItemDefinitionGroup>
-  <ItemGroup>
-    <ClCompile Include="..\Tools\DenseMatrix.cpp" />
-    <ClCompile Include="..\Tools\FEM.cpp" />
-    <ClCompile Include="..\Tools\SymmetricCSlRMatrix.cpp" />
-    <ClCompile Include="..\Tools\Triangulation.cpp" />
-    <ClCompile Include="user.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="PureDirichletProblem.hpp" />
-    <ClInclude Include="PureNeumannProblem.hpp" />
-    <ClInclude Include="PureRobinProblem.hpp" />
-  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

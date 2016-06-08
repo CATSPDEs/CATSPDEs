@@ -4,8 +4,8 @@
 #include "array.hpp" // utility for array operations
 
 vector<double> FEM::computeDiscreteSolution(DiffusionReactionEqn const & PDE, 
-                        BoundaryConditions const & BCs, 
-                        Triangulation& Omega) {
+                                            BoundaryConditions const & BCs, 
+                                            Triangulation& Omega) {
 	// data structures for final linear system A.xi = b:
 	SymmetricCSlRMatrix A(Omega.generateAdjList()); // build final matrix portrait
 	vector<double> b(Omega.numbOfNodes(), 0.), // load vector
@@ -36,9 +36,9 @@ vector<double> FEM::computeDiscreteSolution(DiffusionReactionEqn const & PDE,
 		// (1.1) local mass matrix,
 		// (1.2) local stiffness matrix, and
 		// (1.3) local load vector
-		localStiffnessMatrix = FEM::computeLocalStiffnessMatrix(PDE.diffusionTerm(), elementNodes, elementMiddleNodes, measure);
-		localMassMatrix      = FEM::computeLocalMassMatrix(PDE.reactionTerm(), elementNodes, measure);
-		localLoadVector      = FEM::computeLocalLoadVector(PDE.forceTerm(), elementNodes, elementMiddleNodes, measure);
+		localStiffnessMatrix = computeLocalStiffnessMatrix(PDE.diffusionTerm(), elementNodes, elementMiddleNodes, measure);
+		localMassMatrix      = computeLocalMassMatrix(PDE.reactionTerm(), elementNodes, measure);
+		localLoadVector      = computeLocalLoadVector(PDE.forceTerm(), elementNodes, elementMiddleNodes, measure);
 		// (1.4) assemble contributions
 		for (j = 0; j < 3; ++j) {
 			for (k = j; k < 3; ++k)
@@ -60,8 +60,8 @@ vector<double> FEM::computeDiscreteSolution(DiffusionReactionEqn const & PDE,
 			// compute
 			// (2.1) local Robin matrix
 			// (2.2) local Robin vector
-			localRobinMatrix = FEM::computeLocalRobinMatrix(BCs.RobinCoefficient(), edgeNodes, measure);
-			localRobinVector = FEM::computeLocalRobinVector(BCs, edgeNodes, measure);
+			localRobinMatrix = computeLocalRobinMatrix(BCs.RobinCoefficient(), edgeNodes, measure);
+			localRobinVector = computeLocalRobinVector(BCs, edgeNodes, measure);
 			// (2.3) assemble contributions
 			for (j = 0; j < 2; ++j) {
 				for (k = j; k < 2; ++k)
@@ -76,8 +76,8 @@ vector<double> FEM::computeDiscreteSolution(DiffusionReactionEqn const & PDE,
 }
 
 SymmetricContainer<double> FEM::computeLocalMassMatrix(Function reactionTerm, 
-	                                            array<Node, 3>& nodes, 
-	                                            double area) {
+	                                                   array<Node, 3>& nodes, 
+	                                                   double area) {
 	SymmetricContainer<double> m(3);
 	m(0, 0) = area * (6. * reactionTerm(nodes[0]) + 2. * reactionTerm(nodes[1]) + 2. * reactionTerm(nodes[2])) / 60.;
 	m(0, 1) = area * (2. * reactionTerm(nodes[0]) + 2. * reactionTerm(nodes[1]) + reactionTerm(nodes[2])) / 60.;
@@ -89,9 +89,9 @@ SymmetricContainer<double> FEM::computeLocalMassMatrix(Function reactionTerm,
 }
 
 SymmetricContainer<double> FEM::computeLocalStiffnessMatrix(Function diffusionTerm,
-                                                     array<Node, 3>& nodes,
-													 array<Node, 3>& middleNodes,
-                                                     double area) {
+                                                            array<Node, 3>& nodes,
+													        array<Node, 3>& middleNodes,
+                                                            double area) {
 	SymmetricContainer<double> s(3);
 	s(0, 0) = (nodes[1].x() - nodes[2].x()) * (nodes[1].x() - nodes[2].x()) +
 	          (nodes[1].y() - nodes[2].y()) * (nodes[1].y() - nodes[2].y());
@@ -122,9 +122,9 @@ SymmetricContainer<double> FEM::computeLocalStiffnessMatrix(Function diffusionTe
 }
 
 array<double, 3> FEM::computeLocalLoadVector(Function forceTerm,
-                                      array<Node, 3>& nodes,
-                                      array<Node, 3>& middleNodes,
-	                                  double area) {
+                                             array<Node, 3>& nodes,
+                                             array<Node, 3>& middleNodes,
+	                                         double area) {
 	array<double, 3> f;
 	// …assuming forceTerm(x, y) lives in P_1:
 	/*

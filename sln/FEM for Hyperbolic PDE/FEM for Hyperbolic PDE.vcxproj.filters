@@ -13,36 +13,15 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
-    <Filter Include="Header Files\Model Problems">
-      <UniqueIdentifier>{6e675834-c81d-4e89-8640-566413663c80}</UniqueIdentifier>
-    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\Tools\DenseMatrix.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Tools\SymmetricCSlRMatrix.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Tools\Triangulation.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="user.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Tools\FEM.cpp">
+    <ClCompile Include="FEMt.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="PureNeumannProblem.hpp">
-      <Filter>Header Files\Model Problems</Filter>
-    </ClInclude>
-    <ClInclude Include="PureRobinProblem.hpp">
-      <Filter>Header Files\Model Problems</Filter>
-    </ClInclude>
-    <ClInclude Include="PureDirichletProblem.hpp">
-      <Filter>Header Files\Model Problems</Filter>
+    <ClInclude Include="FEMt.hpp">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
