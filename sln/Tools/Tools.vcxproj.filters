@@ -96,9 +96,6 @@
     <ClInclude Include="RectangularFDMMesh.hpp">
       <Filter>Meshes\Rectangular Mesh</Filter>
     </ClInclude>
-    <ClInclude Include="LinearEllipticPDE.hpp">
-      <Filter>PDEs</Filter>
-    </ClInclude>
     <ClInclude Include="AbstractElement.hpp">
       <Filter>PDEs\Temp</Filter>
     </ClInclude>
@@ -134,6 +131,12 @@
     </ClInclude>
     <ClInclude Include="InitialBoundaryConditions.hpp">
       <Filter>PDEs</Filter>
+    </ClInclude>
+    <ClInclude Include="holeySquare.hpp">
+      <Filter>Meshes\Triangulation\Model Domains</Filter>
+    </ClInclude>
+    <ClInclude Include="LinearEllipticPDE.hpp">
+      <Filter>PDEs\Temp</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

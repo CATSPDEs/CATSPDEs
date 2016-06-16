@@ -71,6 +71,8 @@ public:
 	Triangulation& refine(Indicies&); // red-green refinement
 	Triangulation& refine(unsigned numbOfRefinements = 1); // uniform refinement
 	vector<double> qualityMeasure(); // O(n)
+
+	friend Triangulation generateMesh(); // user defined mesh generator
 };
 
 inline localIndex nextIndex(localIndex i) {

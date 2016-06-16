@@ -124,6 +124,7 @@
     <ClInclude Include="CurvilinearEdge.hpp" />
     <ClInclude Include="DenseMatrix.hpp" />
     <ClInclude Include="FEM.hpp" />
+    <ClInclude Include="holeySquare.hpp" />
     <ClInclude Include="HyperbolicPDE.hpp" />
     <ClInclude Include="InitialBoundaryConditions.hpp" />
     <ClInclude Include="krylov.hpp" />

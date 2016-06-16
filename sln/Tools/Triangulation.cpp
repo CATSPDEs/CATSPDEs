@@ -88,7 +88,7 @@ Triangulation::Triangulation(Node const & lb, Node const & rt, double percent) {
 }
 
 Triangulation::Triangulation(vector<Node> const & nodes, vector<Triangle> const & triangles,
-	vector<Curve> const & curves, vector<CurvilinearEdge> const & edges) 
+                             vector<Curve> const & curves, vector<CurvilinearEdge> const & edges) 
 	: _nodes(nodes)
 	, _triangles(triangles)
 	, _curves(curves)
