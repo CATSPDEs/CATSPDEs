@@ -131,6 +131,11 @@ std::vector<double> BandMatrix::mult(std::vector<double> const & v) const {
 	return std::vector<double>(_n);
 }
 
+BandMatrix& BandMatrix::setZero() {
+	// ... 
+	return *this;
+}
+
 std::istream& BandMatrix::loadSparse(std::istream& input) {
 	_isDecomposed = false;
 	for (size_t i = 0; i < _n * _w; ++i) input >> _A[i];

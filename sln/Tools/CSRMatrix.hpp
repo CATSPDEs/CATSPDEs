@@ -16,6 +16,7 @@ public:
 	// virtual methods to be implemented
 	std::vector<double> solve(std::vector<double> const &);
 	std::vector<double> mult(std::vector<double> const &) const;
+	CSRMatrix& setZero();
 	std::istream& loadSparse(std::istream&);
 	std::ostream& saveSparse(std::ostream&) const;
 	// new methods

@@ -42,6 +42,11 @@ std::vector<double> CSRMatrix::solve(std::vector<double> const & b) {
 	return CG(b);
 }
 
+CSRMatrix& CSRMatrix::setZero() {
+	// ...
+	return *this;
+}
+
 std::istream& CSRMatrix::loadSparse(std::istream& input) {
 	size_t i, max = _n;
 	for (i = 0; i < max; ++i)

@@ -6,6 +6,7 @@ public:
 	virtual ~IRealMatrix() {}
 	virtual std::vector<double> solve(std::vector<double> const &) = 0; // solve A.x = b
 	virtual std::vector<double> mult(std::vector<double> const &) const = 0; // matrix-vector product A.v
+	virtual IRealMatrix& setZero() = 0; // set A = zero matrix
 };
 
 // useful stuff 

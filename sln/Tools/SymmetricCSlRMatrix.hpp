@@ -40,6 +40,7 @@ public:
 	~SymmetricCSlRMatrix() {}
 	std::vector<double> solve(std::vector<double> const &);
 	std::vector<double> mult(std::vector<double> const &) const;
+	SymmetricCSlRMatrix& setZero();
 	std::istream& loadSparse(std::istream&); // look at implementation for istream / ostream structure
 	std::ostream& saveSparse(std::ostream&) const;
 	friend SymmetricCSlRMatrix operator*(SymmetricCSlRMatrix const &, SymmetricCSlRMatrix const &);
