@@ -4,9 +4,9 @@
 #include "array.hpp" // utility for array operations
 
 vector<vector<double>> FEMt::CN3(HyperbolicPDE const & PDE,
-                        InitialBoundaryConditions const & IBCs,
-                        vector<double> const & t,
-                        Triangulation& Omega) {
+                                 InitialBoundaryConditions const & IBCs,
+                                 vector<double> const & t, // vector of time points
+                                 Triangulation& Omega) {
 	// data structures for final linear system A.xi[m] = b:
 	SymmetricCSlRMatrix A(Omega.generateAdjList()); // build final matrix portrait
 	vector<double> b(Omega.numbOfNodes(), 0.); // load vector
@@ -14,9 +14,10 @@ vector<vector<double>> FEMt::CN3(HyperbolicPDE const & PDE,
 	// data structures for assemby of A and b:
 	SymmetricContainer<double> localMassMatrixChi(3), localMassMatrixSigma(3), // for hat functions on triangles 
 	                           localStiffnessMatrix(3), // we have 3 × 3 element matricies
-	                           localRobinMatrix(2); // and 2 × 2 element matricies for Robin BCs (just like element matrix in 1D)
+	                           localRobinMatrix_m(2), // and 2 × 2 element matricies for Robin BCs (just like element matrix in 1D)
+	                           localRobinMatrix_m_2(2); // computed on t[m] and t[m - 2]—for CN3–scheme
 	array<double, 3> localLoadVector_m, localLoadVector_m_2; // and their
-	array<double, 2> localRobinVector; // friends, element vectors
+	array<double, 2> localRobinVector_m, localRobinVector_m_2; // friends, element vectors
 	array<Node, 3> elementNodes, // nodes of the current triangle
 	               elementMiddleNodes; // and nodes on the middle of edges
 	array<Node, 2> edgeNodes; // nodes spanning an edge of the current triangle that is part of bndry
@@ -44,11 +45,11 @@ vector<vector<double>> FEMt::CN3(HyperbolicPDE const & PDE,
 		            (t[m - 2] - t[m]) / (t[m - 1] - t[m]);
 		eta[0][1] = -2. / 
 		            (t[m - 2] - t[m]) / (t[m - 1] - t[m]);
-		// assemble and solve SLDE
+		// assemble SLDE
 		for (size_t i = 0; i < Omega.numbOfNodes(); ++i) {
 			// (1) quadratures over elements
 			// in order to assemble A and b,
-			// it is convinient to iterate over mesh elements (i.e. triangles)
+			// it is convenient to iterate over mesh elements (i.e. triangles)
 			elementNodes = Omega.getNodes(i); // get nodes of ith triangle
 			for (j = 0; j < 3; ++j) // and middle nodes of its edges
 				elementMiddleNodes[j] = elementNodes[k = nextIndex(j)].midPoint(elementNodes[nextIndex(k)]);
@@ -92,25 +93,32 @@ vector<vector<double>> FEMt::CN3(HyperbolicPDE const & PDE,
 				// compute
 				// (2.1) local Robin matrix
 				// (2.2) local Robin vector
-				localRobinMatrix = FEMt::computeLocalRobinMatrix(BCs.RobinCoefficient(), t[m], edgeNodes, measure);
-				localRobinVector = FEMt::computeLocalRobinVector(BCs, t[m], edgeNodes, measure);
+				localRobinMatrix_m = FEMt::computeLocalRobinMatrix(IBCs.RobinCoefficient(), t[m], edgeNodes, measure);
+				localRobinMatrix_m_2 = FEMt::computeLocalRobinMatrix(IBCs.RobinCoefficient(), t[m - 2], edgeNodes, measure);
+				localRobinVector_m = FEMt::computeLocalRobinVector(IBCs, t[m], edgeNodes, measure);
+				localRobinVector_m_2 = FEMt::computeLocalRobinVector(IBCs, t[m - 2], edgeNodes, measure);
 				// (2.3) assemble contributions
 				for (j = 0; j < 2; ++j) {
-					for (k = j; k < 2; ++k)
-						A(l2g_edge[j], l2g_edge[k]) += localRobinMatrix(j, k);
-					b[l2g_edge[j]] += localRobinVector[j];
+					for (k = j; k < 2; ++k) {
+						A(l2g_edge[j], l2g_edge[k]) += localRobinMatrix_m(j, k) / 2.;
+						b[l2g_elem[j]] -= localRobinMatrix_m_2(j, k) * xi[t[m - 2]][l2g_elem[j]] / 2.;
+					}
+					b[l2g_edge[j]] += (localRobinVector_m[j] + localRobinVector_m_2[j]) / 2.;
 				}
 			}
 		}
 		// now we are ready to compute xi[m], A.xi[m] = b
-		xi[m] = CG(A, b, xi[m], 10e-70);
+		xi[m] = CG(A, b, xi[m - 1], 10e-70);
+		// clear A and b 
+		A.setZero();
+		fill(b.begin(), b.end(), 0.);
 	}
 	return xi;
 }
 
 SymmetricContainer<double> FEMt::computeLocalMassMatrix(Function reactionTerm,
-                                                       array<Node, 3>& nodes,
-                                                       double area) {
+                                                        array<Node, 3>& nodes,
+                                                        double area) {
 	SymmetricContainer<double> m(3);
 	m(0, 0) = area * (6. * reactionTerm(nodes[0]) + 2. * reactionTerm(nodes[1]) + 2. * reactionTerm(nodes[2])) / 60.;
 	m(0, 1) = area * (2. * reactionTerm(nodes[0]) + 2. * reactionTerm(nodes[1]) + reactionTerm(nodes[2])) / 60.;

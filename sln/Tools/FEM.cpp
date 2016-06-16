@@ -26,7 +26,7 @@ vector<double> FEM::computeDiscreteSolution(DiffusionReactionEqn const & PDE,
 	for (size_t i = 0; i < Omega.numbOfTriangles(); ++i) {
 		// (1) quadratures over elements
 		// in order to assemble stiffness matrix and load vector,
-		// it is convinient to iterate over mesh elements (i.e. triangles)
+		// it is convenient to iterate over mesh elements (i.e. triangles)
 		elementNodes = Omega.getNodes(i); // get nodes of ith triangle
 		for (j = 0; j < 3; ++j) // and middle nodes of its edges
 			elementMiddleNodes[j] = elementNodes[k = nextIndex(j)].midPoint(elementNodes[nextIndex(k)]);
