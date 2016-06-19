@@ -9,6 +9,7 @@
 
 typedef list<size_t> Indicies;
 typedef list<unsigned short> LocalIndicies;
+typedef vector<array<size_t, 2>> Boundary; // we do not save boudary explicitly (since it is available from elements), but we can compute it if necessary
 
 class Triangulation { // this data structure is known as “Nodes and Triangles”
 	// we have array of nodes := points on the plane and
@@ -71,6 +72,7 @@ public:
 	Triangulation& refine(Indicies&); // red-green refinement
 	Triangulation& refine(unsigned numbOfRefinements = 1); // uniform refinement
 	vector<double> qualityMeasure(); // O(n)
+	Boundary computeBoundary(); // O(numb of triangles); compute vector of arrays of indicies of _nodes that make the boudary 
 
 	friend Triangulation generateMesh(); // user defined mesh generator
 };

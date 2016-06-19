@@ -374,3 +374,11 @@ vector<double> Triangulation::qualityMeasure() {
 	// we multiply by sqrt(3), so ideal triangles have quality measure = 1
 	return v;
 }
+
+Boundary Triangulation::computeBoundary() {
+	Boundary edges;
+	for (size_t i = 0; i < numbOfTriangles(); ++i) 
+		for (localIndex edgeIndex : getBoundaryIndicies(i)) 
+			edges.push_back({ _triangles[i].nodes(edgeIndex + 1), _triangles[i].nodes(edgeIndex + 2) });
+	return edges;
+}
