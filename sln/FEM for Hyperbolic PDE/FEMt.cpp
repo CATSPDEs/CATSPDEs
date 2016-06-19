@@ -5,8 +5,9 @@
 
 vector<vector<double>> FEMt::CN3(HyperbolicPDE const & PDE,
                                  InitialBoundaryConditions const & IBCs,
-                                 vector<double> const & t, // vector of time points
+                                 vector<double> const & t, // vector of time frames
                                  Triangulation& Omega) {
+	if (t.size() < 2) throw invalid_argument("CN3() needs at least 2 time frames to compute soln");
 	// data structures for final linear system A.xi[m] = b:
 	SymmetricCSlRMatrix A(Omega.generateAdjList()); // build final matrix portrait
 	vector<double> b(Omega.numbOfNodes(), 0.); // load vector
@@ -31,22 +32,22 @@ vector<vector<double>> FEMt::CN3(HyperbolicPDE const & PDE,
 	// eta_i = unity at t_(-i), zero elsewhere, eta_i = a t^2 + b t + c
 	// eta[i][j] means (j+1)’s derivative of eta_i computed at t_0
 	// we will need these derivatives to approximate differential operators
+	// (I) apply initial conditions to get xi[0] and xi[1]
+	for (size_t i = 0; i < Omega.numbOfNodes(); ++i) {
+		xi[0][i] = IBCs.DirichletCondition(Omega.getNode(i), t[0]);
+		xi[1][i] = xi[0][i] + IBCs.initialVelocity(Omega.getNode(i)) * (t[1] - t[0]);
+	}
+	// (II) solve for xi[m], m = 2, 3, … w/ Crank–Nicolson scheme
 	for (size_t m = 2; m < t.size(); ++m) {
 		// compute derivatives
-		eta[2][0] = (t[m] - t[m - 1]) / 
-		            (t[m - 2] - t[m - 1]) / (t[m - 2] - t[m]);
-		eta[2][1] = 2. / 
-		            (t[m - 2] - t[m - 1]) / (t[m - 2] - t[m]);
-		eta[1][0] = (t[m - 2] - t[m]) / 
-		            (t[m - 2] - t[m - 1]) / (t[m - 1] - t[m]);
-		eta[1][1] = - 2. /
-		            (t[m - 2] - t[m - 1]) / (t[m - 1] - t[m]);
-		eta[0][0] = (t[m - 2] + t[m - 1] - 2. * t[m]) / 
-		            (t[m - 2] - t[m]) / (t[m - 1] - t[m]);
-		eta[0][1] = -2. / 
-		            (t[m - 2] - t[m]) / (t[m - 1] - t[m]);
+		eta[2][0] = (t[m] - t[m - 1])                 / (t[m - 2] - t[m - 1]) / (t[m - 2] - t[m]);
+		eta[2][1] = 2.                                / (t[m - 2] - t[m - 1]) / (t[m - 2] - t[m]);
+		eta[1][0] = (t[m - 2] - t[m])                 / (t[m - 2] - t[m - 1]) / (t[m - 1] - t[m]);
+		eta[1][1] = - 2.                              / (t[m - 2] - t[m - 1]) / (t[m - 1] - t[m]);
+		eta[0][0] = (2. * t[m] - t[m - 2] - t[m - 1]) / (t[m - 2] - t[m]) / (t[m - 1] - t[m]);
+		eta[0][1] = 2.                                / (t[m - 2] - t[m]) / (t[m - 1] - t[m]);
 		// assemble SLDE
-		for (size_t i = 0; i < Omega.numbOfNodes(); ++i) {
+		for (size_t i = 0; i < Omega.numbOfTriangles(); ++i) {
 			// (1) quadratures over elements
 			// in order to assemble A and b,
 			// it is convenient to iterate over mesh elements (i.e. triangles)
@@ -63,17 +64,18 @@ vector<vector<double>> FEMt::CN3(HyperbolicPDE const & PDE,
 			localLoadVector_m_2 = computeLocalLoadVector(PDE.forceTerm(), t[m - 2], elementNodes, elementMiddleNodes, measure);
 			// assemble contributions
 			for (j = 0; j < 3; ++j) {
-				for (k = j; k < 3; ++k) {
-					A(l2g_elem[j], l2g_elem[k]) +=
-						eta[0][0] * localMassMatrixSigma(j, k) +
-						eta[0][1] * localMassMatrixChi(j, k) +
-						localStiffnessMatrix(j, k) / 2.;
+				for (k = 0; k < 3; ++k) {
+					if (k >= j) // symmetric
+						A(l2g_elem[j], l2g_elem[k]) +=
+							eta[0][0] * localMassMatrixSigma(j, k) +
+							eta[0][1] * localMassMatrixChi(j, k) +
+							localStiffnessMatrix(j, k) / 2.;
 					b[l2g_elem[j]] -= (
-						localStiffnessMatrix(j, k) * xi[t[m - 2]][l2g_elem[j]] / 2. +
-						eta[1][0] * localMassMatrixSigma(j, k) * xi[t[m - 1]][l2g_elem[j]] + // parabolic
-						eta[2][0] * localMassMatrixSigma(j, k) * xi[t[m - 2]][l2g_elem[j]] +
-						eta[1][1] * localMassMatrixChi(j, k)   * xi[t[m - 1]][l2g_elem[j]] + // hyperbolic
-						eta[2][1] * localMassMatrixChi(j, k)   * xi[t[m - 2]][l2g_elem[j]]
+						localStiffnessMatrix(j, k) * xi[m - 2][l2g_elem[k]] / 2. +
+						eta[1][0] * localMassMatrixSigma(j, k) * xi[m - 1][l2g_elem[k]] + // parabolic
+						eta[2][0] * localMassMatrixSigma(j, k) * xi[m - 2][l2g_elem[k]] +
+						eta[1][1] * localMassMatrixChi(j, k)   * xi[m - 1][l2g_elem[k]] + // hyperbolic
+						eta[2][1] * localMassMatrixChi(j, k)   * xi[m - 2][l2g_elem[k]]
 					);
 				}
 				b[l2g_elem[j]] += (localLoadVector_m[j] + localLoadVector_m_2[j]) / 2.;
@@ -99,15 +101,18 @@ vector<vector<double>> FEMt::CN3(HyperbolicPDE const & PDE,
 				localRobinVector_m_2 = FEMt::computeLocalRobinVector(IBCs, t[m - 2], edgeNodes, measure);
 				// (2.3) assemble contributions
 				for (j = 0; j < 2; ++j) {
-					for (k = j; k < 2; ++k) {
-						A(l2g_edge[j], l2g_edge[k]) += localRobinMatrix_m(j, k) / 2.;
-						b[l2g_elem[j]] -= localRobinMatrix_m_2(j, k) * xi[t[m - 2]][l2g_elem[j]] / 2.;
+					for (k = 0; k < 2; ++k) {
+						if (k >= j) // symmetric
+							A(l2g_edge[j], l2g_edge[k]) += localRobinMatrix_m(j, k) / 2.;
+						b[l2g_edge[j]] -= localRobinMatrix_m_2(j, k) * xi[m - 2][l2g_edge[k]] / 2.;
 					}
 					b[l2g_edge[j]] += (localRobinVector_m[j] + localRobinVector_m_2[j]) / 2.;
 				}
 			}
 		}
 		// now we are ready to compute xi[m], A.xi[m] = b
+		//ofstream oA("Mathematica/Model Problem Analysis/m.dat");
+		//A.save(oA);
 		xi[m] = CG(A, b, xi[m - 1], 10e-70);
 		// clear A and b 
 		A.setZero();

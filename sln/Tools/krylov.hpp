@@ -9,7 +9,7 @@ std::vector<double> CG(T const &A, std::vector<double> const &b, std::vector<dou
 	std::vector<double> r = b - A*x0;
 	std::vector<double>p = r;
 	std::vector<double> x = x0;
-	while (abs(norm(r) / norm(b)) > eps) {
+	for (unsigned maxIter = 0; /*maxIter < 10000 &&*/ abs(norm(r) / norm(b)) > eps; ++maxIter) {
 		double  rXr = r*r;
 		std::vector<double> AXp = (A*p);
 		double a = rXr / (AXp*p);

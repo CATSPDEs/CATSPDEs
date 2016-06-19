@@ -23,10 +23,9 @@
     <ClCompile Include="..\Tools\Triangulation.cpp" />
     <ClCompile Include="FEMt.cpp" />
     <ClCompile Include="generateMesh.cpp" />
-    <ClCompile Include="user.cpp" />
+    <ClCompile Include="waveInterference.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="allBCsExample.hpp" />
     <ClInclude Include="FEMt.hpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">

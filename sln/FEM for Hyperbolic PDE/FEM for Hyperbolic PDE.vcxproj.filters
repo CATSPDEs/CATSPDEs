@@ -21,9 +21,6 @@
     <ClCompile Include="FEMt.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="user.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="..\Tools\Triangulation.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -33,13 +30,13 @@
     <ClCompile Include="generateMesh.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="waveInterference.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="FEMt.hpp">
       <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="allBCsExample.hpp">
-      <Filter>Header Files\Model Problems</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

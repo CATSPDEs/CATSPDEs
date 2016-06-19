@@ -21,7 +21,7 @@ public:
 	TimeFunction NeumannValue() const { return _N; }
 	TimeFunction RobinCoefficient() const { return _R; }
 	Function initialVelocity() const { return _v; }
-	double initialVelocity(Node& p) { return _v(p); }
+	double initialVelocity(Node& p) const { return _v(p); }
 	double DirichletCondition(Node& p, double t) const { return _D(p, t); }
 	double NeumannValue(Node& p, double t) const { return _N(p, t); }
 	double RobinCoefficient(Node& p, double t) const { return _R(p, t); }
