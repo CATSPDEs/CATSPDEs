@@ -30,6 +30,7 @@ double& SymmetricCSlRMatrix::_set(size_t i, size_t j) {
 	for (size_t k = _iptr[i]; k < _iptr[i + 1]; ++k)
 		if (_jptr[k] == j) return _lval[k];
 		else if (_jptr[k] > j) throw std::invalid_argument("portrait of sparse matrix doesn’t allow to change element w/ these indicies");
+	throw std::invalid_argument("portrait of sparse matrix doesn’t allow to change element w/ these indicies");
 }
 
 double SymmetricCSlRMatrix::_get(size_t i, size_t j) const {
@@ -38,6 +39,7 @@ double SymmetricCSlRMatrix::_get(size_t i, size_t j) const {
 	for (size_t k = _iptr[i]; k < _iptr[i + 1]; ++k)
 		if (_jptr[k] == j) return _lval[k];
 		else if (_jptr[k] > j) return 0.;
+	return 0.;
 }
 
 // public methods
@@ -75,6 +77,28 @@ std::ostream& SymmetricCSlRMatrix::saveSparse(std::ostream& output) const {
 		<< _diag;
 }
 
+SymmetricCSlRMatrix SymmetricCSlRMatrix::ILDL()
+{
+	SymmetricCSlRMatrix L(*this);
+	for (size_t k = 1;k < _n;k++){
+		for (size_t j = _iptr[k]; j < _iptr[k + 1];j++)	{
+			for (size_t i = _iptr[k];i < j;i++)
+				L._lval[j] -= L._lval[i] * L._diag[_jptr[i]] *
+				[&](int q, int d) {
+				int p;	
+				for (p = _iptr[d]; p < _iptr[d + 1];p++)
+						if (_jptr[p] == q) return L._lval[p];
+					return 0.;
+				}(_jptr[i], _jptr[j]);
+			L._lval[j]/= L._diag[_jptr[j]];
+		}
+
+		for (size_t j = _iptr[k];j < _iptr[k + 1];j++)
+			L._diag[k] -= L._lval[j] * L._lval[j] * L._diag[_jptr[j]];
+	}
+	return L;
+}
+
 std::vector<double> SymmetricCSlRMatrix::solve(std::vector<double> const &) {
 	//placeholder
 	return std::vector<double>();
@@ -90,4 +114,15 @@ std::vector<double> SymmetricCSlRMatrix::mult(std::vector<double> const &u) cons
 		}
 	}
 	return v;
+}
+
+std::vector<double> SymmetricCSlRMatrix::forwardSubst(std::vector<double> const &f)
+{
+	std::vector<double> res(_n);
+	std::vector<double> temp(f);
+	for (int i = 0;i < _n;i++) {
+		for (int j = _iptr[i];j < _iptr[i + 1];j++)
+			temp[i] = f[i] - res[_jptr[j]] * _lval[j];
+		res[i] = temp[i] / _diag[i];
+	}
 }
