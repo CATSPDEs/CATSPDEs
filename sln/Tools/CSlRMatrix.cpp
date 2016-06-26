@@ -105,3 +105,55 @@ std::vector<double> CSlRMatrix::multt(std::vector<double> const &u) const { // c
 std::vector<double> operator& (CSlRMatrix const & A, std::vector<double> const & b) {
 	return A.multt(b);
 }
+
+CSlRMatrix CSlRMatrix::ILU() {
+	CSlRMatrix LU(*this);
+	for (size_t k = 1;k < _n;k++) {
+		for (size_t j = _iptr[k];j < _iptr[k + 1];j++) {
+			for (size_t i = _iptr[k];i < j;i++)
+				LU._lval[j] -= LU._lval[i] * 
+				[&](size_t q, size_t c) {
+				int p;
+				for (p = _iptr[c]; p < _iptr[c + 1];p++)
+					if (_jptr[p] == q) return LU._uval[p];
+				return 0.;
+			}(k, _jptr[j]);
+			LU._lval[j] /= LU._diag[_jptr[j]];
+		}
+		for (size_t j = _iptr[k];j < _iptr[k + 1];j++)
+			LU._diag[k] -= LU._uval[j] * LU._lval[j];
+		for (size_t j = _iptr[k];j < _iptr[k + 1];j++)
+			for (size_t i = _iptr[k];i < j;i++)
+				LU._uval[j] -= LU._uval[i] * [&](size_t q, size_t c) {
+				int p;
+				for (p = _iptr[c]; p < _iptr[c + 1];p++)
+					if (_jptr[p] == q) return LU._lval[p];
+				return 0.;
+			}(k, _jptr[j]);
+
+	}
+	return LU;
+}
+
+std::vector<double> CSlRMatrix::forwardSubstitution(std::vector<double> const &f) {
+	std::vector<double> temp(f);
+	std::vector<double> res(_n);
+	for (int i = 0;i < _n;i++) {
+		for (int j = _iptr[i];j < _iptr[i + 1];j++)
+			temp[i] -= res[_jptr[j]] * _lval[j];
+		res[i] = temp[i];
+	}
+	return res;
+}
+
+std::vector<double> CSlRMatrix::backwardSubstitution(std::vector<double> const &f) {
+	std::vector<double> temp(f);
+	std::vector<double> res(_n);
+	for (int i = _n-1;i >= 0;i--) {
+		res[i] = temp[i] / _diag[i];
+		for (int j = _iptr[i];j < _iptr[i + 1];j++)
+			temp[_jptr[j]] -= res[i] * _uval[j];
+
+	}
+	return res;
+}

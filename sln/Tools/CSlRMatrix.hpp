@@ -23,6 +23,9 @@ public:
 	std::vector<double> multt(std::vector<double> const &) const;
 	std::istream& loadSparse(std::istream&); // look at implementation for istream / ostream structure
 	std::ostream& saveSparse(std::ostream&) const;
+	CSlRMatrix ILU();
+	std::vector<double> forwardSubstitution(std::vector<double> const &);
+	std::vector<double> backwardSubstitution(std::vector<double> const &);
 	friend CSlRMatrix operator*(CSlRMatrix const &, CSlRMatrix const &);
 	friend std::vector<double> operator&(CSlRMatrix const &, std::vector<double> const & );
 };

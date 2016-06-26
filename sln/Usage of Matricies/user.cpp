@@ -17,7 +17,8 @@ int main() {
 	std::vector<double> x0(4, 0);
 	std::vector<double> rb = { 1,1,1,1 };
 	std::cout << A_cslr.multt(rb)  << std::endl;
-	auto pair = BCG(A_cslr, b_cslr, x0, 10e-7);
+	A_cslr.ILU().save();
+	auto pair = ILUBiCGStab(A_cslr, b_cslr, x0, 10e-7);
 	std::cout << pair.second << std::endl << pair.first;
 	std::cout << std::endl << std::endl;
 	std::ifstream inputMatrixCRS("matrix_crs.txt"),
