@@ -114,6 +114,9 @@
     <ClInclude Include="BoundaryConditions.hpp">
       <Filter>PDEs</Filter>
     </ClInclude>
+    <ClInclude Include="CSlRMatrix.hpp">
+      <Filter>Matrices\Implementations</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="BandMatrix.cpp">
@@ -142,6 +145,9 @@
     </ClCompile>
     <ClCompile Include="Triangulation.cpp">
       <Filter>Meshes\Triangulation</Filter>
+    </ClCompile>
+    <ClCompile Include="CSlRMatrix.cpp">
+      <Filter>Matrices\Implementations</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
