@@ -5,8 +5,9 @@
 
 typedef double(*Function)(Node&); // function pointer
 
-inline double zeroFunc(Node&) { return 0.; }
-inline double oneFunc (Node&) { return 1.; }
+inline double emptyFunc(Node&) { return 0.; } // for default parameters
+inline double zeroFunc (Node&) { return 0.; }
+inline double oneFunc  (Node&) { return 1.; }
 
 // What does it mean to read Function from stdin? 
 // No sense in saving pointers
