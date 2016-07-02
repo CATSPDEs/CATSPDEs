@@ -19,14 +19,15 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\Tools\FEM_t.cpp" />
     <ClCompile Include="..\Tools\SymmetricCSlRMatrix.cpp" />
     <ClCompile Include="..\Tools\Triangulation.cpp" />
-    <ClCompile Include="FEMt.cpp" />
     <ClCompile Include="generateMesh.cpp" />
     <ClCompile Include="waveInterference.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="FEMt.hpp" />
+    <ClInclude Include="sineWave.hpp" />
+    <ClInclude Include="simple.hpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{D25E37AF-1CEE-4C9D-8475-C472DA1CA69C}</ProjectGuid>

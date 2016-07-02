@@ -14,22 +14,22 @@ RectangularFDMMesh::RectangularFDMMesh(Point startPoint, Point endPoint, unsigne
 			_nodes[j + nX * i] = AbstractNode(startPoint.x() + i * _hX, startPoint.y() + j * _hY);
 }
 
-void RectangularFDMMesh::setBottomBC(unsigned BCType = DIRICHLET_NODE) {
+void RectangularFDMMesh::setBottomBC(unsigned BC_type = DIRICHLET_NODE) {
 	for (size_t i = 0; i < _horPointNumber; i++)
-		getNode(i)->setBCType(BCType);
+		getNode(i)->setBC_type(BC_type);
 }
 
-void RectangularFDMMesh::setTopBC(unsigned BCType = DIRICHLET_NODE) {
+void RectangularFDMMesh::setTopBC(unsigned BC_type = DIRICHLET_NODE) {
 	for (size_t i = _nodes.size() - 1; i >= _nodes.size() - _horPointNumber; --i)
-		getNode(i)->setBCType(BCType);
+		getNode(i)->setBC_type(BC_type);
 }
 
-void RectangularFDMMesh::setLeftBC(unsigned BCType = DIRICHLET_NODE) {
+void RectangularFDMMesh::setLeftBC(unsigned BC_type = DIRICHLET_NODE) {
 	for (size_t i = 0; i < _nodes.size(); i += _horPointNumber)
-		getNode(i)->setBCType(BCType);
+		getNode(i)->setBC_type(BC_type);
 }
 
-void RectangularFDMMesh::setRightBC(unsigned BCType = DIRICHLET_NODE) {
+void RectangularFDMMesh::setRightBC(unsigned BC_type = DIRICHLET_NODE) {
 	for (size_t i = _horPointNumber - 1; i < _nodes.size(); i += _horPointNumber)
-		getNode(i)->setBCType(BCType);
+		getNode(i)->setBC_type(BC_type);
 }

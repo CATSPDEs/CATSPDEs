@@ -66,9 +66,6 @@
     <ClInclude Include="CSRMatrix.hpp">
       <Filter>Matrices\Implementations</Filter>
     </ClInclude>
-    <ClInclude Include="krylov.hpp">
-      <Filter>Utilities</Filter>
-    </ClInclude>
     <ClInclude Include="unitCircle.hpp">
       <Filter>Meshes\Triangulation\Model Domains</Filter>
     </ClInclude>
@@ -120,23 +117,35 @@
     <ClInclude Include="AdjacencyList.hpp">
       <Filter>Common</Filter>
     </ClInclude>
-    <ClInclude Include="TimeFunction.hpp">
-      <Filter>Common</Filter>
-    </ClInclude>
     <ClInclude Include="HyperbolicPDE.hpp">
       <Filter>PDEs</Filter>
     </ClInclude>
     <ClInclude Include="FEM.hpp">
       <Filter>Solvers</Filter>
     </ClInclude>
-    <ClInclude Include="InitialBoundaryConditions.hpp">
-      <Filter>PDEs</Filter>
-    </ClInclude>
-    <ClInclude Include="holeySquare.hpp">
-      <Filter>Meshes\Triangulation\Model Domains</Filter>
-    </ClInclude>
     <ClInclude Include="LinearEllipticPDE.hpp">
       <Filter>PDEs\Temp</Filter>
+    </ClInclude>
+    <ClInclude Include="TimeFrames.hpp">
+      <Filter>PDEs</Filter>
+    </ClInclude>
+    <ClInclude Include="Predicate.hpp">
+      <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="Function_t.hpp">
+      <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="InitialConditions.hpp">
+      <Filter>PDEs</Filter>
+    </ClInclude>
+    <ClInclude Include="BoundaryConditions_t.hpp">
+      <Filter>PDEs</Filter>
+    </ClInclude>
+    <ClInclude Include="FEM_t.hpp">
+      <Filter>Solvers</Filter>
+    </ClInclude>
+    <ClInclude Include="krylov.hpp">
+      <Filter>Solvers</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -168,6 +177,9 @@
       <Filter>PDEs\Temp</Filter>
     </ClCompile>
     <ClCompile Include="FEM.cpp">
+      <Filter>Solvers</Filter>
+    </ClCompile>
+    <ClCompile Include="FEM_t.cpp">
       <Filter>Solvers</Filter>
     </ClCompile>
   </ItemGroup>

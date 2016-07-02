@@ -51,6 +51,31 @@ std::ostream& operator<<(std::ostream& output, std::vector<T> const & u) {
 	return output;
 }
 
+// for vector of vectors
+template <typename T>
+std::ostream& operator<<(std::ostream& output, std::vector<std::vector<T>> const & u) {
+	output.precision(15); // double precision
+	output << std::scientific << std::showpos;
+	for (size_t i = 0; i < u.size(); ++i) {
+		for (size_t j = 0; j < u[i].size(); ++j)
+			output << u[i][j] << ' ';
+		output << '\n';
+	}
+	return output;
+}
+
+template <typename T, size_t N>
+std::ostream& operator<<(std::ostream& output, std::vector<std::array<T, N>> const & u) {
+	output.precision(15); // double precision
+	output << std::scientific << std::showpos;
+	for (size_t i = 0; i < u.size(); ++i) {
+		for (size_t j = 0; j < N; ++j)
+			output << u[i][j] << ' ';
+		output << '\n';
+	}
+	return output;
+}
+
 template <typename T>
 T norm(std::vector<T> const & v)
 {

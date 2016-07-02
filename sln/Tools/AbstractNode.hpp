@@ -8,12 +8,12 @@ const unsigned ROBIN_NODE = 3;
 class AbstractNode
 {
 	Point _location;
-	unsigned short _BCType;
+	unsigned short _BC_type;
 public:
-	explicit AbstractNode(Point const &, unsigned BCType = INTERNAL_NODE);
-	explicit AbstractNode(double x = 0., double y = 0., double z = 0., unsigned BCType = INTERNAL_NODE);
+	explicit AbstractNode(Point const &, unsigned BC_type = INTERNAL_NODE);
+	explicit AbstractNode(double x = 0., double y = 0., double z = 0., unsigned BC_type = INTERNAL_NODE);
 	void setLocation(Point const &);
-	void setBCType(unsigned);
+	void setBC_type(unsigned);
 	Point getLocation() const;
-	unsigned getBCType() const;
+	unsigned getBC_type() const;
 };

@@ -18,13 +18,13 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="FEMt.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="..\Tools\Triangulation.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="..\Tools\SymmetricCSlRMatrix.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Tools\FEM_t.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="generateMesh.cpp">
@@ -35,8 +35,11 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="FEMt.hpp">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="simple.hpp">
+      <Filter>Header Files\Model Problems</Filter>
+    </ClInclude>
+    <ClInclude Include="sineWave.hpp">
+      <Filter>Header Files\Model Problems</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

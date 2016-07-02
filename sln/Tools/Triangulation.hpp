@@ -32,11 +32,6 @@ class Triangulation { // this data structure is known as “Nodes and Triangles”
 	bool _checkNeighbor(size_t, localIndex); // check if ith neighbor of a tth triangle also has _triangles[t] as a neighbor
 	bool _makeNeighbors(size_t, size_t); // make 2 triangles neighbors
 	ssize_t _neighbor2edge(ssize_t); // mapping between indicies
-	// mesh quality measures
-	vector<double> _longestEdges(); // O(n), n := _triangles.size()
-	// compute vector of longest edges of all triangles
-	vector<double> _inscribedDiameters(); // O(n), n := _triangles.size()
-	// compute vector of diameters of inscribed circles of all triangles
 public:
 	Triangulation(Node const &, Node const &, double percent = .5); // dummy rect triangulation
 	Triangulation(vector<Node> const &, vector<Triangle> const &, 
@@ -71,6 +66,11 @@ public:
 	Triangulation& save(ostream& nodes = cout, ostream& triangles = cout); // save mesh to std out
 	Triangulation& refine(Indicies&); // red-green refinement
 	Triangulation& refine(unsigned numbOfRefinements = 1); // uniform refinement
+	// mesh quality measures
+	vector<double> longestEdges(); // O(n), n := _triangles.size()
+									// compute vector of longest edges of all triangles
+	vector<double> inscribedDiameters(); // O(n), n := _triangles.size()
+										  // compute vector of diameters of inscribed circles of all triangles
 	vector<double> qualityMeasure(); // O(n)
 	Boundary computeBoundary(); // O(numb of triangles); compute vector of arrays of indicies of _nodes that make the boudary 
 

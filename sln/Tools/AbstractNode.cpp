@@ -1,10 +1,10 @@
 #include "AbstractNode.hpp"
 
-AbstractNode::AbstractNode(Point const & location, unsigned BCType) :  _location(location), _BCType(BCType)
+AbstractNode::AbstractNode(Point const & location, unsigned BC_type) :  _location(location), _BC_type(BC_type)
 {
 }
 
-AbstractNode::AbstractNode(double x, double y, double z, unsigned BCType): _location(x,y,z), _BCType(BCType)
+AbstractNode::AbstractNode(double x, double y, double z, unsigned BC_type): _location(x,y,z), _BC_type(BC_type)
 {
 }
 
@@ -13,9 +13,9 @@ void AbstractNode::setLocation(Point const & location)
 	_location = location;
 }
 
-void AbstractNode::setBCType(unsigned BCType)
+void AbstractNode::setBC_type(unsigned BC_type)
 {
-	_BCType = BCType;
+	_BC_type = BC_type;
 }
 
 Point AbstractNode::getLocation() const
@@ -24,7 +24,7 @@ Point AbstractNode::getLocation() const
 }
 
 
-unsigned AbstractNode::getBCType() const
+unsigned AbstractNode::getBC_type() const
 {
-	return _BCType;
+	return _BC_type;
 }

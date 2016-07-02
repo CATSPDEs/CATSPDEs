@@ -120,12 +120,14 @@
   <ItemGroup>
     <ClInclude Include="AdjacencyList.hpp" />
     <ClInclude Include="array.hpp" />
+    <ClInclude Include="BoundaryConditions_t.hpp" />
     <ClInclude Include="Curve.hpp" />
     <ClInclude Include="CurvilinearEdge.hpp" />
     <ClInclude Include="DenseMatrix.hpp" />
     <ClInclude Include="FEM.hpp" />
+    <ClInclude Include="FEM_t.hpp" />
     <ClInclude Include="HyperbolicPDE.hpp" />
-    <ClInclude Include="InitialBoundaryConditions.hpp" />
+    <ClInclude Include="InitialConditions.hpp" />
     <ClInclude Include="krylov.hpp" />
     <ClInclude Include="Node.hpp" />
     <ClInclude Include="DiffusionReactionEqn.hpp" />
@@ -142,10 +144,12 @@
     <ClInclude Include="IRealMatrix.hpp" />
     <ClInclude Include="LinearEllipticPDE.hpp" />
     <ClInclude Include="Point.hpp" />
+    <ClInclude Include="Predicate.hpp" />
     <ClInclude Include="RectangularFDMMesh.hpp" />
     <ClInclude Include="SymmetricContainer.hpp" />
     <ClInclude Include="SymmetricCSlRMatrix.hpp" />
-    <ClInclude Include="TimeFunction.hpp" />
+    <ClInclude Include="TimeFrames.hpp" />
+    <ClInclude Include="Function_t.hpp" />
     <ClInclude Include="Triangle.hpp" />
     <ClInclude Include="Triangulation.hpp" />
     <ClInclude Include="unitCircle.hpp" />
@@ -160,6 +164,7 @@
     <ClCompile Include="CSRMatrix.cpp" />
     <ClCompile Include="DenseMatrix.cpp" />
     <ClCompile Include="FEM.cpp" />
+    <ClCompile Include="FEM_t.cpp" />
     <ClCompile Include="RectangularFDMMesh.cpp" />
     <ClCompile Include="SymmetricCSlRMatrix.cpp" />
     <ClCompile Include="Triangulation.cpp" />

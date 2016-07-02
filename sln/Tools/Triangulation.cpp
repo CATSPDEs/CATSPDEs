@@ -120,22 +120,6 @@ bool Triangulation::_makeNeighbors(size_t t1, size_t t2) {
 	return true; // we are gold
 }
 
-vector<double> Triangulation::_longestEdges() {
-	vector<double> v(_triangles.size());
-	for (size_t i = 0; i < _triangles.size(); ++i) {
-		v[i] = max(length(i, 0), length(i, 1));
-		v[i] = max(v[i], length(i, 2));
-	}
-	return v;
-}
-
-vector<double> Triangulation::_inscribedDiameters() {
-	vector<double> v(_triangles.size());
-	for (size_t i = 0; i < _triangles.size(); ++i)
-		v[i] = 4 * area(i) / perimeter(i);
-	return v;
-}
-
 bool Triangulation::_checkNeighbor(size_t t1, localIndex i) {
 	// check if ith neighbor of a t1th triangle also has _triangles[t1] as a neighbor
 	ssize_t t2 = _triangles[t1].neighbors(i);
@@ -365,10 +349,26 @@ Triangulation& Triangulation::refine(unsigned numbOfRefinements) {
 	return *this;
 }
 
+vector<double> Triangulation::longestEdges() {
+	vector<double> v(_triangles.size());
+	for (size_t i = 0; i < _triangles.size(); ++i) {
+		v[i] = max(length(i, 0), length(i, 1));
+		v[i] = max(v[i], length(i, 2));
+	}
+	return v;
+}
+
+vector<double> Triangulation::inscribedDiameters() {
+	vector<double> v(_triangles.size());
+	for (size_t i = 0; i < _triangles.size(); ++i)
+		v[i] = 4 * area(i) / perimeter(i);
+	return v;
+}
+
 vector<double> Triangulation::qualityMeasure() {
 	vector<double> v(_triangles.size()),
-				   h(_longestEdges()),
-				   d(_inscribedDiameters());
+				   h(longestEdges()),
+				   d(inscribedDiameters());
 	for (size_t i = 0; i < _triangles.size(); ++i)
 		v[i] = sqrt(3) * d[i] / h[i]; 
 	// we multiply by sqrt(3), so ideal triangles have quality measure = 1

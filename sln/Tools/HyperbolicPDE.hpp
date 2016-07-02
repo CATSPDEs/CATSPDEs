@@ -1,17 +1,17 @@
 #pragma once
 #include "Function.hpp"
-#include "TimeFunction.hpp"
+#include "Function_t.hpp"
 
 class HyperbolicPDE { 
 	// chi[r] u_tt[r,t] + sigma[r] u_t[r,t] – nabla . (a[r] nabla u[r,t]) = f[r,t],
 	// where r := <x, y> — space variable, t := time, and subscripts mean derivatives
 	Function _chi, _sigma, _a;
-	TimeFunction _f;
+	Function_t _f;
 public:
 	explicit HyperbolicPDE(Function chi = oneFunc,
 	                       Function sigma = zeroFunc,
 	                       Function a = oneFunc, 
-	                       TimeFunction f = zeroTimeFunc)
+	                       Function_t f = zeroFunc_t)
 		// hom. wave eqn by default
 		: _chi(chi)
 		, _sigma(sigma)
@@ -21,7 +21,7 @@ public:
 	Function chi() const { return _chi; }
 	Function sigma() const { return _sigma; }
 	Function diffusionTerm() const { return _a; }
-	TimeFunction forceTerm() const { return _f; }
+	Function_t forceTerm() const { return _f; }
 	double chi(Node& p) const { return _chi(p); }
 	double sigma(Node& p) const { return _sigma(p); }
 	double diffusionTerm(Node& p) const { return _a(p); }
