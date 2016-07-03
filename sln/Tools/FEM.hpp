@@ -36,12 +36,12 @@
 // so we have to assemble and solve n × n linear system, n := numb of nodes of the mesh Omega
 
 namespace FEM {
-	// finite element method
-	vector<double> computeDiscreteSolution(DiffusionReactionEqn const &, BoundaryConditions const &, Triangulation&);
+	// classic finite element method
+	vector<double> computeDiscreteSolution(DiffusionReactionEqn const &, Triangulation&, BoundaryConditions&);
 	// helpers
-	SymmetricContainer<double> computeLocalMassMatrix(Function, array<Node, 3>&, double);
+	SymmetricContainer<double> computeLocalMassMatrix     (Function, array<Node, 3>&, double);
 	SymmetricContainer<double> computeLocalStiffnessMatrix(Function, array<Node, 3>&, array<Node, 3>&, double);
-	array<double, 3> computeLocalLoadVector(Function, array<Node, 3>&, array<Node, 3>&, double);
-	SymmetricContainer<double> computeLocalRobinMatrix(Function, array<Node, 2>&, double);
-	array<double, 2> computeLocalRobinVector(BoundaryConditions const &, array<Node, 2>&, double);
+	array<double, 3>           computeLocalLoadVector     (Function, array<Node, 3>&, array<Node, 3>&, double);
+	SymmetricContainer<double> computeLocalRobinMatrix    (BoundaryConditions const &, array<Node, 2>&, double);
+	array<double, 2>           computeLocalRobinVector    (BoundaryConditions const &, array<Node, 2>&, double);
 }

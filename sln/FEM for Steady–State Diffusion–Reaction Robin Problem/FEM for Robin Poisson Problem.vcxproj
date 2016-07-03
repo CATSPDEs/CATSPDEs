@@ -130,6 +130,7 @@
     <ClCompile Include="user.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="kittyProblem.hpp" />
     <ClInclude Include="PureDirichletProblem.hpp" />
     <ClInclude Include="PureNeumannProblem.hpp" />
     <ClInclude Include="PureRobinProblem.hpp" />

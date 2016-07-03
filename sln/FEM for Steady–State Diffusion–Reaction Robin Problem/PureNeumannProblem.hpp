@@ -1,13 +1,25 @@
 #pragma once
 #include "unitCircle.hpp" // our mesh
 
-// for any pure Neumann problem:
-inline double g_D(Node& p) {
-	return 0.;
+// (4)
+// u in P_2, a = const, c = const AND g_N = const on bndry
+inline double u(Node& p) { // a > 0
+	return p.x() * p.x() + p.y() * p.y() + 1.;
 }
-inline double kappa(Node& p) { // kappa > 0
-	return 0.;
+inline double a(Node& p) { // a > 0
+	return 7.;
 }
+inline double c(Node& p) { // c > c_0 >= 0
+	return 2.;
+}
+inline double f(Node& p) {
+	return 2 * p.x() * p.x() + 2 * p.y() * p.y() - 26.;
+}
+inline double g_N(Node& p) {
+	return 14. * (p.x() * p.x() + p.y() * p.y());
+}
+NeumannBC Neumann(g_N); // pure Neumann everywhere
+vector<AbstractBC*> ListOfBCs = { &Neumann };
 
 // (1)
 // u, c in P_1, a, f in P_2
@@ -62,24 +74,6 @@ inline double kappa(Node& p) { // kappa > 0
 //inline double g_N(Node& p) {
 //	return (p.x() + p.y()) * (p.x() + 2. * p.y());
 //}
-
-// (4)
-// u in P_2, a = const, c = const AND g_N = const on bndry
-inline double u(Node& p) { // a > 0
-	return p.x() * p.x() + p.y() * p.y() + 1.;
-}
-inline double a(Node& p) { // a > 0
-	return 7.;
-}
-inline double c(Node& p) { // c > c_0 >= 0
-	return 2.;
-}
-inline double f(Node& p) {
-	return 2 * p.x() * p.x() + 2 * p.y() * p.y() - 26.;
-}
-inline double g_N(Node& p) {
-	return 14. * ( p.x() * p.x() + p.y() * p.y() );
-}
 
 // (5)
 // u in P_2, a = const, c = const BUT g_N != const on bndry

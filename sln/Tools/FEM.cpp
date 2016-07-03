@@ -4,8 +4,8 @@
 #include "array.hpp" // utility for array operations
 
 vector<double> FEM::computeDiscreteSolution(DiffusionReactionEqn const & PDE, 
-                                            BoundaryConditions const & BCs, 
-                                            Triangulation& Omega) {
+	                                        Triangulation& Omega,
+                                            BoundaryConditions& BCs) {
 	// data structures for final linear system A.xi = b:
 	SymmetricCSlRMatrix A(Omega.generateAdjList()); // build final matrix portrait
 	vector<double> b(Omega.numbOfNodes(), 0.), // load vector
@@ -19,6 +19,7 @@ vector<double> FEM::computeDiscreteSolution(DiffusionReactionEqn const & PDE,
 	array<Node, 3> elementNodes, // nodes of the current triangle
 				   elementMiddleNodes; // and nodes on the middle of edges
 	array<Node, 2> edgeNodes; // nodes spanning an edge of the current triangle that is part of bndry
+	Node midPoint; // middle point of the edge (to define which BCs to apply)
 	double measure; // area of ith triangle / length of bndry edge of ith thiangle
 	array<size_t, 3> l2g_elem; // local to global mapping of nodes on the element
 	array<size_t, 2> l2g_edge; // and on the edge
@@ -57,10 +58,13 @@ vector<double> FEM::computeDiscreteSolution(DiffusionReactionEqn const & PDE,
 			l2g_edge[0] = l2g_elem[leftNodeIndex]; // local to global nodes
 			l2g_edge[1] = l2g_elem[rightNodeIndex]; // numeration mapping 
 			measure = Omega.length(i, edgeIndex);
+			// define BCs to apply
+			midPoint = edgeNodes[0].midPoint(edgeNodes[1]);
+			BCs.defineBCsAt(midPoint);
 			// compute
 			// (2.1) local Robin matrix
 			// (2.2) local Robin vector
-			localRobinMatrix = computeLocalRobinMatrix(BCs.RobinCoefficient(), edgeNodes, measure);
+			localRobinMatrix = computeLocalRobinMatrix(BCs, edgeNodes, measure);
 			localRobinVector = computeLocalRobinVector(BCs, edgeNodes, measure);
 			// (2.3) assemble contributions
 			for (j = 0; j < 2; ++j) {
@@ -146,13 +150,13 @@ array<double, 3> FEM::computeLocalLoadVector(Function forceTerm,
 }
 
 
-SymmetricContainer<double> FEM::computeLocalRobinMatrix(Function RobinCoefficient,
+SymmetricContainer<double> FEM::computeLocalRobinMatrix(BoundaryConditions const & BCs,
                                                         array<Node, 2>& nodes,
 	                                                    double length) {
 	SymmetricContainer<double> r(2);
-	r(0, 0) = length * ( 3. * RobinCoefficient(nodes[0]) +      RobinCoefficient(nodes[1]) ) / 12.;
-	r(0, 1) = length * (      RobinCoefficient(nodes[0]) +      RobinCoefficient(nodes[1]) ) / 12.;
-	r(1, 1) = length * (      RobinCoefficient(nodes[0]) + 3. * RobinCoefficient(nodes[1]) ) / 12.;
+	r(0, 0) = length * ( 3. * BCs.RobinCoefficient(nodes[0]) +      BCs.RobinCoefficient(nodes[1]) ) / 12.;
+	r(0, 1) = length * (      BCs.RobinCoefficient(nodes[0]) +      BCs.RobinCoefficient(nodes[1]) ) / 12.;
+	r(1, 1) = length * (      BCs.RobinCoefficient(nodes[0]) + 3. * BCs.RobinCoefficient(nodes[1]) ) / 12.;
 	return r;
 }
 
