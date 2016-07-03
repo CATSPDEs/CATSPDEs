@@ -22,7 +22,6 @@ class Triangulation { // this data structure is known as “Nodes and Triangles”
 	vector<Node> _nodes; // nodes (i.e. P-matrix),
 	vector<Indicies> _neighbors; // nodes’ neighbors [we need to construct it to assemble our CRS matrix],
 	vector<Triangle> _triangles; // triangles (i.e. T-matrix or connectivity matrix), and
-	double _h; // max size of triangle edge
 	vector<Curve> _curves; // curves that make the boundary
 	vector<CurvilinearEdge> _edges;
 	// we will loop over our elements (i.e. over _triangles vector) to assemble stiffness matrix
@@ -35,7 +34,10 @@ class Triangulation { // this data structure is known as “Nodes and Triangles”
 public:
 	Triangulation(Node const &, Node const &, double percent = .5); // dummy rect triangulation
 	Triangulation(vector<Node> const &, vector<Triangle> const &, 
-				  vector<Curve> const &, vector<CurvilinearEdge> const &);
+				  vector<Curve> const &, vector<CurvilinearEdge> const &); // manually constructed mesh
+	Triangulation(istream&, istream&); // import triangulation
+	// from nodes.dat and triangles.dat
+	// O(m^2), m := numb of triangles (because we need to construct _neighbors list)
 	double length(size_t t, localIndex i) { // O(1)
 		// compute length of ith edge of tth triangle
 		return (_nodes[_triangles[t].nodes(i + 1)] - _nodes[_triangles[t].nodes(i + 2)]).norm();

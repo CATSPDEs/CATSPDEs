@@ -1,6 +1,7 @@
 #include <map>
 #include <algorithm>
 #include "Triangulation.hpp"
+#include "vector.hpp"
 
 Triangulation::Triangulation(Node const & lb, Node const & rt, double percent) {
 	// here we construct dummy rect triangulation
@@ -19,8 +20,8 @@ Triangulation::Triangulation(Node const & lb, Node const & rt, double percent) {
 	Node size = rt - lb;
 	// so x-projection of size is width of our rect and y-projection is height
 	if (size.x() <= 0 || size.y() <= 0) throw invalid_argument("invalid rect");
-	_h = percent * min(size.x(), size.y()); // hypotenuse and
-	double dx = _h / sqrt(2), // legs max sizes 
+	double hypotenuse = percent * min(size.x(), size.y()); // hypotenuse and
+	double dx = hypotenuse / sqrt(2), // legs max sizes 
 		dy = dx;
 	size_t ix = ceil(size.x() / dx), // numb of INTERVALS on x-axis and
 		   iy = ceil(size.y() / dy), // '' on y-axis, 
@@ -52,7 +53,7 @@ Triangulation::Triangulation(Node const & lb, Node const & rt, double percent) {
 	_triangles.resize(2 * ix * iy); // just draw and you see why
 	dx = size.x() / ix; // normalizing (legs actual size)
 	dy = size.y() / iy;
-	_h = sqrt(dx * dx + dy * dy); // good old days w/ Pythagorean thm
+	hypotenuse = sqrt(dx * dx + dy * dy); // good old days w/ Pythagorean thm
 	for (i = 0, O = 0, t = 0; i < ny; ++i)
 		for (j = 0; j < nx; ++j, ++O) {
 			_nodes[O] = lb + Node(j * dx, i * dy); // compute nodes
@@ -93,6 +94,16 @@ Triangulation::Triangulation(vector<Node> const & nodes, vector<Triangle> const 
 	, _triangles(triangles)
 	, _curves(curves)
 	, _edges(edges) {
+}
+
+Triangulation::Triangulation(istream& nodes, istream& triangles) {
+	size_t n;
+	nodes >> n; // numb of nodes
+	_nodes.resize(n);
+	nodes >> _nodes; // load nodes
+	triangles >> n; // numb of triangles
+	_triangles.resize(n);
+	triangles >> _triangles;
 }
 
 // private methods

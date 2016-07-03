@@ -58,10 +58,10 @@ public:
 	Node midPoint(Node const & p) const {
 		return .5 * (*this + p);
 	}
-	friend ostream& operator<<(ostream& out, Node const & p) {
-		return out << p._x << ' ' << p._y << '\n';
+	friend ostream& operator<<(ostream& output, Node const & p) {
+		return output << p._x << ' ' << p._y << '\n';
 	}
-	friend istream& operator>>(istream& in, Node& p) {
-		return in >> p._x >> p._y;
+	friend istream& operator>>(istream& input, Node& p) {
+		return input >> p._x >> p._y;
 	}
 };
