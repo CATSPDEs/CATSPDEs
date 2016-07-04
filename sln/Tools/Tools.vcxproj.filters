@@ -66,17 +66,11 @@
     <ClInclude Include="CSRMatrix.hpp">
       <Filter>Matrices\Implementations</Filter>
     </ClInclude>
-    <ClInclude Include="unitCircle.hpp">
-      <Filter>Meshes\Triangulation\Model Domains</Filter>
-    </ClInclude>
     <ClInclude Include="Triangle.hpp">
       <Filter>Meshes\Triangulation</Filter>
     </ClInclude>
     <ClInclude Include="Triangulation.hpp">
       <Filter>Meshes\Triangulation</Filter>
-    </ClInclude>
-    <ClInclude Include="unitSquare.hpp">
-      <Filter>Meshes\Triangulation\Model Domains</Filter>
     </ClInclude>
     <ClInclude Include="CurvilinearEdge.hpp">
       <Filter>Meshes\Triangulation</Filter>

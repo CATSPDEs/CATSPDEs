@@ -1,26 +1,25 @@
 #pragma once
 #include "Triangulation.hpp"
 
-double const PI = 3.14159265358979323846;
-
-inline Node circleCurve(double theta) { // unit speed parametrization
+// unit circle curve w/ center at origo
+inline Node innerCircleCurve(double theta) { // unit speed clockwise (!) parametrization for inner hole
 	return Node(cos(2 * PI * theta), -sin(2 * PI * theta));
 }
 
 Triangulation generateMesh() {
 	// (1) rect “body”
-	Triangulation Omega(Node(-1.5, -1.5), Node(0., 1.5));
+	Triangulation Omega(Node(-1.5, -1.5), Node(0., 1.5), 1. / sqrt(2.) + .1);
 	// (2) semi-circle hole
 	vector<Node> nodes = { 
 		Node(.5, -1.5), Node(1.5, -1.5),
-		circleCurve(.125),
+		innerCircleCurve(.125),
 		Node(1.5, -.5),
 		Node(1., 0.), Node(1.5, 0.),
 		Node(1.5, .5),
-		circleCurve(.875),
+		innerCircleCurve(.875),
 		Node(.5, 1.5), Node(1.5, 1.5) 
 	};
-	vector<Curve> curves = { circleCurve };
+	vector<Curve> curves = { innerCircleCurve };
 	vector<CurvilinearEdge> edges = {
 		CurvilinearEdge(.0, .125, 0),
 		CurvilinearEdge(.125, .25, 0),

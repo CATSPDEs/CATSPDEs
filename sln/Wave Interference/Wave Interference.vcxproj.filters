@@ -13,14 +13,17 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
-    <Filter Include="Header Files\Model Problems">
-      <UniqueIdentifier>{ac0d33c5-e342-4e17-9ab7-6f76f51ce8bc}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Source Files\External Tools">
-      <UniqueIdentifier>{5fef47a2-8752-4b39-8061-7425729941c3}</UniqueIdentifier>
+      <UniqueIdentifier>{ef74d5bc-57a4-4b49-afbe-5fb4a9b4c67a}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="generateMesh.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="waveInterference.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
     <ClCompile Include="..\Tools\FEM_t.cpp">
       <Filter>Source Files\External Tools</Filter>
     </ClCompile>
@@ -30,13 +33,5 @@
     <ClCompile Include="..\Tools\Triangulation.cpp">
       <Filter>Source Files\External Tools</Filter>
     </ClCompile>
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="simple.hpp">
-      <Filter>Header Files\Model Problems</Filter>
-    </ClInclude>
-    <ClInclude Include="sineWave.hpp">
-      <Filter>Header Files\Model Problems</Filter>
-    </ClInclude>
   </ItemGroup>
 </Project>

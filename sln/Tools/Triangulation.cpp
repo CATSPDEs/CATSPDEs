@@ -1,5 +1,6 @@
 #include <map>
 #include <algorithm>
+#include <string>
 #include "Triangulation.hpp"
 #include "vector.hpp"
 
@@ -73,6 +74,7 @@ Triangulation::Triangulation(Node const & lb, Node const & rt, double h) {
 					/*
 					_neighbors[O].push_front(NW = N - 1);
 					*/
+					NW = N - 1;
 					_triangles[t].nodes(O, N, NW); // counterclockwise! you can check our STENCIL 
 					// now we have to add neighbors of our triangle
 					if (canGoNorther) _triangles[t].neighbors(0) = t + 2 * ix - 1; // just draw and you will see
@@ -85,6 +87,7 @@ Triangulation::Triangulation(Node const & lb, Node const & rt, double h) {
 				/*
 				_neighbors[O].push_front(E = O + 1);
 				*/
+				E = O + 1;
 				if (canGoNorth) {
 					_triangles[t].nodes(O, E, N);
 					_triangles[t].neighbors(0) = t + 1;
@@ -117,14 +120,6 @@ Triangulation::Triangulation(double h)
 	}
 }
 
-Triangulation::Triangulation(vector<Node> const & nodes, vector<Triangle> const & triangles,
-                             vector<Curve> const & curves, vector<CurvilinearEdge> const & edges) 
-	: _nodes(nodes)
-	, _triangles(triangles)
-	, _curves(curves)
-	, _edges(edges) {
-}
-
 Triangulation::Triangulation(istream& nodes, istream& triangles) {
 	size_t n;
 	nodes >> n; // numb of nodes
@@ -145,10 +140,8 @@ bool Triangulation::_makeNeighbors(size_t t1, size_t t2) {
 	for (i = 0; i < 3; ++i)
 		for (j = 0; j < 3; ++j)
 			if (_triangles[t1].nodes(i) == _triangles[t2].nodes(j)) {
-				if (k > 1) { // triangles share… more than 2 nodes?
-					string error("invalid mesh: check out tringles #");
-					throw logic_error(((error += t1) += " and #") += t2);
-				}
+				if (k > 1) // triangles share… more than 2 nodes?
+					throw logic_error("invalid mesh: check out tringles #" + to_string(t1) + " and #" + to_string(t2));
 				commonNodes[0][k] = i;
 				commonNodes[1][k++] = j;
 			}

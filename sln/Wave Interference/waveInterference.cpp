@@ -9,18 +9,16 @@ inline bool G1(Node& p) {
 	if (p.x() == -3.) return true;
 	return false;
 }
-double const PI = 3.14159265358979323846;
 inline double G1_D(Node& p, double t) {
 	return .0125 * sin(1.5 * PI * t); // sine wave!!
 }
-
 inline bool G2(Node& p) {
 	if (p.x() * p.x() + p.y() * p.y() <= 1.21) return true;
 	return false;
 }
 
 int main() {
-	unsigned spaceRefCount, timeRefCount;
+	unsigned spaceRefCount, timeRefCount; // 2, 9 is enough
 	cout << "refine SPACE [...] times: ";
 	cin >> spaceRefCount;
 	cout << "refine TIME [...] times: ";
@@ -39,7 +37,7 @@ int main() {
 		// sovle w/ Crank–Nicolson scheme
 		vector<vector<double>> soln = FEM_t::CN3(waveEqn, time, Omega, ICs, BCs);
 		// save the result
-		string path("Mathematica/Wave Interference Animation/");
+		string path("Mathematica/data/");
 		ofstream oTime(path + "time.dat"), 
 			     oXi(path + "xi.dat"), 
 			     oG1(path + "G1.dat"),

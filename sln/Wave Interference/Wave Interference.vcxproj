@@ -18,18 +18,9 @@
       <Platform>x64</Platform>
     </ProjectConfiguration>
   </ItemGroup>
-  <ItemGroup>
-    <ClCompile Include="..\Tools\FEM_t.cpp" />
-    <ClCompile Include="..\Tools\SymmetricCSlRMatrix.cpp" />
-    <ClCompile Include="..\Tools\Triangulation.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="sineWave.hpp" />
-    <ClInclude Include="simple.hpp" />
-  </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{D25E37AF-1CEE-4C9D-8475-C472DA1CA69C}</ProjectGuid>
-    <RootNamespace>FEMforHyperbolicPDE</RootNamespace>
+    <ProjectGuid>{A9ED0084-F411-4D79-857D-E62DB8455E1B}</ProjectGuid>
+    <RootNamespace>WaveInterference</RootNamespace>
     <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
@@ -130,6 +121,13 @@
       <SubSystem>Console</SubSystem>
     </Link>
   </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="..\Tools\FEM_t.cpp" />
+    <ClCompile Include="..\Tools\SymmetricCSlRMatrix.cpp" />
+    <ClCompile Include="..\Tools\Triangulation.cpp" />
+    <ClCompile Include="generateMesh.cpp" />
+    <ClCompile Include="waveInterference.cpp" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

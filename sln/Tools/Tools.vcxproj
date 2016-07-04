@@ -153,8 +153,6 @@
     <ClInclude Include="Function_t.hpp" />
     <ClInclude Include="Triangle.hpp" />
     <ClInclude Include="Triangulation.hpp" />
-    <ClInclude Include="unitCircle.hpp" />
-    <ClInclude Include="unitSquare.hpp" />
     <ClInclude Include="vector.hpp" />
   </ItemGroup>
   <ItemGroup>
