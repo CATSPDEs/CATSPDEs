@@ -3,7 +3,7 @@
 #include "Triangulation.hpp"
 #include "vector.hpp"
 
-Triangulation::Triangulation(Node const & lb, Node const & rt, double percent) {
+Triangulation::Triangulation(Node const & lb, Node const & rt, double h) {
 	// here we construct dummy rect triangulation
 	// w/ left bottom point @lb and right top point @rt
 	// elements will be right-angled triangles
@@ -16,13 +16,13 @@ Triangulation::Triangulation(Node const & lb, Node const & rt, double percent) {
 	//  |\ |\ |\ |
 	//  |_\|_\|_\|
 	//  (0,0)    
-	if (1 <= percent || percent <= 0) throw invalid_argument("3rd parameter should be el of (0, 1)");
+	if (h <= 0) throw invalid_argument("max edge length must be a positive real number");
 	Node size = rt - lb;
 	// so x-projection of size is width of our rect and y-projection is height
 	if (size.x() <= 0 || size.y() <= 0) throw invalid_argument("invalid rect");
-	double hypotenuse = percent * min(size.x(), size.y()); // hypotenuse and
-	double dx = hypotenuse / sqrt(2), // legs max sizes 
-		dy = dx;
+	double hypotenuse = min(h, size.norm()); // hypotenuse and
+	double dx = hypotenuse / sqrt(2.), // legs max sizes 
+	       dy = dx;
 	size_t ix = ceil(size.x() / dx), // numb of INTERVALS on x-axis and
 		   iy = ceil(size.y() / dy), // '' on y-axis, 
 		   nx = ix + 1, // numb of NODES on x-axis and
@@ -111,8 +111,10 @@ Triangulation::Triangulation(double h)
 		Triangle(4, 3, 1, 3, 1, -5),
 		Triangle(3, 2, 1, 0, 2, -2)
 	}) {
-	if (h < 1. / sqrt(2))
-		while(longestEdge() > h) refine();
+	if (h < 1. / sqrt(2)) {
+		if (h <= 0) throw invalid_argument("max edge length must be a positive real number");
+		while (longestEdge() > h) refine();
+	}
 }
 
 Triangulation::Triangulation(vector<Node> const & nodes, vector<Triangle> const & triangles,

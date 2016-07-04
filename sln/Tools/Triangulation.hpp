@@ -36,20 +36,19 @@ public:
 	/* (I) model domains constructors
 	*/
 	// (1) dummy rect triangulation
-	Triangulation(Node const &, Node const &, double percent = .5); 
+	Triangulation(Node const &, Node const &, double h = INFTY); 
 	// (2) unit circle triangulation w/ center at origo,
 	Triangulation(double h = INFTY); // @h := longest edge 
-	Triangulation(vector<Node> const &, vector<Triangle> const &, 
-				  vector<Curve> const &, vector<CurvilinearEdge> const &); // manually constructed mesh
-	Triangulation(istream&, istream&); // import triangulation
+	// (3) import triangulation	
 	// from nodes.dat and triangles.dat
 	// O(m^2), m := numb of triangles (because we need to construct _neighbors list)
+	Triangulation(istream&, istream&);
+	/* (II) simple inline methods
+	*/
 	double length(size_t t, localIndex i) { // O(1)
 		// compute length of ith edge of tth triangle
 		return (_nodes[_triangles[t].nodes(i + 1)] - _nodes[_triangles[t].nodes(i + 2)]).norm();
 	}
-	/* (II) simple inline methods
-	*/
 	Node getNode(size_t i) const {
 		return _nodes[i];
 	}
