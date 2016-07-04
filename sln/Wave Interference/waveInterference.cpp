@@ -27,10 +27,11 @@ int main() {
 		HyperbolicPDE waveEqn; // hom. wave eqn	
 		InitialConditions ICs; // zero position and velocity
 		// BCs
-		DirichletBC_t DirichletWave(G1_D, G1); // sine wave at strips’ ends,
-		DirichletBC_t DirichletHom (zeroFunc_t, G2); // fixed hole, and
-		NeumannBC_t Neumann; // free boundary elsewhere  
-		BoundaryConditions_t BCs({ &DirichletWave, &DirichletHom, &Neumann });
+		BoundaryConditions_t BCs({ 
+			make_shared<DirichletBC_t>(G1_D, G1), // sine wave at strips’ ends,
+			make_shared<DirichletBC_t>(zeroFunc_t, G2), // fixed hole, and
+			make_shared<NeumannBC_t>() // free boundary elsewhere
+		});
 		TimeFrames time(0., 15., timeRefCount); // time frames
 		Triangulation Omega(generateMesh()); // mesh w/ “strips” and hole—to demonstrate wave inerference
 		Omega.refine(spaceRefCount);

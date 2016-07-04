@@ -19,9 +19,6 @@
     <Filter Include="Meshes\Triangulation">
       <UniqueIdentifier>{c17f61b4-efe3-4565-b502-81b20402b00b}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Meshes\Triangulation\Model Domains">
-      <UniqueIdentifier>{1062cd10-0145-4e97-ba61-c9caf24eecef}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Meshes\Rectangular Mesh">
       <UniqueIdentifier>{ebc49e94-b00d-4098-ad87-1a355918334c}</UniqueIdentifier>
     </Filter>
@@ -141,9 +138,6 @@
     <ClInclude Include="krylov.hpp">
       <Filter>Solvers</Filter>
     </ClInclude>
-    <ClInclude Include="kitty.hpp">
-      <Filter>Meshes\Triangulation\Model Domains</Filter>
-    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="BandMatrix.cpp">
@@ -179,13 +173,5 @@
     <ClCompile Include="FEM_t.cpp">
       <Filter>Solvers</Filter>
     </ClCompile>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="kittyNodes.dat">
-      <Filter>Meshes\Triangulation\Model Domains</Filter>
-    </None>
-    <None Include="kittyTriangles.dat">
-      <Filter>Meshes\Triangulation\Model Domains</Filter>
-    </None>
   </ItemGroup>
 </Project>

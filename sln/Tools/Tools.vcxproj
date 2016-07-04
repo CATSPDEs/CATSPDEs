@@ -128,7 +128,6 @@
     <ClInclude Include="FEM_t.hpp" />
     <ClInclude Include="HyperbolicPDE.hpp" />
     <ClInclude Include="InitialConditions.hpp" />
-    <ClInclude Include="kitty.hpp" />
     <ClInclude Include="krylov.hpp" />
     <ClInclude Include="Node.hpp" />
     <ClInclude Include="DiffusionReactionEqn.hpp" />
@@ -167,10 +166,6 @@
     <ClCompile Include="RectangularFDMMesh.cpp" />
     <ClCompile Include="SymmetricCSlRMatrix.cpp" />
     <ClCompile Include="Triangulation.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="kittyNodes.dat" />
-    <None Include="kittyTriangles.dat" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

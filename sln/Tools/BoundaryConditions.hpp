@@ -1,6 +1,7 @@
 ﻿#pragma once
 #include <stdexcept>
 #include <vector>
+#include <memory>
 #include "Function.hpp"
 #include "Predicate.hpp"
 
@@ -70,10 +71,10 @@ public:
 
 // list of BCs (any kind)
 class BoundaryConditions {
-	vector<AbstractBC*> _BCs;
+	vector<shared_ptr<AbstractBC>> _BCs;
 	size_t _current; // index of current BCs to apply
 public:
-	BoundaryConditions(vector<AbstractBC*> const & BCs) : _BCs(BCs), _current(0) {
+	BoundaryConditions(vector<shared_ptr<AbstractBC>> const & BCs) : _BCs(BCs), _current(0) {
 		if (BCs.size() == 0) throw invalid_argument("list of BCs cannot be empty");
 	}
 	void defineBCsAt(Node& p) {

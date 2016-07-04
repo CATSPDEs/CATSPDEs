@@ -71,10 +71,10 @@ public:
 
 // list of BCs (any kind)
 class BoundaryConditions_t {
-	vector<AbstractBC_t*> _BCs_t;
+	vector<shared_ptr<AbstractBC_t>> _BCs_t;
 	size_t _current; // index of current BCs to apply
 public:
-	BoundaryConditions_t(vector<AbstractBC_t*> const & BCs_t) : _BCs_t(BCs_t), _current(0) {
+	BoundaryConditions_t(vector<shared_ptr<AbstractBC_t>> const & BCs_t) : _BCs_t(BCs_t), _current(0) {
 		if (BCs_t.size() == 0) throw invalid_argument("list of BCs cannot be empty");
 	}
 	void defineBCsAt(Node& p) {
