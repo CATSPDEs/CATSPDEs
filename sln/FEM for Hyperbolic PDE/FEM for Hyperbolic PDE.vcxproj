@@ -22,6 +22,7 @@
     <ClCompile Include="..\Tools\FEM_t.cpp" />
     <ClCompile Include="..\Tools\SymmetricCSlRMatrix.cpp" />
     <ClCompile Include="..\Tools\Triangulation.cpp" />
+    <ClCompile Include="modelProblems.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="sineWave.hpp" />

@@ -123,17 +123,10 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="..\Tools\DenseMatrix.cpp" />
     <ClCompile Include="..\Tools\FEM.cpp" />
     <ClCompile Include="..\Tools\SymmetricCSlRMatrix.cpp" />
     <ClCompile Include="..\Tools\Triangulation.cpp" />
-    <ClCompile Include="user.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="kittyProblem.hpp" />
-    <ClInclude Include="PureDirichletProblem.hpp" />
-    <ClInclude Include="PureNeumannProblem.hpp" />
-    <ClInclude Include="PureRobinProblem.hpp" />
+    <ClCompile Include="modelProblems.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -44,4 +44,6 @@ namespace FEM {
 	array<double, 3>           computeLocalLoadVector     (Function, array<Node, 3>&, array<Node, 3>&, double);
 	SymmetricContainer<double> computeLocalRobinMatrix    (BoundaryConditions const &, array<Node, 2>&, double);
 	array<double, 2>           computeLocalRobinVector    (BoundaryConditions const &, array<Node, 2>&, double);
+	// make vector of model soln
+	vector<double> constructVector(Function, Triangulation&);
 }

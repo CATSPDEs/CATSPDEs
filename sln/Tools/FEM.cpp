@@ -173,3 +173,10 @@ array<double, 2> FEM::computeLocalRobinVector(BoundaryConditions const & BCs,
 		BCs.DirichletCondition(nodes[1]) * ( BCs.RobinCoefficient(nodes[0]) + 3. * BCs.RobinCoefficient(nodes[1]) )
 	}) *= length / 12.;
 }
+
+vector<double> FEM::constructVector(Function u, Triangulation& Omega) {
+	vector<double> uVec(Omega.numbOfNodes());
+	for (size_t i = 0; i < uVec.size(); ++i)
+		uVec[i] = u(Omega.getNode(i));
+	return uVec;
+}

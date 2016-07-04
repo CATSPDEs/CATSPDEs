@@ -30,6 +30,9 @@
     <ClCompile Include="..\Tools\Triangulation.cpp">
       <Filter>Source Files\External Tools</Filter>
     </ClCompile>
+    <ClCompile Include="modelProblems.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="simple.hpp">
