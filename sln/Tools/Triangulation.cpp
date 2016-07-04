@@ -42,7 +42,9 @@ Triangulation::Triangulation(Node const & lb, Node const & rt, double percent) {
 	bool canGoNorth, canGoNorther, canGoWest, canGoEast, canGoSouth; 
 	// we will need this flags in order to check if we can add neighbor (of node or triangle)
 	_nodes.resize(nx * ny); // so numb of points is nx * ny
+	/* 
 	_neighbors.resize(nx * ny - 1); // we will also construct vector of nodes neighbors here
+	*/
 	// just because it is straight-forward
 	// in general we need to loop over triangles to construct it
 	// recall that we will need neighbors in order to assemble portrait of CRS matrix
@@ -64,9 +66,13 @@ Triangulation::Triangulation(Node const & lb, Node const & rt, double percent) {
 			canGoSouth = i;
 			N = O + nx; // north node!
 			if (canGoNorth) { // add neighbors from the future!
+				/*
 				_neighbors[O].push_front(N);
+				*/
 				if (canGoWest) {
+					/*
 					_neighbors[O].push_front(NW = N - 1);
+					*/
 					_triangles[t].nodes(O, N, NW); // counterclockwise! you can check our STENCIL 
 					// now we have to add neighbors of our triangle
 					if (canGoNorther) _triangles[t].neighbors(0) = t + 2 * ix - 1; // just draw and you will see
@@ -76,7 +82,9 @@ Triangulation::Triangulation(Node const & lb, Node const & rt, double percent) {
 				}
 			}
 			if (canGoEast) {
+				/*
 				_neighbors[O].push_front(E = O + 1);
+				*/
 				if (canGoNorth) {
 					_triangles[t].nodes(O, E, N);
 					_triangles[t].neighbors(0) = t + 1;
@@ -86,6 +94,25 @@ Triangulation::Triangulation(Node const & lb, Node const & rt, double percent) {
 				}
 			}
 		}
+}
+
+Triangulation::Triangulation(double h) 
+	: _nodes({ Node(-1., 0.), Node(0., 0.), Node(0., 1.), Node(1., 0.), Node(0., -1.) })
+	, _curves({ circleCurve })
+	, _edges({
+		CurvilinearEdge(0., .25, 0),
+		CurvilinearEdge(.25, .5, 0),
+		CurvilinearEdge(.5, .75, 0),
+		CurvilinearEdge(.75, 1., 0)
+	})
+	, _triangles({
+		Triangle(0, 1, 2, 3, -3, 1),
+		Triangle(0, 4, 1, 2, 0, -4),
+		Triangle(4, 3, 1, 3, 1, -5),
+		Triangle(3, 2, 1, 0, 2, -2)
+	}) {
+	if (h < 1. / sqrt(2))
+		while(longestEdge() > h) refine();
 }
 
 Triangulation::Triangulation(vector<Node> const & nodes, vector<Triangle> const & triangles,
@@ -367,6 +394,11 @@ vector<double> Triangulation::longestEdges() {
 		v[i] = max(v[i], length(i, 2));
 	}
 	return v;
+}
+
+double Triangulation::longestEdge() {
+	vector<double> v = longestEdges();
+	return *max_element(v.begin(), v.end());
 }
 
 vector<double> Triangulation::inscribedDiameters() {

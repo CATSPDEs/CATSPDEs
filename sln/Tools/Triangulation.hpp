@@ -7,6 +7,8 @@
 #include "CurvilinearEdge.hpp"
 #include "AdjacencyList.hpp"
 
+double const INFTY = 10e50;
+
 typedef list<size_t> Indicies;
 typedef list<unsigned short> LocalIndicies;
 typedef vector<array<size_t, 2>> Boundary; // we do not save boudary explicitly (since it is available from elements), but we can compute it if necessary
@@ -20,7 +22,6 @@ class Triangulation { // this data structure is known as “Nodes and Triangles”
 	// * determine boundary edges [assembly of Robin BCs]
 	// * refine mesh w/o reconstruction [we call it adaptive FEM and it is neat!] 
 	vector<Node> _nodes; // nodes (i.e. P-matrix),
-	vector<Indicies> _neighbors; // nodes’ neighbors [we need to construct it to assemble our CRS matrix],
 	vector<Triangle> _triangles; // triangles (i.e. T-matrix or connectivity matrix), and
 	vector<Curve> _curves; // curves that make the boundary
 	vector<CurvilinearEdge> _edges;
@@ -32,7 +33,12 @@ class Triangulation { // this data structure is known as “Nodes and Triangles”
 	bool _makeNeighbors(size_t, size_t); // make 2 triangles neighbors
 	ssize_t _neighbor2edge(ssize_t); // mapping between indicies
 public:
-	Triangulation(Node const &, Node const &, double percent = .5); // dummy rect triangulation
+	/* (I) model domains constructors
+	*/
+	// (1) dummy rect triangulation
+	Triangulation(Node const &, Node const &, double percent = .5); 
+	// (2) unit circle triangulation w/ center at origo,
+	Triangulation(double h = INFTY); // @h := longest edge 
 	Triangulation(vector<Node> const &, vector<Triangle> const &, 
 				  vector<Curve> const &, vector<CurvilinearEdge> const &); // manually constructed mesh
 	Triangulation(istream&, istream&); // import triangulation
@@ -42,6 +48,8 @@ public:
 		// compute length of ith edge of tth triangle
 		return (_nodes[_triangles[t].nodes(i + 1)] - _nodes[_triangles[t].nodes(i + 2)]).norm();
 	}
+	/* (II) simple inline methods
+	*/
 	Node getNode(size_t i) const {
 		return _nodes[i];
 	}
@@ -63,20 +71,28 @@ public:
 	}
 	size_t numbOfNodes() const { return _nodes.size(); }
 	size_t numbOfTriangles() const { return _triangles.size(); }
-	AdjacencyList generateAdjList(); // . . . for matrix portrait
+	/* (III) more complex methods (exporting, refining etc.)
+	*/
+	AdjacencyList generateAdjList(); // nodes’ neighbors [we need it to construct portrait of CSlR matrix],
 	double area(size_t); // compute area of ith triangle
 	Triangulation& save(ostream& nodes = cout, ostream& triangles = cout); // save mesh to std out
 	Triangulation& refine(Indicies&); // red-green refinement
 	Triangulation& refine(unsigned numbOfRefinements = 1); // uniform refinement
-	// mesh quality measures
+	/* (IV) mesh quality measures
+	*/
+	// (1) compute vector of longest edges of all triangles
 	vector<double> longestEdges(); // O(n), n := _triangles.size()
-									// compute vector of longest edges of all triangles
+	double longestEdge();
+	// (2) compute vector of diameters of inscribed circles of all triangles
 	vector<double> inscribedDiameters(); // O(n), n := _triangles.size()
-										  // compute vector of diameters of inscribed circles of all triangles
 	vector<double> qualityMeasure(); // O(n)
 	Boundary computeBoundary(); // O(numb of triangles); compute vector of arrays of indicies of _nodes that make the boudary 
-
-	friend Triangulation generateMesh(); // user defined mesh generator
+	/* (VI) user-defined mesh generator
+	*/
+	// useful for creating user-defined complex meshes
+	// write your own generateMesh(), then use copy constructor:
+	//     Triangulation Omega(generateMesh());
+	friend Triangulation generateMesh();
 };
 
 inline localIndex nextIndex(localIndex i) {
