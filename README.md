@@ -1,3 +1,3 @@
-# CATS’ PDEs…
-…stands for Comprehensive Abstract Toolkit for Solving Partial Differential Equations.
+# Welcome!
+Our toolkit’s description is yet to come.
 
