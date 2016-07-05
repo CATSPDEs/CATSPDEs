@@ -1,5 +1,4 @@
 #pragma once
-#include "unitSquare.hpp" // our mesh
 
 // model
 
@@ -52,10 +51,6 @@ inline double G2_N(Node& p, double t) {
 }
 
 // (3) Robin boundary
-inline bool G3(Node& p) {
-	if (p.x() == 0.) return true;
-	return false;
-}
 inline double G3_R(Node& p, double t) {
 	return 1.;
 }

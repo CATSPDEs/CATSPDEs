@@ -2,7 +2,7 @@
 #include <string>
 #include "FEM_t.hpp"
 
-// input R × R × T —> R functions for IBCs
+// input R × R × T —> R functions for PDE and IBCs
 #include "sineWave.hpp"
 //#include "simple.hpp"
 
@@ -19,17 +19,18 @@ int main() {
 		cout << "method (CN3, BDF3): ";
 		cin >> method;
 	}
+	string path("Mathematica/Model Problem Analysis/tests/"), currentPath;
 	try {
+		Triangulation Omega(Node(0., 0.), Node(1., 1.)); // simple square mesh
 		HyperbolicPDE PDE(chi, sigma, a, f);
 		InitialConditions ICs(initialPosition, initialVelocity);
-		// BCs
-		DirichletBC_t Dirichlet(G1_D, G1);
-		NeumannBC_t Neumann(G2_N, G2);
-		RobinBC_t Robin(G3_R, G3_N, G3);
-		BoundaryConditions_t BCs({ &Dirichlet, &Neumann, &Robin });
+		BoundaryConditions_t BCs({
+			make_shared<DirichletBC_t>(G1_D, G1),
+			make_shared<NeumannBC_t>(G2_N, G2),
+			make_shared<RobinBC_t>(G3_R, G3_N)
+		});
 		TimeFrames time(0., 1., 1); // 0.___.5___.1 — initially we have 3 time frames ([0., 1.] refined once)
 		vector<vector<double>> soln;
-		string path("Mathematica/Model Problem Analysis/tests/"), currentPath;
 		for (unsigned i = 0; i < numbOfTests; ++i) {
 			// (1) solve
 			soln = method == "CN3" ? FEM_t::CN3 (PDE, time, Omega, ICs, BCs, u) 
@@ -48,14 +49,10 @@ int main() {
 			oXi << soln;
 			Omega.save(ofstream(currentPath + "nodes.dat"), ofstream(currentPath + "triangles.dat"));
 			// save model soln
-			vector<vector<double>> uVec(soln.size(), soln[0]);
-			for (size_t m = 0; m < time.size(); ++m)
-				for (size_t j = 0; j < Omega.numbOfNodes(); ++j)
-					uVec[m][j] = u(Omega.getNode(j), time[m]);
-			oU << uVec;
+			oU << FEM_t::constructVector(u, time, Omega);
 			// save meshes parameters
 			vector<double> edges = Omega.longestEdges();
-			oH << *max_element(edges.begin(), edges.end());
+			oH << Omega.longestEdge();
 			oT << time[1] - time[0]; // const delta t
 			// for analysis
 			Boundary bndry = Omega.computeBoundary();

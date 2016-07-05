@@ -10,10 +10,10 @@
 NotebookFileLineBreakTest
 NotebookFileLineBreakTest
 NotebookDataPosition[       158,          7]
-NotebookDataLength[     59190,       1835]
-NotebookOptionsPosition[     57722,       1781]
-NotebookOutlinePosition[     58069,       1796]
-CellTagsIndexPosition[     58026,       1793]
+NotebookDataLength[     60738,       1859]
+NotebookOptionsPosition[     59269,       1805]
+NotebookOutlinePosition[     59615,       1820]
+CellTagsIndexPosition[     59572,       1817]
 WindowFrame->Normal*)
 
 (* Beginning of Notebook Content *)
@@ -29,14 +29,17 @@ Cell[BoxData[
   "\[IndentingNewLine]", 
   RowBox[{
    RowBox[{"SetDirectory", "[", 
-    RowBox[{"NotebookDirectory", "[", "]"}], "]"}], ";"}]}]], "Input",
+    RowBox[{
+     RowBox[{"NotebookDirectory", "[", "]"}], "<>", "\"\<tests/\>\""}], "]"}],
+    ";"}]}]], "Input",
  CellChangeTimes->{{3.6736128708451166`*^9, 3.6736128719532504`*^9}, {
   3.673701871360532*^9, 3.673701935113879*^9}, {3.6737043134219275`*^9, 
   3.6737043135767374`*^9}, {3.67383003460979*^9, 3.673830034959489*^9}, {
   3.6738300829054785`*^9, 3.673830088014452*^9}, {3.674375239413291*^9, 
   3.6743752395334845`*^9}, {3.674375597940053*^9, 3.674375598108341*^9}, {
   3.6753258754669075`*^9, 3.675325902045867*^9}, {3.6753260295441666`*^9, 
-  3.6753260357873073`*^9}, {3.6753347914869194`*^9, 3.6753347918140297`*^9}}],
+  3.6753260357873073`*^9}, {3.6753347914869194`*^9, 3.6753347918140297`*^9}, {
+  3.6766980772374315`*^9, 3.676698082217712*^9}}],
 
 Cell[CellGroupData[{
 
@@ -51,7 +54,7 @@ Cell[BoxData[
  RowBox[{"numbOfRows", "=", 
   RowBox[{
    RowBox[{"Import", "[", 
-    RowBox[{"\"\<tests/numbOfRows.dat\>\"", ",", "\"\<List\>\""}], "]"}], "[", 
+    RowBox[{"\"\<numbOfRows.dat\>\"", ",", "\"\<List\>\""}], "]"}], "[", 
    RowBox[{"[", "1", "]"}], "]"}]}]], "Input",
  CellChangeTimes->{{3.675934984094626*^9, 3.675935032779317*^9}, {
    3.675936637751587*^9, 3.675936637841472*^9}, {3.6759368521813965`*^9, 
@@ -66,7 +69,7 @@ Cell[BoxData[
    3.6759477778277392`*^9}, {3.67595210293301*^9, 3.675952103108695*^9}, {
    3.676012883398685*^9, 3.6760128835609922`*^9}, {3.6761907344154205`*^9, 
    3.676190771893788*^9}, 3.676193184792421*^9, {3.6761992543005486`*^9, 
-   3.6761992568657403`*^9}}],
+   3.6761992568657403`*^9}, 3.6766980877388444`*^9}],
 
 Cell[BoxData["5"], "Output",
  CellChangeTimes->{
@@ -76,7 +79,9 @@ Cell[BoxData["5"], "Output",
    3.6761992810518885`*^9, 3.6761992957507105`*^9}, 3.6761993537270813`*^9, 
    3.6764622253710647`*^9, 3.676466362482613*^9, 3.676467069570472*^9, 
    3.6764673599846835`*^9, 3.67646789933619*^9, 3.676467953870263*^9, 
-   3.676468967327438*^9, 3.676470418324995*^9}]
+   3.676468967327438*^9, 3.676470418324995*^9, 3.6766978553029037`*^9, 
+   3.6766981092404704`*^9, 3.6766984034922504`*^9, 3.6766985016382346`*^9, 
+   3.676702701409668*^9, 3.6767027716517825`*^9, 3.6767036639782495`*^9}]
 }, Open  ]],
 
 Cell[BoxData[{
@@ -84,7 +89,7 @@ Cell[BoxData[{
   RowBox[{
    RowBox[{
     RowBox[{"path", "=", 
-     RowBox[{"\"\<tests/\>\"", "<>", 
+     RowBox[{
       RowBox[{"ToString", "@", "i"}], "<>", "\"\</\>\""}]}], ";", 
     "\[IndentingNewLine]", 
     RowBox[{
@@ -179,15 +184,22 @@ Cell[BoxData[{
  RowBox[{
   RowBox[{
    OverscriptBox["k", "1"], "=", "\"\<\>\""}], ";"}]}], "Input",
- CellChangeTimes->CompressedData["
-1:eJxTTMoPSmViYGAQB2IQbXTsqdzx5NeO9XOKtEH0BQ53cxAdyv02AERrL1IO
-BdFcf1fHgWi7nz/ugGhft/r7ILo0pfM5iF7nz/0CRAdM+fkZRJ/Yy/YFRJ9t
-F/oBossXvmE8AZKfvYIfRD9pNRIG0WVJfyVBdOY7H2kQrbzGVx5Ec3X3qIFo
-r0PN2iC6STHUGES/U3Z3AdHb9KU9QPTNyuX+IDrvc2wgiD6y4XI9iPZ7494B
-oq/9id8Koo/9mQ2mkzZM3nMKSPflOu4H0blW6WdA9CyfmKcgOmyfyRsQ/VW6
-G0z7Ctt9AtFblr34DKKlGmf8ANENzFOYTwPprGpJDhCtV/yMD0Rf0r2uA6In
-/d6hD6LPaZ4R8Et57Zi2/Z4giAYAP3rH4g==
-  "]],
+ CellChangeTimes->{{3.676190967180444*^9, 3.6761910675816035`*^9}, {
+   3.6761911622198257`*^9, 3.6761913674076333`*^9}, {3.676191401113546*^9, 
+   3.6761914773746386`*^9}, {3.676192487780425*^9, 3.6761925079773316`*^9}, {
+   3.676192572293513*^9, 3.6761925763534765`*^9}, {3.6761926717993546`*^9, 
+   3.6761926722106667`*^9}, {3.6761927045790772`*^9, 3.67619278339471*^9}, {
+   3.676192893268959*^9, 3.676192921578844*^9}, {3.676192975918269*^9, 
+   3.676192986404103*^9}, {3.676193018427263*^9, 3.6761930763919725`*^9}, {
+   3.676193116117467*^9, 3.6761931786603403`*^9}, {3.676193314223136*^9, 
+   3.676193344849574*^9}, {3.676193405233624*^9, 3.6761934189359655`*^9}, {
+   3.676193790615328*^9, 3.676193858247596*^9}, {3.676194218999614*^9, 
+   3.676194220874606*^9}, {3.676198372615281*^9, 3.6761983940446234`*^9}, {
+   3.676198499225882*^9, 3.676198698884351*^9}, {3.6761987536482344`*^9, 
+   3.6761987563471627`*^9}, {3.676198801939856*^9, 3.6761988152703495`*^9}, {
+   3.6761988527657595`*^9, 3.6761989406254272`*^9}, {3.676198976796315*^9, 
+   3.67619903120156*^9}, {3.6761992707243433`*^9, 3.6761992937807093`*^9}, {
+   3.676467334380103*^9, 3.6764673429598875`*^9}, 3.6766980995736895`*^9}],
 
 Cell[CellGroupData[{
 
@@ -282,12 +294,10 @@ h\\)], SubscriptBox[\\(\[Delta]\\), \\(h\\)]]\\)\"\>",
       StripOnInput->False,
       FontSize->Larger,
       FontWeight->Bold]},
-    {"16", 
+    {"4", 
      TagBox[
-      InterpretationBox[
-       RowBox[{"\<\"4.71\"\>", "\[Times]", 
-        SuperscriptBox["10", "\<\"-1\"\>"]}],
-       0.471405,
+      InterpretationBox["\<\"1.41\"\>",
+       1.41421,
        AutoDelete->True],
       ScientificForm[#, 3]& ], 
      TagBox[
@@ -298,23 +308,27 @@ h\\)], SubscriptBox[\\(\[Delta]\\), \\(h\\)]]\\)\"\>",
        AutoDelete->True],
       ScientificForm[#, 3]& ], 
      TagBox[
-      InterpretationBox["\<\"6.37\"\>",
-       6.366957404589434,
+      InterpretationBox[
+       RowBox[{"\<\"7.2\"\>", "\[Times]", 
+        SuperscriptBox["10", "\<\"-16\"\>"]}],
+       7.195067539997724*^-16,
        AutoDelete->True],
       ScientificForm[#, 3]& ], 
      TagBox[
-      InterpretationBox["\<\"2.25\"\>",
-       2.2470145057299886`,
+      InterpretationBox[
+       RowBox[{"\<\"5.01\"\>", "\[Times]", 
+        SuperscriptBox["10", "\<\"-16\"\>"]}],
+       5.006153838646489*^-16,
        AutoDelete->True],
       ScientificForm[#, 3]& ], 
      TagBox["\<\"\"\>",
       NumberForm[#, 3]& ]},
-    {"49", 
+    {"9", 
      TagBox[
       InterpretationBox[
-       RowBox[{"\<\"2.36\"\>", "\[Times]", 
+       RowBox[{"\<\"7.07\"\>", "\[Times]", 
         SuperscriptBox["10", "\<\"-1\"\>"]}],
-       0.235702,
+       0.707107,
        AutoDelete->True],
       ScientificForm[#, 3]& ], 
      TagBox[
@@ -325,26 +339,32 @@ h\\)], SubscriptBox[\\(\[Delta]\\), \\(h\\)]]\\)\"\>",
        AutoDelete->True],
       ScientificForm[#, 3]& ], 
      TagBox[
-      InterpretationBox["\<\"6.66\"\>",
-       6.657519087700136,
+      InterpretationBox[
+       RowBox[{"\<\"7.1\"\>", "\[Times]", 
+        SuperscriptBox["10", "\<\"-1\"\>"]}],
+       0.7102117262602876,
        AutoDelete->True],
       ScientificForm[#, 3]& ], 
-     TagBox[
-      InterpretationBox["\<\"1.34\"\>",
-       1.3430931644287896`,
-       AutoDelete->True],
-      ScientificForm[#, 3]& ], 
-     TagBox[
-      InterpretationBox["\<\"1.67\"\>",
-       1.6730146241832986`,
-       AutoDelete->True],
-      NumberForm[#, 3]& ]},
-    {"169", 
      TagBox[
       InterpretationBox[
-       RowBox[{"\<\"1.18\"\>", "\[Times]", 
+       RowBox[{"\<\"3.18\"\>", "\[Times]", 
         SuperscriptBox["10", "\<\"-1\"\>"]}],
-       0.117851,
+       0.31757734508337904`,
+       AutoDelete->True],
+      ScientificForm[#, 3]& ], 
+     TagBox[
+      InterpretationBox[
+       RowBox[{"\<\"1.58\"\>", "\[Times]", 
+        SuperscriptBox["10", "\<\"-15\"\>"]}],
+       1.5763573555072505`*^-15,
+       AutoDelete->True],
+      NumberForm[#, 3]& ]},
+    {"25", 
+     TagBox[
+      InterpretationBox[
+       RowBox[{"\<\"3.54\"\>", "\[Times]", 
+        SuperscriptBox["10", "\<\"-1\"\>"]}],
+       0.353553,
        AutoDelete->True],
       ScientificForm[#, 3]& ], 
      TagBox[
@@ -355,28 +375,28 @@ h\\)], SubscriptBox[\\(\[Delta]\\), \\(h\\)]]\\)\"\>",
        AutoDelete->True],
       ScientificForm[#, 3]& ], 
      TagBox[
-      InterpretationBox["\<\"3.79\"\>",
-       3.792045487506896,
+      InterpretationBox["\<\"1.13\"\>",
+       1.1289601555388893`,
        AutoDelete->True],
       ScientificForm[#, 3]& ], 
      TagBox[
       InterpretationBox[
-       RowBox[{"\<\"4.11\"\>", "\[Times]", 
+       RowBox[{"\<\"3.19\"\>", "\[Times]", 
         SuperscriptBox["10", "\<\"-1\"\>"]}],
-       0.4107654737647503,
+       0.3193149669416843,
        AutoDelete->True],
       ScientificForm[#, 3]& ], 
      TagBox[
-      InterpretationBox["\<\"3.27\"\>",
-       3.269732366060525,
+      InterpretationBox["\<\"0.995\"\>",
+       0.9945582824540052,
        AutoDelete->True],
       NumberForm[#, 3]& ]},
-    {"625", 
+    {"81", 
      TagBox[
       InterpretationBox[
-       RowBox[{"\<\"5.89\"\>", "\[Times]", 
-        SuperscriptBox["10", "\<\"-2\"\>"]}],
-       0.0589256,
+       RowBox[{"\<\"1.77\"\>", "\[Times]", 
+        SuperscriptBox["10", "\<\"-1\"\>"]}],
+       0.176777,
        AutoDelete->True],
       ScientificForm[#, 3]& ], 
      TagBox[
@@ -387,28 +407,30 @@ h\\)], SubscriptBox[\\(\[Delta]\\), \\(h\\)]]\\)\"\>",
        AutoDelete->True],
       ScientificForm[#, 3]& ], 
      TagBox[
-      InterpretationBox["\<\"1.97\"\>",
-       1.9689692229944902`,
+      InterpretationBox[
+       RowBox[{"\<\"6.16\"\>", "\[Times]", 
+        SuperscriptBox["10", "\<\"-1\"\>"]}],
+       0.6156251398920267,
        AutoDelete->True],
       ScientificForm[#, 3]& ], 
      TagBox[
       InterpretationBox[
-       RowBox[{"\<\"1.11\"\>", "\[Times]", 
-        SuperscriptBox["10", "\<\"-1\"\>"]}],
-       0.11072995229191372`,
+       RowBox[{"\<\"9.65\"\>", "\[Times]", 
+        SuperscriptBox["10", "\<\"-2\"\>"]}],
+       0.09647092478889047,
        AutoDelete->True],
       ScientificForm[#, 3]& ], 
      TagBox[
-      InterpretationBox["\<\"3.71\"\>",
-       3.709614835576401,
+      InterpretationBox["\<\"3.31\"\>",
+       3.309960670952917,
        AutoDelete->True],
       NumberForm[#, 3]& ]},
-    {"2401", 
+    {"289", 
      TagBox[
       InterpretationBox[
-       RowBox[{"\<\"2.95\"\>", "\[Times]", 
+       RowBox[{"\<\"8.84\"\>", "\[Times]", 
         SuperscriptBox["10", "\<\"-2\"\>"]}],
-       0.0294628,
+       0.0883883,
        AutoDelete->True],
       ScientificForm[#, 3]& ], 
      TagBox[
@@ -420,21 +442,21 @@ h\\)], SubscriptBox[\\(\[Delta]\\), \\(h\\)]]\\)\"\>",
       ScientificForm[#, 3]& ], 
      TagBox[
       InterpretationBox[
-       RowBox[{"\<\"9.98\"\>", "\[Times]", 
+       RowBox[{"\<\"2.98\"\>", "\[Times]", 
         SuperscriptBox["10", "\<\"-1\"\>"]}],
-       0.9981575882032818,
+       0.2976056860855579,
        AutoDelete->True],
       ScientificForm[#, 3]& ], 
      TagBox[
       InterpretationBox[
-       RowBox[{"\<\"2.86\"\>", "\[Times]", 
+       RowBox[{"\<\"2.46\"\>", "\[Times]", 
         SuperscriptBox["10", "\<\"-2\"\>"]}],
-       0.028616825218692483`,
+       0.024632530187503845`,
        AutoDelete->True],
       ScientificForm[#, 3]& ], 
      TagBox[
-      InterpretationBox["\<\"3.87\"\>",
-       3.869400307186593,
+      InterpretationBox["\<\"3.92\"\>",
+       3.916403392365696,
        AutoDelete->True],
       NumberForm[#, 3]& ]}
    },
@@ -455,7 +477,9 @@ h\\)], SubscriptBox[\\(\[Delta]\\), \\(h\\)]]\\)\"\>",
    3.6761992820134354`*^9, 3.6761992965168886`*^9}, 3.676199355422016*^9, 
    3.6764622264292555`*^9, 3.6764663634720707`*^9, 3.676467104033186*^9, 
    3.676467387260964*^9, 3.6764679018708277`*^9, 3.676467955808773*^9, 
-   3.6764689854889092`*^9, 3.676470441589255*^9}]
+   3.6764689854889092`*^9, 3.676470441589255*^9, 3.6766978584258847`*^9, 
+   3.676698110580984*^9, 3.67669842242969*^9, 3.6766985032760963`*^9, 
+   3.676702776330365*^9, 3.67670366859272*^9}]
 }, Open  ]],
 
 Cell[BoxData[""], "Input",
@@ -1779,8 +1803,8 @@ h\\)], SubscriptBox[\\(\[Delta]\\), \\(h\\)]]\\)\"\>",
 }, Open  ]]
 }, Open  ]]
 },
-WindowSize->{1366, 685},
-WindowMargins->{{-8, Automatic}, {Automatic, -8}},
+WindowSize->{1350, 685},
+WindowMargins->{{-8, Automatic}, {Automatic, 0}},
 FrontEndVersion->"10.4 for Microsoft Windows (64-bit) (February 25, 2016)",
 StyleDefinitions->"Default.nb"
 ]
@@ -1796,44 +1820,44 @@ CellTagsIndex->{}
 (*NotebookFileOutline
 Notebook[{
 Cell[558, 20, 142, 2, 31, "Input"],
-Cell[703, 24, 783, 14, 52, "Input"],
+Cell[703, 24, 878, 17, 52, "Input"],
 Cell[CellGroupData[{
-Cell[1511, 42, 135, 3, 144, "Title"],
+Cell[1606, 45, 135, 3, 144, "Title"],
 Cell[CellGroupData[{
-Cell[1671, 49, 1122, 19, 31, "Input"],
-Cell[2796, 70, 540, 8, 31, "Output"]
+Cell[1766, 52, 1140, 19, 31, "Input"],
+Cell[2909, 73, 714, 10, 31, "Output"]
 }, Open  ]],
-Cell[3351, 81, 3912, 108, 468, "Input"],
+Cell[3638, 86, 4644, 115, 468, "Input"],
 Cell[CellGroupData[{
-Cell[7288, 193, 2368, 60, 101, "Input"],
-Cell[9659, 255, 6435, 202, 189, "Output"]
+Cell[8307, 205, 2368, 60, 101, "Input"],
+Cell[10678, 267, 6963, 214, 189, "Output"]
 }, Open  ]],
-Cell[16109, 460, 145, 2, 31, "Input"],
+Cell[17656, 484, 145, 2, 31, "Input"],
 Cell[CellGroupData[{
-Cell[16279, 466, 94, 1, 63, "Section"],
+Cell[17826, 490, 94, 1, 63, "Section"],
 Cell[CellGroupData[{
-Cell[16398, 471, 248, 3, 43, "Subsection"],
+Cell[17945, 495, 248, 3, 43, "Subsection"],
 Cell[CellGroupData[{
-Cell[16671, 478, 117, 1, 34, "Subsubsection"],
-Cell[16791, 481, 6704, 211, 189, "Output"]
+Cell[18218, 502, 117, 1, 34, "Subsubsection"],
+Cell[18338, 505, 6704, 211, 189, "Output"]
 }, Open  ]],
 Cell[CellGroupData[{
-Cell[23532, 697, 116, 1, 34, "Subsubsection"],
-Cell[23651, 700, 6799, 213, 189, "Output"],
-Cell[30453, 915, 6823, 213, 189, "Output"]
+Cell[25079, 721, 116, 1, 34, "Subsubsection"],
+Cell[25198, 724, 6799, 213, 189, "Output"],
+Cell[32000, 939, 6823, 213, 189, "Output"]
 }, Open  ]]
 }, Open  ]],
 Cell[CellGroupData[{
-Cell[37325, 1134, 101, 1, 43, "Subsection"],
-Cell[37429, 1137, 6892, 213, 189, "Output"]
+Cell[38872, 1158, 101, 1, 43, "Subsection"],
+Cell[38976, 1161, 6892, 213, 189, "Output"]
 }, Open  ]],
 Cell[CellGroupData[{
-Cell[44358, 1355, 104, 1, 43, "Subsection"],
-Cell[44465, 1358, 6639, 208, 189, "Output"]
+Cell[45905, 1379, 104, 1, 43, "Subsection"],
+Cell[46012, 1382, 6639, 208, 189, "Output"]
 }, Open  ]],
 Cell[CellGroupData[{
-Cell[51141, 1571, 103, 1, 43, "Subsection"],
-Cell[51247, 1574, 6435, 202, 189, "Output"]
+Cell[52688, 1595, 103, 1, 43, "Subsection"],
+Cell[52794, 1598, 6435, 202, 189, "Output"]
 }, Open  ]]
 }, Open  ]]
 }, Open  ]]

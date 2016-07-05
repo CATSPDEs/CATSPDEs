@@ -344,3 +344,11 @@ array<double, 2> FEM_t::computeLocalRobinVector(BoundaryConditions_t const & BCs
 		BCs.DirichletCondition(nodes[1], t) * (BCs.RobinCoefficient(nodes[0], t) + 3. * BCs.RobinCoefficient(nodes[1], t))
 	}) *= length / 12.;
 }
+
+vector<vector<double>> FEM_t::constructVector(Function_t u, TimeFrames const & time, Triangulation& Omega) {
+	vector<vector<double>> uVec(time.size(), vector<double>(Omega.numbOfNodes()));
+	for (size_t m = 0; m < time.size(); ++m)
+		for (size_t i = 0; i < Omega.numbOfNodes(); ++i)
+			uVec[m][i] = u(Omega.getNode(i), time[m]);
+	return uVec;
+}
