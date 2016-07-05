@@ -10,10 +10,10 @@
 NotebookFileLineBreakTest
 NotebookFileLineBreakTest
 NotebookDataPosition[       158,          7]
-NotebookDataLength[     24971,        618]
-NotebookOptionsPosition[     23814,        573]
-NotebookOutlinePosition[     24190,        589]
-CellTagsIndexPosition[     24147,        586]
+NotebookDataLength[     25021,        619]
+NotebookOptionsPosition[     23864,        574]
+NotebookOutlinePosition[     24240,        590]
+CellTagsIndexPosition[     24197,        587]
 WindowFrame->Normal*)
 
 (* Beginning of Notebook Content *)
@@ -332,7 +332,7 @@ Cell[BoxData[
    3.676554094135255*^9, {3.6765541556324883`*^9, 3.6765541799727335`*^9}, 
    3.676554228019273*^9, {3.6765543148921585`*^9, 3.676554321428203*^9}, 
    3.6765576054579096`*^9, 3.6765612733522987`*^9, {3.6765615289693837`*^9, 
-   3.6765615558675385`*^9}}]
+   3.6765615558675385`*^9}, 3.676704811410716*^9}]
 }, Open  ]],
 
 Cell[BoxData[{
@@ -565,7 +565,8 @@ w36GyfxTBYRf2B+ylg5uef7S/iCUBgAuEwOG
    "Graphics", FrontEnd`GraphicsHighlightColor -> 
     Hue[0.1, 1, 0.7]}]], "Output",
  CellChangeTimes->{{3.676557577885879*^9, 3.676557605713418*^9}, 
-   3.676561273629945*^9, {3.6765615292453327`*^9, 3.6765615561702995`*^9}}]
+   3.676561273629945*^9, {3.6765615292453327`*^9, 3.6765615561702995`*^9}, 
+   3.6767048123954067`*^9}]
 }, Open  ]]
 }, Open  ]]
 }, Open  ]]
@@ -610,12 +611,12 @@ Cell[6431, 196, 109, 1, 37, "Subsubsection"],
 Cell[6543, 199, 2869, 63, 113, "Input"],
 Cell[CellGroupData[{
 Cell[9437, 266, 229, 5, 32, "Input"],
-Cell[9669, 273, 3248, 61, 378, "Output"]
+Cell[9669, 273, 3270, 61, 378, "Output"]
 }, Open  ]],
-Cell[12932, 337, 1429, 36, 132, "Input"],
+Cell[12954, 337, 1429, 36, 132, "Input"],
 Cell[CellGroupData[{
-Cell[14386, 377, 827, 15, 53, "Input"],
-Cell[15216, 394, 8546, 173, 386, "Output"]
+Cell[14408, 377, 827, 15, 53, "Input"],
+Cell[15238, 394, 8574, 174, 386, "Output"]
 }, Open  ]]
 }, Open  ]]
 }, Open  ]]

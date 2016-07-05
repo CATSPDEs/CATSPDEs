@@ -128,6 +128,10 @@ Triangulation::Triangulation(istream& nodes, istream& triangles) {
 	triangles >> n; // numb of triangles
 	_triangles.resize(n);
 	triangles >> _triangles;
+	// fix neighbors
+	for (size_t i = 0; i < _triangles.size(); ++i)
+		for (size_t j = i + 1; j < _triangles.size(); ++j)
+			_makeNeighbors(i, j);
 }
 
 // private methods

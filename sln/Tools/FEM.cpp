@@ -180,3 +180,10 @@ vector<double> FEM::constructVector(Function u, Triangulation& Omega) {
 		uVec[i] = u(Omega.getNode(i));
 	return uVec;
 }
+
+vector<size_t> FEM::computeBoundaryNodes(Triangulation& Omega, Boundary& bndry, Predicate validAt) {
+	vector<size_t> res;
+	for (auto const & edge : bndry) 
+		if (validAt(Omega.getNode(edge[0]))) res.push_back(edge[0]);
+	return res;
+}

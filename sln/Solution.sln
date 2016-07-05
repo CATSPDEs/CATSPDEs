@@ -15,6 +15,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "FEM for Hyperbolic PDE", "F
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Wave Interference", "Wave Interference\Wave Interference.vcxproj", "{A9ED0084-F411-4D79-857D-E62DB8455E1B}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "CATSPDEs Kitty Logo Problem", "CATSPDEs Kitty Logo Problem\CATSPDEs Kitty Logo Problem.vcxproj", "{AD10CA30-BC62-4E9F-8C2D-9FE863E99FD2}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -71,6 +73,14 @@ Global
 		{A9ED0084-F411-4D79-857D-E62DB8455E1B}.Release|x64.Build.0 = Release|x64
 		{A9ED0084-F411-4D79-857D-E62DB8455E1B}.Release|x86.ActiveCfg = Release|Win32
 		{A9ED0084-F411-4D79-857D-E62DB8455E1B}.Release|x86.Build.0 = Release|Win32
+		{AD10CA30-BC62-4E9F-8C2D-9FE863E99FD2}.Debug|x64.ActiveCfg = Debug|x64
+		{AD10CA30-BC62-4E9F-8C2D-9FE863E99FD2}.Debug|x64.Build.0 = Debug|x64
+		{AD10CA30-BC62-4E9F-8C2D-9FE863E99FD2}.Debug|x86.ActiveCfg = Debug|Win32
+		{AD10CA30-BC62-4E9F-8C2D-9FE863E99FD2}.Debug|x86.Build.0 = Debug|Win32
+		{AD10CA30-BC62-4E9F-8C2D-9FE863E99FD2}.Release|x64.ActiveCfg = Release|x64
+		{AD10CA30-BC62-4E9F-8C2D-9FE863E99FD2}.Release|x64.Build.0 = Release|x64
+		{AD10CA30-BC62-4E9F-8C2D-9FE863E99FD2}.Release|x86.ActiveCfg = Release|Win32
+		{AD10CA30-BC62-4E9F-8C2D-9FE863E99FD2}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

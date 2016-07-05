@@ -38,7 +38,7 @@
 namespace FEM {
 	// classic finite element method
 	vector<double> computeDiscreteSolution(DiffusionReactionEqn const &, Triangulation&, BoundaryConditions&);
-	// helpers
+	// local matrices and vectors
 	SymmetricContainer<double> computeLocalMassMatrix     (Function, array<Node, 3>&, double);
 	SymmetricContainer<double> computeLocalStiffnessMatrix(Function, array<Node, 3>&, array<Node, 3>&, double);
 	array<double, 3>           computeLocalLoadVector     (Function, array<Node, 3>&, array<Node, 3>&, double);
@@ -46,4 +46,6 @@ namespace FEM {
 	array<double, 2>           computeLocalRobinVector    (BoundaryConditions const &, array<Node, 2>&, double);
 	// make vector of model soln
 	vector<double> constructVector(Function, Triangulation&);
+	// save boundary nodes
+	vector<size_t> computeBoundaryNodes(Triangulation&, Boundary&, Predicate);
 }
