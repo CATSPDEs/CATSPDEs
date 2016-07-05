@@ -56,11 +56,9 @@ int main() {
 			oT << time[1] - time[0]; // const delta t
 			// for analysis
 			Boundary bndry = Omega.computeBoundary();
-			for (size_t j = 0; j < bndry.size(); ++j) {
-				if (G1(Omega.getNode(bndry[j][0]))) oDirichletNodes << bndry[j][0] << '\n';
-				else if (G2(Omega.getNode(bndry[j][0]))) oNeumannNodes << bndry[j][0] << '\n';
-				else oRobinNodes << bndry[j][0] << '\n';
-			}
+			oDirichletNodes << FEM_t::computeBoundaryNodes(Omega, bndry, G1);
+			oNeumannNodes   << FEM_t::computeBoundaryNodes(Omega, bndry, G2);
+			oRobinNodes     << FEM_t::computeBoundaryNodes(Omega, bndry, G3);
 			// refine
 			Omega.refine(spaceRefCount);
 			time.refine(timeRefCount);

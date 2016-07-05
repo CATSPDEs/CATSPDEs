@@ -27,4 +27,6 @@ namespace FEM_t {
 	array<double, 2>           computeLocalRobinVector    (BoundaryConditions_t const &, double, array<Node, 2>&, double length);
 	// make vector of model soln
 	vector<vector<double>> constructVector(Function_t, TimeFrames const &, Triangulation&);
+	// save boundary nodes
+	vector<size_t> computeBoundaryNodes(Triangulation&, Boundary&, Predicate);
 }

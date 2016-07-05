@@ -351,3 +351,10 @@ vector<vector<double>> FEM_t::constructVector(Function_t u, TimeFrames const & t
 			uVec[m][i] = u(Omega.getNode(i), time[m]);
 	return uVec;
 }
+
+vector<size_t> FEM_t::computeBoundaryNodes(Triangulation& Omega, Boundary& bndry, Predicate validAt) {
+	vector<size_t> res;
+	for (auto const & edge : bndry)
+		if (validAt(Omega.getNode(edge[0]))) res.push_back(edge[0]);
+	return res;
+}
