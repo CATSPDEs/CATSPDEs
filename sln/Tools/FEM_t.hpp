@@ -15,10 +15,10 @@
 namespace FEM_t {
 	// Crank–Nicolson scheme, 3 time frames
 	vector<vector<double>> CN3(HyperbolicPDE const &, TimeFrames const &, Triangulation&, InitialConditions const &, BoundaryConditions_t&, 
-		                       Function_t u = emptyFunc_t); // exact soln (if we are dealing w / model problem)
+	                           Function_t u = emptyFunc_t); // exact soln (if we are dealing w / model problem)
 	// Backward difference formula, 3 time frames
 	vector<vector<double>> BDF3(HyperbolicPDE const &, TimeFrames const &, Triangulation&, InitialConditions const &, BoundaryConditions_t&, 
-		                        Function_t u = emptyFunc_t);
+	                            Function_t u = emptyFunc_t);
 	// helpers
 	SymmetricContainer<double> computeLocalMassMatrix     (Function, array<Node, 3>&, double);
 	SymmetricContainer<double> computeLocalStiffnessMatrix(Function, array<Node, 3>&, array<Node, 3>&, double);

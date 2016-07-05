@@ -4,12 +4,11 @@
 #include "array.hpp" // utility for array operations
 
 vector<vector<double>> FEM_t::CN3(HyperbolicPDE const & PDE,
-	                             TimeFrames const & t,
-	                             Triangulation& Omega,
-	                             InitialConditions const & ICs,
-	                             BoundaryConditions_t& BCs,
-	                             Function_t u) {
-	if (t[0] < 0.) throw invalid_argument("t0 < 0 — time cannot take negative values!");
+                                  TimeFrames const & t,
+                                  Triangulation& Omega,
+                                  InitialConditions const & ICs,
+                                  BoundaryConditions_t& BCs,
+                                  Function_t u) {
 	if (t.size() < 2) throw invalid_argument("CN3() needs at least 2 time frames to compute soln");
 	// data structures for final linear system A.xi[m] = b:
 	SymmetricCSlRMatrix A(Omega.generateAdjList()); // build final matrix portrait
@@ -136,11 +135,11 @@ vector<vector<double>> FEM_t::CN3(HyperbolicPDE const & PDE,
 }
 
 vector<vector<double>> FEM_t::BDF3(HyperbolicPDE const & PDE,
-	                             TimeFrames const & t,
-	                             Triangulation& Omega,
-	                             InitialConditions const & ICs,
-	                             BoundaryConditions_t& BCs,
-	                             Function_t u) {
+                                   TimeFrames const & t,
+                                   Triangulation& Omega,
+                                   InitialConditions const & ICs,
+                                   BoundaryConditions_t& BCs,
+                                   Function_t u) {
 	if (t.size() < 2) throw invalid_argument("BDF3() needs at least 2 time frames to compute soln");
 	// data structures for final linear system A.xi[m] = b:
 	SymmetricCSlRMatrix A(Omega.generateAdjList()); // build final matrix portrait
@@ -148,12 +147,12 @@ vector<vector<double>> FEM_t::BDF3(HyperbolicPDE const & PDE,
 	vector<vector<double>> xi(t.size(), b); // discrete solution—xi[m][i] is our solution at time = t[m] and at node_i
 	// data structures for assemby of A and b:
 	SymmetricContainer<double> localMassMatrixChi(3), localMassMatrixSigma(3), // for hat functions on triangles 
-		                       localStiffnessMatrix(3), // we have 3 × 3 element matricies
-		                       localRobinMatrix(2); // and 2 × 2 element matricies for Robin BCs (just like element matrix in 1D)
+	                           localStiffnessMatrix(3), // we have 3 × 3 element matricies
+	                           localRobinMatrix(2); // and 2 × 2 element matricies for Robin BCs (just like element matrix in 1D)
 	array<double, 3> localLoadVector; // and their
 	array<double, 2> localRobinVector; // friends, element vectors
 	array<Node, 3> elementNodes, // nodes of the current triangle
-		           elementMiddleNodes; // and nodes on the middle of edges
+	               elementMiddleNodes; // and nodes on the middle of edges
 	array<Node, 2> edgeNodes; // nodes spanning an edge of the current triangle that is part of bndry
 	Node midPoint;
 	double measure; // area of ith triangle / length of bndry edge of ith thiangle
@@ -257,8 +256,8 @@ vector<vector<double>> FEM_t::BDF3(HyperbolicPDE const & PDE,
 
 
 SymmetricContainer<double> FEM_t::computeLocalMassMatrix(Function reactionTerm,
-                                                        array<Node, 3>& nodes,
-                                                        double area) {
+                                                         array<Node, 3>& nodes,
+                                                         double area) {
 	SymmetricContainer<double> m(3);
 	m(0, 0) = area * (6. * reactionTerm(nodes[0]) + 2. * reactionTerm(nodes[1]) + 2. * reactionTerm(nodes[2])) / 60.;
 	m(0, 1) = area * (2. * reactionTerm(nodes[0]) + 2. * reactionTerm(nodes[1]) + reactionTerm(nodes[2])) / 60.;
@@ -270,9 +269,9 @@ SymmetricContainer<double> FEM_t::computeLocalMassMatrix(Function reactionTerm,
 }
 
 SymmetricContainer<double> FEM_t::computeLocalStiffnessMatrix(Function diffusionTerm,
-                                                             array<Node, 3>& nodes,
-                                                             array<Node, 3>& middleNodes,
-                                                             double area) {
+                                                              array<Node, 3>& nodes,
+                                                              array<Node, 3>& middleNodes,
+                                                              double area) {
 	SymmetricContainer<double> s(3);
 	s(0, 0) = (nodes[1].x() - nodes[2].x()) * (nodes[1].x() - nodes[2].x()) +
 		(nodes[1].y() - nodes[2].y()) * (nodes[1].y() - nodes[2].y());
@@ -303,10 +302,10 @@ SymmetricContainer<double> FEM_t::computeLocalStiffnessMatrix(Function diffusion
 }
 
 array<double, 3> FEM_t::computeLocalLoadVector(Function_t forceTerm,
-                                              double t,
-                                              array<Node, 3>& nodes,
-                                              array<Node, 3>& middleNodes,
-                                              double area) {
+                                               double t,
+                                               array<Node, 3>& nodes,
+                                               array<Node, 3>& middleNodes,
+                                               double area) {
 	array<double, 3> f;
 	return (f = {
 		2. * forceTerm(nodes[0], t) - forceTerm(nodes[1], t) - forceTerm(nodes[2], t) +
@@ -320,9 +319,9 @@ array<double, 3> FEM_t::computeLocalLoadVector(Function_t forceTerm,
 
 
 SymmetricContainer<double> FEM_t::computeLocalRobinMatrix(BoundaryConditions_t const & BCs,
-                                                         double t,
-                                                         array<Node, 2>& nodes,
-	                                                     double length) {
+                                                          double t,
+                                                          array<Node, 2>& nodes,
+                                                          double length) {
 	SymmetricContainer<double> r(2);
 	r(0, 0) = length * (3. * BCs.RobinCoefficient(nodes[0], t) + BCs.RobinCoefficient(nodes[1], t)) / 12.;
 	r(0, 1) = length * (BCs.RobinCoefficient(nodes[0], t) + BCs.RobinCoefficient(nodes[1], t)) / 12.;
@@ -331,9 +330,9 @@ SymmetricContainer<double> FEM_t::computeLocalRobinMatrix(BoundaryConditions_t c
 }
 
 array<double, 2> FEM_t::computeLocalRobinVector(BoundaryConditions_t const & BCs,
-                                               double t,
-                                               array<Node, 2>& nodes,
-                                               double length) {
+                                                double t,
+                                                array<Node, 2>& nodes,
+                                                double length) {
 	array<double, 2> r;
 	return (r = {
 		4. * BCs.NeumannValue(nodes[0], t) + 2. * BCs.NeumannValue(nodes[1], t) +

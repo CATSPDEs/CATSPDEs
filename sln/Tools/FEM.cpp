@@ -4,7 +4,7 @@
 #include "array.hpp" // utility for array operations
 
 vector<double> FEM::computeDiscreteSolution(DiffusionReactionEqn const & PDE, 
-	                                        Triangulation& Omega,
+                                            Triangulation& Omega,
                                             BoundaryConditions& BCs) {
 	// data structures for final linear system A.xi = b:
 	SymmetricCSlRMatrix A(Omega.generateAdjList()); // build final matrix portrait
@@ -17,7 +17,7 @@ vector<double> FEM::computeDiscreteSolution(DiffusionReactionEqn const & PDE,
 	array<double, 3> localLoadVector; // and their
 	array<double, 2> localRobinVector; // friends, element vectors
 	array<Node, 3> elementNodes, // nodes of the current triangle
-				   elementMiddleNodes; // and nodes on the middle of edges
+	               elementMiddleNodes; // and nodes on the middle of edges
 	array<Node, 2> edgeNodes; // nodes spanning an edge of the current triangle that is part of bndry
 	Node midPoint; // middle point of the edge (to define which BCs to apply)
 	double measure; // area of ith triangle / length of bndry edge of ith thiangle
@@ -80,8 +80,8 @@ vector<double> FEM::computeDiscreteSolution(DiffusionReactionEqn const & PDE,
 }
 
 SymmetricContainer<double> FEM::computeLocalMassMatrix(Function reactionTerm, 
-	                                                   array<Node, 3>& nodes, 
-	                                                   double area) {
+                                                       array<Node, 3>& nodes, 
+                                                       double area) {
 	SymmetricContainer<double> m(3);
 	m(0, 0) = area * (6. * reactionTerm(nodes[0]) + 2. * reactionTerm(nodes[1]) + 2. * reactionTerm(nodes[2])) / 60.;
 	m(0, 1) = area * (2. * reactionTerm(nodes[0]) + 2. * reactionTerm(nodes[1]) + reactionTerm(nodes[2])) / 60.;
@@ -94,7 +94,7 @@ SymmetricContainer<double> FEM::computeLocalMassMatrix(Function reactionTerm,
 
 SymmetricContainer<double> FEM::computeLocalStiffnessMatrix(Function diffusionTerm,
                                                             array<Node, 3>& nodes,
-													        array<Node, 3>& middleNodes,
+                                                            array<Node, 3>& middleNodes,
                                                             double area) {
 	SymmetricContainer<double> s(3);
 	s(0, 0) = (nodes[1].x() - nodes[2].x()) * (nodes[1].x() - nodes[2].x()) +
@@ -128,7 +128,7 @@ SymmetricContainer<double> FEM::computeLocalStiffnessMatrix(Function diffusionTe
 array<double, 3> FEM::computeLocalLoadVector(Function forceTerm,
                                              array<Node, 3>& nodes,
                                              array<Node, 3>& middleNodes,
-	                                         double area) {
+                                             double area) {
 	array<double, 3> f;
 	// …assuming forceTerm(x, y) lives in P_1:
 	/*
@@ -152,7 +152,7 @@ array<double, 3> FEM::computeLocalLoadVector(Function forceTerm,
 
 SymmetricContainer<double> FEM::computeLocalRobinMatrix(BoundaryConditions const & BCs,
                                                         array<Node, 2>& nodes,
-	                                                    double length) {
+                                                        double length) {
 	SymmetricContainer<double> r(2);
 	r(0, 0) = length * ( 3. * BCs.RobinCoefficient(nodes[0]) +      BCs.RobinCoefficient(nodes[1]) ) / 12.;
 	r(0, 1) = length * (      BCs.RobinCoefficient(nodes[0]) +      BCs.RobinCoefficient(nodes[1]) ) / 12.;
@@ -161,8 +161,8 @@ SymmetricContainer<double> FEM::computeLocalRobinMatrix(BoundaryConditions const
 }
 
 array<double, 2> FEM::computeLocalRobinVector(BoundaryConditions const & BCs,
-											  array<Node, 2>& nodes,
-	                                          double length) {
+                                              array<Node, 2>& nodes,
+                                              double length) {
 	array<double, 2> r;
 	return (r = {
 		4. * BCs.NeumannValue(nodes[0]) + 2. * BCs.NeumannValue(nodes[1]) +
