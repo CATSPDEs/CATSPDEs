@@ -2,37 +2,36 @@
 #include <string>
 #include "FEM.hpp"
 
-inline bool G1(Node& p) { // left half of kitty’s face
+inline bool fixedBoundary(Node& p) { // left half of kitty’s face
 	if (p.x() <= 0.) return true;
 	return false;
 }
 
-inline double G1_D(Node& p) {
-	return p.x() * p.x() + p.y() * p.y();
+inline double f(Node& p) {
+	return p.norm();
 }
 
 int main() {
 	ifstream iNodes("Mathematica/Generate Mesh/nodes.dat"),
 	         iTriangles("Mathematica/Generate Mesh/triangles.dat");
-	ofstream oXi("Mathematica/xi.dat"),
-	         oDirichletNodes("Mathematica/DirichletNodes.dat"),
-	         oNodes("Mathematica/nodes.dat"), 
-	         oTriangles("Mathematica/triangles.dat");
+	ofstream oXi("Mathematica/Draw Logo/xi.dat"),
+	         oDirichletNodes("Mathematica/Draw Logo/DirichletNodes.dat"),
+	         oNodes("Mathematica/Draw Logo/nodes.dat"), 
+	         oTriangles("Mathematica/Draw Logo/triangles.dat");
 	try {
 		// import kitty mesh
 		Triangulation Omega(iNodes, iTriangles);
-		Omega.refine();
-		//DiffusionReactionEqn LaplaceEqn;
-		//BoundaryConditions BCs({
-		//	make_shared<DirichletBC>(G1_D, G1),
-		//	make_shared<NeumannBC>() // free bndry on right half of kitty’s face
-		//});
-		//// solve
-		//vector<double> soln = FEM::computeDiscreteSolution(LaplaceEqn, Omega, BCs);
-		//// save the result
-		//oXi << soln;
+		DiffusionReactionEqn PoissonEqn(oneFunc, zeroFunc, f);
+		BoundaryConditions BCs({
+			make_shared<DirichletBC>(oneFunc, fixedBoundary),
+			make_shared<NeumannBC>() // free bndry on right half of kitty’s face
+		});
+		// solve
+		vector<double> soln = FEM::computeDiscreteSolution(PoissonEqn, Omega, BCs);
+		// save the result
+		oXi << soln;
 		Boundary bndry = Omega.computeBoundary();
-		oDirichletNodes << FEM::computeBoundaryNodes(Omega, bndry, G1);
+		oDirichletNodes << FEM::computeBoundaryNodes(Omega, bndry, fixedBoundary);
 		Omega.save(oNodes, oTriangles);
 	}
 	catch (exception const & e) {
