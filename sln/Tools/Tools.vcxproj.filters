@@ -137,6 +137,9 @@
     </ClInclude>
     <ClInclude Include="krylov.hpp">
       <Filter>Solvers</Filter>
+	</ClInclude>
+    <ClInclude Include="CSlRMatrix.hpp">
+      <Filter>Matrices\Implementations</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -172,6 +175,9 @@
     </ClCompile>
     <ClCompile Include="FEM_t.cpp">
       <Filter>Solvers</Filter>
+	</ClCompile>
+    <ClCompile Include="CSlRMatrix.cpp">
+      <Filter>Matrices\Implementations</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

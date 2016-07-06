@@ -121,6 +121,7 @@
     <ClInclude Include="AdjacencyList.hpp" />
     <ClInclude Include="array.hpp" />
     <ClInclude Include="BoundaryConditions_t.hpp" />
+    <ClInclude Include="CSlRMatrix.hpp" />
     <ClInclude Include="Curve.hpp" />
     <ClInclude Include="CurvilinearEdge.hpp" />
     <ClInclude Include="DenseMatrix.hpp" />
@@ -159,6 +160,7 @@
     <ClCompile Include="AbstractMesh.cpp" />
     <ClCompile Include="AbstractNode.cpp" />
     <ClCompile Include="BandMatrix.cpp" />
+    <ClCompile Include="CSlRMatrix.cpp" />
     <ClCompile Include="CSRMatrix.cpp" />
     <ClCompile Include="DenseMatrix.cpp" />
     <ClCompile Include="FEM.cpp" />

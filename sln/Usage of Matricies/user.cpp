@@ -3,18 +3,23 @@
 #include "BandMatrix.hpp"
 #include "DenseMatrix.hpp"
 #include "SymmetricCSlRMatrix.hpp"
+#include "CSlRMatrix.hpp"
 #include "krylov.hpp"
 
 int main() {
 	std::ifstream inA("testCG_A.txt");
 	std::ifstream inb("testCG_b.txt");
-	SymmetricCSlRMatrix A_cslr(4, 3);
+	CSlRMatrix A_cslr(4, 3);
 	A_cslr.loadSparse(inA);
 	A_cslr.save(std::cout);
 	std::vector<double> b_cslr(4);
 	inb >> b_cslr;
 	std::vector<double> x0(4, 0);
-	std::cout << CG(A_cslr, b_cslr, x0, 10e-7);
+	std::vector<double> rb = { 1,1,1,1 };
+	std::cout << A_cslr.multt(rb)  << std::endl;
+	A_cslr.ILU().save();
+	auto pair = ILUBiCGStab(A_cslr, b_cslr, x0, 10e-7);
+	std::cout << pair.second << std::endl << pair.first;
 	std::cout << std::endl << std::endl;
 	std::ifstream inputMatrixCRS("matrix_crs.txt"),
 				  inputMatrixBand("matrix_band.txt");
