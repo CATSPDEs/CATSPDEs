@@ -7,6 +7,14 @@
 #include "krylov.hpp"
 
 int main() {
+	std::ifstream inpA("testILDL.txt");
+	SymmetricCSlRMatrix A_ldl(4, 3);
+	A_ldl.loadSparse(inpA);
+	A_ldl.save();
+	std::ofstream oA("outLDL.txt");
+	std::ofstream oAA("outSLDL.txt");
+//	A_ldl.saveSparse(oA);
+	A_ldl.ILDL().save();
 	std::ifstream inA("testCG_A.txt");
 	std::ifstream inb("testCG_b.txt");
 	CSlRMatrix A_cslr(4, 3);

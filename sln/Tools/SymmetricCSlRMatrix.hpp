@@ -43,6 +43,8 @@ public:
 	SymmetricCSlRMatrix& setZero();
 	std::istream& loadSparse(std::istream&); // look at implementation for istream / ostream structure
 	std::ostream& saveSparse(std::ostream&) const;
+	SymmetricCSlRMatrix ILDL();
+	std::vector<double> forwardSubst(std::vector<double> const &);
 	friend SymmetricCSlRMatrix operator*(SymmetricCSlRMatrix const &, SymmetricCSlRMatrix const &);
 };
 
