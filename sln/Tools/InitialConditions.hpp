@@ -1,6 +1,5 @@
 #pragma once
 #include "Function.hpp"
-#include "Function_t.hpp"
 
 class InitialConditions { // boundary conditions 
 	Function _u0; // initial position

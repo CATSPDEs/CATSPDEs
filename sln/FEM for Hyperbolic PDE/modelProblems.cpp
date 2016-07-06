@@ -59,7 +59,7 @@ int main() {
 			oDirichletNodes << FEM_t::computeBoundaryNodes(Omega, bndry, G1);
 			oNeumannNodes   << FEM_t::computeBoundaryNodes(Omega, bndry, G2);
 			oRobinNodes     << FEM_t::computeBoundaryNodes(Omega, bndry, G3);
-			// refine
+			// (3) refine
 			Omega.refine(spaceRefCount);
 			time.refine(timeRefCount);
 		}	
