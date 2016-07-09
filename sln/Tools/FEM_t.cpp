@@ -28,7 +28,7 @@ vector<vector<double>> FEM_t::CN3(HyperbolicPDE const & PDE,
 	double measure; // area of ith triangle / length of bndry edge of ith thiangle
 	array<size_t, 3> l2g_elem; // local to global mapping of nodes on the element
 	array<size_t, 2> l2g_edge; // and on the edge
-	localIndex j, k, leftNodeIndex, rightNodeIndex; // dummy indicies
+	LocalIndex j, k, leftNodeIndex, rightNodeIndex; // dummy indicies
 	array<array<double, 2>, 3> eta; // time–basis
 	// stencil:
 	// t_(-2)-----t_(-1)---t_0
@@ -89,7 +89,7 @@ vector<vector<double>> FEM_t::CN3(HyperbolicPDE const & PDE,
 			}
 			// (2) quadratures over edges
 			// iterate over list of local indicies of boundary nodes
-			for (localIndex edgeIndex : Omega.getBoundaryIndicies(i)) {
+			for (LocalIndex edgeIndex : Omega.getBoundaryIndicies(i)) {
 				// if edgeIndex = 2, then the edge against second node of ith triangle
 				// is part of the boundary
 				// so we need to assemble BCs here
@@ -158,7 +158,7 @@ vector<vector<double>> FEM_t::BDF3(HyperbolicPDE const & PDE,
 	double measure; // area of ith triangle / length of bndry edge of ith thiangle
 	array<size_t, 3> l2g_elem; // local to global mapping of nodes on the element
 	array<size_t, 2> l2g_edge; // and on the edge
-	localIndex j, k, leftNodeIndex, rightNodeIndex; // dummy indicies
+	LocalIndex j, k, leftNodeIndex, rightNodeIndex; // dummy indicies
 	array<array<double, 2>, 3> eta; // time–basis
 	// stencil:
 	// t_(-2)-----t_(-1)---t_0
@@ -217,7 +217,7 @@ vector<vector<double>> FEM_t::BDF3(HyperbolicPDE const & PDE,
 			}
 			// (2) quadratures over edges
 			// iterate over list of local indicies of boundary nodes
-			for (localIndex edgeIndex : Omega.getBoundaryIndicies(i)) {
+			for (LocalIndex edgeIndex : Omega.getBoundaryIndicies(i)) {
 				// if edgeIndex = 2, then the edge against second node of ith triangle
 				// is part of the boundary
 				// so we need to assemble BCs here
@@ -285,8 +285,8 @@ SymmetricContainer<double> FEM_t::computeLocalStiffnessMatrix(Function diffusion
 		(nodes[1].y() - nodes[0].y()) * (nodes[0].y() - nodes[2].y());
 	s(2, 2) = (nodes[0].x() - nodes[1].x()) * (nodes[0].x() - nodes[1].x()) +
 		(nodes[0].y() - nodes[1].y()) * (nodes[0].y() - nodes[1].y());
-	for (localIndex i = 0; i < 3; ++i)
-		for (localIndex j = i; j < 3; ++j)
+	for (LocalIndex i = 0; i < 3; ++i)
+		for (LocalIndex j = i; j < 3; ++j)
 			// quadratures calculated assuming diffusionTerm(x, y) 
 			// ( where (x, y) is a point from triangle spanned by nodes array )  
 			// lives in P_1, 

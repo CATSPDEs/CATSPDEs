@@ -9,6 +9,8 @@ class Node {
 	double _y;
 public:
 	explicit Node(double x = 0., double y = 0.) : _x(x), _y(y) {}
+	double x() const { return _x; }
+	double y() const { return _y; }
 	double& x() { return _x; }
 	double& y() { return _y; }
 	Node& operator+=(Node const & p) {

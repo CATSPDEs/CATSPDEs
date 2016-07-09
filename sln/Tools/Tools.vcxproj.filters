@@ -66,9 +66,6 @@
     <ClInclude Include="Triangle.hpp">
       <Filter>Meshes\Triangulation</Filter>
     </ClInclude>
-    <ClInclude Include="Triangulation.hpp">
-      <Filter>Meshes\Triangulation</Filter>
-    </ClInclude>
     <ClInclude Include="CurvilinearEdge.hpp">
       <Filter>Meshes\Triangulation</Filter>
     </ClInclude>
@@ -137,9 +134,27 @@
     </ClInclude>
     <ClInclude Include="krylov.hpp">
       <Filter>Solvers</Filter>
-	</ClInclude>
+    </ClInclude>
     <ClInclude Include="CSlRMatrix.hpp">
       <Filter>Matrices\Implementations</Filter>
+    </ClInclude>
+    <ClInclude Include="IMultipliable.hpp">
+      <Filter>Matrices</Filter>
+    </ClInclude>
+    <ClInclude Include="ITransposeMultipliable.hpp">
+      <Filter>Matrices</Filter>
+    </ClInclude>
+    <ClInclude Include="IDecomposable.hpp">
+      <Filter>Matrices</Filter>
+    </ClInclude>
+    <ClInclude Include="Triangulation.hpp">
+      <Filter>Meshes\Triangulation</Filter>
+    </ClInclude>
+    <ClInclude Include="indicies.hpp">
+      <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="constants.hpp">
+      <Filter>Common</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -154,9 +169,6 @@
     </ClCompile>
     <ClCompile Include="CSRMatrix.cpp">
       <Filter>Matrices\Implementations</Filter>
-    </ClCompile>
-    <ClCompile Include="Triangulation.cpp">
-      <Filter>Meshes\Triangulation</Filter>
     </ClCompile>
     <ClCompile Include="RectangularFDMMesh.cpp">
       <Filter>Meshes\Rectangular Mesh</Filter>
@@ -175,9 +187,12 @@
     </ClCompile>
     <ClCompile Include="FEM_t.cpp">
       <Filter>Solvers</Filter>
-	</ClCompile>
+    </ClCompile>
     <ClCompile Include="CSlRMatrix.cpp">
       <Filter>Matrices\Implementations</Filter>
+    </ClCompile>
+    <ClCompile Include="Triangulation.cpp">
+      <Filter>Meshes\Triangulation</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

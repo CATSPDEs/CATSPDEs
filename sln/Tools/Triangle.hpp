@@ -1,52 +1,47 @@
 #pragma once
-#include <array>
-
-// ssize_t
-#if __BITS_PER_LONG != 64
-typedef int ssize_t;
-#else
-typedef long ssize_t;
-#endif
-
-typedef unsigned short localIndex; // in {0, 1, 2}
-
-using namespace std;
+#include "array.hpp"
+#include "indicies.hpp"
 
 class Triangle {
-	array<size_t, 3> _nodes; // nodes in triangle, counterclockwise! 
-	array<ssize_t, 3> _neighbors; // neighbors of the triangle (they are... triangles!)
+	array<Index, 3> _nodes; // nodes in triangle, counterclockwise! 
+	array<SignedIndex, 3> _neighbors; // neighbors of the triangle (they are... triangles!)
 	// ith triangle against ith node in _nodes array
-	// if there is no triangle (i.e. edge is part of boundary), then index is -1
-	// that is why we use ssize_t instead of size_t here
+	// if there is no triangle (i.e. edge is part of boundary), then index is < 0
+	// that is why we use SignedIndex instead of Index here
 public:
-	explicit Triangle(size_t p1 = 0, size_t p2 = 0, size_t p3 = 0,
-					  ssize_t t1 = -1, ssize_t t2 = -1, ssize_t t3 = -1) 
+	explicit Triangle(Index p1 = 0, Index p2 = 0, Index p3 = 0,
+					  SignedIndex t1 = -1, SignedIndex t2 = -1, SignedIndex t3 = -1) 
 		: _nodes{ {p1, p2, p3} }
 		, _neighbors{ {t1, t2, t3} } {}
-	array<size_t, 3> nodes() const { return _nodes; }
-	Triangle& nodes(array<size_t, 3> const & newNodes) {
+	// (1) nodes methods
+	array<Index, 3>& nodes() { return _nodes; } // set / get
+	array<Index, 3>  nodes() const { return _nodes; } // get
+	Triangle&        nodes(array<Index, 3> const & newNodes) { // set
 		_nodes = newNodes;
 		return *this;
 	}
-	size_t& nodes(localIndex i) { return _nodes[i % 3]; }
-	Triangle& nodes(size_t i, size_t j, size_t k) {
+	Index&           nodes(LocalIndex i) { return _nodes[i % 3]; } // set / get
+	Triangle&        nodes(Index i, Index j, Index k) { // set
 		_nodes[0] = i;
 		_nodes[1] = j;
 		_nodes[2] = k;
 		return *this;
 	}
-	array<ssize_t, 3> neighbors() { return _neighbors; }
-	Triangle& neighbors(array<ssize_t, 3> const & newNeighbors) {
+	// (2) neighbors methods
+	array<SignedIndex, 3>& neighbors() { return _neighbors; } // set / get
+	array<SignedIndex, 3>  neighbors() const { return _neighbors; } // get
+	Triangle&              neighbors(array<SignedIndex, 3> const & newNeighbors) { // set
 		_neighbors = newNeighbors;
 		return *this;
 	}
-	ssize_t& neighbors(localIndex i) { return _neighbors[i % 3]; }
-	Triangle& neighbors(ssize_t i, ssize_t j, ssize_t k) {
+	SignedIndex&           neighbors(LocalIndex i) { return _neighbors[i % 3]; } // set / get
+	Triangle&              neighbors(SignedIndex i, SignedIndex j, SignedIndex k) { // set
 		_neighbors[0] = i;
 		_neighbors[1] = j;
 		_neighbors[2] = k;
 		return *this;
 	}
+	// (3) import / export
 	friend ostream& operator<<(ostream& output, Triangle const & t) {
 		return output << t._nodes[0] << ' ' << t._nodes[1] << ' ' << t._nodes[2] << '\n';
 	}
@@ -55,7 +50,7 @@ public:
 	}
 };
 
-inline array<localIndex, 2> excludeIndex(localIndex i) { 
+inline array<LocalIndex, 2> excludeIndex(LocalIndex i) { 
 	// exclude i from <0, 1, 2> counterclockwise		
 	//   _____<_____
 	//  |     2	    |
@@ -69,9 +64,13 @@ inline array<localIndex, 2> excludeIndex(localIndex i) {
 	else return { 0, 1 };
 }
 
-inline localIndex excludeIndicies(localIndex i, localIndex j) { 
+inline LocalIndex excludeIndicies(LocalIndex i, LocalIndex j) { 
 	// exclude i, j from <0, 1, 2>		
 	if (i > j) swap(i, j);
 	if (i == 0) return j == 1 ? 2 : 1;
 	return 0;
+}
+
+inline LocalIndex nextIndex(LocalIndex i) {
+	return (i + 1) % 3;
 }

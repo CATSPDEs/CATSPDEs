@@ -19,8 +19,8 @@
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{2CFED6A2-985D-436E-9E3F-D14E7BC838C6}</ProjectGuid>
-    <RootNamespace>Tools</RootNamespace>
+    <ProjectGuid>{A2C59D33-FB4A-4079-BE20-D933AD767D8C}</ProjectGuid>
+    <RootNamespace>FEMforStokesSystem</RootNamespace>
     <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
@@ -118,61 +118,6 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="AdjacencyList.hpp" />
-    <ClInclude Include="array.hpp" />
-    <ClInclude Include="BoundaryConditions_t.hpp" />
-    <ClInclude Include="constants.hpp" />
-    <ClInclude Include="CSlRMatrix.hpp" />
-    <ClInclude Include="Curve.hpp" />
-    <ClInclude Include="CurvilinearEdge.hpp" />
-    <ClInclude Include="DenseMatrix.hpp" />
-    <ClInclude Include="FEM.hpp" />
-    <ClInclude Include="FEM_t.hpp" />
-    <ClInclude Include="HyperbolicPDE.hpp" />
-    <ClInclude Include="IDecomposable.hpp" />
-    <ClInclude Include="IMultipliable.hpp" />
-    <ClInclude Include="indicies.hpp" />
-    <ClInclude Include="InitialConditions.hpp" />
-    <ClInclude Include="ITransposeMultipliable.hpp" />
-    <ClInclude Include="krylov.hpp" />
-    <ClInclude Include="Node.hpp" />
-    <ClInclude Include="DiffusionReactionEqn.hpp" />
-    <ClInclude Include="AbstractElement.hpp" />
-    <ClInclude Include="AbstractMesh.hpp" />
-    <ClInclude Include="AbstractNode.hpp" />
-    <ClInclude Include="AbstractPDE.hpp" />
-    <ClInclude Include="AbstractSparseMatrix.hpp" />
-    <ClInclude Include="AbstractSquareMatrix.hpp" />
-    <ClInclude Include="BandMatrix.hpp" />
-    <ClInclude Include="BoundaryConditions.hpp" />
-    <ClInclude Include="CSRMatrix.hpp" />
-    <ClInclude Include="Function.hpp" />
-    <ClInclude Include="IRealMatrix.hpp" />
-    <ClInclude Include="LinearEllipticPDE.hpp" />
-    <ClInclude Include="Point.hpp" />
-    <ClInclude Include="Predicate.hpp" />
-    <ClInclude Include="RectangularFDMMesh.hpp" />
-    <ClInclude Include="SymmetricContainer.hpp" />
-    <ClInclude Include="SymmetricCSlRMatrix.hpp" />
-    <ClInclude Include="TimeFrames.hpp" />
-    <ClInclude Include="Function_t.hpp" />
-    <ClInclude Include="Triangle.hpp" />
-    <ClInclude Include="Triangulation.hpp" />
-    <ClInclude Include="vector.hpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClCompile Include="AbstractElement.cpp" />
-    <ClCompile Include="AbstractMesh.cpp" />
-    <ClCompile Include="AbstractNode.cpp" />
-    <ClCompile Include="BandMatrix.cpp" />
-    <ClCompile Include="CSlRMatrix.cpp" />
-    <ClCompile Include="CSRMatrix.cpp" />
-    <ClCompile Include="DenseMatrix.cpp" />
-    <ClCompile Include="FEM.cpp" />
-    <ClCompile Include="FEM_t.cpp" />
-    <ClCompile Include="RectangularFDMMesh.cpp" />
-    <ClCompile Include="SymmetricCSlRMatrix.cpp" />
-    <ClCompile Include="Triangulation.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

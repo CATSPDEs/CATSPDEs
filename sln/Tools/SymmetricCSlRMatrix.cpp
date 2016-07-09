@@ -120,6 +120,7 @@ SymmetricCSlRMatrix& SymmetricCSlRMatrix::setZero() {
 	std::fill(_diag.begin(), _diag.end(), 0.);
 	std::fill(_lval.begin(), _lval.end(), 0.);
 	return *this;
+}
 
 std::vector<double> SymmetricCSlRMatrix::forwardSubst(std::vector<double> const &f)
 {

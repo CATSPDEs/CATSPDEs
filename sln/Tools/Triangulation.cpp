@@ -2,7 +2,6 @@
 #include <algorithm>
 #include <string>
 #include "Triangulation.hpp"
-#include "vector.hpp"
 
 Triangulation::Triangulation(Node const & lb, Node const & rt, double h) {
 	// here we construct dummy rect triangulation
@@ -24,7 +23,7 @@ Triangulation::Triangulation(Node const & lb, Node const & rt, double h) {
 	double hypotenuse = min(h, size.norm()); // hypotenuse and
 	double dx = hypotenuse / sqrt(2.), // legs max sizes 
 	       dy = dx;
-	size_t ix = ceil(size.x() / dx), // numb of INTERVALS on x-axis and
+	Index ix = ceil(size.x() / dx), // numb of INTERVALS on x-axis and
 		   iy = ceil(size.y() / dy), // '' on y-axis, 
 		   nx = ix + 1, // numb of NODES on x-axis and
 		   ny = iy + 1, // on y-axis, 
@@ -102,7 +101,7 @@ Triangulation::Triangulation(Node const & lb, Node const & rt, double h) {
 Triangulation::Triangulation(double h) 
 	: _nodes({ Node(-1., 0.), Node(0., 0.), Node(0., 1.), Node(1., 0.), Node(0., -1.) })
 	, _curves({ circleCurve })
-	, _edges({
+	, _curvilinearEdges({
 		CurvilinearEdge(0., .25, 0),
 		CurvilinearEdge(.25, .5, 0),
 		CurvilinearEdge(.5, .75, 0),
@@ -120,8 +119,8 @@ Triangulation::Triangulation(double h)
 	}
 }
 
-Triangulation::Triangulation(istream& nodes, istream& triangles) {
-	size_t n;
+Triangulation::Triangulation(istream& nodes, istream& triangles, istream& neighbors) {
+	Index n;
 	nodes >> n; // numb of nodes
 	_nodes.resize(n);
 	nodes >> _nodes; // load nodes
@@ -129,18 +128,31 @@ Triangulation::Triangulation(istream& nodes, istream& triangles) {
 	_triangles.resize(n);
 	triangles >> _triangles;
 	// fix neighbors
-	for (size_t i = 0; i < _triangles.size(); ++i)
-		for (size_t j = i + 1; j < _triangles.size(); ++j)
+	for (Index i = 0; i < _triangles.size(); ++i)
+		neighbors >> _triangles[i].neighbors();
+}
+
+Triangulation::Triangulation(istream& nodes, istream& triangles) {
+	Index n;
+	nodes >> n; // numb of nodes
+	_nodes.resize(n);
+	nodes >> _nodes; // load nodes
+	triangles >> n; // numb of triangles
+	_triangles.resize(n);
+	triangles >> _triangles;
+	// fix neighbors
+	for (Index i = 0; i < _triangles.size(); ++i)
+		for (Index j = i + 1; j < _triangles.size(); ++j)
 			_makeNeighbors(i, j);
 }
 
 // private methods
 
-bool Triangulation::_makeNeighbors(size_t t1, size_t t2) {
+bool Triangulation::_makeNeighbors(Index t1, Index t2) {
 	// make _triangles[@t1] and ‘‘ @t2 neighbors
 	// if they are not adjacent, return false
-	array<array<localIndex, 2>, 2> commonNodes;
-	localIndex i, j, k = 0;
+	array<array<LocalIndex, 2>, 2> commonNodes;
+	LocalIndex i, j, k = 0;
 	for (i = 0; i < 3; ++i)
 		for (j = 0; j < 3; ++j)
 			if (_triangles[t1].nodes(i) == _triangles[t2].nodes(j)) {
@@ -157,27 +169,31 @@ bool Triangulation::_makeNeighbors(size_t t1, size_t t2) {
 	return true; // we are gold
 }
 
-bool Triangulation::_checkNeighbor(size_t t1, localIndex i) {
+bool Triangulation::_checkNeighbor(Index t1, LocalIndex i, LocalIndex* j) {
 	// check if ith neighbor of a t1th triangle also has _triangles[t1] as a neighbor
-	ssize_t t2 = _triangles[t1].neighbors(i);
+	// if so, j = local index of node of ith neighbor that is against ith node of t1th triangle
+	SignedIndex t2 = _triangles[t1].neighbors(i);
 	if (t2 < 0) return true;
 	for (i = 0; i < 3; ++i)
-		if (_triangles[t2].neighbors(i) == t1) return true;
+		if (_triangles[t2].neighbors(i) == t1) {
+			if (j) *j = i;
+			return true;
+		}
 	return false;
 }
 
-ssize_t Triangulation::_neighbor2edge(ssize_t i) {
+SignedIndex Triangulation::_neighbor2edge(SignedIndex i) {
 	// convert @i := _triangles[*].neighbor(**) to
-	// index in _edges vector
-	return -i - 2;
+	// index in _curvilinearEdges vector
+	return - i - 2;
 }
 
 // public methods
 
 AdjacencyList Triangulation::generateAdjList() {
 	AdjacencyList adjList(numbOfNodes());
-	array<size_t, 3> elementNodesIndicies;
-	for (size_t i = 0; i < numbOfTriangles(); ++i) {
+	array<Index, 3> elementNodesIndicies;
+	for (Index i = 0; i < numbOfTriangles(); ++i) {
 		elementNodesIndicies = l2g(i);
 		sort(elementNodesIndicies.begin(), elementNodesIndicies.end());
 		adjList[elementNodesIndicies[2]].insert(elementNodesIndicies[1]);
@@ -187,7 +203,7 @@ AdjacencyList Triangulation::generateAdjList() {
 	return adjList;
 }
 
-double Triangulation::area(size_t i) { // compute area of ith triangle
+double Triangulation::area(Index i) { // compute area of ith triangle
 	// we have norm of vector product underhood
 	// neat!!
 	Node u = _nodes[_triangles[i].nodes(1)] - _nodes[_triangles[i].nodes(0)];
@@ -205,7 +221,7 @@ Triangulation& Triangulation::save(ostream& outNodes, ostream& outTriangles) {
 
 Triangulation& Triangulation::refine(Indicies& redList) {
 	// @redList is a vector of indicies in _triangles to be red-refined
-	map<size_t, unsigned short> greenMap;
+	map<Index, unsigned short> greenMap;
 	// tree of indicies of triangles w/ hanging nodes
 	// we must refine them green later
 	// key is index in _triangles vector,
@@ -213,15 +229,15 @@ Triangulation& Triangulation::refine(Indicies& redList) {
 	Indicies redNeighborsList;
 	// n <= 6 unknown neighbors of three new red triangles
 	// that were added on previous iterations
-	array<size_t, 3> p, rp;
+	array<Index, 3> p, rp;
 	// indicies of nodes of old triangle (i.e. triangle to be refined),
 	// ‘‘ of new (red) nodes to be added,
-	size_t gp; // index of green node and green neighbor
-	array<ssize_t, 3> t, rt;
+	Index gp; // index of green node and green neighbor
+	array<SignedIndex, 3> t, rt;
 	// indicies of neighbor triangles of the old triangle,
 	// ‘‘ of new (red) neighbor triangles
-	size_t i, j, k, m; // dummy indicies
-	auto addExistingRedNodeFrom = [&](size_t t) { // …from triangle _triangles[t]
+	Index i, j, k, m; // dummy indicies
+	auto addExistingRedNodeFrom = [&](Index t) { // …from triangle _triangles[t]
 		// we will need this function in order to 
 		// organize red refinement if @redList contains neighbor triangles
 		// because we do not want to add same nodes to _nodes vector several times
@@ -256,9 +272,9 @@ Triangulation& Triangulation::refine(Indicies& redList) {
 				rp[j] = _nodes.size();
 				if (t[j] < -1) { // curvilinear edges
 					m = _neighbor2edge(t[j]);
-					_nodes.push_back(_curves[_edges[m].curveIndex()](_edges[m].thetaMiddle()));
-					_edges.push_back(CurvilinearEdge(_edges[m].thetaMiddle(), _edges[m].thetaEnd(), _edges[m].curveIndex()));
-					_edges[m].thetaEnd() = _edges[m].thetaMiddle();
+					_nodes.push_back(_curves[_curvilinearEdges[m].curveIndex()](_curvilinearEdges[m].thetaMiddle()));
+					_curvilinearEdges.push_back(CurvilinearEdge(_curvilinearEdges[m].thetaMiddle(), _curvilinearEdges[m].thetaEnd(), _curvilinearEdges[m].curveIndex()));
+					_curvilinearEdges[m].thetaEnd() = _curvilinearEdges[m].thetaMiddle();
 				}
 				else _nodes.push_back(_nodes[p[excludeIndex(j)[0]]].midPoint(_nodes[p[excludeIndex(j)[1]]]));
 			}
@@ -279,8 +295,8 @@ Triangulation& Triangulation::refine(Indicies& redList) {
 			_triangles.push_back(Triangle(p[1], rp[0], rp[2], i, t[2], t[0]));
 			_triangles.push_back(Triangle(p[2], rp[1], rp[0], i, t[0], t[1]));
 			// fix curvilinear edges
-			j = _edges.size();
-			for (size_t newTriangle : { _triangles.size() - 2, _triangles.size() - 3, _triangles.size() - 1 })
+			j = _curvilinearEdges.size();
+			for (Index newTriangle : { _triangles.size() - 2, _triangles.size() - 3, _triangles.size() - 1 })
 				if (_triangles[newTriangle].neighbors(1) < -1) 
 					_triangles[newTriangle].neighbors(1) = _neighbor2edge(--j);
 			// we set neighbors of our new triangles to be neighbors of 
@@ -288,7 +304,7 @@ Triangulation& Triangulation::refine(Indicies& redList) {
 			// so there n <= 6 neighbors to be found
 			// if ith neighbors were red-refined previously 
 			for (j = _triangles.size() - 3; j < _triangles.size(); ++j)
-				for (size_t neighbor : redNeighborsList)
+				for (Index neighbor : redNeighborsList)
 					_makeNeighbors(j, neighbor);
 			redNeighborsList.clear(); // we are done w/ neighbors
 			// if ith has no neighbors or its neighbors were refined earlier, we are gold 
@@ -338,10 +354,10 @@ Triangulation& Triangulation::refine(unsigned numbOfRefinements) {
 	// ALL triangles will be refined in red fashion
 	// so we do not need stuff like redList, greenMap etc. here
 	Indicies redNeighborsList;
-	array<size_t, 3> p, rp;
-	array<ssize_t, 3> t, rt;
-	size_t i, j, m, n;
-	auto addExistingRedNodeFrom = [&](size_t t) {
+	array<Index, 3> p, rp;
+	array<SignedIndex, 3> t, rt;
+	Index i, j, m, n;
+	auto addExistingRedNodeFrom = [&](Index t) {
 		for (m = 0; m < 3; ++m) if (_triangles[_triangles[t].neighbors(m)].neighbors(1) != i &&
 			_triangles[_triangles[t].neighbors(m)].neighbors(2) != i) break;
 		redNeighborsList.push_back(_triangles[t].neighbors(m + 1));
@@ -360,9 +376,9 @@ Triangulation& Triangulation::refine(unsigned numbOfRefinements) {
 					rp[j] = _nodes.size();
 					if (t[j] < -1) {
 						m = _neighbor2edge(t[j]);
-						_nodes.push_back(_curves[_edges[m].curveIndex()](_edges[m].thetaMiddle()));
-						_edges.push_back(CurvilinearEdge(_edges[m].thetaMiddle(), _edges[m].thetaEnd(), _edges[m].curveIndex()));
-						_edges[m].thetaEnd() = _edges[m].thetaMiddle();
+						_nodes.push_back(_curves[_curvilinearEdges[m].curveIndex()](_curvilinearEdges[m].thetaMiddle()));
+						_curvilinearEdges.push_back(CurvilinearEdge(_curvilinearEdges[m].thetaMiddle(), _curvilinearEdges[m].thetaEnd(), _curvilinearEdges[m].curveIndex()));
+						_curvilinearEdges[m].thetaEnd() = _curvilinearEdges[m].thetaMiddle();
 					}
 					else _nodes.push_back(_nodes[p[excludeIndex(j)[0]]].midPoint(_nodes[p[excludeIndex(j)[1]]]));
 				}
@@ -373,12 +389,12 @@ Triangulation& Triangulation::refine(unsigned numbOfRefinements) {
 				_triangles.push_back(Triangle(p[0], rp[2], rp[1], i, t[1], t[2]));
 				_triangles.push_back(Triangle(p[1], rp[0], rp[2], i, t[2], t[0]));
 				_triangles.push_back(Triangle(p[2], rp[1], rp[0], i, t[0], t[1]));
-				j = _edges.size();
-				for (size_t newTriangle : { _triangles.size() - 2, _triangles.size() - 3, _triangles.size() - 1 })
+				j = _curvilinearEdges.size();
+				for (Index newTriangle : { _triangles.size() - 2, _triangles.size() - 3, _triangles.size() - 1 })
 					if (_triangles[newTriangle].neighbors(1) < -1)
 						_triangles[newTriangle].neighbors(1) = _neighbor2edge(--j);
 				for (j = _triangles.size() - 3; j < _triangles.size(); ++j)
-					for (size_t neighbor : redNeighborsList)
+					for (Index neighbor : redNeighborsList)
 						_makeNeighbors(j, neighbor);
 				redNeighborsList.clear();
 		}
@@ -388,7 +404,7 @@ Triangulation& Triangulation::refine(unsigned numbOfRefinements) {
 
 vector<double> Triangulation::longestEdges() {
 	vector<double> v(_triangles.size());
-	for (size_t i = 0; i < _triangles.size(); ++i) {
+	for (Index i = 0; i < _triangles.size(); ++i) {
 		v[i] = max(length(i, 0), length(i, 1));
 		v[i] = max(v[i], length(i, 2));
 	}
@@ -402,7 +418,7 @@ double Triangulation::longestEdge() {
 
 vector<double> Triangulation::inscribedDiameters() {
 	vector<double> v(_triangles.size());
-	for (size_t i = 0; i < _triangles.size(); ++i)
+	for (Index i = 0; i < _triangles.size(); ++i)
 		v[i] = 4 * area(i) / perimeter(i);
 	return v;
 }
@@ -411,16 +427,34 @@ vector<double> Triangulation::qualityMeasure() {
 	vector<double> v(_triangles.size()),
 				   h(longestEdges()),
 				   d(inscribedDiameters());
-	for (size_t i = 0; i < _triangles.size(); ++i)
+	for (Index i = 0; i < _triangles.size(); ++i)
 		v[i] = sqrt(3) * d[i] / h[i]; 
 	// we multiply by sqrt(3), so ideal triangles have quality measure = 1
 	return v;
 }
 
+RibsNumeration Triangulation::computeRibsNumeration() {
+	RibsNumeration res(_triangles.size());
+	Index currentNumber = 0, n;
+	LocalIndex k;
+	for (Index i = 0; i < _triangles.size(); ++i)
+		for (LocalIndex j = 0; j < 3; ++j) {
+			n = _triangles[i].neighbors(j);
+			// if neighbor of ith triangle has not been reached yet or does not exist, then we should numerate
+			if (i < n || n < 0) res[i][j] = currentNumber++;
+			// otherwise, rib already has a number so we need to use it
+			else {
+				if (!_checkNeighbor(i, j, &k)) throw logic_error("invalid mesh: check out tringles #" + to_string(i) + " and #" + to_string(n));
+				res[i][j] = res[n][k];
+			}
+		}
+	return res;
+}
+
 Boundary Triangulation::computeBoundary() {
 	Boundary edges;
-	for (size_t i = 0; i < numbOfTriangles(); ++i) 
-		for (localIndex edgeIndex : getBoundaryIndicies(i)) 
+	for (Index i = 0; i < numbOfTriangles(); ++i) 
+		for (LocalIndex edgeIndex : getBoundaryIndicies(i)) 
 			edges.push_back({ _triangles[i].nodes(edgeIndex + 1), _triangles[i].nodes(edgeIndex + 2) });
 	return edges;
 }

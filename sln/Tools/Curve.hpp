@@ -1,9 +1,8 @@
 #pragma once
 #include "Node.hpp"
+#include "constants.hpp"
 
 typedef Node(*Curve)(double); // function pointer
-
-double const PI = 3.141592653589793;
 
 // unit circle curve w/ center at origo
 inline Node circleCurve(double theta) { // unit speed counter-clock parametrization

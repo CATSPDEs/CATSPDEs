@@ -22,10 +22,10 @@ unsigned AbstractElement::getIndex()
 	return _index;
 }
 
-AbstractNode AbstractElement::getNode(unsigned localIndex)
+AbstractNode AbstractElement::getNode(unsigned LocalIndex)
 {
-	if (localIndex < _nodes.size())
-		return _nodes[localIndex];
+	if (LocalIndex < _nodes.size())
+		return _nodes[LocalIndex];
 	else
 		throw std::out_of_range("local index must be in range [0,n), where n is number of nodes in element");
 }

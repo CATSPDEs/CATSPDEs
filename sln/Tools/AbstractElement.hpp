@@ -17,6 +17,6 @@ public:
 	void setIndex(unsigned);
 	void addNode(AbstractNode const &);
 	unsigned getIndex();
-	AbstractNode getNode(unsigned localIndex); //localIndex [0,n) is the local index of node in element
+	AbstractNode getNode(unsigned LocalIndex); //LocalIndex [0,n) is the local index of node in element
 	unsigned getNodesNumber();
 };

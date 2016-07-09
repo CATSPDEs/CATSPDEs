@@ -13,14 +13,15 @@ inline double f(Node& p) {
 
 int main() {
 	ifstream iNodes("Mathematica/Generate Mesh/nodes.dat"),
-	         iTriangles("Mathematica/Generate Mesh/triangles.dat");
+	         iTriangles("Mathematica/Generate Mesh/triangles.dat"),
+	         iNeighbors("Mathematica/Generate Mesh/neighbors.dat");
 	ofstream oXi("Mathematica/Draw Logo/xi.dat"),
 	         oDirichletNodes("Mathematica/Draw Logo/DirichletNodes.dat"),
 	         oNodes("Mathematica/Draw Logo/nodes.dat"), 
 	         oTriangles("Mathematica/Draw Logo/triangles.dat");
 	try {
 		// import kitty mesh
-		Triangulation Omega(iNodes, iTriangles);
+		Triangulation Omega(iNodes, iTriangles, iNeighbors);
 		DiffusionReactionEqn PoissonEqn(oneFunc, zeroFunc, f);
 		BoundaryConditions BCs({
 			make_shared<DirichletBC>(oneFunc, fixedBoundary),
