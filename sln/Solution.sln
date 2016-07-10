@@ -21,6 +21,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "FEM for Stokes System", "FE
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Ribs Numeration for Vector Shape Funcs", "Ribs Numeration for Vector Shape Funcs\Ribs Numeration for Vector Shape Funcs.vcxproj", "{79D7129B-B767-4FFB-8E40-F3FCA9B64F51}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Red–Green Refinement Timing", "Red–Green Refinement Timing\Red–Green Refinement Timing.vcxproj", "{A6B773B2-63EE-4155-89BC-60F78E850CEA}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -101,6 +103,14 @@ Global
 		{79D7129B-B767-4FFB-8E40-F3FCA9B64F51}.Release|x64.Build.0 = Release|x64
 		{79D7129B-B767-4FFB-8E40-F3FCA9B64F51}.Release|x86.ActiveCfg = Release|Win32
 		{79D7129B-B767-4FFB-8E40-F3FCA9B64F51}.Release|x86.Build.0 = Release|Win32
+		{A6B773B2-63EE-4155-89BC-60F78E850CEA}.Debug|x64.ActiveCfg = Debug|x64
+		{A6B773B2-63EE-4155-89BC-60F78E850CEA}.Debug|x64.Build.0 = Debug|x64
+		{A6B773B2-63EE-4155-89BC-60F78E850CEA}.Debug|x86.ActiveCfg = Debug|Win32
+		{A6B773B2-63EE-4155-89BC-60F78E850CEA}.Debug|x86.Build.0 = Debug|Win32
+		{A6B773B2-63EE-4155-89BC-60F78E850CEA}.Release|x64.ActiveCfg = Release|x64
+		{A6B773B2-63EE-4155-89BC-60F78E850CEA}.Release|x64.Build.0 = Release|x64
+		{A6B773B2-63EE-4155-89BC-60F78E850CEA}.Release|x86.ActiveCfg = Release|Win32
+		{A6B773B2-63EE-4155-89BC-60F78E850CEA}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

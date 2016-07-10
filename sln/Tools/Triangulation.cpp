@@ -1,4 +1,4 @@
-#include <map>
+#include <unordered_map>
 #include <algorithm>
 #include <string>
 #include "Triangulation.hpp"
@@ -221,8 +221,8 @@ Triangulation& Triangulation::save(ostream& outNodes, ostream& outTriangles) {
 
 Triangulation& Triangulation::refine(Indicies& redList) {
 	// @redList is a vector of indicies in _triangles to be red-refined
-	map<Index, unsigned short> greenMap;
-	// tree of indicies of triangles w/ hanging nodes
+	unordered_map<Index, unsigned short> greenMap;
+	// hash table of indicies of triangles w/ hanging nodes
 	// we must refine them green later
 	// key is index in _triangles vector,
 	// value is numb of hanging nodes in (1, 2, or 3)

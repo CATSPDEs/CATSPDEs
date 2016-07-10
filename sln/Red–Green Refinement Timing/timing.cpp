@@ -11,9 +11,9 @@ int main() {
 	ofstream redIndicies("Mathematica/tRed.dat");
 	// (1) generating mesh 
 	begTime = clock();
-	// Triangulation K(Node(-1, -1), Node(1, 1), .00448); // ~100k nodes —> 100k × 100k SLAE
-	// Triangulation K(Node(-1, -1), Node(1, 1), .001); // 2mln nodes ’’
-	Triangulation K(Node(-1, -.5), Node(1, .5), .1); // dummy test
+	// Triangulation K(Node(-1, -1), Node(1, 1), .00897); // ~100k nodes —> 100k × 100k SLAE
+	// Triangulation K(Node(-1, -1), Node(1, 1), .002); // 2mln nodes ’’
+	Triangulation K(Node(-1, -.5), Node(1, .5), .2); // dummy test
 	endTime = clock();
 	size_t e = K.numbOfTriangles(),
 		   n = K.numbOfNodes();
@@ -29,7 +29,7 @@ int main() {
 	Indicies L;
 	begTime = clock();
 	for (size_t i = 0; i < K.numbOfTriangles(); ++i) {
-		if (rand() % 2 && rand() % 2) { // ~50% of triangles will be red-refined
+		if (rand() % 2 && rand() % 2) { // ~25% of triangles will be red-refined
 			L.push_back(i);
 			redIndicies << i << '\n';
 		}
