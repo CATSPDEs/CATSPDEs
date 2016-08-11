@@ -1,17 +1,19 @@
 #pragma once
 #include <vector>
 
+using namespace std;
+
 template <typename T>
-std::vector<T> operator*(T c, std::vector<T> const & v)
+vector<T> operator*(T c, vector<T> const & v)
 {
-	std::vector<T> res(v.size());
+	vector<T> res(v.size());
 	for (size_t i = 0; i < v.size(); i++)
 		res[i] = c*v[i];
 	return res;
 }
 
 template <typename T>
-T operator*(std::vector<T> const & u, std::vector<T> const & v) { // dot product
+T operator*(vector<T> const & u, vector<T> const & v) { // dot product
 	T dotProduct = 0;
 	for (size_t i = 0; i < u.size(); ++i)
 		dotProduct += u[i] * v[i];
@@ -19,33 +21,33 @@ T operator*(std::vector<T> const & u, std::vector<T> const & v) { // dot product
 }
 
 template <typename T>
-std::vector<T> operator+(const std::vector<T>& v1, const std::vector<T>& v2)
+vector<T> operator+(const vector<T>& v1, const vector<T>& v2)
 {
-	std::vector<T> res(v1.size());
+	vector<T> res(v1.size());
 	for (size_t i = 0;i < v1.size();i++)
 		res[i] = v1[i] + v2[i];
 	return res;
 }
 
 template <typename T>
-std::vector<T> operator-(std::vector<T> const & v1, std::vector<T> const & v2) {
-	std::vector<T> res(v1.size());
+vector<T> operator-(vector<T> const & v1, vector<T> const & v2) {
+	vector<T> res(v1.size());
 	for (size_t i = 0; i < v1.size(); i++)
 		res[i] = v1[i] - v2[i];
 	return res;
 }
 
 template <typename T>
-std::istream& operator>>(std::istream& input, std::vector<T> & u) {
+istream& operator>>(istream& input, vector<T> & u) {
 	for (size_t i = 0; i < u.size(); ++i)
 		input >> u[i];
 	return input;
 }
 
 template <typename T>
-std::ostream& operator<<(std::ostream& output, std::vector<T> const & u) {
+ostream& operator<<(ostream& output, vector<T> const & u) {
 	output.precision(15); // double precision
-	output << std::scientific << std::showpos;
+	output << scientific << showpos;
 	for (size_t i = 0; i < u.size(); ++i)
 		output << u[i] << '\n';
 	return output;
@@ -53,9 +55,9 @@ std::ostream& operator<<(std::ostream& output, std::vector<T> const & u) {
 
 // for vector of vectors
 template <typename T>
-std::ostream& operator<<(std::ostream& output, std::vector<std::vector<T>> const & u) {
+ostream& operator<<(ostream& output, vector<vector<T>> const & u) {
 	output.precision(15); // double precision
-	output << std::scientific << std::showpos;
+	output << scientific << showpos;
 	for (size_t i = 0; i < u.size(); ++i) {
 		for (size_t j = 0; j < u[i].size(); ++j)
 			output << u[i][j] << ' ';
@@ -65,9 +67,9 @@ std::ostream& operator<<(std::ostream& output, std::vector<std::vector<T>> const
 }
 
 template <typename T, size_t N>
-std::ostream& operator<<(std::ostream& output, std::vector<std::array<T, N>> const & u) {
+ostream& operator<<(ostream& output, vector<array<T, N>> const & u) {
 	output.precision(15); // double precision
-	output << std::scientific << std::showpos;
+	output << scientific << showpos;
 	for (size_t i = 0; i < u.size(); ++i) {
 		for (size_t j = 0; j < N; ++j)
 			output << u[i][j] << ' ';
@@ -77,7 +79,7 @@ std::ostream& operator<<(std::ostream& output, std::vector<std::array<T, N>> con
 }
 
 template <typename T>
-T norm(std::vector<T> const & v)
+T norm(vector<T> const & v)
 {
 	return sqrt(v*v);
 }

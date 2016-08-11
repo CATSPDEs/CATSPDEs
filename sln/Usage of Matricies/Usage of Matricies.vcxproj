@@ -122,16 +122,12 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="..\Tools\BandMatrix.cpp" />
-    <ClCompile Include="..\Tools\CSlRMatrix.cpp" />
     <ClCompile Include="..\Tools\CSRMatrix.cpp" />
-    <ClCompile Include="..\Tools\DenseMatrix.cpp" />
-    <ClCompile Include="..\Tools\SymmetricCSlRMatrix.cpp" />
     <ClCompile Include="user.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="matrix_band.txt" />
-    <Text Include="matrix_crs.txt" />
+    <Text Include="matrix_csr.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

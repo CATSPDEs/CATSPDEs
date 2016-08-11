@@ -13,32 +13,23 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="Source Files\External Tools">
+      <UniqueIdentifier>{0e282ace-cf71-4787-bdc3-26961f0abb37}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="user.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\Tools\BandMatrix.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Tools\DenseMatrix.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="..\Tools\CSRMatrix.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Tools\SymmetricCSlRMatrix.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Tools\CSlRMatrix.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\External Tools</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Text Include="matrix_band.txt">
       <Filter>Resource Files</Filter>
     </Text>
-    <Text Include="matrix_crs.txt">
+    <Text Include="matrix_csr.txt">
       <Filter>Resource Files</Filter>
     </Text>
   </ItemGroup>

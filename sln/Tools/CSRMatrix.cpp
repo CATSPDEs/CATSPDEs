@@ -1,102 +1,83 @@
-// implementation of CSRMatrix
-
-#include <cmath> // sqrt
+#include <complex>
 #include "CSRMatrix.hpp"
 
-CSRMatrix::CSRMatrix(size_t n, size_t nnz)
-	: AbstractSparseMatrix(n)
-	, _ptr(n + 1)
-	, _col(nnz)
-	, _val(nnz) {
-	_ptr[n] = nnz;
+template <typename T>
+CSRMatrix::CSRMatrix(size_t w, size_t h, size_t nnz)
+	: AbstractSparseMatrix(w, h)
+	, _iptr(h + 1)
+	, _jptr(nnz)
+	, _mval(nnz) {
+	_iptr[h] = nnz;
 }
 
 // private methods
 
-double& CSRMatrix::_set(size_t i, size_t j) {
-	for (size_t k = _ptr[i]; k < _ptr[i + 1]; ++k)
-		if (_col[k] == j) return _val[k];
-		else if (_col[k] > j) throw std::invalid_argument("portrait of sparse matrix doesn’t allow to change element w/ these indicies");
+template <typename T>
+T& CSRMatrix::_set(size_t i, size_t j) {
+	for (size_t k = _iptr[i]; k < _iptr[i + 1]; ++k)
+		if (_jptr[k] == j) return _mval[k];
+		else if (_jptr[k] > j) throw invalid_argument("portrait of sparse matrix doesn’t allow to change element w/ these indicies");
+	throw invalid_argument("portrait of sparse matrix doesn’t allow to change element w/ these indicies");
 }
 
-double CSRMatrix::_get(size_t i, size_t j) const {
-	for (size_t k = _ptr[i]; k < _ptr[i + 1]; ++k)
-		if (_col[k] == j) return _val[k];
-		else if (_col[k] > j) return 0.;
+template <typename T>
+T CSRMatrix::_get(size_t i, size_t j) const {
+	for (size_t k = _iptr[i]; k < _iptr[i + 1]; ++k)
+		if (_jptr[k] == j) return _mval[k];
+		else if (_jptr[k] > j) return 0.;
+	return 0.;
+}
+
+template <typename T>
+vector<T> CSRMatrix::_mult(vector<T> const & u) const { // return product v = A.u
+	vector<T> v(_h, 0.);
+	size_t i, j;
+	for (i = 0; i < _h; ++i)
+		for (j = _iptr[i]; j < _iptr[i + 1]; ++j)
+			v[i] += _mval[j] * u[_jptr[j]];
+	return v;
+}
+
+template <typename T>
+vector<T> CSRMatrix::_multByTranspose(vector<T> const & u) const { // return product v = A^T.u
+	vector<T> v(_w, 0.);
+	size_t i, j;
+	for (i = 0; i < _h; ++i)
+		for (j = _iptr[i]; j < _iptr[i + 1]; ++j)
+			v[j] += _mval[j] * u[i];
+	return v;
 }
 
 // public methods
 
-std::vector<double> CSRMatrix::mult(std::vector<double> const & u) const { // return product v = A.u
-	std::vector<double> v(_n, 0.);
-	size_t i, j;
-	for (i = 0; i < _n; ++i)
-		for (j = _ptr[i]; j < _ptr[i + 1]; ++j)
-			v[i] += _val[j] * u[_col[j]];
-	return v;
-}
-
-std::vector<double> CSRMatrix::solve(std::vector<double> const & b) {
-	// magic goes here
-	// e.g., CG
-	return CG(b);
-}
-
+template <typename T>
 CSRMatrix& CSRMatrix::setZero() {
-	// ...
+	fill(_mval.begin(), _mval.end(), 0.);
 	return *this;
 }
 
-std::istream& CSRMatrix::loadSparse(std::istream& input) {
-	size_t i, max = _n;
+template <typename T>
+istream& CSRMatrix::loadSparse(istream& input) {
+	size_t i, max = _h;
 	for (i = 0; i < max; ++i)
-		input >> _ptr[i];
-	max = _ptr[max];
+		input >> _iptr[i];
+	max = _iptr[max];
 	for (i = 0; i < max; ++i)
-		input >> _col[i];
+		input >> _jptr[i];
 	for (i = 0; i < max; ++i)
-		input >> _val[i];
+		input >> _mval[i];
 	return input;
 }
 
-std::ostream& CSRMatrix::saveSparse(std::ostream& output) const {
-	return output << _n << ' ' << _ptr[_n] << '\n'
-				  << _ptr << '\n'
-				  << _col << '\n'
-				  << _val;
+template <typename T>
+ostream& CSRMatrix::saveSparse(ostream& output) const {
+	return output << _w << ' ' << _h << ' ' << _iptr[_h] << '\n'
+				  << _iptr << '\n'
+				  << _jptr << '\n'
+				  << _mval;
 }
 
-std::vector<double> CSRMatrix::CG(std::vector<double> const & f, double e, unsigned iCount) const {
-	unsigned n = 0;
-	CSRMatrix const & A = *this; // synonim
-	std::vector<double> x(_n, .0);
-	std::vector<double> r(_n);
-	std::vector<double> z;
-	double a, b, dotProdR, dotProdF;
-	r = f - A * x;
-	z = r;
-	dotProdR = r * r;
-	dotProdF = f * f;
-	while ((sqrt(dotProdR) / sqrt(dotProdF)) > e && n < iCount)
-	{
-		a = dotProdR / ((A*z) * z);
-		x = x + a*z;
-		r = r - a*(A*z);
-		b = dotProdR;
-		dotProdR = r * r;
-		b = dotProdR / b;
-		z = r + b*z;
-		n++;
-	}
-	return x;
-}
+// explicit instantiation
 
-// friends
-
-CSRMatrix operator*(CSRMatrix const & A, CSRMatrix const & B) { // return product N = A.B
-	size_t n = A._n,
-		   nnz = A._ptr[n];
-	CSRMatrix N(n, nnz);
-	// …
-	return N;
-}
+template class CSRMatrix<double>;
+template class CSRMatrix<complex<double>>;

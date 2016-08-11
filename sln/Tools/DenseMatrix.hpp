@@ -1,8 +1,8 @@
 #pragma once
-#include "AbstractSquareMatrix.hpp"
+#include "AbstractMatrix.hpp"
 #include "IRealMatrix.hpp"
 
-class DenseMatrix : public AbstractSquareMatrix<double>, public IRealMatrix {
+class DenseMatrix : public AbstractMatrix<double>, public IRealMatrix {
 	double** _A, * _beg;
 	// to be implemented
 	double& _set(size_t, size_t);

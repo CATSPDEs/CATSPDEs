@@ -9,8 +9,8 @@ class CSlRMatrix : public AbstractSparseMatrix<double>, public IRealMatrix {
 						_uval, // vector of elements of upper triangular part of matrix (raw by raw)
 						_diag; // vector of diagonal elements (for FEM / FVM is always > 0, 
 							   // so we store it explicitly)
-	std::vector<size_t> _jptr, // vector of column (row) indicies and
-						_iptr; // vector of raw indicies (see example to get what thes guys are)
+	std::vector<size_t> _jptr, // vector of column indicies and
+						_iptr; // vector of row indicies (see example to get what thes guys are)
 
 	size_t _nnz() const { return _iptr[_n] + _n; } // look 2 strings above; “+ _n” because of _diag
 	double& _set(size_t, size_t);

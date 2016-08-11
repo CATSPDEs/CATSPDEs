@@ -1,16 +1,21 @@
 ﻿#pragma once
 #include "AbstractSparseMatrix.hpp"
-#include "IRealMatrix.hpp"
+#include "IMultipliable.hpp"
+#include "IDecomposable.hpp"
 #include "AdjacencyList.hpp"
 
-class SymmetricCSlRMatrix : public AbstractSparseMatrix<double>, public IRealMatrix {
+template <typename T>
+class SymmetricCSlRMatrix 
+	: public AbstractSparseMatrix<T>
+	, public IMultipliable<T>
+	, public IDecomposable<T> {
 	// fancy name, yeah
 	// stands for Symmetric Compressed Sparse (lower triangular) Row
 	std::vector<double> _lval, // vector of elements of lower triangular part of matrix (raw by raw)
 						_diag; // vector of diagonal elements (for FEM / FVM is always > 0, 
 	                           // so we store it explicitly)
 	std::vector<size_t> _jptr, // vector of column indicies and
-	                    _iptr; // vector of raw indicies (see example to get what thes guys are)
+	                    _iptr; // vector of row indicies (see example to get what thes guys are)
 	// example of 6 × 6 matrix:
 	//		
 	//  8 ─ ─ ─ ─ ┐
@@ -29,22 +34,25 @@ class SymmetricCSlRMatrix : public AbstractSparseMatrix<double>, public IRealMat
 	// 
 	// so, for one, 4th row (we count from zero) countains _iptr[5] – _iptr[4] = 6 – 3 = 3 elements, 
 	// starting w/ element _lval[_iptr[4]] = _lval[3] = 7 in (_jptr[_iptr[4]] = _jptr[3] = 0)th column
-	// size of matrix is 6, so _iptr[6 + 1] = 8 is numb of elements in _lval
+	// size of matrix is 6, so _iptr[6 + 1] = 8 is numb of elements in _lval or _jptr
 	// makes sense!
-	size_t _nnz() const { return _iptr[_n] + _n; } // look 2 strings above; “+ _n” because of _diag
-	double& _set(size_t, size_t);
-	double _get(size_t, size_t) const;
+	//
+	// virtual methods to be implemented
+	vector<T> _mult(vector<T> const &) const override;
+	size_t _nnz() const override { return _iptr[_w] + _w; } // look 2 strings above; “+ _w” because of _diag
+	T& _set(size_t, size_t) override;
+	T  _get(size_t, size_t) const override;
+	vector<T> _mult(vector<T> const &) const override;
 public:
-	SymmetricCSlRMatrix(size_t, size_t);
+	SymmetricCSlRMatrix(size_t n, size_t nnz); // order of matrix and numb of nonzero elems
 	SymmetricCSlRMatrix(AdjacencyList const &); // generate matrix portrait from adjacency list of mesh nodes 
 	~SymmetricCSlRMatrix() {}
-	std::vector<double> solve(std::vector<double> const &);
-	std::vector<double> mult(std::vector<double> const &) const;
-	SymmetricCSlRMatrix& setZero();
-	std::istream& loadSparse(std::istream&); // look at implementation for istream / ostream structure
-	std::ostream& saveSparse(std::ostream&) const;
-	SymmetricCSlRMatrix ILDL();
-	std::vector<double> forwardSubst(std::vector<double> const &);
-	friend SymmetricCSlRMatrix operator*(SymmetricCSlRMatrix const &, SymmetricCSlRMatrix const &);
+	// virtual methods to be implemented
+	SymmetricCSlRMatrix& setZero() override;
+	istream& loadSparse(istream&) override; // look at implementation for istream / ostream structure
+	ostream& saveSparse(ostream&) const override;
+	SymmetricCSlRMatrix& decompose() override;
+	vector<T> forwardSubstitution (vector<T> const &) const override;
+	vector<T> backwardSubstitution(vector<T> const &) const override;
 };
 

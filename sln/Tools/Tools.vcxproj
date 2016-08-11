@@ -118,6 +118,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="AbstractMatrix.hpp" />
     <ClInclude Include="AdjacencyList.hpp" />
     <ClInclude Include="array.hpp" />
     <ClInclude Include="BoundaryConditions_t.hpp" />
@@ -142,7 +143,6 @@
     <ClInclude Include="AbstractNode.hpp" />
     <ClInclude Include="AbstractPDE.hpp" />
     <ClInclude Include="AbstractSparseMatrix.hpp" />
-    <ClInclude Include="AbstractSquareMatrix.hpp" />
     <ClInclude Include="BandMatrix.hpp" />
     <ClInclude Include="BoundaryConditions.hpp" />
     <ClInclude Include="CSRMatrix.hpp" />

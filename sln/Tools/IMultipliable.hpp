@@ -1,13 +1,15 @@
 #pragma once
 #include <vector>
 
+using namespace std;
+
 template <typename T>
 class IMultipliable {
 protected:
-	virtual std::vector<T> _mult(std::vector<T> const &) const = 0;
+	virtual vector<T> _mult(vector<T> const &) = 0;
 public:
 	virtual ~IMultipliable() {}
-	virtual std::vector<T> operator*(std::vector<T> const & b) {
+	virtual vector<T> operator*(vector<T> const & b) {
 		return _mult(b);
 	}
 };
