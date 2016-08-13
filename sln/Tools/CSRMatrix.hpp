@@ -1,13 +1,15 @@
 #pragma once
 #include "AbstractSparseMatrix.hpp"
-#include "ITransposeMultipliable.hpp"
+#include "AbstractTransposeMultipliableMatrix.hpp"
 
 template <typename T>
-class CSRMatrix : public AbstractSparseMatrix<T>, public ITransposeMultipliable<T> { 
-	// matrix is stored in comressed row storage format (http://netlib.org/linalg/html_templates/node91.html)
+class CSRMatrix 
+	: public AbstractSparseMatrix<T>
+	, public AbstractTransposeMultipliableMatrix<T> { 
+	// matrix is stored in comressed row storage (CSR for compressed sparse row) format (http://netlib.org/linalg/html_templates/node91.html)
 	vector<T>      _mval; // values of the nonzero elements of the matrix (row-wised)
 	vector<size_t> _iptr, // vector of column indicies and
-	               _jcol; // vector of row indicies (see example to get what thes guys are)
+	               _jptr; // vector of row indicies (see example to get what thes guys are)
 	// example of 3 × 6 matrix:
 	//		
 	//  5 × × 1 9 ×
@@ -26,19 +28,92 @@ class CSRMatrix : public AbstractSparseMatrix<T>, public ITransposeMultipliable<
 	// makes sense!
 	//
 	// virtual methods to be implemented
-	vector<T> _mult           (vector<T> const &) const override;
-	vector<T> _multByTranspose(vector<T> const &) const override;
-	size_t _nnz() const override { return _iptr[_h]; }
-	T& _set(size_t, size_t) override;
-	T  _get(size_t, size_t) const override;
+	size_t _nnz() const final { return _iptr[_h]; }
+	T& _set(size_t, size_t) final;
+	T  _get(size_t, size_t) const final;
 public:
 	CSRMatrix(size_t w, size_t h, size_t nnz); // order and number of nonzeros
-	~CSRMatrix() {}
 	// virtual methods to be implemented
-	CSRMatrix& setZero() override;
-	istream& loadSparse(istream&) override;
-	ostream& saveSparse(ostream&) const override;
-	// new methods
-	//vector<double> CG(vector<double> const &, double e = 1E-14, unsigned count = 10000U) const; // conjugate gradients
-	//friend CSRMatrix operator*(CSRMatrix const &, CSRMatrix const &); // matrix-matrix product
+	CSRMatrix& operator=(T const & val) final;
+	void mult           (T const * by, T* result) const final;
+	void multByTranspose(T const * by, T* result) const final;
+	istream& loadSparse(istream&) final;
+	ostream& saveSparse(ostream&) const final;
 };
+
+// implementation
+
+template <typename T>
+CSRMatrix<T>::CSRMatrix(size_t w, size_t h, size_t nnz)
+	: AbstractMatrix<T>(w, h)
+	, _iptr(h + 1)
+	, _jptr(nnz)
+	, _mval(nnz) {
+	_iptr[h] = nnz;
+}
+
+// private methods
+
+template <typename T>
+T& CSRMatrix<T>::_set(size_t i, size_t j) {
+	for (size_t k = _iptr[i]; k < _iptr[i + 1]; ++k)
+		if (_jptr[k] == j) return _mval[k];
+		else if (_jptr[k] > j) throw invalid_argument("portrait of sparse matrix doesn’t allow to change element w/ these indicies");
+		throw invalid_argument("portrait of sparse matrix doesn’t allow to change element w/ these indicies");
+}
+
+template <typename T>
+T CSRMatrix<T>::_get(size_t i, size_t j) const {
+	for (size_t k = _iptr[i]; k < _iptr[i + 1]; ++k)
+		if (_jptr[k] == j) return _mval[k];
+		else if (_jptr[k] > j) return 0.;
+		return 0.;
+}
+
+// public methods
+
+template <typename T>
+CSRMatrix<T>& CSRMatrix<T>::operator=(T const & val) {
+	fill(_mval.begin(), _mval.end(), val);
+	return *this;
+}
+
+template <typename T>
+void CSRMatrix<T>::mult(T const * by, T* result) const {
+	size_t i, j;
+	for (i = 0; i < _h; ++i) {
+		result[i] = 0.;
+		for (j = _iptr[i]; j < _iptr[i + 1]; ++j)
+			result[i] += _mval[j] * by[_jptr[j]];
+	}
+}
+
+template <typename T>
+void CSRMatrix<T>::multByTranspose(T const * by, T* result) const {
+	size_t i, j;
+	fill(result, result + numbOfRows(), 0.); // clear resulting vector
+	for (i = 0; i < _h; ++i)
+		for (j = _iptr[i]; j < _iptr[i + 1]; ++j)
+			result[j] += _mval[j] * by[i];
+}
+
+template <typename T>
+istream& CSRMatrix<T>::loadSparse(istream& input) {
+	size_t i, max = _h;
+	for (i = 0; i < max; ++i)
+		input >> _iptr[i];
+	max = _iptr[_h];
+	for (i = 0; i < max; ++i)
+		input >> _jptr[i];
+	for (i = 0; i < max; ++i)
+		input >> _mval[i];
+	return input;
+}
+
+template <typename T>
+ostream& CSRMatrix<T>::saveSparse(ostream& output) const {
+	return output << _w << ' ' << _h << ' ' << _iptr[_h] << '\n'
+		<< _iptr << '\n'
+		<< _jptr << '\n'
+		<< _mval;
+}

@@ -1,13 +1,13 @@
 ﻿#pragma once
 #include "AbstractSparseMatrix.hpp"
-#include "IMultipliable.hpp"
+#include "AbstractMultipliableMatrix.hpp"
 #include "IDecomposable.hpp"
 #include "AdjacencyList.hpp"
 
 template <typename T>
 class SymmetricCSlRMatrix 
 	: public AbstractSparseMatrix<T>
-	, public IMultipliable<T>
+	, public AbstractMultipliableMatrix<T>
 	, public IDecomposable<T> {
 	// fancy name, yeah
 	// stands for Symmetric Compressed Sparse (lower triangular) Row

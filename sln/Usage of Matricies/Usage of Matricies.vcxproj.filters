@@ -21,9 +21,6 @@
     <ClCompile Include="user.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\Tools\CSRMatrix.cpp">
-      <Filter>Source Files\External Tools</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Text Include="matrix_band.txt">

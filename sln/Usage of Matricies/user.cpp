@@ -11,7 +11,9 @@ int main() {
 	size_t w, h, nnz;
 	iA >> w >> h >> nnz;
 	CSRMatrix<double> A(w, h, nnz);
-
+	iA >> A;
+	A.save();
+	(A = 56.).save();
 //	std::ifstream inpA("testILDL.txt");
 //	SymmetricCSlRMatrix A_ldl(4, 3);
 //	A_ldl.loadSparse(inpA);

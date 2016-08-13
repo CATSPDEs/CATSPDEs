@@ -36,12 +36,6 @@
     <ClInclude Include="AbstractSparseMatrix.hpp">
       <Filter>Matrices</Filter>
     </ClInclude>
-    <ClInclude Include="AbstractSquareMatrix.hpp">
-      <Filter>Matrices</Filter>
-    </ClInclude>
-    <ClInclude Include="IRealMatrix.hpp">
-      <Filter>Matrices</Filter>
-    </ClInclude>
     <ClInclude Include="BandMatrix.hpp">
       <Filter>Matrices\Implementations</Filter>
     </ClInclude>
@@ -138,12 +132,6 @@
     <ClInclude Include="CSlRMatrix.hpp">
       <Filter>Matrices\Implementations</Filter>
     </ClInclude>
-    <ClInclude Include="IMultipliable.hpp">
-      <Filter>Matrices</Filter>
-    </ClInclude>
-    <ClInclude Include="ITransposeMultipliable.hpp">
-      <Filter>Matrices</Filter>
-    </ClInclude>
     <ClInclude Include="IDecomposable.hpp">
       <Filter>Matrices</Filter>
     </ClInclude>
@@ -156,6 +144,18 @@
     <ClInclude Include="constants.hpp">
       <Filter>Common</Filter>
     </ClInclude>
+    <ClInclude Include="StokesMatrix.hpp">
+      <Filter>Matrices\Implementations</Filter>
+    </ClInclude>
+    <ClInclude Include="AbstractMultipliableMatrix.hpp">
+      <Filter>Matrices</Filter>
+    </ClInclude>
+    <ClInclude Include="AbstractTransposeMultipliableMatrix.hpp">
+      <Filter>Matrices</Filter>
+    </ClInclude>
+    <ClInclude Include="AbstractMatrix.hpp">
+      <Filter>Matrices</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="BandMatrix.cpp">
@@ -165,9 +165,6 @@
       <Filter>Matrices\Implementations</Filter>
     </ClCompile>
     <ClCompile Include="SymmetricCSlRMatrix.cpp">
-      <Filter>Matrices\Implementations</Filter>
-    </ClCompile>
-    <ClCompile Include="CSRMatrix.cpp">
       <Filter>Matrices\Implementations</Filter>
     </ClCompile>
     <ClCompile Include="RectangularFDMMesh.cpp">
@@ -193,6 +190,9 @@
     </ClCompile>
     <ClCompile Include="Triangulation.cpp">
       <Filter>Meshes\Triangulation</Filter>
+    </ClCompile>
+    <ClCompile Include="StokesMatrix.cpp">
+      <Filter>Matrices\Implementations</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
