@@ -37,6 +37,6 @@ ostream& operator<<(ostream& output, array<T, N> const & u) {
 	output.precision(15); // double precision
 	output << scientific << showpos;
 	for (size_t i = 0; i < N; ++i)
-		output << u[i] << '\n';
+		output << u[i] << ' ';
 	return output;
 }

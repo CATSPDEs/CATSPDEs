@@ -22,12 +22,4 @@
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
-  <ItemGroup>
-    <Text Include="matrix_band.txt">
-      <Filter>Resource Files</Filter>
-    </Text>
-    <Text Include="matrix_csr.txt">
-      <Filter>Resource Files</Filter>
-    </Text>
-  </ItemGroup>
 </Project>

@@ -21,10 +21,14 @@ public:
 	// (2) multiplication by transposed matrix (w/o actual transposing, obviously)
 		// v = A.t() * u;
 	vector<T> operator*(vector<T> const & u) final {
+		if (_t) {
+			vector<T> v(numbOfCols());
+			multByTranspose(u.data(), v.data());
+			_t = false;
+			return v;
+		}
 		vector<T> v(numbOfRows());
-		if (_t) multByTranspose(u.data(), v.data());
-		else mult(u.data(), v.data());
-		_t = false;
+		mult(u.data(), v.data());
 		return v;
 	}
 };

@@ -124,10 +124,6 @@
   <ItemGroup>
     <ClCompile Include="user.cpp" />
   </ItemGroup>
-  <ItemGroup>
-    <Text Include="matrix_band.txt" />
-    <Text Include="matrix_csr.txt" />
-  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

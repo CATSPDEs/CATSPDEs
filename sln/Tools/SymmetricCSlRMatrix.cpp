@@ -55,12 +55,12 @@ istream & SymmetricCSlRMatrix::loadSparse(istream& input) {
 	// in lower triangular part (_iptr[_w])
 	// so here is istream structure:
 	//
-	// (1) _w - 1    elements of _iptr, w/o _iptr[_w]
+	// (1) _w + 1    elements of _iptr (the last element is already known),
 	// (2) _iptr[_w] elements of _jptr,
 	// (3) _iptr[_w] elements of _lptr,
 	// (4) _w        elements of _diag
 	//
-	size_t i, max = _w;
+	size_t i, max = _w + 1;
 	for (i = 0; i < max; ++i)
 		input >> _iptr[i];
 	max = _iptr[_w];
@@ -77,8 +77,7 @@ istream & SymmetricCSlRMatrix::loadSparse(istream& input) {
 template <typename T>
 ostream& SymmetricCSlRMatrix::saveSparse(ostream& output) const {
 	return output << _w << ' ' << _iptr[_w] << '\n'
-		<< vector<size_t>(_iptr.begin(), _iptr.end() - 1) << '\n' 
-		// we do not want last element to be written—we already have it
+		<< _iptr << '\n' 
 		<< _jptr << '\n'
 		<< _lval << '\n'
 		<< _diag;

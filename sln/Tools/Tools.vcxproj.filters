@@ -156,6 +156,9 @@
     <ClInclude Include="AbstractMatrix.hpp">
       <Filter>Matrices</Filter>
     </ClInclude>
+    <ClInclude Include="CSCMatrix.hpp">
+      <Filter>Matrices\Implementations</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="BandMatrix.cpp">

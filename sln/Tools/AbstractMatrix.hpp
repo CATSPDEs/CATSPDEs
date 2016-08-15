@@ -10,11 +10,11 @@ class AbstractMatrix { // abstract class for rect matricies
 	virtual T& _set(size_t, size_t) = 0; // set / get value of element using indicies of traditional form of matrix
 	virtual T  _get(size_t, size_t) const = 0;
 protected: // interface for derivative classes
-	size_t _w, _h; // numb of rows and cols, _w × _h =: size of matrix
+	size_t _h, _w; // numb of rows and cols, _w × _h =: size of matrix
 public:
-	AbstractMatrix(size_t w, size_t h) 
-		: _w(w)
-		, _h(h) {
+	AbstractMatrix(size_t h, size_t w) 
+		: _h(h)
+		, _w(w) {
 		if (_w < 1 || _h < 1) throw out_of_range("order of matrix must be at least one");
 	}
 	virtual ~AbstractMatrix() {}

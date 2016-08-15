@@ -49,7 +49,7 @@ ostream& operator<<(ostream& output, vector<T> const & u) {
 	output.precision(15); // double precision
 	output << scientific << showpos;
 	for (size_t i = 0; i < u.size(); ++i)
-		output << u[i] << '\n';
+		output << u[i] << ' ';
 	return output;
 }
 
@@ -79,7 +79,6 @@ ostream& operator<<(ostream& output, vector<array<T, N>> const & u) {
 }
 
 template <typename T>
-T norm(vector<T> const & v)
-{
-	return sqrt(v*v);
+T norm(vector<T> const & v) {
+	return sqrt(v * v);
 }

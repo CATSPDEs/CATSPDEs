@@ -123,6 +123,7 @@
     <ClInclude Include="array.hpp" />
     <ClInclude Include="BoundaryConditions_t.hpp" />
     <ClInclude Include="constants.hpp" />
+    <ClInclude Include="CSCMatrix.hpp" />
     <ClInclude Include="CSlRMatrix.hpp" />
     <ClInclude Include="Curve.hpp" />
     <ClInclude Include="CurvilinearEdge.hpp" />
