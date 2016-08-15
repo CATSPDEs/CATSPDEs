@@ -22,12 +22,12 @@ public:
 		// v = A.t() * u;
 	vector<T> operator*(vector<T> const & u) final {
 		if (_t) {
-			vector<T> v(numbOfCols());
+			vector<T> v(_w);
 			multByTranspose(u.data(), v.data());
 			_t = false;
 			return v;
 		}
-		vector<T> v(numbOfRows());
+		vector<T> v(_h);
 		mult(u.data(), v.data());
 		return v;
 	}

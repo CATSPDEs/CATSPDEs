@@ -91,7 +91,7 @@ void CSRMatrix<T>::mult(T const * by, T* result) const {
 template <typename T>
 void CSRMatrix<T>::multByTranspose(T const * by, T* result) const {
 	size_t i, j;
-	fill(result, result + numbOfCols(), 0.); // clear resulting vector
+	fill(result, result + _w, 0.); // clear resulting vector
 	for (i = 0; i < _h; ++i)
 		for (j = _iptr[i]; j < _iptr[i + 1]; ++j)
 			result[_jptr[j]] += _mval[j] * by[i];

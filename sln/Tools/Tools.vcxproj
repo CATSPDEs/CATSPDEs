@@ -130,6 +130,7 @@
     <ClInclude Include="DenseMatrix.hpp" />
     <ClInclude Include="FEM.hpp" />
     <ClInclude Include="FEM_t.hpp" />
+    <ClInclude Include="hb_io.hpp" />
     <ClInclude Include="HyperbolicPDE.hpp" />
     <ClInclude Include="IDecomposable.hpp" />
     <ClInclude Include="AbstractMultipliableMatrix.hpp" />
@@ -170,6 +171,7 @@
     <ClCompile Include="DenseMatrix.cpp" />
     <ClCompile Include="FEM.cpp" />
     <ClCompile Include="FEM_t.cpp" />
+    <ClCompile Include="hb_io.cpp" />
     <ClCompile Include="RectangularFDMMesh.cpp" />
     <ClCompile Include="StokesMatrix.cpp" />
     <ClCompile Include="SymmetricCSlRMatrix.cpp" />

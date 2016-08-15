@@ -2,11 +2,6 @@
 #include <string>
 #include "CSRMatrix.hpp"
 #include "CSCMatrix.hpp"
-//#include "BandMatrix.hpp"
-//#include "DenseMatrix.hpp"
-//#include "SymmetricCSlRMatrix.hpp"
-//#include "CSlRMatrix.hpp"
-//#include "krylov.hpp"
 
 int main() {
 	string matrixType;
@@ -52,6 +47,11 @@ int main() {
 			iV >> v;
 			oCSCxU << CSC * u;
 			oCSCxV << CSC.t() * v;
+			// HB
+			ifstream iHB("HarwellBoeing/beacxc.rra");
+			ofstream oHBDense("Mathematica/beacxc.dat");
+			HBMatrix<double> HB(iHB);
+			HB.save(oHBDense);
 		}
 	}
 	catch (exception const & e) {

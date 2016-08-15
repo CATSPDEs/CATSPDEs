@@ -21,5 +21,8 @@
     <ClCompile Include="user.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="..\Tools\hb_io.cpp">
+      <Filter>Source Files\External Tools</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

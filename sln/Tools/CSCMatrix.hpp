@@ -1,6 +1,8 @@
 #pragma once
+#include <algorithm> // for_each
 #include "AbstractSparseMatrix.hpp"
 #include "AbstractTransposeMultipliableMatrix.hpp"
+#include "hb_io.hpp"
 
 template <typename T> class CSCMatrix;
 // matrix is stored in CSC (compressed sparse column) format…
@@ -24,6 +26,7 @@ class CSCMatrix
 	T  _get(size_t, size_t) const final;
 public:
 	CSCMatrix(size_t h, size_t w, size_t nnz);
+	CSCMatrix(ifstream& iHB); // construct from Harwell–Boeing file
 	// virtual methods to be implemented
 	CSCMatrix& operator=(T const & val) final;
 	void mult(T const * by, T* result) const final;
@@ -41,6 +44,61 @@ CSCMatrix<T>::CSCMatrix(size_t h, size_t w, size_t nnz)
 	, _iptr(nnz)
 	, _mval(nnz) {
 	_jptr[w] = nnz;
+}
+
+template <typename T>
+CSCMatrix<T>::CSCMatrix(ifstream& iHB)
+	: AbstractMatrix<T>(1, 1) {
+	int *colptr = nullptr; // why not size_t, HB_IO, why?..
+	int indcrd;
+	char *indfmt = nullptr;
+	char *key = nullptr;
+	char *mxtype = nullptr;
+	int ncol;
+	int neltvl;
+	int nnzero;
+	int nrhs;
+	int nrhsix;
+	int nrow;
+	int ptrcrd;
+	char *ptrfmt = nullptr;
+	int rhscrd;
+	char *rhsfmt = nullptr;
+	char *rhstyp = nullptr;
+	int *rowind = nullptr;
+	char *title = nullptr;
+	int totcrd;
+	int valcrd;
+	char *valfmt = nullptr;
+	double *values = nullptr; // T = complex<double>?
+	// read header info
+	hb_header_read(iHB, &title, &key, &totcrd, &ptrcrd, &indcrd,
+	               &valcrd, &rhscrd, &mxtype, &nrow, &ncol, &nnzero, &neltvl, &ptrfmt,
+	               &indfmt, &valfmt, &rhsfmt, &rhstyp, &nrhs, &nrhsix);
+	if (mxtype[1] != 'R')
+		throw invalid_argument("rect matrix is expected; use CSlR (SymmetricCSlR) class for unsymmetric matrices w/ symmetric pattern (symmetric matrices), respectively");
+	if (mxtype[2] != 'A')
+		throw invalid_argument("assembled matrix is expected");
+	colptr = new int[ncol + 1];
+	rowind = new int[nnzero];
+	// read structure
+	hb_structure_read(iHB, ncol, mxtype, nnzero, neltvl,
+	                  ptrcrd, ptrfmt, indcrd, indfmt, colptr, rowind);
+	values = new double[nnzero];
+	// read values
+	hb_values_read(iHB, valcrd, mxtype, nnzero, neltvl, valfmt, values);
+	// construct matrix
+	_h = nrow;
+	_w = ncol;
+	_jptr = vector<size_t>(colptr, colptr + ncol + 1);
+	for_each(_jptr.begin(), _jptr.end(), [](size_t& i) { --i; });
+	_iptr = vector<size_t>(rowind, rowind + nnzero);
+	for_each(_iptr.begin(), _iptr.end(), [](size_t& i) { --i; });
+	_mval = vector<T>(values, values + nnzero); // what if T = complex<double>?
+	// free
+	delete[] colptr;
+	delete[] rowind;
+	delete[] values;
 }
 
 // private methods
@@ -72,7 +130,7 @@ CSCMatrix<T>& CSCMatrix<T>::operator=(T const & val) {
 template <typename T>
 void CSCMatrix<T>::mult(T const * by, T* result) const {
 	size_t i, j;
-	fill(result, result + numbOfRows(), 0.); // clear resulting vector
+	fill(result, result + _h, 0.); // clear resulting vector
 	for (j = 0; j < _w; ++j)
 		for (i = _jptr[j]; i < _jptr[j + 1]; ++i)
 			result[_iptr[i]] += _mval[i] * by[j];
