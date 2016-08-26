@@ -31,9 +31,6 @@
     <Filter Include="Solvers">
       <UniqueIdentifier>{63e63e73-f140-4fd0-b55d-cfdf8770fa3a}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Matrices\Implementations\External Tools">
-      <UniqueIdentifier>{abb50411-3070-4456-87f9-6ff3172bc5ae}</UniqueIdentifier>
-    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AbstractSparseMatrix.hpp">
@@ -162,9 +159,6 @@
     <ClInclude Include="CSCMatrix.hpp">
       <Filter>Matrices\Implementations</Filter>
     </ClInclude>
-    <ClInclude Include="hb_io.hpp">
-      <Filter>Matrices\Implementations\External Tools</Filter>
-    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="BandMatrix.cpp">
@@ -202,9 +196,6 @@
     </ClCompile>
     <ClCompile Include="StokesMatrix.cpp">
       <Filter>Matrices\Implementations</Filter>
-    </ClCompile>
-    <ClCompile Include="hb_io.cpp">
-      <Filter>Matrices\Implementations\External Tools</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

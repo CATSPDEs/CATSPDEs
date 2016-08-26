@@ -15,6 +15,9 @@ int main() {
 	}
 	try {
 		if (matrixType == "CSR") {
+			/*
+				CSR–matrix
+			*/
 			ifstream iCSR("Mathematica/matrices/csr.dat"),
 				iU("Mathematica/matrices/csr_vector.dat"),
 				iV("Mathematica/matrices/csr_vector_t.dat");
@@ -32,6 +35,9 @@ int main() {
 			oCSRxV << CSR.t() * v;
 		}
 		else if (matrixType == "CSC") {
+			/*
+				CSC–matrix 
+			*/
 			ifstream iCSC("Mathematica/matrices/csc.dat"),
 			         iU("Mathematica/matrices/csc_vector.dat"),
 			         iV("Mathematica/matrices/csc_vector_t.dat");
@@ -47,11 +53,11 @@ int main() {
 			iV >> v;
 			oCSCxU << CSC * u;
 			oCSCxV << CSC.t() * v;
-			// HB
-			ifstream iHB("HarwellBoeing/beacxc.rra");
-			ofstream oHBDense("Mathematica/beacxc.dat");
-			HBMatrix<double> HB(iHB);
-			HB.save(oHBDense);
+			// Harwell–Boeing i/o testing
+			readHarwellBoeingHeader("Mathematica/HarwellBoeing/input/beacxc.rra", &rows, &cols, &nnz);
+			cout << nnz << '\n';
+			//HBMatrix<double> HB(iHB);
+			//HB.save(oHBDense);
 		}
 	}
 	catch (exception const & e) {

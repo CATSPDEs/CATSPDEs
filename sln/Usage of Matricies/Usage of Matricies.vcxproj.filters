@@ -21,8 +21,10 @@
     <ClCompile Include="user.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\Tools\hb_io.cpp">
+  </ItemGroup>
+  <ItemGroup>
+    <Library Include="..\Harwell–Boeing IO (FORTRAN Static Library)\x64\Debug\Harwell–Boeing IO (FORTRAN Static Library).lib">
       <Filter>Source Files\External Tools</Filter>
-    </ClCompile>
+    </Library>
   </ItemGroup>
 </Project>
