@@ -168,8 +168,8 @@
     <ClInclude Include="SingletonLogger.hpp">
       <Filter>Utilities\Logger</Filter>
     </ClInclude>
-    <ClInclude Include="HarwellBoeingIO.hpp">
-      <Filter>Matrices\Implementations</Filter>
+    <ClInclude Include="AbstractHarwellBoeingMatrix.hpp">
+      <Filter>Matrices</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

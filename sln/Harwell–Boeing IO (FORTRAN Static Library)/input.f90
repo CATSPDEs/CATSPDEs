@@ -67,9 +67,13 @@
             if (header.valcrd .gt. 0 ) then
                 ! read matrix values
                 if (header.mxtype(3) .eq. 'A')  then
-                    read(56, valfmt(1 : 20)) (values(i), i = 1, header.nnzero)
-                else ! actually, we are interested in working w/ assembled matrices only, so…
-                    read(56, valfmt(1 : 20)) (values(i), i = 1, header.neltvl) 
+                    if (header.mxtype(1) .eq. 'R') then
+                        ! real
+                        read(56, valfmt(1 : 20)) (values(i), i = 1, header.nnzero)
+                    else
+                        ! complex
+                        if (header.mxtype(1) .eq. 'C') read(56, valfmt(1 : 20)) (values(i), i = 1, 2 * header.nnzero)
+                    endif
                 endif
             ! …
             endif

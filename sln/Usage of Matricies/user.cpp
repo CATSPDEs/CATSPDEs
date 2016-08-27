@@ -1,10 +1,12 @@
 #include <fstream>
 #include <string>
+#include <complex>
 #include "CSRMatrix.hpp"
 #include "CSCMatrix.hpp"
 
 int main() {
 	SingletonLogger& logger = SingletonLogger::instance();
+	size_t i;
 	logger.beg("choose matrix format from CATSPDEs collection");
 		string matrixType;
 		vector<string> availableTypes = { "CSR", "CSC" };
@@ -59,11 +61,30 @@ int main() {
 					oCSCxU << CSC * u;
 					oCSCxV << CSC.t() * v;
 				logger.end();
+				/*
+					Harwell–Boeing i/o
+				*/
 				logger.beg("Harwell-Boeing i/o test");
-					HBMatrix<double>* HB = nullptr;
-					HBMatrix<double>::loadHarwellBoeing("Mathematica/HarwellBoeing/input/beacxc.rra", HB, logger);
-					//readHarwellBoeingStruct();
-					//HB.save(oHBDense);
+					availableTypes = { 
+						"illc1033.rra (real    rectangular assembled)", 
+						"e40r5000.rua (real    unsymmetric assembled)", 
+						"qc2534.cua   (comlex  unsymmetric assembled)", 
+						"young1c.csa  (complex symmetric   assembled) (should fail)",
+						"cegb2802.pse (pattern symmetric   elemental) (should fail)",
+					};
+					logger.log("available HB types");
+					for (i = 0; i < availableTypes.size(); ++i)
+						logger.mes("(" + to_string(i) + ") " + availableTypes[i]);
+					// leave onle .rra, .rua etc.
+					for_each(availableTypes.begin(), availableTypes.end(), [](string& s) { s.resize(s.find_first_of(' ')); });
+					logger.inp("choose type (enter number)");
+					cin >> i;
+					if (i > availableTypes.size() - 1) i = availableTypes.size() - 1;
+					// complex or real
+					if (availableTypes[i].at(availableTypes[i].find_first_of('.') + 1) == 'r') 
+						HBMatrix<double> HB("Mathematica/HarwellBoeing/input/" + availableTypes[i], logger);
+					else 
+						HBMatrix<complex<double>> HB("Mathematica/HarwellBoeing/input/" + availableTypes[i], logger);
 				logger.end();
 			logger.end();
 		}

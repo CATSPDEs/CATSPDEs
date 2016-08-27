@@ -1,9 +1,9 @@
 ﻿#pragma once
 #include <algorithm> // for_each
-#include "AbstractSparseMatrix.hpp"
+#include <type_traits> // is_same 
+#include "AbstractHarwellBoeingMatrix.hpp"
 #include "AbstractTransposeMultipliableMatrix.hpp"
-#include "HarwellBoeingIO.hpp"
-#include "SingletonLogger.hpp"
+
 
 template <typename T> class CSCMatrix;
 // matrix is stored in CSC (compressed sparse column) format…
@@ -13,7 +13,7 @@ template <typename T> using HBMatrix = CSCMatrix<T>;
 
 template <typename T>
 class CSCMatrix
-	: public AbstractSparseMatrix<T>
+	: public AbstractHarwellBoeingMatrix<T>
 	, public AbstractTransposeMultipliableMatrix<T> {
 	// …it’s similar to CSR (check out CSRMatrix.hpp for details) except 
 	// _mval vector contains nozero matrix values col by col, not row by row
@@ -27,13 +27,14 @@ class CSCMatrix
 	T  _get(size_t, size_t) const final;
 public:
 	CSCMatrix(size_t h, size_t w, size_t nnz);
+	CSCMatrix(string const &, SingletonLogger&); // load from Harwell–Boeing file
 	// virtual methods to be implemented
 	CSCMatrix& operator=(T const & val) final;
 	void mult(T const * by, T* result) const final;
 	void multByTranspose(T const * by, T* result) const final;
 	istream& loadSparse(istream& from = cin) final;
 	ostream& saveSparse(ostream& to   = cout) const final;
-	static void loadHarwellBoeing(string const &, CSCMatrix*, SingletonLogger&);
+	void saveHarwellBoeing(string const &, string const &, string const &) final;
 };
 
 // implementation
@@ -45,6 +46,50 @@ CSCMatrix<T>::CSCMatrix(size_t h, size_t w, size_t nnz)
 	, _iptr(nnz)
 	, _mval(nnz) {
 	_jptr[w] = nnz;
+}
+
+template <typename T>
+CSCMatrix<T>::CSCMatrix(string const & fileName, SingletonLogger& logger)
+	: AbstractMatrix(1, 1) {
+	HarwellBoeingHeader header;
+	logger.beg("read header info from " + fileName);
+		readHarwellBoeingHeader(fileName.c_str(), &header);
+		logHarwellBoeingHeader(header, logger);
+	logger.end();
+	// check matrix type
+	if (header.mxtype[1] != 'U' && header.mxtype[1] != 'R') throw invalid_argument("CSC type is useful for rect / unsymmetric pattern (.*r*, .*u*) Harwell-Boeing matrices; try SymmetricCSlR");
+	if (header.mxtype[2] != 'A') throw invalid_argument("only assembles (.**a) Harwell-Boeing matrices are supported");
+	// update structure
+	_h = header.nrow;
+	_w = header.ncol;
+	_jptr.resize(header.ncol + 1);
+	_iptr.resize(header.nnzero);
+	_mval.resize(header.nnzero);
+	logger.beg("read matrix structure / values from " + fileName);
+		double* mval = reinterpret_cast<double*>(_mval.data());
+		readHarwellBoeingStruct(fileName.c_str(), &header, _jptr.data(), _iptr.data(), mval);
+		logger.log("decrement iptr and jptr values");
+		for_each(_jptr.begin(), _jptr.end(), [](size_t& i) { --i; });
+		for_each(_iptr.begin(), _iptr.end(), [](size_t& i) { --i; });
+		logger.log("print internal data");
+		// jptr
+		short n = min(4, header.ncol + 1), i;
+		for (i = 0; i < n; ++i) logger.mes("jptr[" + to_string(i) + "] = " + to_string(_jptr[i]));
+		logger.mes("jptr[" + to_string(header.ncol) + "] = " + to_string(_jptr[header.ncol]));
+		// iptr
+		n = min(4, header.nnzero);
+		for (i = 0; i < n; ++i) logger.mes("iptr[" + to_string(i) + "] = " + to_string(_iptr[i]));
+		logger.mes("iptr[" + to_string(header.nnzero - 1) + "] = " + to_string(_iptr[header.nnzero - 1]));
+		// mval
+		if (is_same<T, double>::value) { // real
+			for (i = 0; i < n; ++i) logger.mes("mval[" + to_string(i) + "] = " + to_string(mval[i]));
+			logger.mes("mval[" + to_string(header.nnzero - 1) + "] = " + to_string(mval[header.nnzero - 1]));
+		}
+		else { // complex
+			for (i = 0; i < n; ++i) logger.mes("mval[" + to_string(i) + "] = " + to_string(mval[2 * i]) + " + i * " + to_string(mval[2 * i + 1]));
+			logger.mes("mval[" + to_string(header.nnzero - 1) + "] = " + to_string(mval[2 * header.nnzero - 2]) + " + i * " + to_string(mval[2 * header.nnzero - 1]));
+		}
+	logger.end();
 }
 
 // private methods
@@ -110,59 +155,6 @@ ostream& CSCMatrix<T>::saveSparse(ostream& output) const {
 }
 
 template <typename T>
-void CSCMatrix<T>::loadHarwellBoeing(string const & fileName, HBMatrix<T>* matrixPtr, SingletonLogger& logger) { // TODO smart pointers
-	HarwellBoeingHeader header;
-	logger.beg("read header info from " + fileName);
-		readHarwellBoeingHeader(fileName.c_str(), &header);
-		logger.log("line 1");
-		logger.mes("title:  " + string(header.title));
-		logger.mes("key:    " + string(header.key));
-		logger.log("line 2");
-		logger.mes("totcrd: " + to_string(header.totcrd));
-		logger.mes("ptrcrd: " + to_string(header.ptrcrd));
-		logger.mes("indcrd: " + to_string(header.indcrd));
-		logger.mes("valcrd: " + to_string(header.valcrd));
-		logger.mes("rhscrd: " + to_string(header.rhscrd));
-		logger.log("line 3");
-		logger.mes("mxtype: " + string(header.mxtype));
-		logger.mes("nrow:   " + to_string(header.nrow));
-		logger.mes("ncol:   " + to_string(header.ncol));
-		logger.mes("nnzero: " + to_string(header.nnzero));
-		logger.mes("neltvl: " + to_string(header.neltvl));
-		logger.log("line 4");
-		logger.mes("ptrfmt: " + string(header.ptrfmt));
-		logger.mes("indfmt: " + string(header.indfmt));
-		logger.mes("valfmt: " + string(header.valfmt));
-		logger.mes("rhsfmt: " + string(header.rhsfmt));
-		if (header.rhscrd > 0) {
-			logger.log("line 5");
-			logger.mes("rhstyp: " + string(header.rhstyp));
-			logger.mes("nrhs: " + to_string(header.nrhs));
-			logger.mes("nrhsix: " + to_string(header.nrhsix));
-		}
-	logger.end();
-	// TODO mtxtype checking
-	// TODO should we free memory before allocating??
-	matrixPtr = new HBMatrix<T>(header.nrow, header.ncol, header.nnzero);
-	logger.beg("read matrix structure / values from " + fileName);
-		readHarwellBoeingStruct(fileName.c_str(), &header, 
-		                        matrixPtr->_jptr.data(), 
-		                        matrixPtr->_iptr.data(), 
-		                        matrixPtr->_mval.data()); // T = comlex<double>??
-		logger.log("decrement iptr and jptr values");
-		for_each(matrixPtr->_jptr.begin(), matrixPtr->_jptr.end(), [](size_t& i) { --i; });
-		for_each(matrixPtr->_iptr.begin(), matrixPtr->_iptr.end(), [](size_t& i) { --i; });
-		logger.log("print internal data");
-		// jptr
-		short n = min(4, header.ncol + 1), i;
-		for (i = 0; i < n; ++i) logger.mes("jptr[" + to_string(i) + "] = " + to_string(matrixPtr->_jptr[i]));
-		logger.mes("jptr[" + to_string(header.ncol) + "] = " + to_string(matrixPtr->_jptr[header.ncol]));
-		// iptr
-		n = min(4, header.nnzero);
-		for (i = 0; i < n; ++i) logger.mes("iptr[" + to_string(i) + "] = " + to_string(matrixPtr->_iptr[i]));
-		logger.mes("iptr[" + to_string(header.nnzero - 1) + "] = " + to_string(matrixPtr->_iptr[header.nnzero - 1]));
-		// mval
-		for (i = 0; i < n; ++i) logger.mes("mval[" + to_string(i) + "] = " + to_string(matrixPtr->_mval[i]));
-		logger.mes("mval[" + to_string(header.nnzero - 1) + "] = " + to_string(matrixPtr->_mval[header.nnzero - 1]));
-	logger.end();
+void CSCMatrix<T>::saveHarwellBoeing(string const & fileName, string const & title, string const & key) {
+	// …
 }

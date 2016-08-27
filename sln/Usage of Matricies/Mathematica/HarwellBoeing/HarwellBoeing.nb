@@ -10,10 +10,10 @@
 NotebookFileLineBreakTest
 NotebookFileLineBreakTest
 NotebookDataPosition[       158,          7]
-NotebookDataLength[     99691,       1766]
-NotebookOptionsPosition[     98835,       1732]
-NotebookOutlinePosition[     99182,       1747]
-CellTagsIndexPosition[     99139,       1744]
+NotebookDataLength[     99845,       1771]
+NotebookOptionsPosition[     98989,       1737]
+NotebookOutlinePosition[     99336,       1752]
+CellTagsIndexPosition[     99293,       1749]
 WindowFrame->Normal*)
 
 (* Beginning of Notebook Content *)
@@ -26,10 +26,11 @@ Cell[BoxData[
 Cell[BoxData[
  RowBox[{"SetDirectory", "[", 
   RowBox[{
-   RowBox[{"NotebookDirectory", "[", "]"}], "<>", 
-   "\"\<../HarwellBoeing\>\""}], "]"}]], "Input",
+   RowBox[{"NotebookDirectory", "[", "]"}], "<>", "\"\</input\>\""}], 
+  "]"}]], "Input",
  CellChangeTimes->{{3.6804223569269342`*^9, 3.6804223964193788`*^9}, 
-   3.6804224350168505`*^9, {3.680423710558457*^9, 3.6804238075630813`*^9}}],
+   3.6804224350168505`*^9, {3.680423710558457*^9, 3.6804238075630813`*^9}, {
+   3.6813094325848308`*^9, 3.6813094378046293`*^9}}],
 
 Cell[CellGroupData[{
 
@@ -40,9 +41,9 @@ Cell[CellGroupData[{
 
 Cell[BoxData[
  RowBox[{"Import", "[", 
-  RowBox[{"\"\<mcca.rua.gz\>\"", ",", "\"\<Graphics\>\""}], "]"}]], "Input",
+  RowBox[{"\"\<qc2534.cua\>\"", ",", "\"\<Graphics\>\""}], "]"}]], "Input",
  CellChangeTimes->{{3.6804236154399605`*^9, 3.680423616660894*^9}, 
-   3.680423823156443*^9}],
+   3.680423823156443*^9, 3.6813094159197674`*^9}],
 
 Cell[BoxData[
  GraphicsBox[RasterBox[CompressedData["
@@ -1097,8 +1098,9 @@ Cell[BoxData[
                  Evaluator -> Automatic, Method -> "Preemptive"], 
                Alignment -> {Center, Center}, ImageSize -> 
                Dynamic[{
-                 Automatic, 3.5 CurrentValue["FontCapHeight"]/
-                  AbsoluteCurrentValue[Magnification]}]], 
+                 Automatic, 
+                  3.5 (CurrentValue["FontCapHeight"]/AbsoluteCurrentValue[
+                   Magnification])}]], 
               GraphicsBox[
                RasterBox[CompressedData["
 1:eJzt3GtIk2EUB/BZzIJEM4tKWrgkU9R5SbJMO4pWKqV0sZpJiWVgkZKRVlqm
@@ -1132,8 +1134,9 @@ loAyixtwZ13JzMe0fmLf0jYXOjPc2P8PIfUtbXOhM8ONzSf+PwM6DY75RP8f
                Directive[
                  GrayLevel[0.5, 0.4]], ImageSize -> 
                Dynamic[{
-                 Automatic, 3.5 CurrentValue["FontCapHeight"]/
-                  AbsoluteCurrentValue[Magnification]}], 
+                 Automatic, 
+                  3.5 (CurrentValue["FontCapHeight"]/AbsoluteCurrentValue[
+                   Magnification])}], 
                Method -> {
                 "AxisPadding" -> Scaled[0.02], "DefaultBoundaryStyle" -> 
                  Automatic, "DefaultPlotStyle" -> Automatic, "DomainPadding" -> 
@@ -1172,8 +1175,9 @@ loAyixtwZ13JzMe0fmLf0jYXOjPc2P8PIfUtbXOhM8ONzSf+PwM6DY75RP8f
                 None, Evaluator -> Automatic, Method -> "Preemptive"], 
                Alignment -> {Center, Center}, ImageSize -> 
                Dynamic[{
-                 Automatic, 3.5 CurrentValue["FontCapHeight"]/
-                  AbsoluteCurrentValue[Magnification]}]], 
+                 Automatic, 
+                  3.5 (CurrentValue["FontCapHeight"]/AbsoluteCurrentValue[
+                   Magnification])}]], 
               GraphicsBox[
                RasterBox[CompressedData["
 1:eJzt3GtIk2EUB/BZzIJEM4tKWrgkU9R5SbJMO4pWKqV0sZpJiWVgkZKRVlqm
@@ -1207,8 +1211,9 @@ loAyixtwZ13JzMe0fmLf0jYXOjPc2P8PIfUtbXOhM8ONzSf+PwM6DY75RP8f
                Directive[
                  GrayLevel[0.5, 0.4]], ImageSize -> 
                Dynamic[{
-                 Automatic, 3.5 CurrentValue["FontCapHeight"]/
-                  AbsoluteCurrentValue[Magnification]}], 
+                 Automatic, 
+                  3.5 (CurrentValue["FontCapHeight"]/AbsoluteCurrentValue[
+                   Magnification])}], 
                Method -> {
                 "AxisPadding" -> Scaled[0.02], "DefaultBoundaryStyle" -> 
                  Automatic, "DefaultPlotStyle" -> Automatic, "DomainPadding" -> 
@@ -1747,25 +1752,25 @@ CellTagsIndex->{}
 (*NotebookFileOutline
 Notebook[{
 Cell[558, 20, 174, 3, 31, "Input"],
-Cell[735, 25, 302, 6, 31, "Input"],
+Cell[735, 25, 345, 7, 31, "Input"],
 Cell[CellGroupData[{
-Cell[1062, 35, 125, 1, 144, "Title"],
+Cell[1105, 36, 125, 1, 144, "Title"],
 Cell[CellGroupData[{
-Cell[1212, 40, 209, 4, 31, "Input"],
-Cell[1424, 46, 59986, 992, 364, "Output"]
+Cell[1255, 41, 232, 4, 31, "Input"],
+Cell[1490, 47, 59986, 992, 364, "Output"]
 }, Open  ]],
 Cell[CellGroupData[{
-Cell[61447, 1043, 453, 8, 88, "Input"],
-Cell[61903, 1053, 365, 10, 21, "Message"],
-Cell[62271, 1065, 288, 8, 21, "Message"]
+Cell[61513, 1044, 453, 8, 31, "Input"],
+Cell[61969, 1054, 365, 10, 21, "Message"],
+Cell[62337, 1066, 288, 8, 21, "Message"]
 }, Open  ]],
 Cell[CellGroupData[{
-Cell[62596, 1078, 100, 1, 31, "Input"],
-Cell[62699, 1081, 12148, 241, 72, "Output"]
+Cell[62662, 1079, 100, 1, 31, "Input"],
+Cell[62765, 1082, 12236, 245, 72, "Output"]
 }, Open  ]],
 Cell[CellGroupData[{
-Cell[74884, 1327, 86, 2, 31, "Input"],
-Cell[74973, 1331, 23834, 397, 404, "Output"]
+Cell[75038, 1332, 86, 2, 31, "Input"],
+Cell[75127, 1336, 23834, 397, 404, "Output"]
 }, Open  ]]
 }, Open  ]]
 }
