@@ -21,6 +21,9 @@
     <ClCompile Include="user.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="..\Tools\SingletonLogger.cpp">
+      <Filter>Source Files\External Tools</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Library Include="..\Harwell–Boeing IO (FORTRAN Static Library)\x64\Debug\Harwell–Boeing IO (FORTRAN Static Library).lib">

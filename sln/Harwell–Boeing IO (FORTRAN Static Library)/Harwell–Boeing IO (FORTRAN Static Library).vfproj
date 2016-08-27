@@ -42,7 +42,6 @@
 				<Tool Name="VFPostBuildEventTool"/></Configuration></Configurations>
 	<Files>
 		<Filter Name="Source Files" Filter="f90;for;f;fpp;ftn;def;odl;idl">
-		<File RelativePath=".\readHeader.f90"/>
-		<File RelativePath=".\readStruct.f90"/></Filter>
+		<File RelativePath=".\input.f90"/></Filter>
 		<File RelativePath=".\readme.txt"/></Files>
 	<Globals/></VisualStudioProject>

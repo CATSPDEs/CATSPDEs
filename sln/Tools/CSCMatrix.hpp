@@ -1,28 +1,21 @@
-#pragma once
+ï»¿#pragma once
 #include <algorithm> // for_each
 #include "AbstractSparseMatrix.hpp"
 #include "AbstractTransposeMultipliableMatrix.hpp"
+#include "HarwellBoeingIO.hpp"
+#include "SingletonLogger.hpp"
 
 template <typename T> class CSCMatrix;
-// matrix is stored in CSC (compressed sparse column) format…
+// matrix is stored in CSC (compressed sparse column) formatâ€¦
 
 template <typename T> using HBMatrix = CSCMatrix<T>;
-// …aka Harwell–Boeing format…
-
-// those will be linked from
-// Harwell–Boeing IO (FORTRAN Static Library) project
-// so you have to include .lib file from the above project
-// in order to use CSC–matrix in your code
-extern "C" {
-	void readHarwellBoeingHeader(char const * input, size_t* h, size_t* w, size_t* nnz);
-	void readHarwellBoeingStruct();
-}
+// â€¦aka Harwellâ€“Boeing formatâ€¦
 
 template <typename T>
 class CSCMatrix
 	: public AbstractSparseMatrix<T>
 	, public AbstractTransposeMultipliableMatrix<T> {
-	// …it’s similar to CSR (check out CSRMatrix.hpp for details) except 
+	// â€¦itâ€™s similar to CSR (check out CSRMatrix.hpp for details) except 
 	// _mval vector contains nozero matrix values col by col, not row by row
 	// so we omit details here
 	vector<T>      _mval; 
@@ -34,13 +27,13 @@ class CSCMatrix
 	T  _get(size_t, size_t) const final;
 public:
 	CSCMatrix(size_t h, size_t w, size_t nnz);
-	//CSCMatrix(ifstream& iHB); // construct from Harwell–Boeing file
 	// virtual methods to be implemented
 	CSCMatrix& operator=(T const & val) final;
 	void mult(T const * by, T* result) const final;
 	void multByTranspose(T const * by, T* result) const final;
 	istream& loadSparse(istream& from = cin) final;
 	ostream& saveSparse(ostream& to   = cout) const final;
+	static void loadHarwellBoeing(string const &, CSCMatrix*, SingletonLogger&);
 };
 
 // implementation
@@ -54,75 +47,14 @@ CSCMatrix<T>::CSCMatrix(size_t h, size_t w, size_t nnz)
 	_jptr[w] = nnz;
 }
 
-/*
-template <typename T>
-CSCMatrix<T>::CSCMatrix(char* iHB)
-	: AbstractMatrix<T>(1, 1) {
-
-	readHarwellBoeingHeader(char const * iHB, size_t* _h, size_t* w, size_t* nnz);
-	readHarwellBoeingStruct();
-
-	//int *colptr = nullptr; // why not size_t, HB_IO, why?..
-	//int indcrd;
-	//char *indfmt = nullptr;
-	//char *key = nullptr;
-	//char *mxtype = nullptr;
-	//int ncol;
-	//int neltvl;
-	//int nnzero;
-	//int nrhs;
-	//int nrhsix;
-	//int nrow;
-	//int ptrcrd;
-	//char *ptrfmt = nullptr;
-	//int rhscrd;
-	//char *rhsfmt = nullptr;
-	//char *rhstyp = nullptr;
-	//int *rowind = nullptr;
-	//char *title = nullptr;
-	//int totcrd;
-	//int valcrd;
-	//char *valfmt = nullptr;
-	//double *values = nullptr; // T = complex<double>?
-	//// read header info
-	//hb_header_read(iHB, &title, &key, &totcrd, &ptrcrd, &indcrd,
-	//               &valcrd, &rhscrd, &mxtype, &nrow, &ncol, &nnzero, &neltvl, &ptrfmt,
-	//               &indfmt, &valfmt, &rhsfmt, &rhstyp, &nrhs, &nrhsix);
-	//if (mxtype[1] != 'R')
-	//	throw invalid_argument("rect matrix is expected; use CSlR (SymmetricCSlR) class for unsymmetric matrices w/ symmetric pattern (symmetric matrices), respectively");
-	//if (mxtype[2] != 'A')
-	//	throw invalid_argument("assembled matrix is expected");
-	//colptr = new int[ncol + 1];
-	//rowind = new int[nnzero];
-	//// read structure
-	//hb_structure_read(iHB, ncol, mxtype, nnzero, neltvl,
-	//                  ptrcrd, ptrfmt, indcrd, indfmt, colptr, rowind);
-	//values = new double[nnzero];
-	//// read values
-	//hb_values_read(iHB, valcrd, mxtype, nnzero, neltvl, valfmt, values);
-	//// construct matrix
-	//_h = nrow;
-	//_w = ncol;
-	//_jptr = vector<size_t>(colptr, colptr + ncol + 1);
-	//for_each(_jptr.begin(), _jptr.end(), [](size_t& i) { --i; });
-	//_iptr = vector<size_t>(rowind, rowind + nnzero);
-	//for_each(_iptr.begin(), _iptr.end(), [](size_t& i) { --i; });
-	//_mval = vector<T>(values, values + nnzero); // what if T = complex<double>?
-	//// free
-	//delete[] colptr;
-	//delete[] rowind;
-	//delete[] values;
-}
-*/
-
 // private methods
 
 template <typename T>
 T& CSCMatrix<T>::_set(size_t i, size_t j) {
 	for (size_t k = _jptr[j]; k < _jptr[j + 1]; ++k)
 		if (_iptr[k] == i) return _mval[k];
-		else if (_iptr[k] > i) throw invalid_argument("portrait of sparse matrix doesn’t allow to change element w/ these indicies");
-	throw invalid_argument("portrait of sparse matrix doesn’t allow to change element w/ these indicies");
+		else if (_iptr[k] > i) throw invalid_argument("portrait of sparse matrix doesnâ€™t allow to change element w/ these indicies");
+	throw invalid_argument("portrait of sparse matrix doesnâ€™t allow to change element w/ these indicies");
 }
 
 template <typename T>
@@ -175,4 +107,62 @@ ostream& CSCMatrix<T>::saveSparse(ostream& output) const {
 	              << _jptr << '\n'
 	              << _iptr << '\n'
 	              << _mval;
+}
+
+template <typename T>
+void CSCMatrix<T>::loadHarwellBoeing(string const & fileName, HBMatrix<T>* matrixPtr, SingletonLogger& logger) { // TODO smart pointers
+	HarwellBoeingHeader header;
+	logger.beg("read header info from " + fileName);
+		readHarwellBoeingHeader(fileName.c_str(), &header);
+		logger.log("line 1");
+		logger.mes("title:  " + string(header.title));
+		logger.mes("key:    " + string(header.key));
+		logger.log("line 2");
+		logger.mes("totcrd: " + to_string(header.totcrd));
+		logger.mes("ptrcrd: " + to_string(header.ptrcrd));
+		logger.mes("indcrd: " + to_string(header.indcrd));
+		logger.mes("valcrd: " + to_string(header.valcrd));
+		logger.mes("rhscrd: " + to_string(header.rhscrd));
+		logger.log("line 3");
+		logger.mes("mxtype: " + string(header.mxtype));
+		logger.mes("nrow:   " + to_string(header.nrow));
+		logger.mes("ncol:   " + to_string(header.ncol));
+		logger.mes("nnzero: " + to_string(header.nnzero));
+		logger.mes("neltvl: " + to_string(header.neltvl));
+		logger.log("line 4");
+		logger.mes("ptrfmt: " + string(header.ptrfmt));
+		logger.mes("indfmt: " + string(header.indfmt));
+		logger.mes("valfmt: " + string(header.valfmt));
+		logger.mes("rhsfmt: " + string(header.rhsfmt));
+		if (header.rhscrd > 0) {
+			logger.log("line 5");
+			logger.mes("rhstyp: " + string(header.rhstyp));
+			logger.mes("nrhs: " + to_string(header.nrhs));
+			logger.mes("nrhsix: " + to_string(header.nrhsix));
+		}
+	logger.end();
+	// TODO mtxtype checking
+	// TODO should we free memory before allocating??
+	matrixPtr = new HBMatrix<T>(header.nrow, header.ncol, header.nnzero);
+	logger.beg("read matrix structure / values from " + fileName);
+		readHarwellBoeingStruct(fileName.c_str(), &header, 
+		                        matrixPtr->_jptr.data(), 
+		                        matrixPtr->_iptr.data(), 
+		                        matrixPtr->_mval.data()); // T = comlex<double>??
+		logger.log("decrement iptr and jptr values");
+		for_each(matrixPtr->_jptr.begin(), matrixPtr->_jptr.end(), [](size_t& i) { --i; });
+		for_each(matrixPtr->_iptr.begin(), matrixPtr->_iptr.end(), [](size_t& i) { --i; });
+		logger.log("print internal data");
+		// jptr
+		short n = min(4, header.ncol + 1), i;
+		for (i = 0; i < n; ++i) logger.mes("jptr[" + to_string(i) + "] = " + to_string(matrixPtr->_jptr[i]));
+		logger.mes("jptr[" + to_string(header.ncol) + "] = " + to_string(matrixPtr->_jptr[header.ncol]));
+		// iptr
+		n = min(4, header.nnzero);
+		for (i = 0; i < n; ++i) logger.mes("iptr[" + to_string(i) + "] = " + to_string(matrixPtr->_iptr[i]));
+		logger.mes("iptr[" + to_string(header.nnzero - 1) + "] = " + to_string(matrixPtr->_iptr[header.nnzero - 1]));
+		// mval
+		for (i = 0; i < n; ++i) logger.mes("mval[" + to_string(i) + "] = " + to_string(matrixPtr->_mval[i]));
+		logger.mes("mval[" + to_string(header.nnzero - 1) + "] = " + to_string(matrixPtr->_mval[header.nnzero - 1]));
+	logger.end();
 }
