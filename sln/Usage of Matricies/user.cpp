@@ -1,3 +1,7 @@
+ï»¿/*
+	Alexander Å½ilykov, Aug 2016
+*/
+
 #include <fstream>
 #include <string>
 #include <complex>
@@ -5,88 +9,119 @@
 #include "CSCMatrix.hpp"
 
 int main() {
-	SingletonLogger& logger = SingletonLogger::instance();
+	// common vars
+	string iPath, oPath;
+	vector<string> HarwellBoeingMatricies = {
+		"illc1033.rra (real    rectangular assembled)",
+		"e40r5000.rua (real    unsymmetric assembled)",
+		"qc2534.cua   (comlex  unsymmetric assembled)",
+		"young1c.csa  (complex symmetric   assembled)",
+		"cegb2802.pse (pattern symmetric   elemental)"
+	};
 	size_t i;
-	logger.beg("choose matrix format from CATSPDEs collection");
-		string matrixType;
-		vector<string> availableTypes = { "CSR", "CSC" };
-		logger.log("available matrix types");
-		for (auto const & t : availableTypes)
-			logger.mes("* " + t);
-		while (find(availableTypes.begin(), availableTypes.end(), matrixType) == availableTypes.end()) {
-			logger.inp("enter matrix type");
-			cin >> matrixType;
-		}
-	logger.end();
+	// logger
+	SingletonLogger& logger = SingletonLogger::instance();
 	try {
+		size_t testNum = logger.opt(
+			"choose matrix format from CATSPDEs collection", 
+			{ "CSC", "CSlC", "SymmetricCSlC", "CSR" }
+		);
 		/*
-			CRS–matrix
+			(0) CSCâ€“matrix
 		*/
-		if (matrixType == "CSR") {
-			logger.beg("CSR matrix test");
-				ifstream iCSR("Mathematica/matrices/csr.dat"),
-						 iU("Mathematica/matrices/csr_vector.dat"),
-						 iV("Mathematica/matrices/csr_vector_t.dat");
-				ofstream oCSRxU("Mathematica/matrices/csr_mult.dat"),
-						 oCSRxV("Mathematica/matrices/csr_mult_t.dat");
-				size_t rows, cols, nnz;
-				iCSR >> rows >> cols >> nnz;
-				CSRMatrix<double> CSR(rows, cols, nnz);
-				iCSR >> CSR;
-				vector<double> u(cols), v(rows);
-				iU >> u;
-				iV >> v;
-				oCSRxU << CSR * u;
-				oCSRxV << CSR.t() * v;
-			logger.end();
-		}
-		/*
-			CSC–matrix
-		*/
-		else if (matrixType == "CSC") {
+		if (testNum == 0) {
 			logger.beg("CSC matrix test");
 				logger.beg("mult() / multTranspose() test");
-					ifstream iCSC("Mathematica/matrices/csc.dat"),
-							 iU("Mathematica/matrices/csc_vector.dat"),
-							 iV("Mathematica/matrices/csc_vector_t.dat");
-					ofstream oCSCxU("Mathematica/matrices/csc_mult.dat"),
-							 oCSCxV("Mathematica/matrices/csc_mult_t.dat");
-					size_t rows, cols, nnz;
-					iCSC >> rows >> cols >> nnz;
-					CSCMatrix<double> CSC(rows, cols, nnz);
-					iCSC >> CSC;
-					vector<double> u(cols), v(rows);
-					iU >> u;
-					iV >> v;
-					oCSCxU << CSC * u;
-					oCSCxV << CSC.t() * v;
+					// i/o file pathes
+					iPath = "Mathematica/output/CSC/";
+					oPath = "output/CSC/";
+					string iPathA = iPath + "A.dat", // rect CSC matrix in CATSPDEs sparse format
+					       iPathU = iPath + "u.dat", // vector for mult() test
+					       iPathV = iPath + "v.dat", // vector for multTranspose() test
+					       oPathAxU = oPath + "AxU.dat", 
+					       oPathAxV = oPath + "AxV.dat";
+					// i/o file streams
+					ifstream iA(iPathA),
+							 iU(iPathU), 
+							 iV(iPathV); 
+					ofstream oAxU(oPathAxU), // results of multiplication
+							 oAxV(oPathAxV);
+					logger.beg("read sparse matrix A from " + iPathA + "\nread vectors u and v from " + iPath);
+						size_t rows, cols, nnz;
+						iA >> rows >> cols >> nnz;
+						CSCMatrix<double> A(rows, cols, nnz);
+						iA >> A;
+						vector<double> u(cols), v(rows);
+						iU >> u;
+						iV >> v;
+					logger.end();
+					if (logger.yes("print A in dense, u, and v")) {
+						logger.buf << "A in dense format:\n";
+						A.save(logger.buf);
+						logger.buf << "\nu = " << u << "\nv = " << v;
+						logger.log();
+					}
+					logger.beg("compute multiplications A.u, A^T.v\nsave results in " + oPath);
+						vector<double> AxU(rows), AxV(cols);
+						oAxU << (AxU = A * u);
+						oAxV << (AxV = A.t() * v);
+					logger.end();
+					if (logger.yes("print results of multiplications")) {
+						logger.buf << "A.u = " << AxU << '\n' << "A^T.v = " << AxV << '\n';
+						logger.log();
+					}
+					logger.log("check results w/ Mathematica/CSC.nb!");
 				logger.end();
-				/*
-					Harwell–Boeing i/o
-				*/
 				logger.beg("Harwell-Boeing i/o test");
-					availableTypes = { 
-						"illc1033.rra (real    rectangular assembled)", 
-						"e40r5000.rua (real    unsymmetric assembled)", 
-						"qc2534.cua   (comlex  unsymmetric assembled)", 
-						"young1c.csa  (complex symmetric   assembled) (should fail)",
-						"cegb2802.pse (pattern symmetric   elemental) (should fail)",
-					};
-					logger.log("available HB types");
-					for (i = 0; i < availableTypes.size(); ++i)
-						logger.mes("(" + to_string(i) + ") " + availableTypes[i]);
-					// leave onle .rra, .rua etc.
-					for_each(availableTypes.begin(), availableTypes.end(), [](string& s) { s.resize(s.find_first_of(' ')); });
-					logger.inp("choose type (enter number)");
-					cin >> i;
-					if (i > availableTypes.size() - 1) i = availableTypes.size() - 1;
-					// complex or real
-					if (availableTypes[i].at(availableTypes[i].find_first_of('.') + 1) == 'r') 
-						HBMatrix<double> HB("Mathematica/HarwellBoeing/input/" + availableTypes[i], logger);
-					else 
-						HBMatrix<complex<double>> HB("Mathematica/HarwellBoeing/input/" + availableTypes[i], logger);
+					iPath = "HarwellBoeing/";
+					size_t iMatrixNum = logger.opt("choose input matrix", HarwellBoeingMatricies);
+					// leave only *.rra, *.rua etc.
+					for_each(HarwellBoeingMatricies.begin(), HarwellBoeingMatricies.end(), [](string& s) { s.resize(s.find_first_of(' ')); });
+					logger.beg("load HB header");
+						string iHBPath = iPath + HarwellBoeingMatricies[iMatrixNum];
+						HarwellBoeingHeader header;
+						loadHarwellBoeingHeader_f90(iHBPath.c_str(), &header);
+						logger.buf << "header of " << iHBPath << ":\n" << header;
+						logger.log();
+					logger.end();
+					if (logger.opt("choose T for CSCMatrix<T> B", { "double", "complex<double>" }) == 0) {
+						// real
+						CSCMatrix<double> B(header);
+						B.loadHarwellBoeing(iHBPath);
+					}
+					else {
+						// complex
+						CSCMatrix<complex<double>> B(header);
+						B.loadHarwellBoeing(iHBPath);
+					}
 				logger.end();
 			logger.end();
+		}
+		/*
+		(3) CRSâ€“matrix
+		*/
+		else if (testNum == 3) {
+			//logger.beg("CSR matrix test");
+			//	ifstream iCSR("Mathematica/matrices/csr.dat"),
+			//			 iU("Mathematica/matrices/csr_vector.dat"),
+			//			 iV("Mathematica/matrices/csr_vector_t.dat");
+			//	ofstream oCSRxU("Mathematica/matrices/csr_mult.dat"),
+			//			 oCSRxV("Mathematica/matrices/csr_mult_t.dat");
+			//	size_t rows, cols, nnz;
+			//	logger.log("loading matrix");
+			//	iCSR >> rows >> cols >> nnz;
+			//	CSRMatrix<double> CSR(rows, cols, nnz);
+			//	iCSR >> CSR;
+			//	CSR.save(logger.buf << "fullform:\n");
+			//	logger.log();
+			//	vector<double> u(cols), v(rows);
+			//	iU >> u;
+			//	iV >> v;
+			//	logger.beg("mult() / multTranspose testing\nresults: Mathematica/matrices/csr_mult(_t).dat");
+			//		oCSRxU << CSR * u;
+			//		oCSRxV << CSR.t() * v;
+			//	logger.end();
+			//logger.end();
 		}
 	}
 	catch (exception const & e) {

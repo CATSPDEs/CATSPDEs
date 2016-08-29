@@ -3,6 +3,7 @@
 #include <iomanip> // setprecision
 #include <cstddef> // size_t
 #include <stdexcept>
+#include "SingletonLogger.hpp" // for logs
 #include "vector.hpp" // vector operations (*, +, ...)
 
 template <typename T>

@@ -1,4 +1,4 @@
-﻿    module Input
+﻿    module Load
         use, intrinsic :: iso_c_binding, only : c_char, c_size_t, c_null_char, c_double
         implicit none
         integer(c_size_t) :: MAX_NAME_LENGTH
@@ -22,7 +22,7 @@
         !
         ! read header
         !
-        subroutine readHeader(name_c, header) bind(c, name = 'readHarwellBoeingHeader') 
+        subroutine loadHeader(name_c, header) bind(c, name = 'loadHarwellBoeingHeader_f90') 
             ! i/o data
             character(c_char) :: name_c(MAX_NAME_LENGTH)
             type(HBHeader)    :: header
@@ -44,11 +44,11 @@
             ! formats
             1000 format(a72, a8 / 5i14 / a3, 11x, 4i14 / 2a16, 2a20)
             1001 format(a3, 11x, 2i14)
-        end subroutine readHeader
+        end subroutine loadHeader
         !
         ! read structure 
         !
-        subroutine readStruct(name_c, header, colptr, rowind, values) bind(c, name = 'readHarwellBoeingStruct') 
+        subroutine loadStruct(name_c, header, colptr, rowind, values) bind(c, name = 'loadHarwellBoeingStruct_f90') 
             ! i/o data
             character(c_char) :: name_c(MAX_NAME_LENGTH)
             type(HBHeader)    :: header
@@ -78,7 +78,52 @@
             ! …
             endif
             close(56)
-        end subroutine readStruct
+        end subroutine loadStruct
+        !
+        ! read structure (symmetric case) 
+        !
+        subroutine loadStructSym(name_c, header, colptr, rowind, diag, lval) bind(c, name = 'loadHarwellBoeingStructSym_f90') 
+            ! i/o data
+            character(c_char) :: name_c(MAX_NAME_LENGTH)
+            type(HBHeader)    :: header
+            integer(c_size_t) :: colptr(*), rowind(*), i, j, k, m
+            real(c_double)    :: diag(*), lval(*)
+            ! convert C–string (input file name etc.) to FORTRAN ″
+            name_f = transfer(name_c, name_f)
+            ptrfmt = transfer(header.ptrfmt, ptrfmt)
+            indfmt = transfer(header.indfmt, indfmt)
+            valfmt = transfer(header.valfmt, valfmt)
+            ! read data
+            open(56, file = name_f(1 : index(name_f, c_null_char) - 1))
+            ! read matrix structure
+            ! read col pointers
+            read(56, ptrfmt(1 : 16)) (colptr(i), i = 1, header.ncol + 1)
+            ! read row indicies, fix col pointers
+            k = 0 ! numb of stored diag elements
+            do i = 1, header.ncol
+                diag(i) = 0.
+                read(56, indfmt(1 : 16)) m
+                if (m .eq. i) then
+                    diag(i) = 1.
+                    k = k + 1
+                    colptr(i + 1) = colptr(i + 1) - k
+                    read(56, indfmt(1 : 16)) (rowind(j), j = colptr(i), colptr(i + 1) - 1)
+                else
+                    colptr(i + 1) = colptr(i + 1) - k
+                    rowind(colptr(i)) = m
+                    read(56, indfmt(1 : 16)) (rowind(j), j = colptr(i) + 1, colptr(i + 1) - 1)
+                end if 
+            end do
+            if (header.valcrd .gt. 0 ) then
+                ! read matrix values
+                do i = 1, header.ncol
+                    if (diag(i) .eq. 1.) read(56, valfmt(1 : 20)) diag(i) ! diagonal element
+                    read(56, valfmt(1 : 16)) (lval(j), j = colptr(i), colptr(i + 1) - 1)
+                end do
+                ! … complex case
+            endif
+            close(56)
+        end subroutine loadStructSym
         ! helper
         subroutine string2array(s, a, l)
             integer(c_size_t) :: i, l
@@ -89,4 +134,4 @@
             end do
             a(l + 1) = c_null_char
         end subroutine string2array
-    end module Input
+    end module Load

@@ -34,6 +34,9 @@
     <Filter Include="Utilities\Logger">
       <UniqueIdentifier>{a5996e1e-b24c-4dc6-8fea-af5eea6a4801}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Matrices\Related Structures">
+      <UniqueIdentifier>{7cf3f2c9-ab57-4cd3-8251-5c9b1b3c89de}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AbstractSparseMatrix.hpp">
@@ -170,6 +173,9 @@
     </ClInclude>
     <ClInclude Include="AbstractHarwellBoeingMatrix.hpp">
       <Filter>Matrices</Filter>
+    </ClInclude>
+    <ClInclude Include="HarwellBoeingHeader.hpp">
+      <Filter>Matrices\Related Structures</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
