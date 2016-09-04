@@ -12,13 +12,13 @@ int main() {
 	// common vars
 	string iPath, oPath;
 	vector<string> HarwellBoeingMatricies = {
-		"illc1033.rra (real    rectangular assembled)",
-		"e40r5000.rua (real    unsymmetric assembled)",
-		"qc2534.cua   (comlex  unsymmetric assembled)",
-		"young1c.csa  (complex symmetric   assembled)",
-		"cegb2802.pse (pattern symmetric   elemental)"
+		"mathematica.rra (real    rectangular assembled) -- simple artificial example",
+		"illc1033.rra    (real    rectangular assembled)",
+		"e40r5000.rua    (real    unsymmetric assembled)",
+		"qc2534.cua      (comlex  unsymmetric assembled)",
+		"young1c.csa     (complex symmetric   assembled)",
+		"cegb2802.pse    (pattern symmetric   elemental)"
 	};
-	size_t i;
 	// logger
 	SingletonLogger& logger = SingletonLogger::instance();
 	try {
@@ -26,11 +26,14 @@ int main() {
 			"choose matrix format from CATSPDEs collection", 
 			{ "CSC", "CSlC", "SymmetricCSlC", "CSR" }
 		);
-		/*
-			(0) CSC–matrix
-		*/
 		if (testNum == 0) {
+			/*
+				(0) CSC–matrix
+			*/
 			logger.beg("CSC matrix test");
+				/*
+					(0.0)
+				*/
 				logger.beg("mult() / multTranspose() test");
 					// i/o file pathes
 					iPath = "Mathematica/output/CSC/";
@@ -72,35 +75,53 @@ int main() {
 					}
 					logger.log("check results w/ Mathematica/CSC.nb!");
 				logger.end();
+				/*
+					(0.1)
+				*/
 				logger.beg("Harwell-Boeing i/o test");
 					iPath = "HarwellBoeing/";
-					size_t iMatrixNum = logger.opt("choose input matrix", HarwellBoeingMatricies);
+					oPath = "output/CSC/HarwellBoeing/";
+					size_t matrixType = logger.opt("choose T for CSCMatrix<T> B", { "double", "complex<double>" }),
+					       iMatrixNum = logger.opt("choose input matrix", HarwellBoeingMatricies);
 					// leave only *.rra, *.rua etc.
 					for_each(HarwellBoeingMatricies.begin(), HarwellBoeingMatricies.end(), [](string& s) { s.resize(s.find_first_of(' ')); });
-					logger.beg("load HB header");
-						string iHBPath = iPath + HarwellBoeingMatricies[iMatrixNum];
-						HarwellBoeingHeader header;
-						loadHarwellBoeingHeader_f90(iHBPath.c_str(), &header);
-						logger.buf << "header of " << iHBPath << ":\n" << header;
-						logger.log();
+					string iHBPath = iPath + HarwellBoeingMatricies[iMatrixNum],
+					       oHBPath = oPath + HarwellBoeingMatricies[iMatrixNum];
+					logger.beg("load info from " + iHBPath);
+						logger.beg("load HB header");
+							HarwellBoeingHeader header;
+							loadHarwellBoeingHeader_f90(iHBPath.c_str(), &header);
+							logger.buf << header;
+							logger.log();
+						logger.end();
+						if (matrixType == 0) { // real matrix
+							logger.beg("load HB structure");
+								CSCMatrix<double> B(header);
+								B.loadHarwellBoeing(iHBPath);
+							logger.end();
 					logger.end();
-					if (logger.opt("choose T for CSCMatrix<T> B", { "double", "complex<double>" }) == 0) {
-						// real
-						CSCMatrix<double> B(header);
-						B.loadHarwellBoeing(iHBPath);
-					}
-					else {
-						// complex
-						CSCMatrix<complex<double>> B(header);
-						B.loadHarwellBoeing(iHBPath);
-					}
-				logger.end();
+							// output
+							logger.beg("save matrix to " + oHBPath);
+								B.saveHarwellBoeing(oHBPath, { {"title", "My real HB Matrix"} });
+							logger.end();
+						}
+						else { // complex matrix
+							logger.beg("load HB structure");
+								CSCMatrix<complex<double>> B(header);
+								B.loadHarwellBoeing(iHBPath);
+							logger.end();
+					logger.end();
+							// output
+							logger.beg("save matrix to " + oHBPath);
+								B.saveHarwellBoeing(oHBPath, { { "title", "My complex HB Matrix" } });
+							logger.end();
+						}
 			logger.end();
 		}
-		/*
-		(3) CRS–matrix
-		*/
 		else if (testNum == 3) {
+			/*
+				(3) CRS–matrix
+			*/
 			//logger.beg("CSR matrix test");
 			//	ifstream iCSR("Mathematica/matrices/csr.dat"),
 			//			 iU("Mathematica/matrices/csr_vector.dat"),

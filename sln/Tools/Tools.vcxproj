@@ -151,6 +151,7 @@
     <ClInclude Include="CSRMatrix.hpp" />
     <ClInclude Include="Function.hpp" />
     <ClInclude Include="LinearEllipticPDE.hpp" />
+    <ClInclude Include="Parameters.hpp" />
     <ClInclude Include="Point.hpp" />
     <ClInclude Include="Predicate.hpp" />
     <ClInclude Include="RectangularFDMMesh.hpp" />

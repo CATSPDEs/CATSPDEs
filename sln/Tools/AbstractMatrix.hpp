@@ -20,12 +20,12 @@ public:
 	}
 	virtual ~AbstractMatrix() {}
 	virtual AbstractMatrix& operator=(T const & val) = 0; // set all entries = @val (so we can “clear” matrix w/ A = 0.)
-	T operator()(size_t i, size_t j) const {
-		if (i >= _h || j >= _w) throw out_of_range("matrix doesn’t contain element w/ these indicies");
+	T  operator()(size_t i, size_t j) const {
+		if (i >= _h || j >= _w) throw out_of_range("matrix does not contain element w/ these indicies");
 		return _get(i, j);
 	}
 	T& operator()(size_t i, size_t j) { 
-		if (i >= _h || j >= _w) throw out_of_range("matrix doesn’t contain element w/ these indicies");
+		if (i >= _h || j >= _w) throw out_of_range("matrix does not contain element w/ these indicies");
 		return _set(i, j); 
 	}
 	size_t numbOfCols() const { return _w; }

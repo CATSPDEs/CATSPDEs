@@ -1,6 +1,7 @@
 ﻿#pragma once
 #include "AbstractSparseMatrix.hpp"
 #include "HarwellBoeingHeader.hpp"
+#include "Parameters.hpp"
 
 template <typename T>
 class AbstractHarwellBoeingMatrix
@@ -11,7 +12,7 @@ public:
 	AbstractHarwellBoeingMatrix() : _header(nullptr) {}
 	AbstractHarwellBoeingMatrix(HarwellBoeingHeader& header) : _header(&header) {}
 	virtual void loadHarwellBoeing(string const &) = 0; // construct matrix from HB–file
-	virtual void saveHarwellBoeing() const = 0; // save matrix to HB–file
+	virtual void saveHarwellBoeing(string const &, Parameters const & params = {}) const = 0; // save matrix to HB–file
 };		   
 
 // these routines will be linked from

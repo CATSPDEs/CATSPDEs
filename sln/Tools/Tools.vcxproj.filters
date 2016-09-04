@@ -177,6 +177,9 @@
     <ClInclude Include="HarwellBoeingHeader.hpp">
       <Filter>Matrices\Related Structures</Filter>
     </ClInclude>
+    <ClInclude Include="Parameters.hpp">
+      <Filter>Common</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="BandMatrix.cpp">

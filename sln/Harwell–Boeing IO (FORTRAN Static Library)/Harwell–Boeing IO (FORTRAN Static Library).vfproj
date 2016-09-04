@@ -42,6 +42,7 @@
 				<Tool Name="VFPostBuildEventTool"/></Configuration></Configurations>
 	<Files>
 		<Filter Name="Source Files" Filter="f90;for;f;fpp;ftn;def;odl;idl">
+		<File RelativePath=".\common.f90"/>
 		<File RelativePath=".\load.f90"/>
 		<File RelativePath=".\save.f90"/></Filter>
 		<File RelativePath=".\readme.txt"/></Files>

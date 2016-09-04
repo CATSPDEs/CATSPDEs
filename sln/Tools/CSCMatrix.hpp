@@ -34,7 +34,7 @@ public:
 	istream& loadSparse(istream& from = cin) final;
 	ostream& saveSparse(ostream& to   = cout) const final;
 	void loadHarwellBoeing(string const &) final; // load from Harwell–Boeing file
-	void saveHarwellBoeing() const final;
+	void saveHarwellBoeing(string const &, Parameters const & params = {}) const final;
 };
 
 // implementation
@@ -55,6 +55,14 @@ CSCMatrix<T>::CSCMatrix(HarwellBoeingHeader& header)
 	, _jptr(header.ncol + 1)
 	, _iptr(header.nnzero)
 	, _mval(header.nnzero) {
+	// check matrix type
+	if (header.mxtype[1] != 'U' && header.mxtype[1] != 'R') throw invalid_argument("CSC type is useful for rect / unsymmetric pattern (.*r*, .*u*) Harwell-Boeing matrices; try SymmetricCSlR");
+	if (header.mxtype[2] != 'A') throw invalid_argument("only assembled (.**a) Harwell-Boeing matrices are supported");
+	if (is_same<T, double>::value) { // real matrix 
+		if (header.mxtype[0] == 'C') throw invalid_argument("instantiate matrix w/ complex<double> in order to work w/ complex (.c**) Harwell-Boeing matrices");
+	}
+	else // complex matrix
+		if (header.mxtype[0] == 'R') throw invalid_argument("instantiate matrix w/ double in order to work w/ real (.r**) Harwell-Boeing matrices");
 	_jptr[header.ncol] = header.nnzero;
 }
 
@@ -120,58 +128,9 @@ ostream& CSCMatrix<T>::saveSparse(ostream& output) const {
 	              << _mval;
 }
 
-//template <typename T>
-//void CSCMatrix<T>::logStructure(SingletonLogger& logger, unsigned short min2print) const {
-//	//// _jptr
-//	//size_t n = _w + 1; // actual numb of elements
-//	//unsigned short m = min(min2print, n); // numb of elements to print
-//	//logger.log("_jptr, vector of column pointers");
-//	//for (i = 0; i < m; ++i) logger.mes("[" + to_string(i) + "] -> " + to_string(_jptr[i]));
-//	//if (m < n) {
-//	//	if (m < n - 1) logger.mes(". . .");
-//	//	logger.mes("[" + to_string(n - 1) + "] -> " + to_string(_jptr[n - 1]));
-//	//}
-//	//// _iptr
-//	//n = _jptr[_w];
-//	//m = min(min2print, n);
-//	//logger.log("_iptr, vector of row indicies");
-//	//for (i = 0; i < m; ++i) logger.mes("[" + to_string(i) + "] -> " + to_string(_iptr[i]));
-//	//if (m < n) {
-//	//	if (m < n - 1) logger.mes(". . .");
-//	//	logger.mes("[" + (n - 1) + "] -> " + to_string(_iptr[n - 1]));
-//	//}
-//	//// _mval
-//	//auto to_string = [](complex<double> const & c) { // helper for complex T
-//	//	return std::to_string(c.real()) + " + i * " + std::to_string(c.imag());
-//	//};
-//	//logger.log("_mval, vector matrix values");
-//	//for (i = 0; i < m; ++i) logger.mes("[" + to_string(i) + "] -> " + to_string(_mval[i]));
-//	//if (m < n) {
-//	//	if (m < n - 1) logger.mes(". . .");
-//	//	logger.mes("[" + (n - 1) + "] -> " + to_string(_mval[n - 1]));
-//	//}
-//	//if (is_same<T, double>::value) { // real
-//	//	for (i = 0; i < n; ++i) logger.mes("mval[" + to_string(i) + "] = " + to_string(mval[i]));
-//	//	logger.mes("mval[" + to_string(header.nnzero - 1) + "] = " + to_string(mval[header.nnzero - 1]));
-//	//}
-//	//else { // complex
-//	//	for (i = 0; i < n; ++i) logger.mes("mval[" + to_string(i) + "] = " + to_string(mval[2 * i]) + " + i * " + to_string(mval[2 * i + 1]));
-//	//	logger.mes("mval[" + to_string(header.nnzero - 1) + "] = " + to_string(mval[2 * header.nnzero - 2]) + " + i * " + to_string(mval[2 * header.nnzero - 1]));
-//	//}
-//}
-
 extern "C" void loadHarwellBoeingStruct_f90(char const *, HarwellBoeingHeader const *, size_t*, size_t*, double*);
-
 template <typename T>
 void CSCMatrix<T>::loadHarwellBoeing(string const & fileName) {
-	// check matrix type
-	if (_header->mxtype[1] != 'U' && _header->mxtype[1] != 'R') throw invalid_argument("CSC type is useful for rect / unsymmetric pattern (.*r*, .*u*) Harwell-Boeing matrices; try SymmetricCSlR");
-	if (_header->mxtype[2] != 'A') throw invalid_argument("only assembled (.**a) Harwell-Boeing matrices are supported");
-	if (is_same<T, double>::value) { // real matrix 
-		if (_header->mxtype[0] == 'C') throw invalid_argument("instantiate matrix w/ complex<double> in order to work w/ complex (.c**) Harwell-Boeing matrices");
-	}
-	else // complex matrix
-		if (_header->mxtype[0] == 'R') throw invalid_argument("instantiate matrix w/ double in order to work w/ real (.r**) Harwell-Boeing matrices");
 	// read structure and values
 	double* mval = reinterpret_cast<double*>(_mval.data()); // http://en.cppreference.com/w/cpp/numeric/complex > non-static data members
 	loadHarwellBoeingStruct_f90(fileName.c_str(), _header, _jptr.data(), _iptr.data(), mval);
@@ -179,7 +138,63 @@ void CSCMatrix<T>::loadHarwellBoeing(string const & fileName) {
 	for_each(_iptr.begin(), _iptr.end(), [](size_t& i) { --i; });
 }
 
+extern "C" void saveHarwellBoeingStruct_f90(char const *, HarwellBoeingHeader const *, size_t const *, size_t const *, double const *);
 template <typename T>
-void CSCMatrix<T>::saveHarwellBoeing(/*string const & fileName, string const & title, string const & key*/) const {
-	// …
+void CSCMatrix<T>::saveHarwellBoeing(string const & fileName, Parameters const & params) const {
+	/* 
+	available params:
+		"title"   -> "Created w/ CATSPDEs: https://github.com/CATSPDEs"  matrix title (see HB–format docs), 72 chars max
+		"key"     -> "CATSPDEs"                                          matrix key, 8 chars max
+		"pattern"                                                        save only pattern (.**p)
+	*/
+	// (1) generate header
+	HarwellBoeingHeader header = {
+		// line 1
+		"Created w/ CATSPDEs: https://github.com/CATSPDEs", "CATSPDEs",
+		// line 2
+		0, 0, 0, 0, 0,
+		// line 3
+		"CRA", _h, _w, _jptr[_w], 0 /* always zero for assembled matrices */,
+		// line 4
+		"", "", "(3E26.16)", ""
+		// w/o line 5 — no RHS
+	};
+	// fix line 1
+	if (params.find("title") != params.end()) strcpy_s(header.title, params.at("title").c_str());
+	if (params.find("key")   != params.end()) strcpy_s(header.key,   params.at("key").c_str());
+	// fix lines 2—4
+	if (_w == _h) header.mxtype[1] = 'U'; // unsymmetric matrix
+	auto numbOfDigits = [](size_t n) { // helper
+		return floor(log10(n ? n : 1) + 1);
+	};
+	// fix format of column pointers 
+	size_t numbOfRecs = _w + 1,	// numb of records for col pointers (row indicies, values)
+	       recLength = numbOfDigits(_jptr[_w] + 1 /* = max value of _jptr is its last element */),	// length of single record
+	       recsPerLine = 80 /* = numb of cols in HB file */ / recLength; // numb of records per one line
+	header.ptrcrd = ceil( (float) numbOfRecs / recsPerLine); // numb of lines for column pointers
+	string fmt = '(' + to_string(recsPerLine) + "I" + to_string(recLength) + ')'; // FORTRAN format
+	strcpy_s(header.ptrfmt, fmt.c_str());
+	// fix format of row indicies
+	numbOfRecs = _jptr[_w];
+	recLength = numbOfDigits(_h /* = max value of _iptr is numb of rows */);
+	recsPerLine = 80 / recLength;
+	header.indcrd = ceil( (float) numbOfRecs / recsPerLine ); // numb of lines for row indicies
+	fmt = '(' + to_string(recsPerLine) + "I" + to_string(recLength) + ')';
+	strcpy_s(header.indfmt, fmt.c_str());
+	if (params.find("pattern") != params.end()) { // pattern only
+		header.mxtype[0] = 'P';
+		header.valfmt[0] = '\0';
+	}
+	else if (is_same<T, double>::value) { // real matrix
+		header.mxtype[0] = 'R'; 
+		// recLength   = 26 symbols — double precision: {+|-}d.dddddddddddddddde{+|-}ddddd */;
+		// recsPerLine = 80 / 26 = 3
+		header.valcrd = ceil(numbOfRecs / 3.); // numb of lines for values
+	}
+	else header.valcrd = ceil(2. * numbOfRecs / 3.); // for complex values
+	header.totcrd = header.ptrcrd + header.indcrd + header.valcrd;
+	// (2) save header
+	saveHarwellBoeingHeader_f90(fileName.c_str(), &header);
+	// (3) save struct
+	saveHarwellBoeingStruct_f90(fileName.c_str(), &header, _jptr.data(), _iptr.data(), reinterpret_cast<double const *>(_mval.data()));
 }
