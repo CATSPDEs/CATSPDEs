@@ -1,3 +1,6 @@
+ï»¿/*
+	Alexander Å½ilyakov, Sep 2016
+*/
 #pragma once
 #include "AbstractSparseMatrix.hpp"
 #include "AbstractTransposeMultipliableMatrix.hpp"
@@ -8,23 +11,23 @@ class CSRMatrix
 	, public AbstractTransposeMultipliableMatrix<T> { 
 	// matrix is stored in comressed row storage (CSR for compressed sparse row) format (http://netlib.org/linalg/html_templates/node91.html)
 	vector<T>      _mval; // values of the nonzero elements of the matrix (row-wised)
-	vector<size_t> _iptr, // vector of column indicies and
-	               _jptr; // vector of row indicies (see example to get what thes guys are)
-	// example of 3 × 6 matrix:
+	vector<size_t> _iptr, // vector of row pointers and
+	               _jptr; // â€³         column indicies (see example to get what these guys are)
+	// example of 3 Ã— 6 matrix:
 	//		
-	//  5 × × 1 9 ×
-	//  × 8 × × × 3
-	//  1 4 × × 2 ×
+	//    5 Ã— Ã— 1 9 Ã—
+	//    Ã— 8 Ã— Ã— Ã— 3
+	//    1 4 Ã— Ã— 2 Ã—
 	//
-	// (“×” denotes zero–element we do not store)
+	// (â€œÃ—â€ denotes zeroâ€“element we do not store)
 	//
 	// _mval = { 5, 1, 9, 8, 3, 1, 4, 2 }
 	// _jptr = { 0, 3, 4, 1, 5, 0, 1, 4 }
 	// _iptr = { 0, 3, 5, 8 }
 	// 
-	// so, for one, 1st row (we count from zero) countains _iptr[2] – _iptr[1] = 5 – 3 = 2 elements, 
+	// so, for one, 1st row (we count from zero) countains _iptr[2] â€“ _iptr[1] = 5 â€“ 3 = 2 elements, 
 	// starting w/ element _mval[_iptr[1]] = _mval[3] = 8 in (_jptr[_iptr[1]] = _jptr[3] = 1)st column
-	// numb of rows is 3, so _iptr[3 + 1] = 8 is numb of elements in _mval and _jptr
+	// numb of rows is 3, so _iptr[3] = 8 is numb of elements in _mval and _jptr
 	// makes sense!
 	//
 	// virtual methods to be implemented
@@ -33,12 +36,13 @@ class CSRMatrix
 	T  _get(size_t, size_t) const final;
 public:
 	CSRMatrix(size_t h, size_t w, size_t nnz); // order and number of nonzeros
+	~CSRMatrix() {}
 	// virtual methods to be implemented
 	CSRMatrix& operator=(T const & val) final;
 	void mult           (T const * by, T* result) const final;
 	void multByTranspose(T const * by, T* result) const final;
-	istream& loadSparse(istream& from = cin) final;
-	ostream& saveSparse(ostream& to   = cout) const final;
+	CSRMatrix& loadSparse(istream& from = cin) final;
+	void       saveSparse(ostream& to   = cout) const final;
 };
 
 // implementation
@@ -58,8 +62,8 @@ template <typename T>
 T& CSRMatrix<T>::_set(size_t i, size_t j) {
 	for (size_t k = _iptr[i]; k < _iptr[i + 1]; ++k)
 		if (_jptr[k] == j) return _mval[k];
-		else if (_jptr[k] > j) throw invalid_argument("portrait of sparse matrix doesn’t allow to change element w/ these indicies");
-	throw invalid_argument("portrait of sparse matrix doesn’t allow to change element w/ these indicies");
+		else if (_jptr[k] > j) throw invalid_argument("portrait of sparse matrix doesnâ€™t allow to change element w/ these indicies");
+	throw invalid_argument("portrait of sparse matrix doesnâ€™t allow to change element w/ these indicies");
 }
 
 template <typename T>
@@ -98,18 +102,19 @@ void CSRMatrix<T>::multByTranspose(T const * by, T* result) const {
 }
 
 template <typename T>
-istream& CSRMatrix<T>::loadSparse(istream& input) {
+CSRMatrix<T>& CSRMatrix<T>::loadSparse(istream& input) {
 	// stdin structure:
 	// (1) _h + 1    elements of _iptr,
 	// (2) _iptr[_h] elements of _jptr, and
 	// (3) _iptr[_h] elements of _mval
-	return input >> _iptr >> _jptr >> _mval;
+	input >> _iptr >> _jptr >> _mval;
+	return *this;
 }
 
 template <typename T>
-ostream& CSRMatrix<T>::saveSparse(ostream& output) const {
-	return output << _h << ' ' << _w << ' ' << _iptr[_h] << '\n'
-	              << _iptr << '\n'
-		          << _jptr << '\n'
-		          << _mval;
+void CSRMatrix<T>::saveSparse(ostream& output) const {
+	output << _h << ' ' << _w << ' ' << _iptr[_h] << '\n'
+	       << _iptr << '\n'
+		   << _jptr << '\n'
+		   << _mval;
 }

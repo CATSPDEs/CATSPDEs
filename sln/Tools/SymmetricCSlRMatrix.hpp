@@ -34,7 +34,7 @@ class SymmetricCSlRMatrix
 	// 
 	// so, for one, 4th row (we count from zero) countains _iptr[5] – _iptr[4] = 6 – 3 = 3 elements, 
 	// starting w/ element _lval[_iptr[4]] = _lval[3] = 7 in (_jptr[_iptr[4]] = _jptr[3] = 0)th column
-	// size of matrix is 6, so _iptr[6 + 1] = 8 is numb of elements in _lval or _jptr
+	// size of matrix is 6, so _iptr[6] = 8 is numb of elements in _lval or _jptr
 	// makes sense!
 	//
 	// virtual methods to be implemented

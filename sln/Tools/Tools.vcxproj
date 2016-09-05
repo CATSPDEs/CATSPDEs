@@ -159,6 +159,7 @@
     <ClInclude Include="SingletonLogger.hpp" />
     <ClInclude Include="StokesMatrix.hpp" />
     <ClInclude Include="SymmetricContainer.hpp" />
+    <ClInclude Include="SymmetricCSlCMatrix.hpp" />
     <ClInclude Include="SymmetricCSlRMatrix.hpp" />
     <ClInclude Include="TimeFrames.hpp" />
     <ClInclude Include="Function_t.hpp" />

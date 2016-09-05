@@ -1,4 +1,7 @@
-﻿#pragma once
+﻿/*
+	Alexander Žilyakov, Sep 2016
+*/
+#pragma once
 #include <algorithm> // for_each
 #include <type_traits> // is_same 
 #include "AbstractHarwellBoeingMatrix.hpp"
@@ -26,15 +29,15 @@ class CSCMatrix
 	T  _get(size_t, size_t) const final;
 public:
 	CSCMatrix(size_t h, size_t w, size_t nnz);
-	CSCMatrix(HarwellBoeingHeader&);
+	~CSCMatrix() {}
 	// virtual methods to be implemented
 	CSCMatrix& operator=(T const & val) final;
 	void mult(T const * by, T* result) const final;
 	void multByTranspose(T const * by, T* result) const final;
-	istream& loadSparse(istream& from = cin) final;
-	ostream& saveSparse(ostream& to   = cout) const final;
-	void loadHarwellBoeing(string const &) final; // load from Harwell–Boeing file
-	void saveHarwellBoeing(string const &, Parameters const & params = {}) const final;
+	CSCMatrix& loadSparse(istream& from = cin) final;
+	void       saveSparse(ostream& to   = cout) const final;
+	CSCMatrix& loadHarwellBoeing(HarwellBoeingHeader const &, string const &) final; // load from Harwell–Boeing file
+	void       saveHarwellBoeing(string const &, Parameters const & params = {}) const final;
 };
 
 // implementation
@@ -48,32 +51,14 @@ CSCMatrix<T>::CSCMatrix(size_t h, size_t w, size_t nnz)
 	_jptr[w] = nnz;
 }
 
-template <typename T>
-CSCMatrix<T>::CSCMatrix(HarwellBoeingHeader& header)
-	: AbstractMatrix<T>(header.nrow, header.ncol)
-	, AbstractHarwellBoeingMatrix<T>(header)
-	, _jptr(header.ncol + 1)
-	, _iptr(header.nnzero)
-	, _mval(header.nnzero) {
-	// check matrix type
-	if (header.mxtype[1] != 'U' && header.mxtype[1] != 'R') throw invalid_argument("CSC type is useful for rect / unsymmetric pattern (.*r*, .*u*) Harwell-Boeing matrices; try SymmetricCSlR");
-	if (header.mxtype[2] != 'A') throw invalid_argument("only assembled (.**a) Harwell-Boeing matrices are supported");
-	if (is_same<T, double>::value) { // real matrix 
-		if (header.mxtype[0] == 'C') throw invalid_argument("instantiate matrix w/ complex<double> in order to work w/ complex (.c**) Harwell-Boeing matrices");
-	}
-	else // complex matrix
-		if (header.mxtype[0] == 'R') throw invalid_argument("instantiate matrix w/ double in order to work w/ real (.r**) Harwell-Boeing matrices");
-	_jptr[header.ncol] = header.nnzero;
-}
-
 // private methods
 
 template <typename T>
 T& CSCMatrix<T>::_set(size_t i, size_t j) {
 	for (size_t k = _jptr[j]; k < _jptr[j + 1]; ++k)
 		if (_iptr[k] == i) return _mval[k];
-		else if (_iptr[k] > i) throw invalid_argument("portrait of sparse matrix doesn’t allow to change element w/ these indicies");
-	throw invalid_argument("portrait of sparse matrix doesn’t allow to change element w/ these indicies");
+		else if (_iptr[k] > i) throw invalid_argument("pattern of sparse matrix does not allow to change element w/ these indicies");
+	throw invalid_argument("pattern of sparse matrix does not allow to change element w/ these indicies");
 }
 
 template <typename T>
@@ -112,30 +97,41 @@ void CSCMatrix<T>::multByTranspose(T const * by, T* result) const {
 }
 
 template <typename T>
-istream& CSCMatrix<T>::loadSparse(istream& input) {
+CSCMatrix<T>& CSCMatrix<T>::loadSparse(istream& input) {
 	// stdin structure:
 	// (1) _w + 1    elements of _jptr,
 	// (2) _jptr[_w] elements of _iptr, and
 	// (3) _jptr[_w] elements of _mval
-	return input >> _jptr >> _iptr >> _mval;
+	input >> _jptr >> _iptr >> _mval;
+	return *this;
 }
 
 template <typename T>
-ostream& CSCMatrix<T>::saveSparse(ostream& output) const {
-	return output << _h << ' ' << _w << ' ' << _jptr[_w] << '\n'
-	              << _jptr << '\n'
-	              << _iptr << '\n'
-	              << _mval;
+void CSCMatrix<T>::saveSparse(ostream& output) const {
+	output << _h << ' ' << _w << ' ' << _jptr[_w] << '\n'
+	       << _jptr << '\n'
+	       << _iptr << '\n'
+	       << _mval;
 }
 
 extern "C" void loadHarwellBoeingStruct_f90(char const *, HarwellBoeingHeader const *, size_t*, size_t*, double*);
 template <typename T>
-void CSCMatrix<T>::loadHarwellBoeing(string const & fileName) {
+CSCMatrix<T>& CSCMatrix<T>::loadHarwellBoeing(HarwellBoeingHeader const & header, string const & fileName) {
+	// check matrix type
+	if (header.mxtype[1] != 'U' && header.mxtype[1] != 'R') throw invalid_argument("CSC type is useful for rect / unsymmetric pattern (.*r*, .*u*) Harwell-Boeing matrices; try SymmetricCSlC for (.*s*) type");
+	if (header.mxtype[2] != 'A') throw invalid_argument("only assembled (.**a) Harwell-Boeing matrices are supported");
+	if (is_same<T, double>::value) { // real matrix 
+		if (header.mxtype[0] == 'C') throw invalid_argument("instantiate matrix w/ complex<double> in order to work w/ complex (.c**) Harwell-Boeing matrices");
+	}
+	else // complex matrix
+		if (header.mxtype[0] == 'R') throw invalid_argument("instantiate matrix w/ double in order to work w/ real (.r**) Harwell-Boeing matrices");
 	// read structure and values
-	double* mval = reinterpret_cast<double*>(_mval.data()); // http://en.cppreference.com/w/cpp/numeric/complex > non-static data members
-	loadHarwellBoeingStruct_f90(fileName.c_str(), _header, _jptr.data(), _iptr.data(), mval);
+	loadHarwellBoeingStruct_f90(fileName.c_str(), &header, _jptr.data(), _iptr.data(), 
+	                            reinterpret_cast<double*>(_mval.data())); // http://en.cppreference.com/w/cpp/numeric/complex > non-static data members
+	// TODO: FORTRAN should care for this
 	for_each(_jptr.begin(), _jptr.end(), [](size_t& i) { --i; });
 	for_each(_iptr.begin(), _iptr.end(), [](size_t& i) { --i; });
+	return *this;
 }
 
 extern "C" void saveHarwellBoeingStruct_f90(char const *, HarwellBoeingHeader const *, size_t const *, size_t const *, double const *);
@@ -187,7 +183,7 @@ void CSCMatrix<T>::saveHarwellBoeing(string const & fileName, Parameters const &
 	}
 	else if (is_same<T, double>::value) { // real matrix
 		header.mxtype[0] = 'R'; 
-		// recLength   = 26 symbols — double precision: {+|-}d.dddddddddddddddde{+|-}ddddd */;
+		// recLength   = 26 symbols — double precision: {+|-}d.dddddddddddddddde{+|-}ddddd
 		// recsPerLine = 80 / 26 = 3
 		header.valcrd = ceil(numbOfRecs / 3.); // numb of lines for values
 	}

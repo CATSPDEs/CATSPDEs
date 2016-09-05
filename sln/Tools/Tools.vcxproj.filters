@@ -37,28 +37,19 @@
     <Filter Include="Matrices\Related Structures">
       <UniqueIdentifier>{7cf3f2c9-ab57-4cd3-8251-5c9b1b3c89de}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Matrices\Implementations\To Refactor">
+      <UniqueIdentifier>{272c08f6-8445-46b7-adab-cc07307aaf59}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AbstractSparseMatrix.hpp">
       <Filter>Matrices</Filter>
     </ClInclude>
-    <ClInclude Include="BandMatrix.hpp">
-      <Filter>Matrices\Implementations</Filter>
-    </ClInclude>
-    <ClInclude Include="SymmetricContainer.hpp">
-      <Filter>Matrices\Implementations</Filter>
-    </ClInclude>
     <ClInclude Include="vector.hpp">
       <Filter>Utilities</Filter>
     </ClInclude>
-    <ClInclude Include="DenseMatrix.hpp">
-      <Filter>Matrices\Implementations</Filter>
-    </ClInclude>
     <ClInclude Include="array.hpp">
       <Filter>Utilities</Filter>
-    </ClInclude>
-    <ClInclude Include="SymmetricCSlRMatrix.hpp">
-      <Filter>Matrices\Implementations</Filter>
     </ClInclude>
     <ClInclude Include="CSRMatrix.hpp">
       <Filter>Matrices\Implementations</Filter>
@@ -135,9 +126,6 @@
     <ClInclude Include="krylov.hpp">
       <Filter>Solvers</Filter>
     </ClInclude>
-    <ClInclude Include="CSlRMatrix.hpp">
-      <Filter>Matrices\Implementations</Filter>
-    </ClInclude>
     <ClInclude Include="IDecomposable.hpp">
       <Filter>Matrices</Filter>
     </ClInclude>
@@ -180,17 +168,26 @@
     <ClInclude Include="Parameters.hpp">
       <Filter>Common</Filter>
     </ClInclude>
+    <ClInclude Include="SymmetricCSlCMatrix.hpp">
+      <Filter>Matrices\Implementations</Filter>
+    </ClInclude>
+    <ClInclude Include="BandMatrix.hpp">
+      <Filter>Matrices\Implementations\To Refactor</Filter>
+    </ClInclude>
+    <ClInclude Include="CSlRMatrix.hpp">
+      <Filter>Matrices\Implementations\To Refactor</Filter>
+    </ClInclude>
+    <ClInclude Include="DenseMatrix.hpp">
+      <Filter>Matrices\Implementations\To Refactor</Filter>
+    </ClInclude>
+    <ClInclude Include="SymmetricContainer.hpp">
+      <Filter>Matrices\Implementations\To Refactor</Filter>
+    </ClInclude>
+    <ClInclude Include="SymmetricCSlRMatrix.hpp">
+      <Filter>Matrices\Implementations\To Refactor</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="BandMatrix.cpp">
-      <Filter>Matrices\Implementations</Filter>
-    </ClCompile>
-    <ClCompile Include="DenseMatrix.cpp">
-      <Filter>Matrices\Implementations</Filter>
-    </ClCompile>
-    <ClCompile Include="SymmetricCSlRMatrix.cpp">
-      <Filter>Matrices\Implementations</Filter>
-    </ClCompile>
     <ClCompile Include="RectangularFDMMesh.cpp">
       <Filter>Meshes\Rectangular Mesh</Filter>
     </ClCompile>
@@ -209,9 +206,6 @@
     <ClCompile Include="FEM_t.cpp">
       <Filter>Solvers</Filter>
     </ClCompile>
-    <ClCompile Include="CSlRMatrix.cpp">
-      <Filter>Matrices\Implementations</Filter>
-    </ClCompile>
     <ClCompile Include="Triangulation.cpp">
       <Filter>Meshes\Triangulation</Filter>
     </ClCompile>
@@ -220,6 +214,18 @@
     </ClCompile>
     <ClCompile Include="SingletonLogger.cpp">
       <Filter>Utilities\Logger</Filter>
+    </ClCompile>
+    <ClCompile Include="BandMatrix.cpp">
+      <Filter>Matrices\Implementations\To Refactor</Filter>
+    </ClCompile>
+    <ClCompile Include="CSlRMatrix.cpp">
+      <Filter>Matrices\Implementations\To Refactor</Filter>
+    </ClCompile>
+    <ClCompile Include="DenseMatrix.cpp">
+      <Filter>Matrices\Implementations\To Refactor</Filter>
+    </ClCompile>
+    <ClCompile Include="SymmetricCSlRMatrix.cpp">
+      <Filter>Matrices\Implementations\To Refactor</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

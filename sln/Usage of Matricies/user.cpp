@@ -96,8 +96,8 @@ int main() {
 						logger.end();
 						if (matrixType == 0) { // real matrix
 							logger.beg("load HB structure");
-								CSCMatrix<double> B(header);
-								B.loadHarwellBoeing(iHBPath);
+								CSCMatrix<double> B(header.nrow, header.ncol, header.nnzero);
+								B.loadHarwellBoeing(header, iHBPath);
 							logger.end();
 					logger.end();
 							// output
@@ -107,8 +107,8 @@ int main() {
 						}
 						else { // complex matrix
 							logger.beg("load HB structure");
-								CSCMatrix<complex<double>> B(header);
-								B.loadHarwellBoeing(iHBPath);
+								CSCMatrix<complex<double>> B(header.nrow, header.ncol, header.nnzero);
+								B.loadHarwellBoeing(header, iHBPath);
 							logger.end();
 					logger.end();
 							// output
