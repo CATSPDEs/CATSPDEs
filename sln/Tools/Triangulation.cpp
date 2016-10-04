@@ -1,21 +1,28 @@
-#include <unordered_map>
+ï»¿#include <unordered_map> // for redâ€“green refinement
 #include <algorithm>
 #include <string>
 #include "Triangulation.hpp"
 
 Triangulation::Triangulation(Node const & lb, Node const & rt, double h) {
-	// here we construct dummy rect triangulation
-	// w/ left bottom point @lb and right top point @rt
-	// elements will be right-angled triangles
-	// w/ max hypotenuse size := @percent * min of rect sizes
-	// for @lb = origo, @rt = (3,2) and @percent = .9 
-	// it will look something like this:
-	//   ________(3,2)
-	//  |\ |\ |\ |
-	//  |_\|_\|_\|
-	//  |\ |\ |\ |
-	//  |_\|_\|_\|
-	//  (0,0)    
+	/*
+		author: 
+			Alexander Å½ilyakov, May 2016
+		edited:
+			Oct 2016
+		comments:
+			here we construct dummy rect triangulation
+			w/ left bottom point @lb and right top point @rt
+			elements will be right-angled triangles
+			w/ max hypotenuse size := @percent * min of rect sizes
+			for @lb = origo, @rt = (3,2) and @percent = .9 
+			it will look something like this:
+					 ________(3,2)
+					|\ |\ |\ |
+					|_\|_\|_\|
+					|\ |\ |\ |
+					|_\|_\|_\|
+				(0,0)  
+	*/
 	if (h <= 0) throw invalid_argument("max edge length must be a positive real number");
 	Node size = rt - lb;
 	// so x-projection of size is width of our rect and y-projection is height
@@ -149,14 +156,14 @@ Triangulation::Triangulation(istream& nodes, istream& triangles) {
 // private methods
 
 bool Triangulation::_makeNeighbors(Index t1, Index t2) {
-	// make _triangles[@t1] and ‘‘ @t2 neighbors
+	// make _triangles[@t1] and â€˜â€˜ @t2 neighbors
 	// if they are not adjacent, return false
 	array<array<LocalIndex, 2>, 2> commonNodes;
 	LocalIndex i, j, k = 0;
 	for (i = 0; i < 3; ++i)
 		for (j = 0; j < 3; ++j)
 			if (_triangles[t1].nodes(i) == _triangles[t2].nodes(j)) {
-				if (k > 1) // triangles share… more than 2 nodes?
+				if (k > 1) // triangles shareâ€¦ more than 2 nodes?
 					throw logic_error("invalid mesh: check out tringles #" + to_string(t1) + " and #" + to_string(t2));
 				commonNodes[0][k] = i;
 				commonNodes[1][k++] = j;
@@ -220,7 +227,15 @@ Triangulation& Triangulation::save(ostream& outNodes, ostream& outTriangles) {
 }
 
 Triangulation& Triangulation::refine(Indicies& redList) {
-	// @redList is a vector of indicies in _triangles to be red-refined
+	/*
+		author: 
+			Alexander Å½ilyakov, Jun 2016
+		edited:
+			Oct 2016
+		comments:
+			here we implement redâ€“green refinement of our mesh
+			@redList is a vector of indicies in _triangles to be redâ€“refined
+	*/
 	unordered_map<Index, unsigned short> greenMap;
 	// hash table of indicies of triangles w/ hanging nodes
 	// we must refine them green later
@@ -231,13 +246,13 @@ Triangulation& Triangulation::refine(Indicies& redList) {
 	// that were added on previous iterations
 	array<Index, 3> p, rp;
 	// indicies of nodes of old triangle (i.e. triangle to be refined),
-	// ‘‘ of new (red) nodes to be added,
+	// â€˜â€˜ of new (red) nodes to be added,
 	Index gp; // index of green node and green neighbor
 	array<SignedIndex, 3> t, rt;
 	// indicies of neighbor triangles of the old triangle,
-	// ‘‘ of new (red) neighbor triangles
+	// â€˜â€˜ of new (red) neighbor triangles
 	Index i, j, k, m; // dummy indicies
-	auto addExistingRedNodeFrom = [&](Index t) { // …from triangle _triangles[t]
+	auto addExistingRedNodeFrom = [&](Index t) { // â€¦from triangle _triangles[t]
 		// we will need this function in order to 
 		// organize red refinement if @redList contains neighbor triangles
 		// because we do not want to add same nodes to _nodes vector several times
@@ -258,7 +273,7 @@ Triangulation& Triangulation::refine(Indicies& redList) {
 		// we will need ith nodes and neighbors later
 		p = _triangles[i].nodes();
 		t = _triangles[i].neighbors();
-		// let’s deal w/ red points
+		// letâ€™s deal w/ red points
 		for (j = 0, k = 0; j < 3; ++j)
 			if (!_checkNeighbor(i, j)) {
 				// if our triangle has a neighbor which has already been red-refined,
@@ -268,7 +283,7 @@ Triangulation& Triangulation::refine(Indicies& redList) {
 				++k; // how many nodes we do not need to create
 			}
 			else {
-				// otherwise, well, let’s add a node!
+				// otherwise, well, letâ€™s add a node!
 				rp[j] = _nodes.size();
 				if (t[j] < -1) { // curvilinear edges
 					m = _neighbor2edge(t[j]);
@@ -321,7 +336,7 @@ Triangulation& Triangulation::refine(Indicies& redList) {
 	}
 	// GREEN PART
 	for (auto const & keyValue : greenMap) {
-		if (keyValue.second > 1) continue; // we should do green refinement iff there’s only one hanging node
+		if (keyValue.second > 1) continue; // we should do green refinement iff thereâ€™s only one hanging node
 		i = keyValue.first; // index of triangle to be green-refined
 		for (j = 0; j < 3; ++j)
 			if (!_checkNeighbor(i, j)) {
@@ -330,13 +345,13 @@ Triangulation& Triangulation::refine(Indicies& redList) {
 			}
 		gp = addExistingRedNodeFrom(rt[0]); // so _nodes[gp] is our hagning node
 		// we want to split our ith triangle into two triangles
-		// one of them we will add… 
+		// one of them we will addâ€¦ 
 		_triangles.push_back(Triangle(_triangles[i].nodes(j), _triangles[i].nodes(j + 1), gp,
 									  -1, i, _triangles[i].neighbors(j + 2)));
-		// …(fix green neighbor)…
+		// â€¦(fix green neighbor)â€¦
 		if (_triangles[i].neighbors(j + 2) > -1) 
 			_makeNeighbors(_triangles.size() - 1, _triangles[i].neighbors(j + 2));
-		// …and another one will take place of the old one
+		// â€¦and another one will take place of the old one
 		_triangles[i]
 			.nodes(_triangles[i].nodes(j), gp, _triangles[i].nodes(j + 2))
 			.neighbors(-1, _triangles[i].neighbors(j + 1), _triangles.size() - 1);
@@ -349,10 +364,17 @@ Triangulation& Triangulation::refine(Indicies& redList) {
 }
 
 Triangulation& Triangulation::refine(unsigned numbOfRefinements) {
-	// uniform refinement
-	// works just like red green refinement, but 
-	// ALL triangles will be refined in red fashion
-	// so we do not need stuff like redList, greenMap etc. here
+	/*
+		author: 
+			Alexander Å½ilyakov, Jun 2016
+		edited:
+			Oct 2016
+		comments:
+			 here we implement uniform refinement
+			 works just like red green refinement, but 
+			 ALL triangles will be refined in red fashion
+			 so we do not need stuff like redList, greenMap etc. here
+	*/
 	Indicies redNeighborsList;
 	array<Index, 3> p, rp;
 	array<SignedIndex, 3> t, rt;
@@ -448,6 +470,35 @@ RibsNumeration Triangulation::computeRibsNumeration() {
 				res[i][j] = res[n][k];
 			}
 		}
+	return res;
+}
+
+vector<Node> Triangulation::computeMiddleNodes(RibsNumeration const & ribs) {
+	/*
+		author:
+			Alexander Å½ilyakov, Oct 2016
+		edited:
+			_	
+		comments:
+			we will not usually compute mid nodes in real FEM apps
+			we will get them from elements if needed (e.g. in FEM apps
+			using, for one, Nedelec or Crouzeixâ€“Raviart finite elements,
+			which DOFs numeration is induced by ribsâ€™ / mid nodesâ€™ numeration)
+
+			anyway, it is useful to have this routine for the purpose of analysis
+			we use it, for one, in Î” P1 CR â€” Î” P0 L Interpolant Visualization project
+			in order to compute basis coefs u1Vec, u2Vec of velocity components u1, u2
+
+			in real problems we will get such vectors solving a linear system
+	*/
+	vector<Node> res;
+	for (Index i = 0; i < ribs.size(); ++i)
+		for (LocalIndex j = 0; j < 3; ++j)
+			if (ribs[i][j] + 1 > res.size()) res.push_back(
+				_nodes[_triangles[i].nodes(j + 1)].midPoint(
+					_nodes[_triangles[i].nodes(j + 2)]
+				)
+			);
 	return res;
 }
 

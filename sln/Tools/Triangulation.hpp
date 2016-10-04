@@ -7,6 +7,10 @@
 #include "AdjacencyList.hpp"
 #include "vector.hpp"
 
+/*
+	Alexander Žilyakov, Aug 2016
+*/
+
 typedef vector<array<Index, 2>> Boundary;       
 // we do not store boundary explicitly (since it is available from elements), but we can compute it if necessary
 typedef vector<array<Index, 3>> RibsNumeration; 
@@ -63,7 +67,10 @@ public:
 		return _nodes[i];
 	}
 	array<Node, 3> getNodes(Index t) { // ... of tth triangle
-		return { _nodes[_triangles[t].nodes(0)],_nodes[_triangles[t].nodes(1)],_nodes[_triangles[t].nodes(2)] };
+		return { _nodes[_triangles[t].nodes(0)], _nodes[_triangles[t].nodes(1)], _nodes[_triangles[t].nodes(2)] };
+	}
+	Node centroid(Index t) { // …of tth triangle
+		return ( _nodes[_triangles[t].nodes(0)] + _nodes[_triangles[t].nodes(1)] + _nodes[_triangles[t].nodes(2)] ) / 3.;
 	}
 	array<Index, 3> l2g(Index t) const { // local to global nodes numeration
 		return _triangles[t].nodes();
@@ -102,6 +109,7 @@ public:
 	*/
 	RibsNumeration computeRibsNumeration(); // we may want to do this for some FE; see def of RibsNumeration 
 	Boundary computeBoundary(); // O(numb of triangles); compute vector of arrays of indicies of _nodes that make the boudary 
+	vector<Node> computeMiddleNodes(RibsNumeration const &);
 	/* 
 	(VII) user-defined mesh generator
 	*/
