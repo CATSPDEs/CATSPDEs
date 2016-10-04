@@ -1,18 +1,20 @@
-﻿/*
+﻿#include <fstream>
+#include <complex>
+#include "CSCMatrix.hpp"
+#include "SymmetricCSlCMatrix.hpp"
+#include "CSRMatrix.hpp"
+#include "SingletonLogger.hpp"
+
+/*
 	Alexander Žilykov, Aug 2016
 */
-
-#include <fstream>
-#include <string>
-#include <complex>
-#include "CSRMatrix.hpp"
-#include "CSCMatrix.hpp"
 
 int main() {
 	// common vars
 	string iPath, oPath;
 	vector<string> HarwellBoeingMatricies = {
 		"mathematica.rra (real    rectangular assembled) -- simple artificial example",
+		"mathematica.rsa (real    symmetric   assembled) -- simple artificial example",
 		"illc1033.rra    (real    rectangular assembled)",
 		"e40r5000.rua    (real    unsymmetric assembled)",
 		"qc2534.cua      (comlex  unsymmetric assembled)",
@@ -50,11 +52,9 @@ int main() {
 					ofstream oAxU(oPathAxU), // results of multiplication
 							 oAxV(oPathAxV);
 					logger.beg("read sparse matrix A from " + iPathA + "\nread vectors u and v from " + iPath);
-						size_t rows, cols, nnz;
-						iA >> rows >> cols >> nnz;
-						CSCMatrix<double> A(rows, cols, nnz);
+						CSCMatrix<double> A;
 						iA >> A;
-						vector<double> u(cols), v(rows);
+						vector<double> u(A.numbOfCols()), v(A.numbOfRows());
 						iU >> u;
 						iV >> v;
 					logger.end();
@@ -65,12 +65,12 @@ int main() {
 						logger.log();
 					}
 					logger.beg("compute multiplications A.u, A^T.v\nsave results in " + oPath);
-						vector<double> AxU(rows), AxV(cols);
+						vector<double> AxU(A.numbOfRows()), AxV(A.numbOfCols());
 						oAxU << (AxU = A * u);
 						oAxV << (AxV = A.t() * v);
 					logger.end();
 					if (logger.yes("print results of multiplications")) {
-						logger.buf << "A.u = " << AxU << '\n' << "A^T.v = " << AxV << '\n';
+						logger.buf << "A.u = " << AxU << "\nA^T.v = " << AxV;
 						logger.log();
 					}
 					logger.log("check results w/ Mathematica/CSC.nb!");
@@ -81,46 +81,88 @@ int main() {
 				logger.beg("Harwell-Boeing i/o test");
 					iPath = "HarwellBoeing/";
 					oPath = "output/CSC/HarwellBoeing/";
-					size_t matrixType = logger.opt("choose T for CSCMatrix<T> B", { "double", "complex<double>" }),
-					       iMatrixNum = logger.opt("choose input matrix", HarwellBoeingMatricies);
+					size_t iMatrixNum = logger.opt("choose input matrix", HarwellBoeingMatricies);
 					// leave only *.rra, *.rua etc.
 					for_each(HarwellBoeingMatricies.begin(), HarwellBoeingMatricies.end(), [](string& s) { s.resize(s.find_first_of(' ')); });
 					string iHBPath = iPath + HarwellBoeingMatricies[iMatrixNum],
 					       oHBPath = oPath + HarwellBoeingMatricies[iMatrixNum];
-					logger.beg("load info from " + iHBPath);
-						logger.beg("load HB header");
-							HarwellBoeingHeader header;
-							loadHarwellBoeingHeader_f90(iHBPath.c_str(), &header);
-							logger.buf << header;
+					HarwellBoeingHeader header;
+					if (logger.opt("choose T for CSCMatrix<T> B", { "double", "complex<double>" }) == 0) { // real
+						logger.beg("load info from " + iHBPath);		
+							CSCMatrix<double> B;
+							B.loadHarwellBoeing(iHBPath, &header);
+							logger.buf << "HB header:\n" << header;
 							logger.log();
 						logger.end();
-						if (matrixType == 0) { // real matrix
-							logger.beg("load HB structure");
-								CSCMatrix<double> B(header.nrow, header.ncol, header.nnzero);
-								B.loadHarwellBoeing(header, iHBPath);
-							logger.end();
+						logger.beg("save matrix to " + oHBPath);
+							B.saveHarwellBoeing(oHBPath, { { "title", "My real HB matrix" } });
+						logger.end();
+					}
+					else { // complex
+						logger.beg("load info from " + iHBPath);
+							CSCMatrix<complex<double>> B;
+							B.loadHarwellBoeing(iHBPath, &header);
+							logger.buf << "HB header:\n" << header;
+							logger.log();
+						logger.end();
+						logger.beg("save matrix to " + oHBPath);
+							B.saveHarwellBoeing(oHBPath, { { "title", "My real HB matrix" } });
+						logger.end();
+					}
+				logger.end();
+			logger.end();
+		}
+		else if (testNum == 2) {
+			/*
+				(2) Symmetric CSlC matrix
+			*/
+			logger.beg("Symmetric CSlC matrix test");
+				/*
+					(2.0)
+				*/
+				logger.beg("mult() test");
+					// i/o file pathes
+					iPath = "Mathematica/output/SymmetricCSlC/";
+					oPath = "output/SymmetricCSlC/";
+					string iPathA = iPath + "A.dat", // rect CSC matrix in CATSPDEs sparse format
+						   iPathU = iPath + "u.dat", // vector for mult() test
+						   oPathAxU = oPath + "AxU.dat";
+					// i/o file streams
+					ifstream iA(iPathA), iU(iPathU);
+					ofstream oAxU(oPathAxU); // results of multiplication
+					logger.beg("read sparse matrix A from " + iPathA + "\nread vector u from " + iPathU);
+						SymmetricCSlCMatrix<double> A;
+						iA >> A;
+						vector<double> u(A.getOrder());
+						iU >> u;
 					logger.end();
-							// output
-							logger.beg("save matrix to " + oHBPath);
-								B.saveHarwellBoeing(oHBPath, { {"title", "My real HB Matrix"} });
-							logger.end();
-						}
-						else { // complex matrix
-							logger.beg("load HB structure");
-								CSCMatrix<complex<double>> B(header.nrow, header.ncol, header.nnzero);
-								B.loadHarwellBoeing(header, iHBPath);
-							logger.end();
+					if (logger.yes("print A (in dense format) and u")) {
+						logger.buf << "A in dense format:\n";
+						A.save(logger.buf);
+						logger.buf << "\nu = " << u;
+						logger.log();
+					}
+					logger.beg("compute A.u and save results in " + oPathAxU);
+						vector<double> AxU(A.getOrder());
+						oAxU << (AxU = A * u);
 					logger.end();
-							// output
-							logger.beg("save matrix to " + oHBPath);
-								B.saveHarwellBoeing(oHBPath, { { "title", "My complex HB Matrix" } });
-							logger.end();
-						}
+					if (logger.yes("print result of multiplication")) {
+						logger.buf << "A.u = " << AxU;
+						logger.log();
+					}
+					logger.log("check results w/ Mathematica/SymmetricCSlC.nb!");
+				logger.end();
+				/*
+					(2.1)
+				*/
+				logger.beg("Harwell-Boeing i/o test");
+				// …
+				logger.end();
 			logger.end();
 		}
 		else if (testNum == 3) {
 			/*
-				(3) CRS–matrix
+				(3) CSR–matrix
 			*/
 			//logger.beg("CSR matrix test");
 			//	ifstream iCSR("Mathematica/matrices/csr.dat"),

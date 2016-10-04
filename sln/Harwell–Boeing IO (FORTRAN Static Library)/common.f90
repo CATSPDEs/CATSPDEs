@@ -1,8 +1,10 @@
+!
+! Žilyakov Alexander, Sep 2016
+!
 module CommonMod
     use, intrinsic :: iso_c_binding, only : c_char, c_size_t, c_null_char, c_double
     implicit none
-    integer(c_size_t) :: MAX_NAME_LENGTH
-    parameter (MAX_NAME_LENGTH = 250) ! max string length for file path
+    ! data structure for Harwell Boeing, interoperable w/ C 
     type, bind(c) :: HBHeader
         ! line 1
         character(c_char) :: title(73), key(9) ! +1 element for null–character of C–strings
@@ -18,7 +20,7 @@ module CommonMod
         integer(c_size_t) :: nrhs, nrhsix
     end type HBHeader
     ! FORTRAN–strings
-    character(kind = c_char, len = MAX_NAME_LENGTH) :: fname
+    character(kind = c_char, len = 250) :: fname
     character(c_char) :: title*72, key*8, mxtype*3, rhstyp*3, ptrfmt*16, indfmt*16, valfmt*20, rhsfmt*20
     ! formats
     character(kind = c_char, len = *), parameter :: headerFormat1to4 = '(a72, a8 / 5i14 / a3, 11x, 4i14 / 2a16, 2a20)', headerFormat5 = '(a3, 11x, 2i14)'

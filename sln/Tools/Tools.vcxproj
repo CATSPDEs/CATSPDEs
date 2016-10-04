@@ -118,6 +118,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="AbstractFEMatrix.hpp" />
     <ClInclude Include="AbstractMatrix.hpp" />
     <ClInclude Include="AdjacencyList.hpp" />
     <ClInclude Include="array.hpp" />

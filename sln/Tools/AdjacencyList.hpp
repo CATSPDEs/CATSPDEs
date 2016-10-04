@@ -2,8 +2,7 @@
 #include <vector>
 #include <set>
 
-typedef std::vector<std::set<size_t>> AdjacencyList;
-
 // useful data structure which is used to 
-// generate portrait of sparse (CRS-like) matrix
+// generate pattern of sparse (CSC-like) matrix
 // from the FEM mesh
+typedef std::vector<std::set<size_t>> AdjacencyList;

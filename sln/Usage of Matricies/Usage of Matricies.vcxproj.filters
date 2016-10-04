@@ -26,7 +26,7 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <Library Include="..\Harwell–Boeing IO (FORTRAN Static Library)\x64\Release\Harwell–Boeing IO (FORTRAN Static Library).lib">
+    <Library Include="..\Harwell–Boeing IO (FORTRAN Static Library)\x64\Debug\Harwell–Boeing IO (FORTRAN Static Library).lib">
       <Filter>Source Files\External Tools</Filter>
     </Library>
   </ItemGroup>

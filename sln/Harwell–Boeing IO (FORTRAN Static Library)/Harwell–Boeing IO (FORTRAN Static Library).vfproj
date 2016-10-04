@@ -45,5 +45,5 @@
 		<File RelativePath=".\common.f90"/>
 		<File RelativePath=".\load.f90"/>
 		<File RelativePath=".\save.f90"/></Filter>
-		<File RelativePath=".\readme.txt"/></Files>
+		<File RelativePath=".\readme.md"/></Files>
 	<Globals/></VisualStudioProject>

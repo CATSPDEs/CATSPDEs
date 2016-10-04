@@ -10,7 +10,6 @@
 
 class SingletonLogger {
 	std::stack<time_t> _processes; // stack of started proccesses
-	std::stringstream _stream;
 	double _diff(clock_t t1, clock_t t2) const { return fabs(t2 - t1) / CLOCKS_PER_SEC; }
 	std::string _format(std::string const &) const;
 	// singleton

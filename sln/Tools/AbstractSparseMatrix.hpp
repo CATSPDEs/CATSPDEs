@@ -9,7 +9,11 @@ class AbstractSparseMatrix
 public:
 	virtual AbstractSparseMatrix& loadSparse(istream& from = cin) = 0; // construct matrix from stdin (sparse form)
 	virtual void                  saveSparse(ostream& to   = cout) const = 0; // save matrix to stdout (sparse form)
-	double sparsity() const { return (double)_nnz() / _w / _h; }
+	
+	// in dense format, we store N = _w × _h elements; in sparse format we store some % of N elements (+ some extra data, such as column pointers, coords, band width etc.)
+	// density() shows this % (not taking into account these extra data) 
+	double density()  const { return (double) _nnz() / _w / _h; }
+	double sparsity() const { return 1 - density(); }
 };
 
 // useful stuff 

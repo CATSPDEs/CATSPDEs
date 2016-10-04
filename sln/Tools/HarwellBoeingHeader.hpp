@@ -65,4 +65,6 @@ std::ostream& operator<<(std::ostream& output, HarwellBoeingHeader const & heade
 extern "C" {
 	void loadHarwellBoeingHeader_f90(char const *, HarwellBoeingHeader*);
 	void saveHarwellBoeingHeader_f90(char const *, HarwellBoeingHeader const *);
+	void loadHarwellBoeingStruct_f90(char const *, HarwellBoeingHeader const *, size_t*, size_t*, double*);
+	void saveHarwellBoeingStruct_f90(char const *, HarwellBoeingHeader const *, size_t const *, size_t const *, double const *);
 }

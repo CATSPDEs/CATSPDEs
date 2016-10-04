@@ -48,13 +48,13 @@ public:
 	Node operator/(double scaler) const { // scale (division)
 		return Node(*this) /= scaler;
 	}
-	double operator*(Node const & p) { // dot product
+	double operator*(Node const & p) const { // dot product
 		return _x * p._x + _y * p._y;
 	}
 	double crossProductNorm(Node const & p) {
 		return _x * p._y - _y * p._x;
 	}
-	double norm() {
+	double norm() const {
 		return sqrt((*this) * (*this));
 	}
 	Node midPoint(Node const & p) const {

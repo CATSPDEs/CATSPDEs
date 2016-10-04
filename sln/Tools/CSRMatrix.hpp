@@ -1,9 +1,10 @@
-﻿/*
-	Alexander Žilyakov, Sep 2016
-*/
-#pragma once
+﻿#pragma once
 #include "AbstractSparseMatrix.hpp"
 #include "AbstractTransposeMultipliableMatrix.hpp"
+
+/*
+	Alexander Žilyakov, Sep 2016
+*/
 
 template <typename T>
 class CSRMatrix 
@@ -62,8 +63,8 @@ template <typename T>
 T& CSRMatrix<T>::_set(size_t i, size_t j) {
 	for (size_t k = _iptr[i]; k < _iptr[i + 1]; ++k)
 		if (_jptr[k] == j) return _mval[k];
-		else if (_jptr[k] > j) throw invalid_argument("portrait of sparse matrix doesn’t allow to change element w/ these indicies");
-	throw invalid_argument("portrait of sparse matrix doesn’t allow to change element w/ these indicies");
+		else if (_jptr[k] > j) throw invalid_argument("pattern of sparse matrix does not allow to change element w/ these indicies");
+	throw invalid_argument("pattern of sparse matrix does not allow to change element w/ these indicies");
 }
 
 template <typename T>

@@ -1,11 +1,12 @@
-﻿/*
-	Alexander Žilyakov, Sep 2016
-*/
-#pragma once
+﻿#pragma once
 #include <algorithm> // for_each
 #include <type_traits> // is_same 
 #include "AbstractHarwellBoeingMatrix.hpp"
 #include "AbstractTransposeMultipliableMatrix.hpp"
+
+/*
+	Alexander Žilyakov, Sep 2016
+*/
 
 template <typename T> class CSCMatrix;
 // matrix is stored in CSC (compressed sparse column) format…
@@ -20,15 +21,15 @@ class CSCMatrix
 	// …it’s similar to CSR (check out CSRMatrix.hpp for details) except 
 	// _mval vector contains nozero matrix values col by col, not row by row
 	// so we omit details here
-	vector<T>      _mval; 
 	vector<size_t> _jptr, 
 	               _iptr; 
+	vector<T>      _mval;
 	// virtual methods to be implemented
 	size_t _nnz() const final { return _jptr[_w]; }
 	T& _set(size_t, size_t) final;
 	T  _get(size_t, size_t) const final;
 public:
-	CSCMatrix(size_t h, size_t w, size_t nnz);
+	explicit CSCMatrix(size_t h = 1, size_t w = 1, size_t nnz = 0);
 	~CSCMatrix() {}
 	// virtual methods to be implemented
 	CSCMatrix& operator=(T const & val) final;
@@ -36,14 +37,14 @@ public:
 	void multByTranspose(T const * by, T* result) const final;
 	CSCMatrix& loadSparse(istream& from = cin) final;
 	void       saveSparse(ostream& to   = cout) const final;
-	CSCMatrix& loadHarwellBoeing(HarwellBoeingHeader const &, string const &) final; // load from Harwell–Boeing file
+	CSCMatrix& loadHarwellBoeing(string const &, HarwellBoeingHeader* headerPtr = nullptr) final; // load from Harwell–Boeing file
 	void       saveHarwellBoeing(string const &, Parameters const & params = {}) const final;
 };
 
 // implementation
 
 template <typename T>
-CSCMatrix<T>::CSCMatrix(size_t h, size_t w, size_t nnz)
+CSCMatrix<T>::CSCMatrix(size_t h = 1, size_t w = 1, size_t nnz = 0)
 	: AbstractMatrix<T>(h, w)
 	, _jptr(w + 1)
 	, _iptr(nnz)
@@ -99,9 +100,17 @@ void CSCMatrix<T>::multByTranspose(T const * by, T* result) const {
 template <typename T>
 CSCMatrix<T>& CSCMatrix<T>::loadSparse(istream& input) {
 	// stdin structure:
-	// (1) _w + 1    elements of _jptr,
-	// (2) _jptr[_w] elements of _iptr, and
-	// (3) _jptr[_w] elements of _mval
+	// (1) _h
+	// (2) _w
+	// (3) numb of nonzeros =: _jptr[_w]
+	// (4) _w + 1    elements of _jptr,
+	// (5) _jptr[_w] elements of _iptr, and
+	// (6) _jptr[_w] elements of _mval
+	size_t nnz;
+	input >> _h >> _w >> nnz;
+	_jptr.resize(_w + 1);
+	_iptr.resize(nnz);
+	_mval.resize(nnz);
 	input >> _jptr >> _iptr >> _mval;
 	return *this;
 }
@@ -114,9 +123,11 @@ void CSCMatrix<T>::saveSparse(ostream& output) const {
 	       << _mval;
 }
 
-extern "C" void loadHarwellBoeingStruct_f90(char const *, HarwellBoeingHeader const *, size_t*, size_t*, double*);
 template <typename T>
-CSCMatrix<T>& CSCMatrix<T>::loadHarwellBoeing(HarwellBoeingHeader const & header, string const & fileName) {
+CSCMatrix<T>& CSCMatrix<T>::loadHarwellBoeing(string const & fileName, HarwellBoeingHeader* headerPtr) {
+	// load header
+	HarwellBoeingHeader header;
+	loadHarwellBoeingHeader_f90(fileName.c_str(), &header);
 	// check matrix type
 	if (header.mxtype[1] != 'U' && header.mxtype[1] != 'R') throw invalid_argument("CSC type is useful for rect / unsymmetric pattern (.*r*, .*u*) Harwell-Boeing matrices; try SymmetricCSlC for (.*s*) type");
 	if (header.mxtype[2] != 'A') throw invalid_argument("only assembled (.**a) Harwell-Boeing matrices are supported");
@@ -125,16 +136,23 @@ CSCMatrix<T>& CSCMatrix<T>::loadHarwellBoeing(HarwellBoeingHeader const & header
 	}
 	else // complex matrix
 		if (header.mxtype[0] == 'R') throw invalid_argument("instantiate matrix w/ double in order to work w/ real (.r**) Harwell-Boeing matrices");
-	// read structure and values
+	// fix internal structure
+	_h = header.nrow;
+	_w = header.ncol;
+	_jptr.resize(_w + 1);
+	_iptr.resize(header.nnzero);
+	_mval.resize(header.nnzero);
+	// load structure and values
 	loadHarwellBoeingStruct_f90(fileName.c_str(), &header, _jptr.data(), _iptr.data(), 
 	                            reinterpret_cast<double*>(_mval.data())); // http://en.cppreference.com/w/cpp/numeric/complex > non-static data members
 	// TODO: FORTRAN should care for this
 	for_each(_jptr.begin(), _jptr.end(), [](size_t& i) { --i; });
 	for_each(_iptr.begin(), _iptr.end(), [](size_t& i) { --i; });
+	// optionally return header
+	if (headerPtr) *headerPtr = header;
 	return *this;
 }
 
-extern "C" void saveHarwellBoeingStruct_f90(char const *, HarwellBoeingHeader const *, size_t const *, size_t const *, double const *);
 template <typename T>
 void CSCMatrix<T>::saveHarwellBoeing(string const & fileName, Parameters const & params) const {
 	/* 

@@ -186,6 +186,9 @@
     <ClInclude Include="SymmetricCSlRMatrix.hpp">
       <Filter>Matrices\Implementations\To Refactor</Filter>
     </ClInclude>
+    <ClInclude Include="AbstractFEMatrix.hpp">
+      <Filter>Matrices</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="RectangularFDMMesh.cpp">

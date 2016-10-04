@@ -1,4 +1,7 @@
-﻿module SaveMod
+﻿!
+! Žilyakov Alexander, Sep 2016
+!
+module SaveMod
     use CommonMod
     implicit none
 contains
@@ -31,8 +34,8 @@ contains
     ! write structure 
     !
     subroutine saveStruct(fname_array, header, colptr, rowind, values) bind(c, name = 'saveHarwellBoeingStruct_f90') 
-        ! i/o data
-        character(kind = c_char) :: fname_array(*)
+        ! input data
+        character(c_char) :: fname_array(*)
         type(HBHeader)    :: header
         integer(c_size_t) :: colptr(*), rowind(*), i
         real(c_double)    :: values(*)

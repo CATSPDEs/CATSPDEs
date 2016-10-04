@@ -127,6 +127,7 @@ size_t SingletonLogger::opt(std::string const & message, std::vector<std::string
 	buf << " [0, 1";
 	if (choices.size() == 2) buf << "]";
 	else if (choices.size() == 3) buf << ", 2]";
+	else if (choices.size() == 4) buf << ", 2, 3]";
 	else buf << ", ..., " << choices.size() - 1 << "]";
 	std::cout << buf.str();
 	// clear buf
