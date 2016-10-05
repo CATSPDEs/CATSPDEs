@@ -15,8 +15,8 @@ This is how current project is organized:
 3. [`./Mathematica/Draw Interpolant/drawInterpolant.nb`](Mathematica/Draw Interpolant/drawInterpolant.nb) then loads resulting from (1 – 2) mesh and vectors.
 
    It provides all post–processing stuff:
-   * visualazing resulting mesh,
-   * drawing FE interpolants *P* [ `u1Vec` ], *P* [`u2Vec`], *P* [`pVec`] (also as a vector velocity field w/ background density plot for pressure distribution),
+   * visualizing resulting mesh,
+   * plotting FE interpolants *P* ( `u1Vec` ), *P* ( `u2Vec` ), *P* ( `pVec` ) (also as a vector velocity field w/ background density plot for pressure distribution),
    * computing L<sub>2</sub>–norms of errors,
    * etc.
    
