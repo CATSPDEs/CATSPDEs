@@ -44,4 +44,4 @@ Check out (global and local) nodes’, ribs’, and triangles’ numerations (hi
 
 ![](img/Pp.png)
 	 
-— Žilyzkov Alexander, Oct 2016
+— Žilyakov Alexander, Oct 2016
