@@ -30,7 +30,9 @@ This is how current project is organized:
 
 ### Mesh
 
-![From step (1) we get this discretized region](img/fineMesh.png)
+From step (1) we get this discretized region:
+
+![](img/fineMesh.png)
 
 Check out (global and local) nodes’, ribs’, and triangles’ numerations (high–res): [./img/fineMeshNumn.png](img/fineMeshNumn.png)
 
@@ -43,5 +45,9 @@ Check out (global and local) nodes’, ribs’, and triangles’ numerations (hi
 ![](img/Pu2.png)
 
 ![](img/Pp.png)
+
+Velocity vector field and pressure distribution:
+
+![](img/vectorPlot.png)
 	 
 — Žilyakov Alexander, Oct 2016
