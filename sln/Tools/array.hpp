@@ -1,42 +1,66 @@
 #pragma once
 #include <array>
+#include <cmath>
+#include <iostream>
+#include "Index.hpp"
 
-using namespace std;
-
-template <typename T, size_t N>
-array<T, N>& operator*=(array<T, N>& u, T scaler) { // multiply by a scaler
-	for (size_t i = 0; i < N; ++i)
-		u[i] *= scaler;
+// sum two arrays
+template <typename T, Index N>
+std::array<T, N>& operator+=(std::array<T, N>& u, std::array<T, N> const & v) {
+	std::transform(u.begin(), u.end(), v.begin(), u.begin(), std::plus<T>());
 	return u;
 }
-
-template <typename T, size_t N>
-array<T, N> operator*(array<T, N> const & u, T scaler) {
-	return array<T, N>(u) *= scaler;
+template <typename T, Index N>
+std::array<T, N> operator+(std::array<T, N> const & u, std::array<T, N> const & v) {
+	std::array<T, N> t(u);
+	return t += v;
 }
 
-template <typename T, size_t N>
-array<T, N>& operator/=(array<T, N>& u, T scaler) { // divide by a scaler
+// diff two arrays
+template <typename T, Index N>
+std::array<T, N>& operator-=(std::array<T, N>& u, std::array<T, N> const & v) {
+	std::transform(u.begin(), u.end(), v.begin(), u.begin(), std::minus<T>());
+	return u;
+}
+template <typename T, Index N>
+std::array<T, N> operator-(std::array<T, N> const & u, std::array<T, N> const & v) {
+	std::array<T, N> t(u);
+	return t -= v;
+}
+
+// multiply by a scaler
+template <typename T, Index N>
+std::array<T, N>& operator*=(std::array<T, N>& u, T scaler) {
+	std::for_each(u.begin(), u.end(), [&](T& elem) { elem *= scaler; });
+	return u;
+}
+template <typename T, Index N>
+std::array<T, N> operator*(T scaler, std::array<T, N> const & u) {
+	std::array<T, N> t(u);
+	return t *= scaler;
+}
+
+// divide by a scaler
+template <typename T, Index N>
+std::array<T, N>& operator/=(std::array<T, N>& u, T scaler) {
 	return u *= 1 / scaler;
 }
-
-template <typename T, size_t N>
-array<T, N> operator/(array<T, N> const & u, T scaler) {
-	return array<T, N>(u) /= scaler;
+template <typename T, Index N>
+std::array<T, N> operator/(std::array<T, N> const & u, T scaler) {
+	std::array<T, N> t(u);
+	return t /= scaler;
 }
 
-template <typename T, size_t N>
-istream& operator>>(istream& input, array<T, N> & u) {
-	for (size_t i = 0; i < N; ++i)
-		input >> u[i];
+// i/o
+template <typename T, Index N>
+std::istream& operator>>(std::istream& input, std::array<T, N> & u) {
+	std::for_each(u.begin(), u.end(), [&](T& elem) { input >> elem; });
 	return input;
 }
-
-template <typename T, size_t N>
-ostream& operator<<(ostream& output, array<T, N> const & u) {
+template <typename T, Index N>
+std::ostream& operator<<(std::ostream& output, std::array<T, N> const & u) {
 	output.precision(15); // double precision
-	output << scientific << showpos;
-	for (size_t i = 0; i < N; ++i)
-		output << u[i] << ' ';
+	output << std::scientific << std::showpos; // scientific notation (signed)
+	std::for_each(u.begin(), u.end(), [&](T const & elem) { output << elem << ' '; });
 	return output;
 }

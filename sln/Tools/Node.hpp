@@ -1,69 +1,42 @@
 #pragma once
-#include <cmath>
-#include <iostream>
+#include <numeric> // inner_product
+#include "array.hpp"
 
-using namespace std;
+template <LocalIndex N> 
+using Node = std::array<double, N>; // abstract node
 
-class Node {
-	double _x;
-	double _y;
-public:
-	explicit Node(double x = 0., double y = 0.) : _x(x), _y(y) {}
-	double x() const { return _x; }
-	double y() const { return _y; }
-	double& x() { return _x; }
-	double& y() { return _y; }
-	Node& operator+=(Node const & p) {
-		_x += p._x;
-		_y += p._y;
-		return *this;
+	// dot product
+	template <LocalIndex N>
+	double operator*(Node<N> const & u, Node<N> const & v) {
+		return std::inner_product(u.begin(), u.end(), v.begin(), 0.);
 	}
-	Node operator+(Node const & p) const {
-		return Node(*this) += p;
+
+	// norm
+	template <LocalIndex N>
+	double norm(Node<N> const & u) {
+		return sqrt(u * u);
 	}
-	Node& operator-=(Node const & p) { 
-		_x -= p._x;
-		_y -= p._y;
-		return *this;
+
+	// middle point
+	template <LocalIndex N>
+	Node<N> midNode(Node<N> const & u, Node<N> const & v) {
+		return .5 * (u + v);
 	}
-	Node operator-(Node const & p) const {
-		return Node(*this) -= p;
+
+using Node1D = Node<1>;
+
+using Node2D = Node<2>;
+
+using Node3D = Node<3>;
+
+	inline Node3D crossProduct(Node3D const & u, Node3D const & v) {
+		return {
+			u[1] * v[2] - u[2] * v[1],
+			u[2] * v[0] - u[0] * v[2],
+			u[0] * v[1] - u[1] * v[0]
+		};
 	}
-	Node& operator*=(double scaler) { // scale
-		_x *= scaler;
-		_y *= scaler;
-		return *this;
+
+	inline Node3D crossProduct(Node2D const & u, Node2D const & v) {
+		return { 0., 0, u[0] * v[1] - u[1] * v[0] };
 	}
-	Node operator*(double scaler) const { // scale
-		return Node(*this) *= scaler;
-	}
-	friend Node operator*(double scaler, Node const & p) { // for the sake of commutativity
-		return p * scaler;
-	}
-	Node& operator/=(double scaler) { // scale (division)
-		_x *= 1 / scaler;
-		_y *= 1 / scaler;
-		return *this;
-	}
-	Node operator/(double scaler) const { // scale (division)
-		return Node(*this) /= scaler;
-	}
-	double operator*(Node const & p) const { // dot product
-		return _x * p._x + _y * p._y;
-	}
-	double crossProductNorm(Node const & p) {
-		return _x * p._y - _y * p._x;
-	}
-	double norm() const {
-		return sqrt((*this) * (*this));
-	}
-	Node midPoint(Node const & p) const {
-		return .5 * (*this + p);
-	}
-	friend ostream& operator<<(ostream& output, Node const & p) {
-		return output << p._x << ' ' << p._y << '\n';
-	}
-	friend istream& operator>>(istream& input, Node& p) {
-		return input >> p._x >> p._y;
-	}
-};

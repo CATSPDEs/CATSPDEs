@@ -84,6 +84,7 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
+      <AdditionalIncludeDirectories>C:\Program Files\boost\boost_1_62_0</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -110,6 +111,7 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
+      <AdditionalIncludeDirectories>C:\Program Files\boost\boost_1_62_0</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -128,7 +130,8 @@
     <ClInclude Include="CSlRMatrix.hpp" />
     <ClInclude Include="Curve.hpp" />
     <ClInclude Include="CurvilinearEdge.hpp" />
-    <ClInclude Include="DenseMatrix.hpp" />
+    <ClInclude Include="DenseSquareMatrix.hpp" />
+    <ClInclude Include="Element.hpp" />
     <ClInclude Include="FEM.hpp" />
     <ClInclude Include="FEM_t.hpp" />
     <ClInclude Include="AbstractHarwellBoeingMatrix.hpp" />
@@ -136,26 +139,20 @@
     <ClInclude Include="HyperbolicPDE.hpp" />
     <ClInclude Include="IDecomposable.hpp" />
     <ClInclude Include="AbstractMultipliableMatrix.hpp" />
-    <ClInclude Include="indicies.hpp" />
+    <ClInclude Include="Index.hpp" />
     <ClInclude Include="InitialConditions.hpp" />
     <ClInclude Include="AbstractTransposeMultipliableMatrix.hpp" />
-    <ClInclude Include="krylov.hpp" />
+    <ClInclude Include="ProjectionSolvers.hpp" />
     <ClInclude Include="Node.hpp" />
     <ClInclude Include="DiffusionReactionEqn.hpp" />
-    <ClInclude Include="AbstractElement.hpp" />
     <ClInclude Include="AbstractMesh.hpp" />
-    <ClInclude Include="AbstractNode.hpp" />
-    <ClInclude Include="AbstractPDE.hpp" />
     <ClInclude Include="AbstractSparseMatrix.hpp" />
     <ClInclude Include="BandMatrix.hpp" />
     <ClInclude Include="BoundaryConditions.hpp" />
     <ClInclude Include="CSRMatrix.hpp" />
     <ClInclude Include="Function.hpp" />
-    <ClInclude Include="LinearEllipticPDE.hpp" />
     <ClInclude Include="Parameters.hpp" />
-    <ClInclude Include="Point.hpp" />
     <ClInclude Include="Predicate.hpp" />
-    <ClInclude Include="RectangularFDMMesh.hpp" />
     <ClInclude Include="rlutil.h" />
     <ClInclude Include="SingletonLogger.hpp" />
     <ClInclude Include="StokesMatrix.hpp" />
@@ -164,20 +161,14 @@
     <ClInclude Include="SymmetricCSlRMatrix.hpp" />
     <ClInclude Include="TimeFrames.hpp" />
     <ClInclude Include="Function_t.hpp" />
-    <ClInclude Include="Triangle.hpp" />
     <ClInclude Include="Triangulation.hpp" />
     <ClInclude Include="vector.hpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="AbstractElement.cpp" />
-    <ClCompile Include="AbstractMesh.cpp" />
-    <ClCompile Include="AbstractNode.cpp" />
     <ClCompile Include="BandMatrix.cpp" />
     <ClCompile Include="CSlRMatrix.cpp" />
-    <ClCompile Include="DenseMatrix.cpp" />
     <ClCompile Include="FEM.cpp" />
     <ClCompile Include="FEM_t.cpp" />
-    <ClCompile Include="RectangularFDMMesh.cpp" />
     <ClCompile Include="SingletonLogger.cpp" />
     <ClCompile Include="StokesMatrix.cpp" />
     <ClCompile Include="SymmetricCSlRMatrix.cpp" />

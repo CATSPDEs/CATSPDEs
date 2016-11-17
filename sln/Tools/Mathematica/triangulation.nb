@@ -10,10 +10,10 @@
 NotebookFileLineBreakTest
 NotebookFileLineBreakTest
 NotebookDataPosition[       158,          7]
-NotebookDataLength[     37724,        982]
-NotebookOptionsPosition[     35974,        917]
-NotebookOutlinePosition[     36320,        932]
-CellTagsIndexPosition[     36277,        929]
+NotebookDataLength[     45805,       1131]
+NotebookOptionsPosition[     44174,       1069]
+NotebookOutlinePosition[     44520,       1084]
+CellTagsIndexPosition[     44477,       1081]
 WindowFrame->Normal*)
 
 (* Beginning of Notebook Content *)
@@ -180,9 +180,13 @@ Cell[BoxData[{
   RowBox[{"numbOf\[ScriptN]", "@", "\[ScriptCapitalT]_"}], ":=", 
   RowBox[{"Length", "[", 
    RowBox[{"\[ScriptCapitalT]", "[", "\"\<nodes\>\"", "]"}], 
-   "]"}]}]}], "Input",
+   "]"}]}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"numbOf\[ScriptR]", "@", "\[ScriptCapitalT]_"}], ":=", 
+  RowBox[{"\[ScriptCapitalT]", "[", "\"\<numb of ribs\>\"", "]"}]}]}], "Input",
  CellChangeTimes->{{3.684595049841214*^9, 3.684595057314942*^9}, {
-  3.684601169894959*^9, 3.684601175938649*^9}}]
+  3.684601169894959*^9, 3.684601175938649*^9}, {3.6868506606993885`*^9, 
+  3.686850685823123*^9}}]
 }, Open  ]],
 
 Cell[CellGroupData[{
@@ -229,12 +233,11 @@ Cell["Create Mesh \[ScriptCapitalT] from Symbolic Region", "Subsection",
 Cell[BoxData[
  RowBox[{
   RowBox[{"create\[ScriptCapitalT]fromRegion", "[", 
-   RowBox[{"\[CapitalOmega]_", ",", "maxCellMeasure_"}], "]"}], ":=", 
+   RowBox[{"\[CapitalOmega]_", ",", 
+    RowBox[{"maxCellMeasure_:", "\[Infinity]"}]}], "]"}], ":=", 
   RowBox[{"Module", "[", 
    RowBox[{
-    RowBox[{"{", 
-     RowBox[{"\[ScriptCapitalT]", ",", "femMesh"}], "}"}], ",", 
-    "\[IndentingNewLine]", 
+    RowBox[{"{", "femMesh", "}"}], ",", "\[IndentingNewLine]", 
     RowBox[{
      RowBox[{"<<", "NDSolve`FEM`"}], ";", "\[IndentingNewLine]", 
      RowBox[{"femMesh", "=", 
@@ -265,6 +268,8 @@ Cell[BoxData[
        RowBox[{"nodes", "."}]}], " ", "*)"}], "\[IndentingNewLine]", 
      RowBox[{"<|", "\[IndentingNewLine]", 
       RowBox[{
+       RowBox[{"\"\<format\>\"", "\[Rule]", "\"\<NTN\>\""}], ",", 
+       "\[IndentingNewLine]", 
        RowBox[{"\"\<nodes\>\"", "\[Rule]", 
         RowBox[{"femMesh", "[", 
          RowBox[{"[", "1", "]"}], "]"}]}], ",", "\[IndentingNewLine]", 
@@ -378,8 +383,9 @@ Cell[BoxData[
    3.6845088099961557`*^9}, {3.684508903396573*^9, 3.684508905568677*^9}, {
    3.684512788365442*^9, 3.684512789466679*^9}, {3.6845200931382847`*^9, 
    3.6845201001996326`*^9}, {3.684594182071188*^9, 3.68459451193808*^9}, 
-   3.6845954667229347`*^9}]
-}, Closed]],
+   3.6845954667229347`*^9, {3.6864869853669405`*^9, 3.686487012284938*^9}, {
+   3.6868290579681063`*^9, 3.686829071145713*^9}}]
+}, Open  ]],
 
 Cell[CellGroupData[{
 
@@ -397,85 +403,173 @@ Cell[BoxData[
     "want", " ", "to", " ", "import", " ", "from", " ", "the", " ", "same", 
     " ", "dir"}], " ", "*)"}], "\[IndentingNewLine]", 
   RowBox[{
-   RowBox[{"importNT", "[", 
-    RowBox[{"nodesDat_", ",", "trianglesDat_"}], "]"}], ":=", 
-   RowBox[{"<|", "\[IndentingNewLine]", 
+   RowBox[{"import", "[", "fileName_", "]"}], ":=", 
+   RowBox[{"Module", "[", 
     RowBox[{
-     RowBox[{"\"\<nodes\>\"", "\[Rule]", 
-      RowBox[{"Import", "@", "nodesDat"}]}], ",", "\[IndentingNewLine]", 
-     RowBox[{"\"\<triangles\>\"", "\[Rule]", 
-      RowBox[{"Import", "@", "trianglesDat"}]}], ",", "\[IndentingNewLine]", 
-     RowBox[{"\"\<neighbors\>\"", "\[Rule]", 
-      RowBox[{"{", "}"}]}], ",", "\[IndentingNewLine]", 
-     RowBox[{"\"\<ribs\>\"", "\[Rule]", 
-      RowBox[{"{", "}"}]}]}], "\[IndentingNewLine]", "|>"}]}]}]], "Input",
- CellChangeTimes->{{3.6845953631870804`*^9, 3.6845953638673368`*^9}, {
-  3.6845954091834583`*^9, 3.6845956600571566`*^9}, {3.684595910598739*^9, 
-  3.6845959371361303`*^9}}],
-
-Cell[BoxData[
- RowBox[{
-  RowBox[{"importNTN", "[", 
-   RowBox[{"nodesDat_", ",", "trianglesDat_", ",", "neighborsDat_"}], "]"}], ":=", 
-  RowBox[{"Module", "[", 
-   RowBox[{
-    RowBox[{"{", 
-     RowBox[{"\[ScriptCapitalT]", "=", 
-      RowBox[{"importNT", "[", 
-       RowBox[{"nodesDat", ",", "trianglesDat"}], "]"}]}], "}"}], ",", 
-    "\[IndentingNewLine]", 
-    RowBox[{
+     RowBox[{"{", 
+      RowBox[{
+      "data", ",", "format", ",", "numbOfNodes", ",", "numbOfTriangles"}], 
+      "}"}], ",", "\[IndentingNewLine]", 
      RowBox[{
-      RowBox[{"\[ScriptCapitalT]", "[", 
-       RowBox[{"[", "\"\<neighbors\>\"", "]"}], "]"}], "=", 
-      RowBox[{"Import", "@", "neighborsDat"}]}], ";", "\[IndentingNewLine]", 
-     "\[ScriptCapitalT]"}]}], "\[IndentingNewLine]", "]"}]}]], "Input",
- CellChangeTimes->{
-  3.6845956731363535`*^9, {3.684595722546167*^9, 3.6845957334353476`*^9}, {
-   3.6845957699780917`*^9, 3.6845958760612926`*^9}, {3.684595942045766*^9, 
-   3.684595955193116*^9}}],
-
-Cell[BoxData[
- RowBox[{
-  RowBox[{"importNTR", "[", 
-   RowBox[{"nodesDat_", ",", "trianglesDat_", ",", "ribsDat_"}], "]"}], ":=", 
-  RowBox[{"Module", "[", 
-   RowBox[{
-    RowBox[{"{", 
-     RowBox[{"\[ScriptCapitalT]", "=", 
-      RowBox[{"importNT", "[", 
-       RowBox[{"nodesDat", ",", "trianglesDat"}], "]"}]}], "}"}], ",", 
-    "\[IndentingNewLine]", 
-    RowBox[{
-     RowBox[{
-      RowBox[{"\[ScriptCapitalT]", "[", 
-       RowBox[{"[", "\"\<ribs\>\"", "]"}], "]"}], "=", 
-      RowBox[{"Import", "@", "ribsDat"}]}], ";", "\[IndentingNewLine]", 
-     "\[ScriptCapitalT]"}]}], "\[IndentingNewLine]", "]"}]}]], "Input",
- CellChangeTimes->{{3.684596002418852*^9, 3.6845960347045207`*^9}, {
-  3.684596067034886*^9, 3.6845960726394806`*^9}}],
-
-Cell[BoxData[
- RowBox[{
-  RowBox[{"importNTNR", "[", 
-   RowBox[{
-   "nodesDat_", ",", "trianglesDat_", ",", "neighborsDat_", ",", "ribsDat_"}],
-    "]"}], ":=", 
-  RowBox[{"Module", "[", 
-   RowBox[{
-    RowBox[{"{", 
-     RowBox[{"\[ScriptCapitalT]", "=", 
-      RowBox[{"importNTN", "[", 
-       RowBox[{"nodesDat", ",", "trianglesDat", ",", "neighborsDat"}], 
-       "]"}]}], "}"}], ",", "\[IndentingNewLine]", 
-    RowBox[{
-     RowBox[{
-      RowBox[{"\[ScriptCapitalT]", "[", 
-       RowBox[{"[", "\"\<ribs\>\"", "]"}], "]"}], "=", 
-      RowBox[{"Import", "@", "ribsDat"}]}], ";", "\[IndentingNewLine]", 
-     "\[ScriptCapitalT]"}]}], "\[IndentingNewLine]", "]"}]}]], "Input",
- CellChangeTimes->{{3.6845960896523466`*^9, 3.6845961543992867`*^9}}]
-}, Closed]],
+      RowBox[{"data", "=", 
+       RowBox[{"Import", "[", 
+        RowBox[{"fileName", ",", "\"\<Table\>\""}], "]"}]}], ";", 
+      "\[IndentingNewLine]", 
+      RowBox[{"format", "=", 
+       RowBox[{"data", "[", 
+        RowBox[{"[", 
+         RowBox[{"1", ",", "1"}], "]"}], "]"}]}], ";", "\[IndentingNewLine]", 
+      RowBox[{"numbOfNodes", "=", 
+       RowBox[{"data", "[", 
+        RowBox[{"[", 
+         RowBox[{"2", ",", "1"}], "]"}], "]"}]}], ";", "\[IndentingNewLine]", 
+      RowBox[{"numbOfTriangles", "=", 
+       RowBox[{"data", "[", 
+        RowBox[{"[", 
+         RowBox[{"2", ",", "2"}], "]"}], "]"}]}], ";", "\[IndentingNewLine]", 
+      RowBox[{"If", "[", 
+       RowBox[{
+        RowBox[{"format", "\[Equal]", "\"\<NT\>\""}], ",", 
+        "\[IndentingNewLine]", 
+        RowBox[{"<|", "\[IndentingNewLine]", 
+         RowBox[{
+          RowBox[{"\"\<format\>\"", "\[Rule]", "\"\<NT\>\""}], ",", 
+          "\[IndentingNewLine]", 
+          RowBox[{"\"\<nodes\>\"", "\[Rule]", 
+           RowBox[{"data", "[", 
+            RowBox[{"[", 
+             RowBox[{"3", ";;", 
+              RowBox[{"3", "+", "numbOfNodes", "-", "1"}]}], "]"}], "]"}]}], 
+          ",", "\[IndentingNewLine]", 
+          RowBox[{"\"\<triangles\>\"", "\[Rule]", 
+           RowBox[{"data", "[", 
+            RowBox[{"[", 
+             RowBox[{
+              RowBox[{"3", "+", "numbOfNodes"}], ";;"}], "]"}], "]"}]}]}], 
+         "\[IndentingNewLine]", "|>"}], ",", "\[IndentingNewLine]", 
+        RowBox[{"If", "[", 
+         RowBox[{
+          RowBox[{"format", "\[Equal]", "\"\<NTN\>\""}], ",", 
+          "\[IndentingNewLine]", 
+          RowBox[{"<|", "\[IndentingNewLine]", 
+           RowBox[{
+            RowBox[{"\"\<format\>\"", "\[Rule]", "\"\<NTN\>\""}], ",", 
+            "\[IndentingNewLine]", 
+            RowBox[{"\"\<nodes\>\"", "\[Rule]", 
+             RowBox[{"data", "[", 
+              RowBox[{"[", 
+               RowBox[{"3", ";;", 
+                RowBox[{"3", "+", "numbOfNodes", "-", "1"}]}], "]"}], "]"}]}],
+             ",", "\[IndentingNewLine]", 
+            RowBox[{"\"\<triangles\>\"", "\[Rule]", 
+             RowBox[{"data", "[", 
+              RowBox[{"[", 
+               RowBox[{
+                RowBox[{"3", "+", "numbOfNodes"}], ";;", 
+                RowBox[{
+                "3", "+", "numbOfNodes", "+", "numbOfTriangles", "-", "1"}]}],
+                "]"}], "]"}]}], ",", "\[IndentingNewLine]", 
+            RowBox[{"\"\<neighbors\>\"", "\[Rule]", 
+             RowBox[{"data", "[", 
+              RowBox[{"[", 
+               RowBox[{
+                RowBox[{"3", "+", "numbOfNodes", "+", "numbOfTriangles"}], 
+                ";;"}], "]"}], "]"}]}]}], "\[IndentingNewLine]", "|>"}], ",", 
+          "\[IndentingNewLine]", 
+          RowBox[{"If", "[", 
+           RowBox[{
+            RowBox[{"format", "\[Equal]", "\"\<NTNR\>\""}], ",", 
+            "\[IndentingNewLine]", 
+            RowBox[{"<|", "\[IndentingNewLine]", 
+             RowBox[{
+              RowBox[{"\"\<format\>\"", "\[Rule]", "\"\<NTNR\>\""}], ",", 
+              "\[IndentingNewLine]", 
+              RowBox[{"\"\<nodes\>\"", "\[Rule]", 
+               RowBox[{"data", "[", 
+                RowBox[{"[", 
+                 RowBox[{"3", ";;", 
+                  RowBox[{"3", "+", "numbOfNodes", "-", "1"}]}], "]"}], 
+                "]"}]}], ",", "\[IndentingNewLine]", 
+              RowBox[{"\"\<triangles\>\"", "\[Rule]", 
+               RowBox[{"data", "[", 
+                RowBox[{"[", 
+                 RowBox[{
+                  RowBox[{"3", "+", "numbOfNodes"}], ";;", 
+                  RowBox[{
+                  "3", "+", "numbOfNodes", "+", "numbOfTriangles", "-", 
+                   "1"}]}], "]"}], "]"}]}], ",", "\[IndentingNewLine]", 
+              RowBox[{"\"\<neighbors\>\"", "\[Rule]", 
+               RowBox[{"data", "[", 
+                RowBox[{"[", 
+                 RowBox[{
+                  RowBox[{"3", "+", "numbOfNodes", "+", "numbOfTriangles"}], ";;", 
+                  RowBox[{"3", "+", "numbOfNodes", "+", 
+                   RowBox[{"2", "numbOfTriangles"}], "-", "1"}]}], "]"}], 
+                "]"}]}], ",", "\[IndentingNewLine]", 
+              RowBox[{"\"\<ribs\>\"", "\[Rule]", 
+               RowBox[{"data", "[", 
+                RowBox[{"[", 
+                 RowBox[{
+                  RowBox[{"3", "+", "numbOfNodes", "+", 
+                   RowBox[{"2", "numbOfTriangles"}]}], ";;"}], "]"}], "]"}]}],
+               ",", "\[IndentingNewLine]", 
+              RowBox[{"\"\<numb of ribs\>\"", "\[Rule]", 
+               RowBox[{"data", "[", 
+                RowBox[{"[", 
+                 RowBox[{"2", ",", "3"}], "]"}], "]"}]}]}], 
+             "\[IndentingNewLine]", "|>"}], ",", "\[IndentingNewLine]", 
+            RowBox[{"If", "[", 
+             RowBox[{
+              RowBox[{"format", "\[Equal]", "\"\<NTR\>\""}], ",", 
+              "\[IndentingNewLine]", 
+              RowBox[{"<|", "\[IndentingNewLine]", 
+               RowBox[{
+                RowBox[{"\"\<format\>\"", "\[Rule]", "\"\<NTR\>\""}], ",", 
+                "\[IndentingNewLine]", 
+                RowBox[{"\"\<nodes\>\"", "\[Rule]", 
+                 RowBox[{"data", "[", 
+                  RowBox[{"[", 
+                   RowBox[{"3", ";;", 
+                    RowBox[{"3", "+", "numbOfNodes", "-", "1"}]}], "]"}], 
+                  "]"}]}], ",", "\[IndentingNewLine]", 
+                RowBox[{"\"\<triangles\>\"", "\[Rule]", 
+                 RowBox[{"data", "[", 
+                  RowBox[{"[", 
+                   RowBox[{
+                    RowBox[{"3", "+", "numbOfNodes"}], ";;", 
+                    RowBox[{
+                    "3", "+", "numbOfNodes", "+", "numbOfTriangles", "-", 
+                    "1"}]}], "]"}], "]"}]}], ",", "\[IndentingNewLine]", 
+                RowBox[{"\"\<ribs\>\"", "\[Rule]", 
+                 RowBox[{"data", "[", 
+                  RowBox[{"[", 
+                   RowBox[{
+                    RowBox[{"3", "+", "numbOfNodes", "+", "numbOfTriangles"}],
+                     ";;"}], "]"}], "]"}]}], ",", "\[IndentingNewLine]", 
+                RowBox[{"\"\<numb of ribs\>\"", "\[Rule]", 
+                 RowBox[{"data", "[", 
+                  RowBox[{"[", 
+                   RowBox[{"2", ",", "3"}], "]"}], "]"}]}]}], 
+               "\[IndentingNewLine]", "|>"}], ",", "\[IndentingNewLine]", 
+              RowBox[{"Print", "[", "\"\<Unknown mesh format\>\"", "]"}]}], 
+             "\[IndentingNewLine]", "]"}]}], "\[IndentingNewLine]", "]"}]}], 
+         "\[IndentingNewLine]", "]"}]}], "\[IndentingNewLine]", "]"}]}]}], 
+    "\[IndentingNewLine]", "]"}]}]}]], "Input",
+ CellChangeTimes->{{3.6868221342707915`*^9, 3.6868221556346636`*^9}, {
+   3.68682221420494*^9, 3.6868222282937455`*^9}, 3.6868223484592657`*^9, {
+   3.686822382656996*^9, 3.68682267387122*^9}, {3.68682272766474*^9, 
+   3.6868227849779*^9}, {3.686822857040854*^9, 3.686822859780367*^9}, {
+   3.686822937311243*^9, 3.6868229997201333`*^9}, {3.686823060441656*^9, 
+   3.6868231208080244`*^9}, {3.6868232411471386`*^9, 3.686823308291772*^9}, {
+   3.68682364293857*^9, 3.6868236662289085`*^9}, {3.6868247530610375`*^9, 
+   3.686824865642593*^9}, {3.6868249001231565`*^9, 3.6868249318860626`*^9}, {
+   3.6868249826535254`*^9, 3.6868250296982756`*^9}, {3.686825099327217*^9, 
+   3.6868251067103443`*^9}, {3.68682827994446*^9, 3.6868283524779615`*^9}, {
+   3.686828406035119*^9, 3.686828434124565*^9}, {3.6868284650535254`*^9, 
+   3.6868284753053784`*^9}, {3.686828507238241*^9, 3.686828531662692*^9}, {
+   3.6868285794350986`*^9, 3.686828712666403*^9}, {3.686828751556376*^9, 
+   3.6868288046234818`*^9}, {3.6868290260486617`*^9, 3.6868290290330353`*^9}}]
+}, Open  ]],
 
 Cell[CellGroupData[{
 
@@ -492,32 +586,88 @@ Cell[BoxData[
     "want", " ", "to", " ", "export", " ", "to", " ", "the", " ", "same", " ",
      "dir"}], " ", "*)"}], "\[IndentingNewLine]", 
   RowBox[{
-   RowBox[{"export", "@", "\[ScriptCapitalT]_"}], ":=", 
-   RowBox[{"(", "\[IndentingNewLine]", 
+   RowBox[{"export", "[", 
+    RowBox[{"\[ScriptCapitalT]_", ",", 
+     RowBox[{"fileName_:", "\"\<mesh\>\""}], ",", 
+     RowBox[{"params_:", 
+      RowBox[{"<|", 
+       RowBox[{"\"\<format\>\"", "\[Rule]", "\"\<NTN\>\""}], "|>"}]}]}], 
+    "]"}], ":=", 
+   RowBox[{"Module", "[", 
     RowBox[{
-     RowBox[{"Export", "[", 
-      RowBox[{"\"\<nodes.dat\>\"", ",", 
-       RowBox[{"Prepend", "[", 
+     RowBox[{"{", "to", "}"}], ",", "\[IndentingNewLine]", 
+     RowBox[{
+      RowBox[{"to", "=", 
+       RowBox[{"fileName", "<>", "\"\<.\>\"", "<>", 
+        RowBox[{"ToLowerCase", "@", 
+         RowBox[{"params", "[", "\"\<format\>\"", "]"}]}]}]}], ";", 
+      "\[IndentingNewLine]", 
+      RowBox[{"If", "[", 
+       RowBox[{
         RowBox[{
-         RowBox[{"\[ScriptCapitalT]", "[", 
-          RowBox[{"[", "\"\<nodes\>\"", "]"}], "]"}], ",", 
-         RowBox[{"numbOf\[ScriptN]", "@", "\[ScriptCapitalT]"}]}], "]"}]}], 
-      "]"}], ";", "\[IndentingNewLine]", 
-     RowBox[{"Export", "[", 
-      RowBox[{"\"\<triangles.dat\>\"", ",", 
-       RowBox[{"Prepend", "[", 
-        RowBox[{
-         RowBox[{"\[ScriptCapitalT]", "[", 
-          RowBox[{"[", "\"\<triangles\>\"", "]"}], "]"}], ",", 
-         RowBox[{"numbOf\[CapitalDelta]", "@", "\[ScriptCapitalT]"}]}], 
-        "]"}]}], "]"}], ";", "\[IndentingNewLine]", 
-     RowBox[{"Export", "[", 
-      RowBox[{"\"\<neighbors.dat\>\"", ",", 
-       RowBox[{"\[ScriptCapitalT]", "[", 
-        RowBox[{"[", "\"\<neighbors\>\"", "]"}], "]"}]}], "]"}], ";"}], 
-    "\[IndentingNewLine]", ")"}]}]}]], "Input",
- CellChangeTimes->{{3.684595252016181*^9, 3.6845953383835506`*^9}}]
-}, Closed]]
+         RowBox[{"params", "[", "\"\<format\>\"", "]"}], "\[Equal]", 
+         "\"\<NT\>\""}], ",", "\[IndentingNewLine]", 
+        RowBox[{"Export", "[", 
+         RowBox[{"to", ",", 
+          RowBox[{"{", "\[IndentingNewLine]", 
+           RowBox[{"\"\<NT\>\"", ",", "\[IndentingNewLine]", 
+            RowBox[{"{", 
+             RowBox[{
+              RowBox[{"numbOf\[ScriptN]", "@", "\[ScriptCapitalT]"}], ",", 
+              RowBox[{"numbOf\[CapitalDelta]", "@", "\[ScriptCapitalT]"}]}], 
+             "}"}], ",", "\[IndentingNewLine]", 
+            RowBox[{"Flatten", "@", 
+             RowBox[{"\[ScriptCapitalT]", "[", 
+              RowBox[{"[", "\"\<nodes\>\"", "]"}], "]"}]}], ",", 
+            "\[IndentingNewLine]", 
+            RowBox[{"Flatten", "@", 
+             RowBox[{"\[ScriptCapitalT]", "[", 
+              RowBox[{"[", "\"\<triangles\>\"", "]"}], "]"}]}], ","}], 
+           "\[IndentingNewLine]", "}"}], ",", "\"\<Table\>\""}], "]"}], ",", 
+        "\[IndentingNewLine]", 
+        RowBox[{"If", "[", 
+         RowBox[{
+          RowBox[{
+           RowBox[{"params", "[", "\"\<format\>\"", "]"}], "\[Equal]", 
+           "\"\<NTN\>\""}], ",", "\[IndentingNewLine]", 
+          RowBox[{"Export", "[", 
+           RowBox[{"to", ",", 
+            RowBox[{"{", "\[IndentingNewLine]", 
+             RowBox[{"\"\<NTN\>\"", ",", "\[IndentingNewLine]", 
+              RowBox[{"{", 
+               RowBox[{
+                RowBox[{"numbOf\[ScriptN]", "@", "\[ScriptCapitalT]"}], ",", 
+                RowBox[{"numbOf\[CapitalDelta]", "@", "\[ScriptCapitalT]"}]}],
+                "}"}], ",", "\[IndentingNewLine]", 
+              RowBox[{"Flatten", "@", 
+               RowBox[{"\[ScriptCapitalT]", "[", 
+                RowBox[{"[", "\"\<nodes\>\"", "]"}], "]"}]}], ",", 
+              "\[IndentingNewLine]", 
+              RowBox[{"Flatten", "@", 
+               RowBox[{"\[ScriptCapitalT]", "[", 
+                RowBox[{"[", "\"\<triangles\>\"", "]"}], "]"}]}], ",", 
+              "\[IndentingNewLine]", 
+              RowBox[{"Flatten", "@", 
+               RowBox[{"\[ScriptCapitalT]", "[", 
+                RowBox[{"[", "\"\<neighbors\>\"", "]"}], "]"}]}]}], 
+             "\[IndentingNewLine]", "}"}], ",", "\"\<Table\>\""}], "]"}], ",",
+           "\[IndentingNewLine]", 
+          RowBox[{"Print", "@", "\"\<Unknown mesh format\>\""}]}], 
+         "\[IndentingNewLine]", "]"}]}], "\[IndentingNewLine]", "]"}]}]}], 
+    "\[IndentingNewLine]", "]"}]}]}]], "Input",
+ CellChangeTimes->{{3.684595252016181*^9, 3.6845953383835506`*^9}, {
+   3.6864872095049458`*^9, 3.686487222602665*^9}, {3.6864872962413464`*^9, 
+   3.6864875307430534`*^9}, {3.6864875858098965`*^9, 
+   3.6864875874363537`*^9}, {3.6864876908648653`*^9, 
+   3.6864876931939707`*^9}, {3.6864877596728354`*^9, 3.686487762834056*^9}, {
+   3.68648779911727*^9, 3.68648780694014*^9}, {3.686487870233303*^9, 
+   3.686487872753394*^9}, {3.6864879309792175`*^9, 3.686488013456914*^9}, {
+   3.686499805312944*^9, 3.6864999100600314`*^9}, {3.686729671178788*^9, 
+   3.6867296986770844`*^9}, {3.686729730830287*^9, 3.686730033674369*^9}, {
+   3.686730065467059*^9, 3.68673009122803*^9}, {3.6867301271549964`*^9, 
+   3.686730146855221*^9}, 3.6868291818491125`*^9, {3.6868292297839327`*^9, 
+   3.6868292362733803`*^9}, {3.6868293062846107`*^9, 3.686829340252616*^9}}]
+}, Open  ]]
 }, Open  ]],
 
 Cell[CellGroupData[{
@@ -641,7 +791,9 @@ Cell[BoxData[
 Cell[BoxData[
  RowBox[{
   RowBox[{"highlight", "[", 
-   RowBox[{"\[ScriptCapitalT]_", ",", "what_"}], "]"}], ":=", 
+   RowBox[{"\[ScriptCapitalT]_", ",", 
+    RowBox[{"what_:", 
+     RowBox[{"{", "}"}]}]}], "]"}], ":=", 
   RowBox[{"Module", "[", "\[IndentingNewLine]", 
    RowBox[{
     RowBox[{"{", "\[IndentingNewLine]", 
@@ -910,13 +1062,13 @@ Cell[BoxData[
    3.6845197906944885`*^9, 3.6845198073582244`*^9}, {3.6845199725032787`*^9, 
    3.6845200083628283`*^9}, {3.684520071528466*^9, 3.684520071976379*^9}, {
    3.6845201288427343`*^9, 3.6845201484416466`*^9}, {3.6846006751991825`*^9, 
-   3.6846007217611732`*^9}}]
+   3.6846007217611732`*^9}, {3.6868237122602644`*^9, 3.686823713483692*^9}}]
 }, Open  ]]
 }, Open  ]]
 }, Open  ]]
 },
-WindowSize->{1362, 685},
-WindowMargins->{{Automatic, -4}, {Automatic, 0}},
+WindowSize->{1350, 676},
+WindowMargins->{{-7, Automatic}, {Automatic, 0}},
 FrontEndVersion->"10.4 for Microsoft Windows (64-bit) (February 25, 2016)",
 StyleDefinitions->"Default.nb"
 ]
@@ -946,41 +1098,38 @@ Cell[4792, 137, 1003, 27, 72, "Input"]
 }, Open  ]],
 Cell[CellGroupData[{
 Cell[5832, 169, 142, 1, 43, "Subsection"],
-Cell[5977, 172, 525, 12, 52, "Input"]
+Cell[5977, 172, 745, 16, 105, "Input"]
 }, Open  ]],
 Cell[CellGroupData[{
-Cell[6539, 189, 134, 1, 43, "Subsection"],
-Cell[6676, 192, 706, 20, 68, "Input"]
+Cell[6759, 193, 134, 1, 43, "Subsection"],
+Cell[6896, 196, 706, 20, 68, "Input"]
 }, Open  ]]
 }, Open  ]],
 Cell[CellGroupData[{
-Cell[7431, 218, 165, 2, 63, "Section"],
+Cell[7651, 222, 165, 2, 63, "Section"],
 Cell[CellGroupData[{
-Cell[7621, 224, 167, 2, 43, "Subsection"],
-Cell[7791, 228, 5818, 152, 282, "Input"]
-}, Closed]],
-Cell[CellGroupData[{
-Cell[13646, 385, 213, 3, 35, "Subsection"],
-Cell[13862, 390, 1139, 23, 152, "Input"],
-Cell[15004, 415, 842, 20, 92, "Input"],
-Cell[15849, 437, 747, 18, 92, "Input"],
-Cell[16599, 457, 754, 19, 125, "Input"]
-}, Closed]],
-Cell[CellGroupData[{
-Cell[17390, 481, 162, 2, 35, "Subsection"],
-Cell[17555, 485, 1472, 33, 132, "Input"]
-}, Closed]]
+Cell[7841, 228, 167, 2, 43, "Subsection"],
+Cell[8011, 232, 6000, 154, 302, "Input"]
 }, Open  ]],
 Cell[CellGroupData[{
-Cell[19076, 524, 108, 1, 63, "Section"],
+Cell[14048, 391, 213, 3, 43, "Subsection"],
+Cell[14264, 396, 8324, 174, 852, "Input"]
+}, Open  ]],
 Cell[CellGroupData[{
-Cell[19209, 529, 128, 1, 43, "Subsection"],
-Cell[19340, 532, 399, 11, 31, "Input"]
+Cell[22625, 575, 162, 2, 43, "Subsection"],
+Cell[22790, 579, 4347, 89, 485, "Input"]
+}, Open  ]]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[27186, 674, 108, 1, 63, "Section"],
+Cell[CellGroupData[{
+Cell[27319, 679, 128, 1, 43, "Subsection"],
+Cell[27450, 682, 399, 11, 31, "Input"]
 }, Closed]],
 Cell[CellGroupData[{
-Cell[19776, 548, 125, 1, 35, "Subsection"],
-Cell[19904, 551, 3637, 87, 319, "Input"],
-Cell[23544, 640, 12390, 272, 932, "Input"]
+Cell[27886, 698, 125, 1, 35, "Subsection"],
+Cell[28014, 701, 3637, 87, 319, "Input"],
+Cell[31654, 790, 12480, 274, 932, "Input"]
 }, Open  ]]
 }, Open  ]]
 }, Open  ]]

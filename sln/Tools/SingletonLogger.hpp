@@ -17,6 +17,7 @@ class SingletonLogger {
 	SingletonLogger(SingletonLogger const &);
 	SingletonLogger& operator=(SingletonLogger const &);
 public:
+	bool mute;
 	std::ostringstream buf;
 	~SingletonLogger();
 	static SingletonLogger& instance();
@@ -24,12 +25,22 @@ public:
 	void end(); // terminate last process
 	void log(std::string const &) const; // print message w/ "[log]" prefix
 	void log(); // print formatted buf 
-	void wrn(std::string const &) const; // print error
+	void wrn(std::string const &) const; // print warning
 	void err(std::string const &) const; // print error
-	void inp(std::string const &) const; // print input invite
+	template <typename T>
+	void inp(std::string const &, T&) const; // print input invite and get input value
 	bool yes(std::string const &) const; // true if get 'y' from stdin
 	size_t opt(std::string const &, std::vector<std::string> const &); // choose vector element (get index from stdin), return its index
 	std::string tab() const { // tabulations
 		return std::string(_processes.size(), '\t'); 
 	} 
 };
+
+template <typename T>
+void SingletonLogger::inp(std::string const & message, T& val) const {
+	rlutil::setColor(10);
+	std::cout << tab() << "[inp] ";
+	rlutil::setColor(7);
+	std::cout << _format(message) << ":\n" << tab() << "      ";
+	std::cin >> val;
+}

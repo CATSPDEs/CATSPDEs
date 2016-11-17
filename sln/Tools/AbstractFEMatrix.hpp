@@ -13,4 +13,6 @@ public:
 	// construct matrix pattern from adjacency list 
 	// of finite element mesh verticies
 	virtual AbstractFEMatrix& generatePatternFrom(AdjacencyList const &) = 0;
+	// enforce strong BCs
+	virtual AbstractFEMatrix& enforceDirichletBCs(std::unordered_map<Index, T> const &, std::vector<T>&) = 0;
 };

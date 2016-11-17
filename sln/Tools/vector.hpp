@@ -1,63 +1,75 @@
 #pragma once
 #include <vector>
 
-using namespace std;
-
 template <typename T>
-vector<T> operator*(T c, vector<T> const & v)
-{
-	vector<T> res(v.size());
-	for (size_t i = 0; i < v.size(); i++)
-		res[i] = c*v[i];
-	return res;
-}
-
-template <typename T>
-T operator*(vector<T> const & u, vector<T> const & v) { // dot product
+T operator*(std::vector<T> const & u, std::vector<T> const & v) { // dot product
 	T dotProduct = 0;
 	for (size_t i = 0; i < u.size(); ++i)
 		dotProduct += u[i] * v[i];
 	return dotProduct;
 }
 
+// sum two vectors
 template <typename T>
-vector<T> operator+(const vector<T>& v1, const vector<T>& v2)
-{
-	vector<T> res(v1.size());
-	for (size_t i = 0;i < v1.size();i++)
-		res[i] = v1[i] + v2[i];
-	return res;
+std::vector<T>& operator+=(std::vector<T>& u, std::vector<T> const & v) {
+	std::transform(u.begin(), u.end(), v.begin(), u.begin(), std::plus<T>());
+	return u;
+}
+template <typename T>
+std::vector<T> operator+(std::vector<T> const & u, std::vector<T> const & v) {
+	auto t(u);
+	return t += v;
 }
 
+// diff two vectors
 template <typename T>
-vector<T> operator-(vector<T> const & v1, vector<T> const & v2) {
-	vector<T> res(v1.size());
-	for (size_t i = 0; i < v1.size(); i++)
-		res[i] = v1[i] - v2[i];
-	return res;
+std::vector<T>& operator-=(std::vector<T>& u, std::vector<T> const & v) {
+	std::transform(u.begin(), u.end(), v.begin(), u.begin(), std::minus<T>());
+	return u;
+}
+template <typename T>
+std::vector<T> operator-(std::vector<T> const & u, std::vector<T> const & v) {
+	auto t(u);
+	return t -= v;
 }
 
+// multiply by a scaler
 template <typename T>
-istream& operator>>(istream& input, vector<T> & u) {
-	for (size_t i = 0; i < u.size(); ++i)
-		input >> u[i];
+std::vector<T>& operator*=(std::vector<T>& u, T scaler) {
+	std::for_each(u.begin(), u.end(), [&](T& elem) { elem *= scaler; });
+	return u;
+}
+template <typename T>
+std::vector<T> operator*(T scaler, std::vector<T> const & u) {
+	auto t(u);
+	return t *= scaler;
+}
+
+// i/o
+template <typename T>
+std::istream& operator>>(std::istream& input, std::vector<T> & u) {
+	std::for_each(u.begin(), u.end(), [&](T& elem) { input >> elem; });
 	return input;
 }
-
 template <typename T>
-ostream& operator<<(ostream& output, vector<T> const & u) {
+std::ostream& operator<<(std::ostream& output, std::vector<T> const & u) {
 	output.precision(15); // double precision
-	output << scientific << showpos;
-	for (size_t i = 0; i < u.size(); ++i)
-		output << u[i] << ' ';
+	output << std::scientific << std::showpos; // scientific notation (signed)
+	std::for_each(u.begin(), u.end(), [&](T const & elem) { output << elem << ' '; });
 	return output;
 }
-
-// for vector of vectors
 template <typename T>
-ostream& operator<<(ostream& output, vector<vector<T>> const & u) {
+void export(std::vector<T> const & u, std::string const & outputString) {
+	std::ofstream output(outputString);
+	output << u;
+}
+
+
+// for std::vector of std::vectors
+template <typename T>
+std::ostream& operator<<(std::ostream& output, std::vector<std::vector<T>> const & u) {
 	output.precision(15); // double precision
-	output << scientific << showpos;
+	output << std::scientific << std::showpos;
 	for (size_t i = 0; i < u.size(); ++i) {
 		for (size_t j = 0; j < u[i].size(); ++j)
 			output << u[i][j] << ' ';
@@ -67,9 +79,9 @@ ostream& operator<<(ostream& output, vector<vector<T>> const & u) {
 }
 
 template <typename T, size_t N>
-ostream& operator<<(ostream& output, vector<array<T, N>> const & u) {
+std::ostream& operator<<(std::ostream& output, std::vector<std::array<T, N>> const & u) {
 	output.precision(15); // double precision
-	output << scientific << showpos;
+	output << std::scientific << std::showpos;
 	for (size_t i = 0; i < u.size(); ++i) {
 		for (size_t j = 0; j < N; ++j)
 			output << u[i][j] << ' ';
@@ -79,6 +91,6 @@ ostream& operator<<(ostream& output, vector<array<T, N>> const & u) {
 }
 
 template <typename T>
-T norm(vector<T> const & v) {
+T norm(std::vector<T> const & v) {
 	return sqrt(v * v);
 }

@@ -1,8 +1,6 @@
 #pragma once
 #include "vector.hpp"
 
-using namespace std;
-
 class TimeFrames {
 private:
 	vector<double> _t;

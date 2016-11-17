@@ -5,8 +5,6 @@
 #include "Function_t.hpp"
 #include "Predicate.hpp"
 
-using namespace std;
-
 class AbstractBC_t { // boundary condition (any kind)
 protected:
 	Predicate _validAt; // if _validAt(node), then at node this BCs are applied

@@ -5,23 +5,28 @@ template <typename T>
 class SymmetricContainer : public AbstractSparseMatrix<T> {
 	std::vector<T> _val;
 	// virtual methods to be implemented
-	size_t _nnz() const { return (_n * _n + _n) / 2; }
-	T& _set(size_t i, size_t j) {
+	T& _set(Index i, Index j) final {
 		if (i > j) std::swap(i, j);
-		return _val[j + _n * i - (i * i + i) / 2];
+		return _val[j + _w * i - (i * i + i) / 2];
 	}
-	T _get(size_t i, size_t j) const {
+	T _get(Index i, Index j) const final {
 		if (i > j) std::swap(i, j);
-		return _val[j + _n * i - (i * i + i) / 2];
+		return _val[j + _w * i - (i * i + i) / 2];
 	}
 public:
-	explicit SymmetricContainer(size_t n) : AbstractSparseMatrix(n), _val(_nnz()) {}
-	SymmetricContainer(size_t n, T val) : AbstractSparseMatrix(n), _val(_nnz(), val) {}
+	explicit SymmetricContainer(Index n = 1) : AbstractMatrix<T>(n, n), _val(nnz()) {}
+	~SymmetricContainer() {}
 	// virtual methods to be implemented
-	std::istream& loadSparse(std::istream& input) {
-		return input >> _val;
+	Index nnz() const final { return (_w * _w + _w) / 2; }
+	SymmetricContainer& operator=(T const & val) final {
+		std::fill(_val.begin(), _val.end(), val);
+		return *this;
 	}
-	std::ostream& saveSparse(std::ostream& output) const {
-		return output << _n << '\n' << _val; 
+	SymmetricContainer& importSparse(std::istream& from = cin) final {
+		from >> _val;
+		return *this;
+	}
+	void exportSparse(std::ostream& to = cout) const final {
+		to << _w << '\n' << _val;
 	}
 };

@@ -19,12 +19,6 @@
     <Filter Include="Meshes\Triangulation">
       <UniqueIdentifier>{c17f61b4-efe3-4565-b502-81b20402b00b}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Meshes\Rectangular Mesh">
-      <UniqueIdentifier>{ebc49e94-b00d-4098-ad87-1a355918334c}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="PDEs\Temp">
-      <UniqueIdentifier>{a940014a-a2b4-4110-9297-76628d6918e5}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Common">
       <UniqueIdentifier>{cca77161-f3a4-44a8-8c8d-13e3de612ab0}</UniqueIdentifier>
     </Filter>
@@ -54,9 +48,6 @@
     <ClInclude Include="CSRMatrix.hpp">
       <Filter>Matrices\Implementations</Filter>
     </ClInclude>
-    <ClInclude Include="Triangle.hpp">
-      <Filter>Meshes\Triangulation</Filter>
-    </ClInclude>
     <ClInclude Include="CurvilinearEdge.hpp">
       <Filter>Meshes\Triangulation</Filter>
     </ClInclude>
@@ -68,24 +59,6 @@
     </ClInclude>
     <ClInclude Include="BoundaryConditions.hpp">
       <Filter>PDEs</Filter>
-    </ClInclude>
-    <ClInclude Include="RectangularFDMMesh.hpp">
-      <Filter>Meshes\Rectangular Mesh</Filter>
-    </ClInclude>
-    <ClInclude Include="AbstractElement.hpp">
-      <Filter>PDEs\Temp</Filter>
-    </ClInclude>
-    <ClInclude Include="AbstractMesh.hpp">
-      <Filter>PDEs\Temp</Filter>
-    </ClInclude>
-    <ClInclude Include="AbstractNode.hpp">
-      <Filter>PDEs\Temp</Filter>
-    </ClInclude>
-    <ClInclude Include="AbstractPDE.hpp">
-      <Filter>PDEs\Temp</Filter>
-    </ClInclude>
-    <ClInclude Include="Point.hpp">
-      <Filter>PDEs\Temp</Filter>
     </ClInclude>
     <ClInclude Include="Node.hpp">
       <Filter>Common</Filter>
@@ -101,9 +74,6 @@
     </ClInclude>
     <ClInclude Include="FEM.hpp">
       <Filter>Solvers</Filter>
-    </ClInclude>
-    <ClInclude Include="LinearEllipticPDE.hpp">
-      <Filter>PDEs\Temp</Filter>
     </ClInclude>
     <ClInclude Include="TimeFrames.hpp">
       <Filter>PDEs</Filter>
@@ -123,17 +93,11 @@
     <ClInclude Include="FEM_t.hpp">
       <Filter>Solvers</Filter>
     </ClInclude>
-    <ClInclude Include="krylov.hpp">
-      <Filter>Solvers</Filter>
-    </ClInclude>
     <ClInclude Include="IDecomposable.hpp">
       <Filter>Matrices</Filter>
     </ClInclude>
     <ClInclude Include="Triangulation.hpp">
       <Filter>Meshes\Triangulation</Filter>
-    </ClInclude>
-    <ClInclude Include="indicies.hpp">
-      <Filter>Common</Filter>
     </ClInclude>
     <ClInclude Include="constants.hpp">
       <Filter>Common</Filter>
@@ -177,40 +141,37 @@
     <ClInclude Include="CSlRMatrix.hpp">
       <Filter>Matrices\Implementations\To Refactor</Filter>
     </ClInclude>
-    <ClInclude Include="DenseMatrix.hpp">
-      <Filter>Matrices\Implementations\To Refactor</Filter>
-    </ClInclude>
-    <ClInclude Include="SymmetricContainer.hpp">
-      <Filter>Matrices\Implementations\To Refactor</Filter>
-    </ClInclude>
     <ClInclude Include="SymmetricCSlRMatrix.hpp">
       <Filter>Matrices\Implementations\To Refactor</Filter>
     </ClInclude>
     <ClInclude Include="AbstractFEMatrix.hpp">
       <Filter>Matrices</Filter>
     </ClInclude>
+    <ClInclude Include="SymmetricContainer.hpp">
+      <Filter>Matrices\Implementations</Filter>
+    </ClInclude>
+    <ClInclude Include="AbstractMesh.hpp">
+      <Filter>Meshes</Filter>
+    </ClInclude>
+    <ClInclude Include="Index.hpp">
+      <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="Element.hpp">
+      <Filter>Meshes</Filter>
+    </ClInclude>
+    <ClInclude Include="ProjectionSolvers.hpp">
+      <Filter>Solvers</Filter>
+    </ClInclude>
+    <ClInclude Include="DenseSquareMatrix.hpp">
+      <Filter>Matrices\Implementations</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="RectangularFDMMesh.cpp">
-      <Filter>Meshes\Rectangular Mesh</Filter>
-    </ClCompile>
-    <ClCompile Include="AbstractElement.cpp">
-      <Filter>PDEs\Temp</Filter>
-    </ClCompile>
-    <ClCompile Include="AbstractMesh.cpp">
-      <Filter>PDEs\Temp</Filter>
-    </ClCompile>
-    <ClCompile Include="AbstractNode.cpp">
-      <Filter>PDEs\Temp</Filter>
-    </ClCompile>
     <ClCompile Include="FEM.cpp">
       <Filter>Solvers</Filter>
     </ClCompile>
     <ClCompile Include="FEM_t.cpp">
       <Filter>Solvers</Filter>
-    </ClCompile>
-    <ClCompile Include="Triangulation.cpp">
-      <Filter>Meshes\Triangulation</Filter>
     </ClCompile>
     <ClCompile Include="StokesMatrix.cpp">
       <Filter>Matrices\Implementations</Filter>
@@ -224,11 +185,11 @@
     <ClCompile Include="CSlRMatrix.cpp">
       <Filter>Matrices\Implementations\To Refactor</Filter>
     </ClCompile>
-    <ClCompile Include="DenseMatrix.cpp">
-      <Filter>Matrices\Implementations\To Refactor</Filter>
-    </ClCompile>
     <ClCompile Include="SymmetricCSlRMatrix.cpp">
       <Filter>Matrices\Implementations\To Refactor</Filter>
+    </ClCompile>
+    <ClCompile Include="Triangulation.cpp">
+      <Filter>Meshes\Triangulation</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

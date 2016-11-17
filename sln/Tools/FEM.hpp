@@ -1,12 +1,11 @@
 #pragma once
-// to define our problem, we need 3 objects:
-// (1) PDE,
+#include <boost/tuple/tuple.hpp>
+#include "CSCMatrix.hpp" // restriction (prolongation) operators
+#include "SymmetricCSlCMatrix.hpp" // for final linear system matrix
+
 #include "DiffusionReactionEqn.hpp"
-// (2) discretized domain (mesh),
 #include "Triangulation.hpp"
-// (3) and BCs that connects (1) and (2)
 #include "BoundaryConditions.hpp"
-#include "SymmetricContainer.hpp" // for local matrices
 
 // our model problem:
 //
@@ -36,16 +35,58 @@
 // so we have to assemble and solve n × n linear system, n := numb of nodes of the mesh Omega
 
 namespace FEM {
-	// classic finite element method
-	vector<double> computeDiscreteSolution(DiffusionReactionEqn const &, Triangulation&, BoundaryConditions&);
-	// local matrices and vectors
-	SymmetricContainer<double> computeLocalMassMatrix     (Function, array<Node, 3>&, double);
-	SymmetricContainer<double> computeLocalStiffnessMatrix(Function, array<Node, 3>&, array<Node, 3>&, double);
-	array<double, 3>           computeLocalLoadVector     (Function, array<Node, 3>&, array<Node, 3>&, double);
-	SymmetricContainer<double> computeLocalRobinMatrix    (BoundaryConditions const &, array<Node, 2>&, double);
-	array<double, 2>           computeLocalRobinVector    (BoundaryConditions const &, array<Node, 2>&, double);
-	// make vector of model soln
-	vector<double> constructVector(Function, Triangulation&);
-	// save boundary nodes
-	vector<size_t> computeBoundaryNodes(Triangulation&, Boundary&, Predicate);
+
+	namespace DivGrad {
+
+		boost::tuple<
+			SymmetricCSlCMatrix<double>, // assembled system matrix and
+			std::vector<double> // rhs vector
+		> linearLagrangeAssembler(
+			DiffusionReactionEqn2D const &, // (1) PDE,
+			Triangulation const &, // (2) discretized domain (mesh),
+			DirichletCondition2D const & // (3) and BCs that connects (1) and (2)
+		);
+
+		namespace Multigrid {
+
+			extern std::function<std::vector<double>(
+				SymmetricCSlCMatrix<double>&, // system matrix
+				std::vector<double> const &, // rhs
+				std::vector<double> const & // initial guess
+			)> smoother;
+			extern Index gamma; // numb of recursive coarse iterations (1 for V–cycle, 2 for W–cycle)
+
+			boost::tuple<
+				SymmetricCSlCMatrix<double>, // assembled system matrix and
+				std::vector<double> // rhs vector
+			> linearLagrangeSetter(
+				DiffusionReactionEqn2D const & PDE,
+				DirichletCondition2D const & DirichletBC,
+				Triangulation&, // initial coarse mesh
+				Index // numb of mesh levels
+			);
+
+			std::vector<double> iteration( // for solving A.z = f
+				Index, // current mesh level
+				std::vector<double> const &, // initial approximation to soln
+				std::vector<double> const & // rhs
+			);
+
+		}
+
+	}
+	namespace Stokes {
+
+	}
+
+	//// local matrices and vectors
+	//SymmetricContainer<double> computeLocalMassMatrix     (Function, array<Node, 3>&, double);
+	//SymmetricContainer<double> computeLocalStiffnessMatrix(Function, array<Node, 3>&, array<Node, 3>&, double);
+	//array<double, 3>           computeLocalLoadVector     (Function, array<Node, 3>&, array<Node, 3>&, double);
+	//SymmetricContainer<double> computeLocalRobinMatrix    (BoundaryConditions const &, array<Node, 2>&, double);
+	//array<double, 2>           computeLocalRobinVector    (BoundaryConditions const &, array<Node, 2>&, double);
+	//// make vector of model soln
+	//vector<double> constructVector(Function, Triangulation&);
+	//// save boundary nodes
+	//vector<size_t> computeBoundaryNodes(Triangulation&, Boundary&, Predicate);
 }

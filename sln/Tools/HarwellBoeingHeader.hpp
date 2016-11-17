@@ -29,7 +29,7 @@ struct HarwellBoeingHeader {
 	       nrhsix;    // ″       row indicies
 };
 
-std::ostream& operator<<(std::ostream& output, HarwellBoeingHeader const & header) {
+inline std::ostream& operator<<(std::ostream& output, HarwellBoeingHeader const & header) {
 	output << "line 1\n"
 	       << "\ttitle:  " << header.title << '\n'
 	       << "\tkey:    " << header.key << '\n'

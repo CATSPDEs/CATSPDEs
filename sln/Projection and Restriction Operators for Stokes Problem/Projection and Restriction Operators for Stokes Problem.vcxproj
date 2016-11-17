@@ -19,8 +19,8 @@
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{79D7129B-B767-4FFB-8E40-F3FCA9B64F51}</ProjectGuid>
-    <RootNamespace>RibsNumerationforVectorShapeFuncs</RootNamespace>
+    <ProjectGuid>{CAA249FB-0C6C-451B-B078-555D7CBE75FC}</ProjectGuid>
+    <RootNamespace>ProjectionandRestrictionOperatorsforStokesProblem</RootNamespace>
     <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
@@ -84,7 +84,7 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>..\Tools</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\Tools;C:\Program Files\boost\boost_1_62_0</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -112,7 +112,7 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>..\Tools</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\Tools;C:\Program Files\boost\boost_1_62_0</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -122,8 +122,11 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="..\Tools\Triangulation.cpp" />
+    <ClCompile Include="..\Tools\SingletonLogger.cpp" />
     <ClCompile Include="user.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <Library Include="..\Harwell–Boeing IO (FORTRAN Static Library)\x64\Release\Harwell–Boeing IO (FORTRAN Static Library).lib" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

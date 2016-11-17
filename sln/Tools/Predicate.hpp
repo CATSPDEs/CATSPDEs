@@ -1,7 +1,12 @@
 #pragma once
+#include <functional>
 #include "Node.hpp"
 
-typedef bool(*Predicate)(Node&); // function pointer
+template <LocalIndex D>
+using Predicate = std::function<bool(Node<D> const &)>;
 
-inline bool constTrue (Node&) { return true; }
-inline bool constFalse(Node&) { return false; }
+template <LocalIndex D>
+inline bool constTrue (Node<D> const &) { return true; }
+
+template <LocalIndex D>
+inline bool constFalse(Node<D> const &) { return false; }

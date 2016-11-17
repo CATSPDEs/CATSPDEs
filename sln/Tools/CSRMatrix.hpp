@@ -36,6 +36,13 @@ class CSRMatrix
 	T& _set(size_t, size_t) final;
 	T  _get(size_t, size_t) const final;
 public:
+	CSRMatrix(vector<Index> const & rowptr, vector<Index> const & colind, vector<T> const values, Index w) 
+		: AbstractMatrix<T>(rowptr.size() - 1, w)
+		, _iptr(rowptr)
+		, _jptr(colind)
+		, _mval(values)
+		{
+	}
 	CSRMatrix(size_t h, size_t w, size_t nnz); // order and number of nonzeros
 	~CSRMatrix() {}
 	// virtual methods to be implemented
@@ -63,7 +70,7 @@ template <typename T>
 T& CSRMatrix<T>::_set(size_t i, size_t j) {
 	for (size_t k = _iptr[i]; k < _iptr[i + 1]; ++k)
 		if (_jptr[k] == j) return _mval[k];
-		else if (_jptr[k] > j) throw invalid_argument("pattern of sparse matrix does not allow to change element w/ these indicies");
+		//else if (_jptr[k] > j) throw invalid_argument("pattern of sparse matrix does not allow to change element w/ these indicies");
 	throw invalid_argument("pattern of sparse matrix does not allow to change element w/ these indicies");
 }
 
@@ -71,7 +78,7 @@ template <typename T>
 T CSRMatrix<T>::_get(size_t i, size_t j) const {
 	for (size_t k = _iptr[i]; k < _iptr[i + 1]; ++k)
 		if (_jptr[k] == j) return _mval[k];
-		else if (_jptr[k] > j) return 0.;
+		//else if (_jptr[k] > j) return 0.;
 	return 0.;
 }
 

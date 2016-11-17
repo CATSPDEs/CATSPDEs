@@ -1,0 +1,867 @@
+(* Content-type: application/vnd.wolfram.mathematica *)
+
+(*** Wolfram Notebook File ***)
+(* http://www.wolfram.com/nb *)
+
+(* CreatedBy='Mathematica 10.4' *)
+
+(*CacheID: 234*)
+(* Internal cache information:
+NotebookFileLineBreakTest
+NotebookFileLineBreakTest
+NotebookDataPosition[       158,          7]
+NotebookDataLength[     33146,        859]
+NotebookOptionsPosition[     31741,        807]
+NotebookOutlinePosition[     32087,        822]
+CellTagsIndexPosition[     32044,        819]
+WindowFrame->Normal*)
+
+(* Beginning of Notebook Content *)
+Notebook[{
+
+Cell[CellGroupData[{
+Cell["\<\
+Routines for Computing Shape Funcs of Different FEs and Post\[Dash]processing\
+\>", "Title",
+ CellChangeTimes->{{3.6859678194907494`*^9, 3.6859678771496162`*^9}}],
+
+Cell["Some explanation goes here...", "Text",
+ CellChangeTimes->{{3.685967891721883*^9, 3.6859679049366827`*^9}}],
+
+Cell[CellGroupData[{
+
+Cell["Finite Elements", "Section",
+ CellChangeTimes->{{3.6859680655374765`*^9, 3.6859680715170174`*^9}}],
+
+Cell["Here we should clarify our notations...", "Text",
+ CellChangeTimes->{{3.6859680972650356`*^9, 3.6859681088535423`*^9}}],
+
+Cell[CellGroupData[{
+
+Cell[TextData[{
+ "\[CapitalDelta] ",
+ Cell[BoxData[
+  FormBox[
+   SuperscriptBox["P", "0"], TraditionalForm]]],
+ " Lagrange"
+}], "Subsection",
+ CellChangeTimes->{{3.685968124697133*^9, 3.685968168637723*^9}, {
+  3.685969897758335*^9, 3.685969900053405*^9}, {3.6859710110485563`*^9, 
+  3.6859710128808317`*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"\[CapitalDelta]P0L", "=", 
+   RowBox[{"<|", "\[IndentingNewLine]", 
+    RowBox[{
+     RowBox[{
+     "\"\<name\>\"", "\[Rule]", 
+      "\"\<\[CapitalDelta] \!\(\*SuperscriptBox[\(P\), \(0\)]\) L\>\""}], ",",
+      "\[IndentingNewLine]", 
+     RowBox[{"\"\<shape funcs\>\"", "\[Rule]", " ", 
+      RowBox[{"{", "1", "}"}]}], ",", "\[IndentingNewLine]", 
+     RowBox[{"(*", " ", 
+      RowBox[{
+      "get", " ", "numeration", " ", "of", " ", "shape", " ", "funcs", " ", 
+       "of", " ", 
+       SuperscriptBox["t", "th"], " ", "triangle", " ", "of", " ", 
+       "\[ScriptCapitalT]"}], " ", "*)"}], "\[IndentingNewLine]", 
+     RowBox[{"\"\<DOFs numn\>\"", "\[Rule]", " ", 
+      RowBox[{"Function", "[", 
+       RowBox[{
+        RowBox[{"{", 
+         RowBox[{"\[ScriptCapitalT]", ",", "t"}], "}"}], ",", 
+        RowBox[{"{", "t", "}"}]}], "]"}]}], ",", "\[IndentingNewLine]", 
+     RowBox[{"\"\<numb of DOFs\>\"", "\[Rule]", 
+      RowBox[{"Function", "[", 
+       RowBox[{
+        RowBox[{"{", "\[ScriptCapitalT]", "}"}], ",", 
+        RowBox[{"numbOf\[CapitalDelta]", "@", "\[ScriptCapitalT]"}]}], 
+       "]"}]}], ",", "\[IndentingNewLine]", 
+     RowBox[{"\"\<DOFs nodes\>\"", "\[Rule]", 
+      RowBox[{"Function", "[", 
+       RowBox[{
+        RowBox[{"{", 
+         RowBox[{"\[ScriptCapitalT]", ",", "t"}], "}"}], ",", 
+        RowBox[{"centroid", "[", 
+         RowBox[{"\[ScriptCapitalT]", ",", "t"}], "]"}]}], "]"}]}]}], 
+    "\[IndentingNewLine]", "|>"}]}], ";"}]], "Input",
+ CellChangeTimes->{{3.685968216783662*^9, 3.685968229541868*^9}, {
+   3.685968337920841*^9, 3.6859683548472805`*^9}, {3.6859687039279757`*^9, 
+   3.685968709615796*^9}, {3.6859688902303314`*^9, 3.685968928086708*^9}, {
+   3.685968988767154*^9, 3.6859689906448164`*^9}, {3.6859690557508965`*^9, 
+   3.68596908085422*^9}, {3.6859691521542616`*^9, 3.685969156509284*^9}, {
+   3.6859692106749916`*^9, 3.68596922398118*^9}, {3.685969326546307*^9, 
+   3.685969402727768*^9}, {3.6859694361460743`*^9, 3.685969455330901*^9}, {
+   3.6859699812283545`*^9, 3.685970035157882*^9}, 3.6859700668720455`*^9, {
+   3.6859707995241547`*^9, 3.685970800324766*^9}, {3.686026170751086*^9, 
+   3.6860262546038847`*^9}, {3.686033032112721*^9, 3.6860330332784595`*^9}, {
+   3.6868500972763453`*^9, 3.686850142828947*^9}, {3.6868501967863073`*^9, 
+   3.686850204409054*^9}, {3.6868502585408907`*^9, 3.6868502960861177`*^9}}]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[TextData[{
+ "\[CapitalDelta] ",
+ Cell[BoxData[
+  FormBox[
+   SuperscriptBox["P", "1"], TraditionalForm]]],
+ " Lagrange"
+}], "Subsection",
+ CellChangeTimes->{{3.685968124697133*^9, 3.685968168637723*^9}, {
+  3.685969897758335*^9, 3.685969900053405*^9}}],
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{"A", "=", 
+   RowBox[{"Inverse", "@", 
+    RowBox[{"{", 
+     RowBox[{
+      RowBox[{"{", 
+       RowBox[{
+        SubscriptBox["x", "1"], ",", 
+        SubscriptBox["x", "2"], ",", 
+        SubscriptBox["x", "3"]}], "}"}], ",", 
+      RowBox[{"{", 
+       RowBox[{
+        SubscriptBox["y", "1"], ",", 
+        SubscriptBox["y", "2"], ",", 
+        SubscriptBox["y", "3"]}], "}"}], ",", 
+      RowBox[{"{", 
+       RowBox[{"1", ",", "1", ",", "1"}], "}"}]}], "}"}]}]}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"S1", "[", 
+    RowBox[{"u_", ",", "v_"}], "]"}], "=", 
+   RowBox[{"FullSimplify", "[", 
+    RowBox[{
+     RowBox[{"A", "[", 
+      RowBox[{"[", "1", "]"}], "]"}], ".", 
+     RowBox[{"{", 
+      RowBox[{"u", ",", "v", ",", "1"}], "}"}]}], "]"}]}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"S2", "[", 
+    RowBox[{"u_", ",", "v_"}], "]"}], "=", 
+   RowBox[{"FullSimplify", "[", 
+    RowBox[{
+     RowBox[{"A", "[", 
+      RowBox[{"[", "2", "]"}], "]"}], ".", 
+     RowBox[{"{", 
+      RowBox[{"u", ",", "v", ",", "1"}], "}"}]}], "]"}]}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"S3", "[", 
+    RowBox[{"u_", ",", "v_"}], "]"}], "=", 
+   RowBox[{"FullSimplify", "[", 
+    RowBox[{
+     RowBox[{"A", "[", 
+      RowBox[{"[", "3", "]"}], "]"}], ".", 
+     RowBox[{"{", 
+      RowBox[{"u", ",", "v", ",", "1"}], "}"}]}], "]"}]}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"\[CapitalDelta]P1L", "=", 
+   RowBox[{"<|", "\[IndentingNewLine]", 
+    RowBox[{
+     RowBox[{
+     "\"\<name\>\"", "\[Rule]", 
+      "\"\<\[CapitalDelta] \!\(\*SuperscriptBox[\(P\), \(1\)]\) L\>\""}], ",",
+      "\[IndentingNewLine]", 
+     RowBox[{"\"\<shape funcs\>\"", "\[Rule]", " ", 
+      RowBox[{"{", 
+       RowBox[{
+        RowBox[{"S1", "[", 
+         RowBox[{"x", ",", "y"}], "]"}], ",", 
+        RowBox[{"S2", "[", 
+         RowBox[{"x", ",", "y"}], "]"}], ",", 
+        RowBox[{"S3", "[", 
+         RowBox[{"x", ",", "y"}], "]"}]}], "}"}]}], ",", 
+     "\[IndentingNewLine]", 
+     RowBox[{"(*", " ", 
+      RowBox[{
+      "get", " ", "numeration", " ", "of", " ", "shape", " ", "funcs", " ", 
+       "of", " ", 
+       SuperscriptBox["t", "th"], " ", "triangle", " ", "of", " ", 
+       "\[ScriptCapitalT]"}], " ", "*)"}], "\[IndentingNewLine]", 
+     RowBox[{"\"\<DOFs numn\>\"", "\[Rule]", " ", 
+      RowBox[{"Function", "[", 
+       RowBox[{
+        RowBox[{"{", 
+         RowBox[{"\[ScriptCapitalT]", ",", "t"}], "}"}], ",", 
+        RowBox[{
+         RowBox[{
+          RowBox[{"\[ScriptCapitalT]", "[", "\"\<triangles\>\"", "]"}], "[", 
+          RowBox[{"[", "t", "]"}], "]"}], "+", "1"}]}], "]"}]}], ",", 
+     "\[IndentingNewLine]", 
+     RowBox[{"\"\<numb of DOFs\>\"", "\[Rule]", 
+      RowBox[{"Function", "[", 
+       RowBox[{
+        RowBox[{"{", "\[ScriptCapitalT]", "}"}], ",", 
+        RowBox[{"numbOf\[ScriptN]", "@", "\[ScriptCapitalT]"}]}], "]"}]}], 
+     ",", "\[IndentingNewLine]", 
+     RowBox[{"\"\<DOFs nodes\>\"", "\[Rule]", 
+      RowBox[{"Function", "[", 
+       RowBox[{
+        RowBox[{"{", 
+         RowBox[{"\[ScriptCapitalT]", ",", "t"}], "}"}], ",", 
+        RowBox[{"\[ScriptN]", "[", 
+         RowBox[{"\[ScriptCapitalT]", ",", "t"}], "]"}]}], "]"}]}]}], 
+    "\[IndentingNewLine]", "|>"}]}], ";"}]}], "Input",
+ CellChangeTimes->{{3.685968216783662*^9, 3.685968229541868*^9}, {
+   3.685968337920841*^9, 3.6859683548472805`*^9}, {3.6859687039279757`*^9, 
+   3.685968709615796*^9}, {3.6859688902303314`*^9, 3.685968928086708*^9}, {
+   3.685968988767154*^9, 3.6859689906448164`*^9}, {3.6859690557508965`*^9, 
+   3.68596908085422*^9}, {3.6859691521542616`*^9, 3.685969156509284*^9}, {
+   3.6859692106749916`*^9, 3.68596922398118*^9}, {3.685969326546307*^9, 
+   3.685969402727768*^9}, {3.6859694361460743`*^9, 3.685969455330901*^9}, {
+   3.6859699812283545`*^9, 3.685970035157882*^9}, 3.6859700668720455`*^9, {
+   3.6859707995241547`*^9, 3.685970800324766*^9}, {3.6860255920258956`*^9, 
+   3.6860256168797207`*^9}, {3.6868505128721027`*^9, 
+   3.6868505264140368`*^9}, {3.6868505863059974`*^9, 3.686850589178393*^9}}]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[TextData[{
+ "\[CapitalDelta] ",
+ Cell[BoxData[
+  FormBox[
+   SuperscriptBox["P", "1"], TraditionalForm]]],
+ " Crouzeix",
+ "\[Dash]Raviart"
+}], "Subsection",
+ CellChangeTimes->{{3.685968124697133*^9, 3.685968168637723*^9}, {
+  3.685969897758335*^9, 3.6859699266591034`*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"\[CapitalDelta]P1CR", "=", 
+   RowBox[{"<|", "\[IndentingNewLine]", 
+    RowBox[{
+     RowBox[{
+     "\"\<name\>\"", "\[Rule]", 
+      "\"\<\[CapitalDelta] \!\(\*SuperscriptBox[\(P\), \(1\)]\) CR\>\""}], 
+     ",", "\[IndentingNewLine]", 
+     RowBox[{"(*", " ", 
+      RowBox[{
+      "change", " ", "Lagrange", " ", "vertices", " ", "to", " ", "mid", " ", 
+       "nodes"}], " ", "*)"}], "\[IndentingNewLine]", 
+     RowBox[{
+      RowBox[{
+       RowBox[{"\"\<shape funcs\>\"", "\[Rule]", " ", 
+        RowBox[{"\[CapitalDelta]P1L", "[", "\"\<shape funcs\>\"", "]"}]}], "/.", 
+       RowBox[{"{", "\[IndentingNewLine]", 
+        RowBox[{
+         RowBox[{
+          SubscriptBox["x", "1"], "\[Rule]", 
+          FractionBox[
+           RowBox[{
+            SubscriptBox["x", "2"], "+", 
+            SubscriptBox["x", "3"]}], "2"]}], ",", 
+         RowBox[{
+          SubscriptBox["y", "1"], "\[Rule]", 
+          FractionBox[
+           RowBox[{
+            SubscriptBox["y", "2"], "+", 
+            SubscriptBox["y", "3"]}], "2"]}], ",", "\[IndentingNewLine]", 
+         RowBox[{
+          SubscriptBox["x", "2"], "\[Rule]", 
+          FractionBox[
+           RowBox[{
+            SubscriptBox["x", "1"], "+", 
+            SubscriptBox["x", "3"]}], "2"]}], ",", 
+         RowBox[{
+          SubscriptBox["y", "2"], "\[Rule]", 
+          FractionBox[
+           RowBox[{
+            SubscriptBox["y", "1"], "+", 
+            SubscriptBox["y", "3"]}], "2"]}], ",", "\[IndentingNewLine]", 
+         RowBox[{
+          SubscriptBox["x", "3"], "\[Rule]", 
+          FractionBox[
+           RowBox[{
+            SubscriptBox["x", "1"], "+", 
+            SubscriptBox["x", "2"]}], "2"]}], ",", 
+         RowBox[{
+          SubscriptBox["y", "3"], "\[Rule]", 
+          FractionBox[
+           RowBox[{
+            SubscriptBox["y", "1"], "+", 
+            SubscriptBox["y", "2"]}], "2"]}]}], "\[IndentingNewLine]", 
+        "}"}]}], "//", "FullSimplify"}], ",", "\[IndentingNewLine]", 
+     RowBox[{"(*", " ", 
+      RowBox[{
+      "get", " ", "numeration", " ", "of", " ", "shape", " ", "funcs", " ", 
+       "of", " ", 
+       SuperscriptBox["t", "th"], " ", "triangle", " ", "of", " ", 
+       "\[ScriptCapitalT]"}], " ", "*)"}], "\[IndentingNewLine]", 
+     RowBox[{"\"\<DOFs numn\>\"", "\[Rule]", " ", 
+      RowBox[{"Function", "[", 
+       RowBox[{
+        RowBox[{"{", 
+         RowBox[{"\[ScriptCapitalT]", ",", "t"}], "}"}], ",", 
+        RowBox[{
+         RowBox[{
+          RowBox[{"\[ScriptCapitalT]", "[", "\"\<ribs\>\"", "]"}], "[", 
+          RowBox[{"[", "t", "]"}], "]"}], "+", "1"}]}], "]"}]}], ",", 
+     "\[IndentingNewLine]", 
+     RowBox[{"\"\<numb of DOFs\>\"", "\[Rule]", 
+      RowBox[{"Function", "[", 
+       RowBox[{
+        RowBox[{"{", "\[ScriptCapitalT]", "}"}], ",", 
+        RowBox[{"numbOf\[ScriptR]", "@", "\[ScriptCapitalT]"}]}], "]"}]}], 
+     ",", "\[IndentingNewLine]", 
+     RowBox[{"\"\<DOFs nodes\>\"", "\[Rule]", 
+      RowBox[{"Function", "[", 
+       RowBox[{
+        RowBox[{"{", 
+         RowBox[{"\[ScriptCapitalT]", ",", "t"}], "}"}], ",", 
+        RowBox[{"\[ScriptM]", "[", 
+         RowBox[{"\[ScriptCapitalT]", ",", "t"}], "]"}]}], "]"}]}]}], 
+    "\[IndentingNewLine]", "|>"}]}], ";"}]], "Input",
+ CellChangeTimes->{{3.685970048451213*^9, 3.6859700879237604`*^9}, {
+  3.685970141850233*^9, 3.6859702034856386`*^9}, {3.685970267618846*^9, 
+  3.6859704400595803`*^9}, {3.685970497532671*^9, 3.6859704982339993`*^9}, {
+  3.685970620063551*^9, 3.6859706717552657`*^9}, {3.6859707245604267`*^9, 
+  3.6859707911661935`*^9}, {3.686026116069451*^9, 3.686026119822516*^9}, {
+  3.6868506158819904`*^9, 3.6868506479781537`*^9}, {3.686850693589802*^9, 
+  3.6868506963621173`*^9}}]
+}, Open  ]]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["Routines", "Section",
+ CellChangeTimes->{{3.686026356025319*^9, 3.686026362039364*^9}, {
+  3.6860347492981224`*^9, 3.6860347521660557`*^9}}],
+
+Cell[CellGroupData[{
+
+Cell["Shape Funcs", "Subsection",
+ CellChangeTimes->{{3.686034655604019*^9, 3.6860346709792185`*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"(*", " ", 
+   RowBox[{"compute", " ", "shape", " ", "funcs", " ", 
+    RowBox[{"(", 
+     RowBox[{"subst", " ", "vertices"}], ")"}], " ", "of", " ", "given", " ", 
+    "FE", " ", "at", " ", 
+    SuperscriptBox["t", "th"], " ", "triangle", " ", "of", " ", "mesh", " ", 
+    "\[ScriptCapitalT]"}], " ", "*)"}], "\[IndentingNewLine]", 
+  RowBox[{
+   RowBox[{
+    RowBox[{"shapes", "[", 
+     RowBox[{"FE_", ",", "\[ScriptCapitalT]_", ",", "t_"}], "]"}], ":=", 
+    RowBox[{
+     RowBox[{"FE", "[", "\"\<shape funcs\>\"", "]"}], "/.", 
+     RowBox[{"Flatten", "@", 
+      RowBox[{"Table", "[", 
+       RowBox[{
+        RowBox[{"{", 
+         RowBox[{
+          RowBox[{
+           SubscriptBox["x", "i"], "\[Rule]", 
+           RowBox[{
+            RowBox[{"\[ScriptN]", "[", 
+             RowBox[{"\[ScriptCapitalT]", ",", "t"}], "]"}], "[", 
+            RowBox[{"[", 
+             RowBox[{"i", ",", "1"}], "]"}], "]"}]}], ",", 
+          RowBox[{
+           SubscriptBox["y", "i"], "\[Rule]", 
+           RowBox[{
+            RowBox[{"\[ScriptN]", "[", 
+             RowBox[{"\[ScriptCapitalT]", ",", "t"}], "]"}], "[", 
+            RowBox[{"[", 
+             RowBox[{"i", ",", "2"}], "]"}], "]"}]}]}], "}"}], ",", 
+        RowBox[{"{", 
+         RowBox[{"i", ",", "3"}], "}"}]}], "]"}]}]}]}], "\[IndentingNewLine]", 
+   RowBox[{"(*", " ", 
+    RowBox[{"plot", " ", "\[DoublePrime]"}], " ", "*)"}], 
+   "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{"plotShapes", "[", 
+     RowBox[{"FE_", ",", "\[ScriptCapitalT]_", ",", "t_"}], "]"}], ":=", 
+    RowBox[{"Plot3D", "[", 
+     RowBox[{
+      RowBox[{"Evaluate", "@", 
+       RowBox[{"shapes", "[", 
+        RowBox[{"FE", ",", "\[ScriptCapitalT]", ",", "t"}], "]"}]}], ",", 
+      RowBox[{
+       RowBox[{"{", 
+        RowBox[{"x", ",", "y"}], "}"}], "\[Element]", 
+       RowBox[{"\[CapitalDelta]", "[", 
+        RowBox[{"\[ScriptCapitalT]", ",", "t"}], "]"}]}], ",", 
+      "\[IndentingNewLine]", 
+      RowBox[{"AxesLabel", "\[Rule]", 
+       RowBox[{"{", 
+        RowBox[{"\"\<x\>\"", ",", "\"\<y\>\"", ",", "\"\<z\>\""}], "}"}]}], 
+      ",", "\[IndentingNewLine]", 
+      RowBox[{"PlotLegends", "\[Rule]", " ", 
+       RowBox[{"Table", "[", 
+        RowBox[{
+         RowBox[{"Subscript", "[", 
+          RowBox[{"\"\<S\>\"", ",", 
+           RowBox[{"ToString", "@", "i"}]}], "]"}], ",", 
+         RowBox[{"{", 
+          RowBox[{"i", ",", 
+           RowBox[{"Length", "@", 
+            RowBox[{"shapes", "[", 
+             RowBox[{"FE", ",", "\[ScriptCapitalT]", ",", "t"}], "]"}]}]}], 
+          "}"}]}], "]"}]}], ",", "\[IndentingNewLine]", 
+      RowBox[{"PlotLabel", "\[Rule]", 
+       RowBox[{"\"\<Shape Funcs of \>\"", "<>", 
+        RowBox[{"FE", "[", "\"\<name\>\"", "]"}], "<>", 
+        "\"\< Finite Element\>\""}]}], ",", "\[IndentingNewLine]", 
+      RowBox[{"Mesh", "\[Rule]", "None"}]}], "\[IndentingNewLine]", 
+     "]"}]}]}]}]], "Input",
+ CellChangeTimes->{{3.6859695281482215`*^9, 3.685969689280716*^9}, {
+   3.685969787040172*^9, 3.6859698507668715`*^9}, {3.686025388730815*^9, 
+   3.6860254660699997`*^9}, {3.6860255393689375`*^9, 
+   3.6860255600248404`*^9}, {3.6860256380253716`*^9, 3.68602564706378*^9}, {
+   3.6860256920966387`*^9, 3.686025706924755*^9}, {3.686025742646099*^9, 
+   3.6860258313308177`*^9}, {3.686025871675254*^9, 3.6860259089560685`*^9}, {
+   3.686025991803807*^9, 3.6860260394565916`*^9}, {3.6860264267092333`*^9, 
+   3.686026470528058*^9}, {3.686026502083705*^9, 3.68602655539047*^9}, {
+   3.686026587547728*^9, 3.686026619014985*^9}, {3.686026668927056*^9, 
+   3.6860267987377834`*^9}, {3.6860268846432743`*^9, 3.686026889240469*^9}, {
+   3.686027294620928*^9, 3.6860273835013213`*^9}, {3.6860274221534433`*^9, 
+   3.6860274715001664`*^9}, {3.6860275527663374`*^9, 3.686027647417424*^9}, {
+   3.6860279742576656`*^9, 3.68602797559449*^9}, {3.686028112405337*^9, 
+   3.686028161200621*^9}, {3.686028304272778*^9, 3.6860283070958443`*^9}, {
+   3.6860283838714914`*^9, 3.686028462730625*^9}, {3.6860285720103455`*^9, 
+   3.6860286059820843`*^9}, {3.686028731928196*^9, 3.6860289332262225`*^9}, 
+   3.6860289964542427`*^9, {3.686029044932108*^9, 3.686029051132351*^9}, {
+   3.6860290879400783`*^9, 3.6860290934351006`*^9}, {3.6860291655891657`*^9, 
+   3.6860291663528786`*^9}, {3.6860293556031084`*^9, 
+   3.6860293963323092`*^9}, {3.6860294388232727`*^9, 
+   3.6860294524560895`*^9}, {3.686029700648018*^9, 3.686029705318122*^9}, {
+   3.6860297747134995`*^9, 3.6860297753930197`*^9}, {3.686029984732606*^9, 
+   3.686029996075167*^9}, {3.686030028952855*^9, 3.686030033345684*^9}, {
+   3.686030113472826*^9, 3.6860301136636257`*^9}, {3.6860302578642983`*^9, 
+   3.6860302672410684`*^9}, {3.68603095968018*^9, 3.686031002718219*^9}, {
+   3.6860310999410257`*^9, 3.686031108672538*^9}, {3.686031153642042*^9, 
+   3.6860311543366013`*^9}, {3.686032363534231*^9, 3.686032378033685*^9}, {
+   3.6860325504631557`*^9, 3.686032560681758*^9}, {3.6860326295671587`*^9, 
+   3.6860326301481447`*^9}, 3.6860326717509117`*^9, {3.686032723052828*^9, 
+   3.686032746018878*^9}, {3.6860328044391994`*^9, 3.6860328136610413`*^9}, {
+   3.68603286864145*^9, 3.6860328780693398`*^9}, {3.6860330454055324`*^9, 
+   3.6860330455839467`*^9}, {3.6860331124419584`*^9, 
+   3.6860331149591007`*^9}, {3.686033174926671*^9, 3.6860333256035223`*^9}, {
+   3.686033381380982*^9, 3.6860333953933077`*^9}, {3.686033443657297*^9, 
+   3.686033492601857*^9}, {3.686033529946352*^9, 3.686033532223304*^9}, {
+   3.6860336241797667`*^9, 3.6860336565736403`*^9}, {3.686033702591258*^9, 
+   3.6860337055755906`*^9}, {3.6860337578499756`*^9, 3.686033802887066*^9}, {
+   3.6860338332413073`*^9, 3.6860338368452053`*^9}, {3.686033947221618*^9, 
+   3.6860339479281015`*^9}, {3.6860339954012833`*^9, 3.686034023686001*^9}, {
+   3.686034208691261*^9, 3.686034229214196*^9}, {3.686034440122143*^9, 
+   3.6860344422249303`*^9}, {3.6860346811179724`*^9, 3.686034681578143*^9}}]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["Basis Funcs", "Subsection",
+ CellChangeTimes->{{3.6860346934501915`*^9, 3.6860346969382915`*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"(*", " ", 
+   RowBox[{"plot", " ", 
+    SuperscriptBox["i", "th"], " ", "basis", " ", "func"}], " ", "*)"}], 
+  "\[IndentingNewLine]", 
+  RowBox[{
+   RowBox[{"plotBasis", "[", 
+    RowBox[{"FE_", ",", "\[ScriptCapitalT]_", ",", "i_"}], "]"}], ":=", 
+   RowBox[{"Module", "[", 
+    RowBox[{
+     RowBox[{"{", 
+      RowBox[{
+       RowBox[{"plots", "=", 
+        RowBox[{"{", "}"}]}], ",", "f", ",", "pos"}], "}"}], ",", 
+     "\[IndentingNewLine]", 
+     RowBox[{
+      RowBox[{"Do", "[", "\[IndentingNewLine]", 
+       RowBox[{
+        RowBox[{
+         RowBox[{"pos", "=", 
+          RowBox[{
+           RowBox[{"FirstPosition", "[", 
+            RowBox[{
+             RowBox[{
+              RowBox[{"FE", "[", "\"\<DOFs numn\>\"", "]"}], "[", 
+              RowBox[{"\[ScriptCapitalT]", ",", "t"}], "]"}], ",", "i", ",", 
+             RowBox[{"{", "0", "}"}]}], "]"}], "[", 
+           RowBox[{"[", "1", "]"}], "]"}]}], ";", "\[IndentingNewLine]", 
+         RowBox[{"If", "[", 
+          RowBox[{
+           RowBox[{"pos", "\[NotEqual]", "0"}], ",", 
+           RowBox[{"f", "=", 
+            RowBox[{
+             RowBox[{"shapes", "[", 
+              RowBox[{"FE", ",", "\[ScriptCapitalT]", ",", "t"}], "]"}], "[", 
+             RowBox[{"[", "pos", "]"}], "]"}]}], ",", 
+           RowBox[{"f", "=", "0"}]}], "]"}], ";", "\[IndentingNewLine]", 
+         RowBox[{"AppendTo", "[", 
+          RowBox[{"plots", ",", 
+           RowBox[{"Plot3D", "[", 
+            RowBox[{"f", ",", 
+             RowBox[{
+              RowBox[{"{", 
+               RowBox[{"x", ",", "y"}], "}"}], "\[Element]", 
+              RowBox[{"\[CapitalDelta]", "[", 
+               RowBox[{"\[ScriptCapitalT]", ",", "t"}], "]"}]}], ",", 
+             "\[IndentingNewLine]", 
+             RowBox[{"PlotRange", "\[Rule]", "All"}], ",", 
+             "\[IndentingNewLine]", 
+             RowBox[{"Mesh", "\[Rule]", "None"}], ",", "\[IndentingNewLine]", 
+             RowBox[{"AxesLabel", "\[Rule]", 
+              RowBox[{"{", 
+               RowBox[{"\"\<x\>\"", ",", "\"\<y\>\"", ",", "\"\<z\>\""}], 
+               "}"}]}], ",", "\[IndentingNewLine]", 
+             RowBox[{"PlotLabel", "\[Rule]", 
+              RowBox[{"\"\<Basis Function \:2116\>\"", "<>", 
+               RowBox[{"ToString", "@", 
+                RowBox[{"(", 
+                 RowBox[{"i", "-", "1"}], ")"}]}], "<>", "\"\< of \>\"", "<>", 
+               RowBox[{"FE", "[", "\"\<name\>\"", "]"}], "<>", 
+               "\"\< FE\[Dash]interpolant\>\""}]}]}], "\[IndentingNewLine]", 
+            "]"}]}], "]"}]}], "\[IndentingNewLine]", ",", 
+        RowBox[{"{", 
+         RowBox[{"t", ",", 
+          RowBox[{"numbOf\[CapitalDelta]", "@", "\[ScriptCapitalT]"}]}], 
+         "}"}]}], "]"}], ";", "\[IndentingNewLine]", 
+      RowBox[{"Show", "@", "plots"}]}]}], "\[IndentingNewLine]", 
+    "]"}]}]}]], "Input",
+ CellChangeTimes->{{3.6860346834340115`*^9, 3.6860346844942427`*^9}, {
+  3.686057934901408*^9, 3.686057960025855*^9}, {3.6860579999822683`*^9, 
+  3.6860580177627234`*^9}, {3.68734211745356*^9, 3.6873421522279544`*^9}}]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["FE\[Dash]Interpolant", "Subsection",
+ CellChangeTimes->{{3.6860348452417607`*^9, 3.6860348553487105`*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"(*", " ", 
+   RowBox[{
+    RowBox[{
+     RowBox[{"compute", " ", "vector", " ", "of", " ", "DOFs", " ", "\[Xi]"}],
+      " ", "="}], " ", "\[InvisibleComma]", 
+    RowBox[{
+     RowBox[{
+      RowBox[{"\[LeftAngleBracket]", 
+       RowBox[{
+        RowBox[{"f", 
+         RowBox[{"(", 
+          SubscriptBox["x", "1"], ")"}]}], ",", " ", 
+        RowBox[{"f", 
+         RowBox[{"(", 
+          SubscriptBox["x", "2"], ")"}]}], ",", " ", "\[Ellipsis]", ",", " ", 
+        RowBox[{"f", 
+         RowBox[{"(", 
+          SubscriptBox["x", "n"], ")"}]}]}], "\[RightAngleBracket]"}], " ", 
+      "for", " ", "FE"}], "\[Dash]", 
+     RowBox[{"interpolant", " ", "\[ScriptCapitalP]\[Xi]"}]}]}], " ", "*)"}], 
+  "\[IndentingNewLine]", 
+  RowBox[{
+   RowBox[{"computeDOFs", "[", 
+    RowBox[{"f_", ",", "FE_", ",", "\[ScriptCapitalT]_"}], "]"}], ":=", 
+   RowBox[{"Module", "[", 
+    RowBox[{
+     RowBox[{"{", 
+      RowBox[{"\[Xi]", "=", 
+       RowBox[{"Table", "[", 
+        RowBox[{"0.", ",", 
+         RowBox[{"{", 
+          RowBox[{"i", ",", 
+           RowBox[{
+            RowBox[{"FE", "[", "\"\<numb of DOFs\>\"", "]"}], "@", 
+            "\[ScriptCapitalT]"}]}], "}"}]}], "]"}]}], "}"}], ",", 
+     "\[IndentingNewLine]", 
+     RowBox[{
+      RowBox[{"Do", "[", 
+       RowBox[{
+        RowBox[{
+         RowBox[{"\[Xi]", "[", 
+          RowBox[{"[", 
+           RowBox[{
+            RowBox[{"FE", "[", "\"\<DOFs numn\>\"", "]"}], "[", 
+            RowBox[{"\[ScriptCapitalT]", ",", "t"}], "]"}], "]"}], "]"}], "=", 
+         RowBox[{"f", "/@", 
+          RowBox[{
+           RowBox[{"FE", "[", "\"\<DOFs nodes\>\"", "]"}], "[", 
+           RowBox[{"\[ScriptCapitalT]", ",", "t"}], "]"}]}]}], ",", 
+        RowBox[{"{", 
+         RowBox[{"t", ",", 
+          RowBox[{"numbOf\[CapitalDelta]", "@", "\[ScriptCapitalT]"}]}], 
+         "}"}]}], "]"}], ";", "\[IndentingNewLine]", "\[Xi]"}]}], 
+    "\[IndentingNewLine]", "]"}]}]}]], "Input",
+ CellChangeTimes->{{3.6868494045176888`*^9, 3.6868494636995754`*^9}, {
+  3.686849498297863*^9, 3.686849526127041*^9}, {3.686849836655379*^9, 
+  3.686849972603608*^9}, {3.686850044380248*^9, 3.6868500661658325`*^9}, {
+  3.6868501539937353`*^9, 3.6868501668706374`*^9}, {3.6868503079474306`*^9, 
+  3.686850501518335*^9}, {3.686852179929042*^9, 3.6868522137567472`*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"(*", " ", 
+   RowBox[{
+    RowBox[{"\[ScriptCapitalP]", " ", ":", " ", 
+     SubscriptBox["\[DoubleStruckCapitalR]", "H"]}], " ", "\[Rule]", " ", 
+    SubscriptBox["\[DoubleStruckCapitalU]", "H"]}], " ", "*)"}], 
+  "\[IndentingNewLine]", 
+  RowBox[{
+   RowBox[{"\[ScriptCapitalP]", "[", 
+    RowBox[{"\[Xi]_", ",", "FE_", ",", "\[ScriptCapitalT]_"}], "]"}], ":=", 
+   RowBox[{"FullSimplify", "@", 
+    RowBox[{"Table", "[", 
+     RowBox[{
+      RowBox[{
+       RowBox[{"\[Xi]", "[", 
+        RowBox[{"[", 
+         RowBox[{
+          RowBox[{"FE", "[", "\"\<DOFs numn\>\"", "]"}], "[", 
+          RowBox[{"\[ScriptCapitalT]", ",", "t"}], "]"}], "]"}], "]"}], ".", 
+       RowBox[{"shapes", "[", 
+        RowBox[{"FE", ",", "\[ScriptCapitalT]", ",", "t"}], "]"}]}], ",", 
+      RowBox[{"{", 
+       RowBox[{"t", ",", 
+        RowBox[{"numbOf\[CapitalDelta]", "@", "\[ScriptCapitalT]"}]}], 
+       "}"}]}], "]"}]}]}]}]], "Input",
+ CellChangeTimes->{{3.6860368758287544`*^9, 3.6860368844583583`*^9}, {
+   3.6860369201670647`*^9, 3.686036963855311*^9}, {3.6860369963302355`*^9, 
+   3.6860370900465527`*^9}, 3.686037120850155*^9, 3.6860377302007957`*^9, {
+   3.68603833767213*^9, 3.686038358205168*^9}, {3.6860611707734947`*^9, 
+   3.6860611757151732`*^9}, {3.686849632880842*^9, 3.686849706899338*^9}, {
+   3.686849740596737*^9, 3.686849751889888*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"plot\[ScriptCapitalP]\[Xi]", "[", 
+   RowBox[{"\[ScriptCapitalP]\[Xi]_", ",", "\[ScriptCapitalT]_", ",", 
+    RowBox[{"style_:", 
+     RowBox[{"{", "}"}]}]}], "]"}], ":=", 
+  RowBox[{"Show", "@", 
+   RowBox[{"Table", "[", 
+    RowBox[{
+     RowBox[{"Plot3D", "[", 
+      RowBox[{
+       RowBox[{"\[ScriptCapitalP]\[Xi]", "[", 
+        RowBox[{"[", "t", "]"}], "]"}], ",", 
+       RowBox[{
+        RowBox[{"{", 
+         RowBox[{"x", ",", "y"}], "}"}], "\[Element]", 
+        RowBox[{"\[CapitalDelta]", "[", 
+         RowBox[{"\[ScriptCapitalT]", ",", "t"}], "]"}]}], ",", 
+       RowBox[{"Mesh", "\[Rule]", "None"}], ",", 
+       RowBox[{"PlotRange", "\[Rule]", "All"}], ",", 
+       RowBox[{"PlotStyle", "\[Rule]", "style"}]}], "]"}], ",", 
+     RowBox[{"{", 
+      RowBox[{"t", ",", 
+       RowBox[{"numbOf\[CapitalDelta]", "@", "\[ScriptCapitalT]"}]}], "}"}]}],
+     "]"}]}]}]], "Input",
+ CellChangeTimes->{{3.686037191995528*^9, 3.686037194555632*^9}, {
+  3.686038255081972*^9, 3.686038262394737*^9}, {3.686038373770032*^9, 
+  3.6860384105534105`*^9}, {3.6864007671568427`*^9, 3.686400769737153*^9}, {
+  3.686400901109428*^9, 3.6864009460788*^9}, {3.6864010487112975`*^9, 
+  3.68640105864292*^9}, {3.6868497657794*^9, 3.6868497799538126`*^9}, {
+  3.6872844400755386`*^9, 3.687284448334893*^9}, {3.6872844822957172`*^9, 
+  3.687284485113233*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"computeErrorNorm", "[", 
+   RowBox[{"u_", ",", "\[ScriptCapitalP]\[Xi]_", ",", "\[ScriptCapitalT]_"}], 
+   "]"}], ":=", 
+  RowBox[{"(*", 
+   RowBox[{"Sqrt", "@", 
+    RowBox[{"Total", "@", 
+     RowBox[{"Table", "[", 
+      RowBox[{
+       RowBox[{
+        SubscriptBox["\[Integral]", 
+         RowBox[{
+          RowBox[{"{", 
+           RowBox[{"x", ",", "y"}], "}"}], "\[Element]", 
+          RowBox[{"\[CapitalDelta]", "[", 
+           RowBox[{"\[ScriptCapitalT]", ",", "t"}], "]"}]}]], 
+        SuperscriptBox[
+         RowBox[{"(", 
+          RowBox[{
+           RowBox[{"u", "[", 
+            RowBox[{"x", ",", "y"}], "]"}], "-", 
+           RowBox[{"\[ScriptCapitalP]u", "[", 
+            RowBox[{"[", "t", "]"}], "]"}]}], ")"}], "2"]}], ",", 
+       RowBox[{"{", 
+        RowBox[{"t", ",", 
+         RowBox[{"numbOf\[CapitalDelta]", "@", "\[ScriptCapitalT]"}]}], 
+        "}"}]}], "]"}]}]}], "*)"}], 
+  RowBox[{"Sqrt", "@", 
+   RowBox[{"Total", "@", 
+    RowBox[{"Table", "[", 
+     RowBox[{
+      RowBox[{"NIntegrate", "[", 
+       RowBox[{
+        SuperscriptBox[
+         RowBox[{"(", 
+          RowBox[{
+           RowBox[{"u", "[", 
+            RowBox[{"x", ",", "y"}], "]"}], "-", 
+           RowBox[{"\[ScriptCapitalP]\[Xi]", "[", 
+            RowBox[{"[", "t", "]"}], "]"}]}], ")"}], "2"], ",", 
+        RowBox[{
+         RowBox[{"{", 
+          RowBox[{"x", ",", "y"}], "}"}], "\[Element]", 
+         RowBox[{"\[CapitalDelta]", "[", 
+          RowBox[{"\[ScriptCapitalT]", ",", "t"}], "]"}]}]}], "]"}], ",", 
+      RowBox[{"{", 
+       RowBox[{"t", ",", 
+        RowBox[{"numbOf\[CapitalDelta]", "@", "\[ScriptCapitalT]"}]}], 
+       "}"}]}], "]"}]}]}]}]], "Input",
+ CellChangeTimes->{{3.686059657370022*^9, 3.686059678117935*^9}, {
+  3.686060910555687*^9, 3.6860609639393306`*^9}, {3.686849797255063*^9, 
+  3.6868498139690914`*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{
+   RowBox[{"computeDOFsNodes", "[", 
+    RowBox[{"FE_", ",", "\[ScriptCapitalT]_"}], "]"}], ":=", 
+   RowBox[{"Module", "[", 
+    RowBox[{
+     RowBox[{"{", 
+      RowBox[{"res", "=", 
+       RowBox[{"Table", "[", 
+        RowBox[{
+         RowBox[{"{", "}"}], ",", 
+         RowBox[{"{", 
+          RowBox[{"i", ",", 
+           RowBox[{
+            RowBox[{"FE", "[", "\"\<numb of DOFs\>\"", "]"}], "@", 
+            "\[ScriptCapitalT]"}]}], "}"}]}], "]"}]}], "}"}], ",", 
+     "\[IndentingNewLine]", 
+     RowBox[{
+      RowBox[{"Do", "[", 
+       RowBox[{
+        RowBox[{
+         RowBox[{"res", "[", 
+          RowBox[{"[", 
+           RowBox[{
+            RowBox[{"FE", "[", "\"\<DOFs numn\>\"", "]"}], "[", 
+            RowBox[{"\[ScriptCapitalT]", ",", "t"}], "]"}], "]"}], "]"}], "=", 
+         RowBox[{
+          RowBox[{"FE", "[", "\"\<DOFs nodes\>\"", "]"}], "[", 
+          RowBox[{"\[ScriptCapitalT]", ",", "t"}], "]"}]}], ",", 
+        RowBox[{"{", 
+         RowBox[{"t", ",", 
+          RowBox[{"numbOf\[CapitalDelta]", "@", "\[ScriptCapitalT]"}]}], 
+         "}"}]}], "]"}], ";", "\[IndentingNewLine]", "res"}]}], 
+    "\[IndentingNewLine]", "]"}]}], ";"}]], "Input",
+ CellChangeTimes->{{3.687259002235501*^9, 3.687259051416689*^9}, {
+  3.687259134757713*^9, 3.6872592795592756`*^9}, {3.6872593200867977`*^9, 
+  3.6872594434059258`*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"interpolantOf\[Xi]", "[", 
+   RowBox[{"\[Xi]_", ",", "FE_", ",", "\[ScriptCapitalT]_", ",", 
+    RowBox[{"order_:", "1"}]}], "]"}], ":=", 
+  RowBox[{"Module", "[", 
+   RowBox[{
+    RowBox[{"{", 
+     RowBox[{"nodes", ",", "nodes2values"}], "}"}], ",", 
+    "\[IndentingNewLine]", 
+    RowBox[{
+     RowBox[{"nodes", "=", 
+      RowBox[{"computeDOFsNodes", "[", 
+       RowBox[{"FE", ",", "\[ScriptCapitalT]"}], "]"}]}], ";", 
+     "\[IndentingNewLine]", 
+     RowBox[{"nodes2values", "=", 
+      RowBox[{"Table", "[", 
+       RowBox[{
+        RowBox[{"{", 
+         RowBox[{
+          RowBox[{"nodes", "[", 
+           RowBox[{"[", "i", "]"}], "]"}], ",", 
+          RowBox[{"\[Xi]", "[", 
+           RowBox[{"[", "i", "]"}], "]"}]}], "}"}], ",", 
+        RowBox[{"{", 
+         RowBox[{"i", ",", 
+          RowBox[{"Length", "@", "\[Xi]"}]}], "}"}]}], "]"}]}], ";", 
+     "\[IndentingNewLine]", 
+     RowBox[{"Interpolation", "[", 
+      RowBox[{"nodes2values", ",", 
+       RowBox[{"InterpolationOrder", "\[Rule]", "order"}]}], "]"}]}]}], 
+   "\[IndentingNewLine]", "]"}]}]], "Input",
+ CellChangeTimes->{{3.6872594669598303`*^9, 3.6872598412454896`*^9}}]
+}, Open  ]]
+}, Open  ]]
+}, Open  ]]
+},
+WindowSize->{1360, 676},
+WindowMargins->{{Automatic, -3}, {Automatic, 0}},
+FrontEndVersion->"10.4 for Microsoft Windows (64-bit) (February 25, 2016)",
+StyleDefinitions->"Default.nb"
+]
+(* End of Notebook Content *)
+
+(* Internal cache information *)
+(*CellTagsOutline
+CellTagsIndex->{}
+*)
+(*CellTagsIndex
+CellTagsIndex->{}
+*)
+(*NotebookFileOutline
+Notebook[{
+Cell[CellGroupData[{
+Cell[580, 22, 172, 3, 144, "Title"],
+Cell[755, 27, 113, 1, 30, "Text"],
+Cell[CellGroupData[{
+Cell[893, 32, 104, 1, 63, "Section"],
+Cell[1000, 35, 125, 1, 30, "Text"],
+Cell[CellGroupData[{
+Cell[1150, 40, 310, 9, 43, "Subsection"],
+Cell[1463, 51, 2422, 48, 172, "Input"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[3922, 104, 257, 8, 43, "Subsection"],
+Cell[4182, 114, 4167, 110, 252, "Input"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[8386, 229, 278, 9, 43, "Subsection"],
+Cell[8667, 240, 3754, 92, 327, "Input"]
+}, Open  ]]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[12470, 338, 146, 2, 63, "Section"],
+Cell[CellGroupData[{
+Cell[12641, 344, 101, 1, 43, "Subsection"],
+Cell[12745, 347, 5956, 115, 192, "Input"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[18738, 467, 103, 1, 43, "Subsection"],
+Cell[18844, 470, 3111, 71, 292, "Input"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[21992, 546, 112, 1, 43, "Subsection"],
+Cell[22107, 549, 2345, 60, 112, "Input"],
+Cell[24455, 611, 1383, 31, 52, "Input"],
+Cell[25841, 644, 1384, 31, 31, "Input"],
+Cell[27228, 677, 1886, 52, 62, "Input"],
+Cell[29117, 731, 1390, 37, 92, "Input"],
+Cell[30510, 770, 1191, 32, 112, "Input"]
+}, Open  ]]
+}, Open  ]]
+}, Open  ]]
+}
+]
+*)
+

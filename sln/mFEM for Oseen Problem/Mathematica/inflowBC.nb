@@ -1,0 +1,566 @@
+(* Content-type: application/vnd.wolfram.mathematica *)
+
+(*** Wolfram Notebook File ***)
+(* http://www.wolfram.com/nb *)
+
+(* CreatedBy='Mathematica 10.4' *)
+
+(*CacheID: 234*)
+(* Internal cache information:
+NotebookFileLineBreakTest
+NotebookFileLineBreakTest
+NotebookDataPosition[       158,          7]
+NotebookDataLength[     23035,        558]
+NotebookOptionsPosition[     22061,        522]
+NotebookOutlinePosition[     22408,        537]
+CellTagsIndexPosition[     22365,        534]
+WindowFrame->Normal*)
+
+(* Beginning of Notebook Content *)
+Notebook[{
+Cell[BoxData[
+ RowBox[{"ClearAll", "[", "\"\<Clobal`*\>\"", "]"}]], "Input",
+ CellChangeTimes->{{3.688184259975868*^9, 3.6881842687119226`*^9}}],
+
+Cell[CellGroupData[{
+
+Cell[TextData[{
+ "Inflow (Dirichlet) BC on ",
+ Cell[BoxData[
+  FormBox[
+   SubscriptBox["\[CapitalGamma]", "in"], TraditionalForm]],
+  FormatType->"TraditionalForm"]
+}], "Title",
+ CellChangeTimes->{{3.6881842969376745`*^9, 3.688184321205779*^9}}],
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{"R", "=", "1."}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   SubscriptBox["V", "min"], "=", ".7"}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   SubscriptBox["V", "max"], "=", "1.4"}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"T", "=", "1."}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   SubscriptBox["t", "max"], "=", 
+   RowBox[{"5", "T"}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   SubscriptBox["\[CapitalDelta]", "t"], "=", ".1"}], ";"}]}], "Input",
+ CellChangeTimes->{{3.688220050340347*^9, 3.6882200945967474`*^9}, {
+   3.6882202429025927`*^9, 3.6882202441755695`*^9}, {3.6882215862167587`*^9, 
+   3.688221635233838*^9}, {3.6882216776940804`*^9, 3.6882216884537153`*^9}, 
+   3.688222741287386*^9, {3.688223820889478*^9, 3.688223822501447*^9}, {
+   3.688224047635868*^9, 3.688224054749301*^9}, {3.6882244871353025`*^9, 
+   3.6882245344271994`*^9}, {3.688224591449921*^9, 3.688224600852728*^9}, 
+   3.688231289643587*^9, {3.688231384203188*^9, 3.6882313972281876`*^9}, 
+   3.6882315423726745`*^9, {3.6882329719511642`*^9, 3.6882329875469007`*^9}, {
+   3.6882330611731567`*^9, 3.68823306808072*^9}, {3.688233273912428*^9, 
+   3.688233274380805*^9}, {3.688233337356787*^9, 3.688233337494237*^9}, {
+   3.6882335928777313`*^9, 3.6882336173215637`*^9}, {3.688233732615118*^9, 
+   3.688233733151017*^9}, {3.6882345085404506`*^9, 3.688234509689588*^9}, {
+   3.6882347199932213`*^9, 3.6882347265177603`*^9}, {3.688234775052271*^9, 
+   3.688234780470124*^9}, {3.6882348238035173`*^9, 3.6882348239470954`*^9}, {
+   3.688234887638419*^9, 3.6882348878709245`*^9}, {3.688234932136037*^9, 
+   3.688234932288555*^9}}],
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{
+   SubscriptBox["V", "mean"], "=", 
+   RowBox[{"Mean", "@", 
+    RowBox[{"{", 
+     RowBox[{
+      SubscriptBox["V", "min"], ",", 
+      SubscriptBox["V", "max"]}], "}"}]}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"\[CapitalDelta]V", "=", 
+   RowBox[{".5", 
+    RowBox[{"(", 
+     RowBox[{
+      SubscriptBox["V", "max"], "-", 
+      SubscriptBox["V", "min"]}], ")"}]}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   SubscriptBox["x", "min"], "=", "0."}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   SubscriptBox["x", "max"], "=", 
+   SubscriptBox["V", "max"]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   SubscriptBox["y", "min"], "=", 
+   RowBox[{"-", "R"}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   SubscriptBox["y", "max"], "=", "R"}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   SubscriptBox["\[CapitalDelta]", "x"], "=", 
+   RowBox[{
+    SubscriptBox["x", "max"], "-", 
+    SubscriptBox["x", "min"]}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   SubscriptBox["\[CapitalDelta]", "y"], "=", 
+   RowBox[{
+    SubscriptBox["y", "max"], "-", 
+    SubscriptBox["y", "min"]}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"\[Omega]", "=", 
+   FractionBox[
+    RowBox[{"2", "\[Pi]"}], "T"]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   SubscriptBox["\[CapitalGamma]", "in"], "=", 
+   RowBox[{"Table", "[", 
+    RowBox[{
+     RowBox[{"{", 
+      RowBox[{
+       SubscriptBox["x", "min"], ",", "s"}], "}"}], ",", 
+     RowBox[{"{", 
+      RowBox[{"s", ",", 
+       SubscriptBox["y", "min"], ",", 
+       SubscriptBox["y", "max"], ",", 
+       RowBox[{".05", 
+        SubscriptBox["\[CapitalDelta]", "y"]}]}], "}"}]}], "]"}]}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"diagLength", "=", 
+   RowBox[{"Sqrt", "[", 
+    RowBox[{
+     SuperscriptBox[
+      SubscriptBox["\[CapitalDelta]", "x"], "2"], "+", 
+     SuperscriptBox[
+      SubscriptBox["\[CapitalDelta]", "y"], "2"]}], "]"}]}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"\[ScriptCapitalX]", "=", 
+   RowBox[{"{", 
+    RowBox[{
+     RowBox[{
+      SubscriptBox["x", "min"], "-", 
+      RowBox[{".1", 
+       SubscriptBox["\[CapitalDelta]", "x"]}]}], ",", 
+     RowBox[{
+      SubscriptBox["x", "max"], "+", 
+      RowBox[{".1", 
+       SubscriptBox["\[CapitalDelta]", "x"]}]}]}], "}"}]}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"\[ScriptCapitalY]", "=", 
+   RowBox[{"{", 
+    RowBox[{
+     RowBox[{
+      SubscriptBox["y", "min"], "-", 
+      RowBox[{".1", 
+       SubscriptBox["\[CapitalDelta]", "y"]}]}], ",", 
+     RowBox[{
+      SubscriptBox["y", "max"], "+", 
+      RowBox[{".1", 
+       SubscriptBox["\[CapitalDelta]", "y"]}]}]}], "}"}]}], ";"}]}], "Input",
+ CellChangeTimes->{{3.6882199960938916`*^9, 3.688220014116932*^9}, {
+  3.6882200442480373`*^9, 3.6882200461656685`*^9}, {3.688220077488744*^9, 
+  3.688220120393509*^9}, {3.688230511237609*^9, 3.6882306495443897`*^9}, {
+  3.6882306805315075`*^9, 3.688230707642171*^9}, {3.688231421956499*^9, 
+  3.6882314517903204`*^9}, {3.688232339178135*^9, 3.68823233972299*^9}, {
+  3.6882324208567*^9, 3.6882324243814387`*^9}, {3.6882332768136053`*^9, 
+  3.6882332783232613`*^9}, {3.6882337490300207`*^9, 3.6882337819283047`*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{
+   RowBox[{"A", "[", "t_", "]"}], "=", 
+   RowBox[{
+    SubscriptBox["V", "mean"], "+", 
+    RowBox[{"\[CapitalDelta]V", " ", 
+     RowBox[{"Cos", "[", 
+      RowBox[{"\[Omega]", " ", "t"}], "]"}]}]}]}], ";"}]], "Input",
+ CellChangeTimes->{{3.6882323716033363`*^9, 3.6882323827655964`*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{
+   SubscriptBox["u", "max"], "[", 
+   RowBox[{"y_", ",", "t_"}], "]"}], ":=", 
+  RowBox[{
+   RowBox[{"A", "[", "t", "]"}], 
+   RowBox[{"(", 
+    RowBox[{"1.", "-", 
+     SuperscriptBox[
+      RowBox[{"(", 
+       FractionBox["y", "R"], ")"}], "2"]}], ")"}]}]}]], "Input",
+ CellChangeTimes->{{3.6882298003479757`*^9, 3.6882298169227424`*^9}, {
+   3.6882298661831713`*^9, 3.688229903291111*^9}, {3.688230239818655*^9, 
+   3.688230247511099*^9}, 3.6882303198355713`*^9, {3.6882323913624105`*^9, 
+   3.688232393353738*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{
+   RowBox[{
+    SubscriptBox["plotU", "max"], "[", "t_", "]"}], ":=", 
+   RowBox[{"ParametricPlot", "[", 
+    RowBox[{
+     RowBox[{"{", 
+      RowBox[{
+       RowBox[{
+        SubscriptBox["u", "max"], "[", 
+        RowBox[{"\[ScriptY]", ",", "t"}], "]"}], ",", "\[ScriptY]"}], "}"}], 
+     ",", 
+     RowBox[{"{", 
+      RowBox[{"\[ScriptY]", ",", 
+       SubscriptBox["y", "min"], ",", 
+       SubscriptBox["y", "max"]}], "}"}], ",", "\[IndentingNewLine]", 
+     RowBox[{"AspectRatio", "\[Rule]", "Automatic"}], ",", 
+     "\[IndentingNewLine]", 
+     RowBox[{"AxesLabel", "\[Rule]", 
+      RowBox[{"{", 
+       RowBox[{"\"\<x\>\"", ",", "\"\<y\>\""}], "}"}]}], ",", 
+     "\[IndentingNewLine]", 
+     RowBox[{"PlotStyle", "\[Rule]", "LightRed"}], ",", "\[IndentingNewLine]", 
+     RowBox[{"PlotRange", "\[Rule]", 
+      RowBox[{"{", 
+       RowBox[{"\[ScriptCapitalX]", ",", "\[ScriptCapitalY]"}], "}"}]}]}], 
+    "]"}]}], ";"}]], "Input",
+ CellChangeTimes->{{3.6882324991412563`*^9, 3.688232545656993*^9}, {
+  3.688232838385212*^9, 3.688232854798359*^9}}],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"Animate", "[", 
+  RowBox[{
+   RowBox[{
+    SubscriptBox["plotU", "max"], "[", "\[ScriptT]", "]"}], ",", 
+   RowBox[{"{", 
+    RowBox[{"\[ScriptT]", ",", "0.", ",", 
+     SubscriptBox["t", "max"], ",", 
+     SubscriptBox["\[CapitalDelta]", "t"]}], "}"}], ",", 
+   RowBox[{"DefaultDuration", "\[Rule]", 
+    SubscriptBox["t", "max"]}], ",", 
+   RowBox[{"DisplayAllSteps", "\[Rule]", "True"}], ",", 
+   RowBox[{"AnimationRunning", "\[Rule]", "False"}]}], "]"}]], "Input",
+ CellChangeTimes->{{3.6882299106862817`*^9, 3.6882299476707506`*^9}, {
+  3.6882300673047066`*^9, 3.6882300722780523`*^9}, {3.6882301208404465`*^9, 
+  3.6882302004371157`*^9}, {3.68823040667408*^9, 3.6882304586082983`*^9}, {
+  3.6882307578498187`*^9, 3.688230761241417*^9}, {3.6882308252094946`*^9, 
+  3.6882309377620068`*^9}, {3.688231499249544*^9, 3.6882315143440323`*^9}, {
+  3.688232556118101*^9, 3.688232570596661*^9}, {3.688232995890328*^9, 
+  3.6882330029545717`*^9}, {3.6882350958306656`*^9, 3.688235118754328*^9}}],
+
+Cell[BoxData[
+ TagBox[
+  StyleBox[
+   DynamicModuleBox[{$CellContext`\[ScriptT]$$ = 4., Typeset`show$$ = True, 
+    Typeset`bookmarkList$$ = {}, Typeset`bookmarkMode$$ = "Menu", 
+    Typeset`animator$$, Typeset`animvar$$ = 1, Typeset`name$$ = 
+    "\"untitled\"", Typeset`specs$$ = {{
+      Hold[$CellContext`\[ScriptT]$$], 0., 5., 0.1}}, Typeset`size$$ = {
+    303., {213., 219.}}, Typeset`update$$ = 0, Typeset`initDone$$, 
+    Typeset`skipInitDone$$ = True, $CellContext`\[ScriptT]$190166$$ = 0}, 
+    DynamicBox[Manipulate`ManipulateBoxes[
+     1, StandardForm, "Variables" :> {$CellContext`\[ScriptT]$$ = 0.}, 
+      "ControllerVariables" :> {
+        Hold[$CellContext`\[ScriptT]$$, $CellContext`\[ScriptT]$190166$$, 0]},
+       "OtherVariables" :> {
+       Typeset`show$$, Typeset`bookmarkList$$, Typeset`bookmarkMode$$, 
+        Typeset`animator$$, Typeset`animvar$$, Typeset`name$$, 
+        Typeset`specs$$, Typeset`size$$, Typeset`update$$, Typeset`initDone$$,
+         Typeset`skipInitDone$$}, "Body" :> 
+      Subscript[$CellContext`plotU, \
+$CellContext`max][$CellContext`\[ScriptT]$$], 
+      "Specifications" :> {{$CellContext`\[ScriptT]$$, 0., 5., 0.1, 
+         DefaultDuration -> 5., DisplayAllSteps -> True, AnimationRunning -> 
+         False, AppearanceElements -> {
+          "ProgressSlider", "PlayPauseButton", "FasterSlowerButtons", 
+           "DirectionButton"}}}, 
+      "Options" :> {
+       ControlType -> Animator, AppearanceElements -> None, DefaultBaseStyle -> 
+        "Animate", DefaultLabelStyle -> "AnimateLabel", SynchronousUpdating -> 
+        True, ShrinkingDelay -> 10.}, "DefaultOptions" :> {}],
+     ImageSizeCache->{354., {251., 258.}},
+     SingleEvaluation->True],
+    Deinitialization:>None,
+    DynamicModuleValues:>{},
+    SynchronousInitialization->True,
+    UndoTrackedVariables:>{Typeset`show$$, Typeset`bookmarkMode$$},
+    UnsavedVariables:>{Typeset`initDone$$},
+    UntrackedVariables:>{Typeset`size$$}], "Animate",
+   Deployed->True,
+   StripOnInput->False],
+  Manipulate`InterpretManipulate[1]]], "Output",
+ CellChangeTimes->{{3.6882339246335883`*^9, 3.6882339409600835`*^9}, 
+   3.688234511894706*^9, 3.688234678023756*^9, 3.68823473380858*^9, 
+   3.6882347849081297`*^9, 3.688234826505165*^9, 3.6882348901947765`*^9, 
+   3.688234934059943*^9, {3.6882351065172358`*^9, 3.6882351200110416`*^9}}]
+}, Open  ]],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{
+   SubscriptBox["u", "in"], "[", 
+   RowBox[{"y_", ",", "t_"}], "]"}], ":=", 
+  RowBox[{"{", 
+   RowBox[{
+    RowBox[{
+     SubscriptBox["u", "max"], "[", 
+     RowBox[{"y", ",", "t"}], "]"}], ",", "0."}], "}"}]}]], "Input",
+ CellChangeTimes->{{3.6881844741857657`*^9, 3.6881845110339828`*^9}, 
+   3.68818480219048*^9, {3.6881854195862846`*^9, 3.688185477424839*^9}, {
+   3.68821768814824*^9, 3.6882176892365723`*^9}, {3.688217869364786*^9, 
+   3.688217869829421*^9}, {3.6882179014325085`*^9, 3.6882179083580008`*^9}, {
+   3.688217941200247*^9, 3.6882179454851637`*^9}, {3.688218121077482*^9, 
+   3.688218123165041*^9}, {3.688218306788116*^9, 3.688218308898923*^9}, {
+   3.6882187511515923`*^9, 3.688218779870493*^9}, {3.688218880261506*^9, 
+   3.6882189296967573`*^9}, {3.6882190184404345`*^9, 
+   3.6882190200051966`*^9}, {3.6882190626850834`*^9, 3.688219064077776*^9}, {
+   3.6882193968662014`*^9, 3.6882193974171453`*^9}, 3.6882216621272583`*^9, {
+   3.688221699199897*^9, 3.6882217080537796`*^9}, 3.688221827555205*^9, {
+   3.688221870561247*^9, 3.688221875306909*^9}, {3.688222190010632*^9, 
+   3.6882222243619127`*^9}, {3.6882225616387916`*^9, 
+   3.6882226018151855`*^9}, {3.6882226974314766`*^9, 
+   3.6882227048276267`*^9}, {3.6882230816412525`*^9, 
+   3.6882230825574675`*^9}, {3.688223284624609*^9, 3.688223285639683*^9}, {
+   3.688223324678303*^9, 3.688223331016408*^9}, {3.6882245706939073`*^9, 
+   3.6882245794549665`*^9}, {3.688224761962857*^9, 3.6882247789036307`*^9}, {
+   3.6882313407606845`*^9, 3.6882313528271465`*^9}, {3.6882315812135296`*^9, 
+   3.688231584436714*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{
+   SubscriptBox["plotU", "in"], "[", "t_", "]"}], ":=", 
+  RowBox[{
+   RowBox[{"VectorPlot", "[", 
+    RowBox[{
+     RowBox[{
+      SubscriptBox["u", "in"], "[", 
+      RowBox[{"\[ScriptY]", ",", "t"}], "]"}], ",", 
+     RowBox[{"{", 
+      RowBox[{"\[ScriptX]", ",", 
+       SubscriptBox["x", "min"], ",", 
+       SubscriptBox["x", "max"]}], "}"}], ",", 
+     RowBox[{"{", 
+      RowBox[{"\[ScriptY]", ",", 
+       SubscriptBox["y", "min"], ",", 
+       SubscriptBox["y", "max"]}], "}"}], ",", "\[IndentingNewLine]", 
+     RowBox[{"PlotRange", "\[Rule]", 
+      RowBox[{"{", 
+       RowBox[{"\[ScriptCapitalX]", ",", "\[ScriptCapitalY]"}], "}"}]}], ",", 
+     "\[IndentingNewLine]", 
+     RowBox[{"VectorPoints", "\[Rule]", 
+      SubscriptBox["\[CapitalGamma]", "in"]}], ",", "\[IndentingNewLine]", 
+     RowBox[{"Epilog", "\[Rule]", 
+      RowBox[{"Point", "@", 
+       SubscriptBox["\[CapitalGamma]", "in"]}]}], ",", "\[IndentingNewLine]", 
+     RowBox[{"AspectRatio", "\[Rule]", "Automatic"}], ",", 
+     "\[IndentingNewLine]", 
+     RowBox[{"VectorScale", "\[Rule]", 
+      RowBox[{"{", 
+       RowBox[{
+        FractionBox[
+         RowBox[{
+          SubscriptBox["u", "max"], "[", 
+          RowBox[{"0.", ",", "t"}], "]"}], "diagLength"], ",", ".15", ",", 
+        "Automatic"}], "}"}]}], ",", "\[IndentingNewLine]", 
+     RowBox[{"PlotLabel", "\[Rule]", 
+      RowBox[{"\"\<t = \>\"", "<>", 
+       RowBox[{"ToString", "@", "t"}]}]}], ",", "\[IndentingNewLine]", 
+     RowBox[{"VectorStyle", "\[Rule]", "Red"}]}], "\[IndentingNewLine]", 
+    "]"}], "/.", 
+   RowBox[{
+    RowBox[{"Arrow", "@", "x_"}], "\[RuleDelayed]", 
+    RowBox[{"Translate", "[", 
+     RowBox[{
+      RowBox[{"Arrow", "@", "x"}], ",", 
+      RowBox[{
+       RowBox[{"Mean", "@", "x"}], "-", 
+       RowBox[{"First", "@", "x"}]}]}], "]"}]}]}]}]], "Input",
+ CellChangeTimes->{{3.688232590471716*^9, 3.6882326207534475`*^9}, {
+   3.688232684250853*^9, 3.688232684751116*^9}, {3.688232799929388*^9, 
+   3.688232805718743*^9}, 3.6882334460760784`*^9, {3.6882346486504335`*^9, 
+   3.6882346935843616`*^9}}],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"Animate", "[", 
+  RowBox[{
+   RowBox[{"Show", "[", 
+    RowBox[{
+     RowBox[{
+      SubscriptBox["plotU", "in"], "[", "\[ScriptT]", "]"}], ",", 
+     RowBox[{
+      SubscriptBox["plotU", "max"], "[", "\[ScriptT]", "]"}]}], "]"}], ",", 
+   RowBox[{"{", 
+    RowBox[{"\[ScriptT]", ",", "0.", ",", 
+     SubscriptBox["t", "max"], ",", 
+     SubscriptBox["\[CapitalDelta]", "t"]}], "}"}], ",", 
+   RowBox[{"DefaultDuration", "\[Rule]", 
+    SubscriptBox["t", "max"]}], ",", 
+   RowBox[{"DisplayAllSteps", "\[Rule]", "True"}], ",", 
+   RowBox[{"AnimationRunning", "\[Rule]", "False"}]}], "]"}]], "Input",
+ CellChangeTimes->{{3.6881845771493673`*^9, 3.68818461365724*^9}, {
+   3.6881846786558375`*^9, 3.688184697742546*^9}, {3.6881848132958956`*^9, 
+   3.6881848249099092`*^9}, {3.6881852585028124`*^9, 
+   3.6881853353941145`*^9}, {3.6881855456975217`*^9, 3.688185550912469*^9}, {
+   3.6882158894465284`*^9, 3.688215905104248*^9}, {3.688216090238405*^9, 
+   3.688216094521531*^9}, {3.6882163660604486`*^9, 3.6882163706198063`*^9}, {
+   3.6882165852696953`*^9, 3.6882166027096615`*^9}, {3.6882167759182653`*^9, 
+   3.6882167821647253`*^9}, {3.688216815573537*^9, 3.688216825046157*^9}, {
+   3.688216986181887*^9, 3.688216986333481*^9}, {3.6882172887941475`*^9, 
+   3.6882173092090216`*^9}, {3.688217376128977*^9, 3.6882173816299314`*^9}, {
+   3.6882174139963117`*^9, 3.6882174169368734`*^9}, {3.6882174724735384`*^9, 
+   3.688217474404984*^9}, {3.6882175655645967`*^9, 3.688217579735566*^9}, {
+   3.6882176350120487`*^9, 3.6882177090297003`*^9}, {3.688217750299494*^9, 
+   3.6882178029088345`*^9}, {3.6882179481742277`*^9, 3.688217948325828*^9}, {
+   3.6882180517094083`*^9, 3.6882180978774347`*^9}, {3.6882181493203425`*^9, 
+   3.688218150561952*^9}, 3.6882181864733334`*^9, {3.688218261070673*^9, 
+   3.688218261926679*^9}, {3.6882183441610627`*^9, 3.6882183495836744`*^9}, {
+   3.6882183889816914`*^9, 3.6882184227095647`*^9}, {3.688218718689074*^9, 
+   3.6882187417817125`*^9}, {3.688218805201257*^9, 3.688218808318219*^9}, {
+   3.688218897025831*^9, 3.6882189054987335`*^9}, {3.6882189581020527`*^9, 
+   3.688218986980234*^9}, {3.6882190427310047`*^9, 3.6882190451819544`*^9}, {
+   3.688219103293775*^9, 3.688219152419899*^9}, {3.688219191243679*^9, 
+   3.6882191932801332`*^9}, {3.688219246564787*^9, 3.6882192561099157`*^9}, {
+   3.688219304351645*^9, 3.688219378639551*^9}, {3.6882194234595604`*^9, 
+   3.688219465062171*^9}, {3.688219637192535*^9, 3.6882196678880987`*^9}, {
+   3.688219853834936*^9, 3.6882199501523514`*^9}, {3.688220524834324*^9, 
+   3.6882205653521347`*^9}, {3.688220681410453*^9, 3.688220743390576*^9}, {
+   3.688220918905588*^9, 3.68822094130019*^9}, {3.688221098549883*^9, 
+   3.688221109057251*^9}, 3.688221201711956*^9, {3.688221958058838*^9, 
+   3.688221992898547*^9}, {3.6882224088867846`*^9, 3.6882224090699015`*^9}, {
+   3.6882315963607073`*^9, 3.6882317356992908`*^9}, 3.6882318209851556`*^9, {
+   3.688231872918269*^9, 3.688231891204474*^9}, 3.6882322850682507`*^9, {
+   3.688232447229616*^9, 3.6882324480466332`*^9}, {3.688232633772616*^9, 
+   3.688232643186928*^9}, {3.6882327075199614`*^9, 3.6882327298752317`*^9}, {
+   3.68823302849364*^9, 3.688233033137232*^9}, {3.6882341660489855`*^9, 
+   3.68823418169248*^9}, {3.688234271548772*^9, 3.6882342771188097`*^9}, {
+   3.688234348831786*^9, 3.6882343494726553`*^9}, {3.688234443913687*^9, 
+   3.6882344752336483`*^9}}],
+
+Cell[BoxData[
+ TagBox[
+  StyleBox[
+   DynamicModuleBox[{$CellContext`\[ScriptT]$$ = 0., Typeset`show$$ = True, 
+    Typeset`bookmarkList$$ = {}, Typeset`bookmarkMode$$ = "Menu", 
+    Typeset`animator$$, Typeset`animvar$$ = 1, Typeset`name$$ = 
+    "\"untitled\"", Typeset`specs$$ = {{
+      Hold[$CellContext`\[ScriptT]$$], 0., 5., 0.1}}, Typeset`size$$ = {
+    306., {213., 219.}}, Typeset`update$$ = 0, Typeset`initDone$$, 
+    Typeset`skipInitDone$$ = True, $CellContext`\[ScriptT]$174934$$ = 0}, 
+    DynamicBox[Manipulate`ManipulateBoxes[
+     1, StandardForm, "Variables" :> {$CellContext`\[ScriptT]$$ = 0.}, 
+      "ControllerVariables" :> {
+        Hold[$CellContext`\[ScriptT]$$, $CellContext`\[ScriptT]$174934$$, 0]},
+       "OtherVariables" :> {
+       Typeset`show$$, Typeset`bookmarkList$$, Typeset`bookmarkMode$$, 
+        Typeset`animator$$, Typeset`animvar$$, Typeset`name$$, 
+        Typeset`specs$$, Typeset`size$$, Typeset`update$$, Typeset`initDone$$,
+         Typeset`skipInitDone$$}, "Body" :> Show[
+        Subscript[$CellContext`plotU, \
+$CellContext`in][$CellContext`\[ScriptT]$$], 
+        Subscript[$CellContext`plotU, $CellContext`max][$CellContext`\
+\[ScriptT]$$]], 
+      "Specifications" :> {{$CellContext`\[ScriptT]$$, 0., 5., 0.1, 
+         DefaultDuration -> 5., DisplayAllSteps -> True, AnimationRunning -> 
+         False, AppearanceElements -> {
+          "ProgressSlider", "PlayPauseButton", "FasterSlowerButtons", 
+           "DirectionButton"}}}, 
+      "Options" :> {
+       ControlType -> Animator, AppearanceElements -> None, DefaultBaseStyle -> 
+        "Animate", DefaultLabelStyle -> "AnimateLabel", SynchronousUpdating -> 
+        True, ShrinkingDelay -> 10.}, "DefaultOptions" :> {}],
+     ImageSizeCache->{357., {251., 258.}},
+     SingleEvaluation->True],
+    Deinitialization:>None,
+    DynamicModuleValues:>{},
+    SynchronousInitialization->True,
+    UndoTrackedVariables:>{Typeset`show$$, Typeset`bookmarkMode$$},
+    UnsavedVariables:>{Typeset`initDone$$},
+    UntrackedVariables:>{Typeset`size$$}], "Animate",
+   Deployed->True,
+   StripOnInput->False],
+  Manipulate`InterpretManipulate[1]]], "Output",
+ CellChangeTimes->{
+  3.688231736883292*^9, 3.6882317698367214`*^9, 3.688231822229911*^9, 
+   3.6882318564681177`*^9, 3.688231892849465*^9, 3.688232287738791*^9, {
+   3.688232428733704*^9, 3.688232448808977*^9}, {3.688232644322318*^9, 
+   3.6882327309217186`*^9}, 3.6882328109919634`*^9, 3.688233034654587*^9, 
+   3.6882330724047766`*^9, 3.688233341141423*^9, 3.68823344911683*^9, 
+   3.688233656135057*^9, 3.688233786536019*^9, {3.6882339255778217`*^9, 
+   3.6882339417266903`*^9}, 3.688234199944872*^9, 3.6882342790342426`*^9, 
+   3.6882343504803658`*^9, 3.688234446704157*^9, 3.688234476832699*^9, 
+   3.688234512716195*^9, {3.6882346790645604`*^9, 3.6882346982287145`*^9}, 
+   3.6882347347294073`*^9, 3.688234785703388*^9, 3.68823482734137*^9, 
+   3.688234891083215*^9, 3.688234934886341*^9}]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"Export", "[", 
+  RowBox[{"\"\<inflow.swf\>\"", ",", "%476"}], "]"}]], "Input",
+ CellChangeTimes->{{3.688381141155033*^9, 3.6883811634099193`*^9}}],
+
+Cell[BoxData["\<\"inflow.swf\"\>"], "Output",
+ CellChangeTimes->{3.688381291981421*^9}]
+}, Open  ]],
+
+Cell[BoxData[
+ RowBox[{"SystemOpen", "[", 
+  RowBox[{"DirectoryName", "[", 
+   RowBox[{"AbsoluteFileName", "[", "\"\<inflow.swf\>\"", "]"}], "]"}], 
+  "]"}]], "Input",
+ NumberMarks->False]
+}, Open  ]]
+},
+WindowSize->{1366, 685},
+WindowMargins->{{-8, Automatic}, {Automatic, -8}},
+FrontEndVersion->"10.4 for Microsoft Windows (64-bit) (February 25, 2016)",
+StyleDefinitions->"Default.nb"
+]
+(* End of Notebook Content *)
+
+(* Internal cache information *)
+(*CellTagsOutline
+CellTagsIndex->{}
+*)
+(*CellTagsIndex
+CellTagsIndex->{}
+*)
+(*NotebookFileOutline
+Notebook[{
+Cell[558, 20, 144, 2, 31, "Input"],
+Cell[CellGroupData[{
+Cell[727, 26, 246, 7, 90, "Title"],
+Cell[976, 35, 1699, 33, 132, "Input"],
+Cell[2678, 70, 3315, 101, 291, "Input"],
+Cell[5996, 173, 325, 9, 31, "Input"],
+Cell[6324, 184, 554, 15, 46, "Input"],
+Cell[6881, 201, 1095, 29, 112, "Input"],
+Cell[CellGroupData[{
+Cell[8001, 234, 1015, 19, 31, "Input"],
+Cell[9019, 255, 2353, 44, 559, "Output"]
+}, Open  ]],
+Cell[11387, 302, 1627, 29, 31, "Input"],
+Cell[13017, 333, 2117, 53, 225, "Input"],
+Cell[CellGroupData[{
+Cell[15159, 390, 3428, 54, 31, "Input"],
+Cell[18590, 446, 2955, 54, 559, "Output"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[21582, 505, 170, 3, 31, "Input"],
+Cell[21755, 510, 87, 1, 31, "Output"]
+}, Open  ]],
+Cell[21857, 514, 188, 5, 31, "Input"]
+}, Open  ]]
+}
+]
+*)
+

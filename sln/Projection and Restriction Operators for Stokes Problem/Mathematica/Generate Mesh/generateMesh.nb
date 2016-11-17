@@ -1,0 +1,1692 @@
+(* Content-type: application/vnd.wolfram.mathematica *)
+
+(*** Wolfram Notebook File ***)
+(* http://www.wolfram.com/nb *)
+
+(* CreatedBy='Mathematica 10.4' *)
+
+(*CacheID: 234*)
+(* Internal cache information:
+NotebookFileLineBreakTest
+NotebookFileLineBreakTest
+NotebookDataPosition[       158,          7]
+NotebookDataLength[     70299,       1684]
+NotebookOptionsPosition[     69236,       1642]
+NotebookOutlinePosition[     69612,       1658]
+CellTagsIndexPosition[     69569,       1655]
+WindowFrame->Normal*)
+
+(* Beginning of Notebook Content *)
+Notebook[{
+Cell[BoxData[
+ RowBox[{"ClearAll", "[", "\"\<Global`*\>\"", "]"}]], "Input",
+ CellChangeTimes->{{3.67652899047178*^9, 3.676529015089635*^9}, {
+  3.67653328781151*^9, 3.6765332891884165`*^9}, {3.676557600042761*^9, 
+  3.6765576005421305`*^9}, {3.6840455204521303`*^9, 3.684045521007506*^9}, {
+  3.684520398853986*^9, 3.6845203998942738`*^9}, {3.6845212262557373`*^9, 
+  3.6845212267445636`*^9}}],
+
+Cell[CellGroupData[{
+
+Cell["Input Mesh", "Title",
+ CellChangeTimes->{{3.676554532530421*^9, 3.676554538053489*^9}, {
+  3.677074763116796*^9, 3.6770747661349792`*^9}}],
+
+Cell[TextData[{
+ "Here we set input mesh for our project. Then cpp unit ",
+ StyleBox["../../user.cpp",
+  FontWeight->"Bold"],
+ " loads mesh data structure, (uniformly) refines it several times, and saves \
+coarse and fine meshes + their ribs\[CloseCurlyQuote] numeration\[LongDash]we \
+will need this since ribs\[CloseCurlyQuote] numeration is DOFs numeration for \
+Crouzeix\[Dash]Raviart shape funcs\[LongDash]to ",
+ StyleBox["../Projection and Restriction Visualization/meshes",
+  FontWeight->"Bold"],
+ "."
+}], "Text",
+ CellChangeTimes->{{3.6840449334901943`*^9, 3.68404522680441*^9}, {
+  3.684505791744718*^9, 3.6845059937046328`*^9}, {3.6845966270780945`*^9, 
+  3.6845966660965405`*^9}, {3.6857951606635404`*^9, 3.6857952195135884`*^9}, {
+  3.6857953206739364`*^9, 3.6857953527373004`*^9}, {3.685795383234702*^9, 
+  3.6857953838906384`*^9}}],
+
+Cell[CellGroupData[{
+
+Cell["Set Analytic Region \[CapitalOmega]", "Section",
+ CellChangeTimes->{{3.676546441374415*^9, 3.6765464423041997`*^9}, {
+  3.6765545144060326`*^9, 3.676554519960825*^9}, {3.677074967898868*^9, 
+  3.677074969913518*^9}, {3.684045253812879*^9, 3.684045294302894*^9}, {
+  3.684596690046281*^9, 3.684596690182873*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"(*", 
+   RowBox[{
+    RowBox[{"\[CapitalOmega]", "=", 
+     RowBox[{"MeshRegion", "[", 
+      RowBox[{
+       RowBox[{"{", "\[IndentingNewLine]", 
+        RowBox[{
+         RowBox[{"{", 
+          RowBox[{"1", ",", "0"}], "}"}], ",", 
+         RowBox[{"{", 
+          RowBox[{"2", ",", "0"}], "}"}], ",", "\[IndentingNewLine]", 
+         RowBox[{"{", 
+          RowBox[{"0", ",", "1"}], "}"}], ",", 
+         RowBox[{"{", 
+          RowBox[{"1", ",", "1"}], "}"}], ",", 
+         RowBox[{"{", 
+          RowBox[{"2", ",", "1"}], "}"}], ",", "\[IndentingNewLine]", 
+         RowBox[{"{", 
+          RowBox[{"0", ",", "2"}], "}"}], ",", 
+         RowBox[{"{", 
+          RowBox[{"1", ",", "2"}], "}"}], ",", 
+         RowBox[{"{", 
+          RowBox[{"2", ",", "2"}], "}"}]}], "\[IndentingNewLine]", "}"}], ",",
+        "\[IndentingNewLine]", 
+       RowBox[{"Triangle", "@", 
+        RowBox[{"{", "\[IndentingNewLine]", 
+         RowBox[{
+          RowBox[{"{", 
+           RowBox[{"1", ",", "2", ",", "4"}], "}"}], ",", 
+          RowBox[{"{", 
+           RowBox[{"2", ",", "5", ",", "4"}], "}"}], ",", 
+          "\[IndentingNewLine]", 
+          RowBox[{"{", 
+           RowBox[{"4", ",", "5", ",", "7"}], "}"}], ",", 
+          RowBox[{"{", 
+           RowBox[{"5", ",", "8", ",", "7"}], "}"}], ",", 
+          "\[IndentingNewLine]", 
+          RowBox[{"{", 
+           RowBox[{"3", ",", "4", ",", "6"}], "}"}], ",", 
+          RowBox[{"{", 
+           RowBox[{"4", ",", "7", ",", "6"}], "}"}]}], "\[IndentingNewLine]", 
+         "}"}]}]}], "\[IndentingNewLine]", "]"}]}], ";"}], "*)"}], 
+  "\[IndentingNewLine]", 
+  RowBox[{
+   RowBox[{"\[CapitalOmega]", "=", 
+    RowBox[{"Rectangle", "[", "]"}]}], ";"}]}]], "Input",
+ CellChangeTimes->{{3.6846033954891644`*^9, 3.684603413342596*^9}, {
+  3.684604917015792*^9, 3.6846049267896504`*^9}, {3.685795504743534*^9, 
+  3.685795537967487*^9}, {3.6857961724543624`*^9, 3.6857964339415603`*^9}, {
+  3.6864016698816504`*^9, 3.6864016862984643`*^9}}],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"RegionPlot", "@", "\[CapitalOmega]"}]], "Input",
+ CellChangeTimes->{{3.6770749183701406`*^9, 3.677074919268565*^9}}],
+
+Cell[BoxData[
+ GraphicsBox[GraphicsComplexBox[{{0., 0.}, {1., 0.}, {1., 1.}, {0., 1.}}, {{
+     {RGBColor[0.368417, 0.506779, 0.709798], AbsoluteThickness[1.6], Opacity[
+      0.3], EdgeForm[None], 
+      GraphicsGroupBox[PolygonBox[{{1, 2, 3, 4}}]]}, {}, {}, {}, {}}, 
+    {RGBColor[0.368417, 0.506779, 0.709798], AbsoluteThickness[1.6], 
+     LineBox[{2, 1, 4, 3, 2}]}}],
+  AspectRatio->1,
+  Axes->{False, False},
+  AxesLabel->{None, None},
+  AxesOrigin->{Automatic, Automatic},
+  DisplayFunction->Identity,
+  Frame->{{True, True}, {True, True}},
+  FrameLabel->{{None, None}, {None, None}},
+  FrameTicks->{{Automatic, Automatic}, {Automatic, Automatic}},
+  GridLinesStyle->Directive[
+    GrayLevel[0.5, 0.4]],
+  Method->{
+   "ScalingFunctions" -> None, "TransparentPolygonMesh" -> True, 
+    "AxesInFront" -> True},
+  PlotRange->{{0., 1.}, {0., 1.}},
+  PlotRangeClipping->True,
+  PlotRangePadding->{{
+     Scaled[0.02], 
+     Scaled[0.02]}, {
+     Scaled[0.02], 
+     Scaled[0.02]}},
+  Ticks->{Automatic, Automatic}]], "Output",
+ CellChangeTimes->{{3.686825050465678*^9, 3.6868250705480604`*^9}, 
+   3.6868251139545527`*^9, 3.6868289776532245`*^9, {3.686847137033104*^9, 
+   3.6868471460018153`*^9}, 3.6868473647132072`*^9, 3.686847608972568*^9}]
+}, Open  ]]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["Create and Export Resulting Mesh \[ScriptCapitalT]", "Section",
+ CellChangeTimes->{{3.676721200898056*^9, 3.6767212067897253`*^9}, {
+   3.6770749995149107`*^9, 3.6770750001061563`*^9}, {3.6840452707566357`*^9, 
+   3.6840452839859734`*^9}, {3.684045561708254*^9, 3.6840455645371246`*^9}, 
+   3.684507573005459*^9, {3.684507608707543*^9, 3.684507623273401*^9}}],
+
+Cell[BoxData[
+ RowBox[{"NotebookEvaluate", "[", 
+  RowBox[{
+   RowBox[{"NotebookDirectory", "[", "]"}], "<>", 
+   "\"\<../../../Tools/Mathematica/triangulation.nb\>\""}], "]"}]], "Input",
+ CellChangeTimes->{{3.684520296946837*^9, 3.6845202975797987`*^9}, {
+   3.6845203649173365`*^9, 3.6845204162781754`*^9}, {3.684520451394295*^9, 
+   3.684520500435384*^9}, {3.684520584499575*^9, 3.6845206207498055`*^9}, {
+   3.684520666316362*^9, 3.68452067448176*^9}, {3.684520720377345*^9, 
+   3.684520744155375*^9}, {3.6845207855012417`*^9, 3.684520867558143*^9}, 
+   3.6845209043762455`*^9, {3.6845209638200088`*^9, 3.6845209746523523`*^9}, {
+   3.684521092861771*^9, 3.6845211120618505`*^9}, {3.6845211632997513`*^9, 
+   3.68452124956898*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"\[ScriptCapitalT]", "=", 
+   RowBox[{"create\[ScriptCapitalT]fromRegion", "[", 
+    RowBox[{"\[CapitalOmega]", ",", ".1"}], "]"}]}], ";"}]], "Input",
+ CellChangeTimes->{{3.676765735317134*^9, 3.6767657415749755`*^9}, {
+   3.6767658562718997`*^9, 3.676765892349421*^9}, {3.6845075994964423`*^9, 
+   3.684507654056369*^9}, 3.6845084532207165`*^9, {3.6845088188635902`*^9, 
+   3.684508820522723*^9}, {3.684603423471736*^9, 3.684603424934882*^9}, {
+   3.6846049341505613`*^9, 3.684604936411075*^9}, {3.6846111389351377`*^9, 
+   3.6846111405112*^9}, {3.6846112985702457`*^9, 3.684611301248092*^9}, {
+   3.6857955817915907`*^9, 3.6857956265989237`*^9}, {3.6857961187888355`*^9, 
+   3.6857961214204903`*^9}, {3.6864017037700057`*^9, 
+   3.6864017361776085`*^9}, {3.6864039980257487`*^9, 3.686404005231779*^9}, {
+   3.6864046430198326`*^9, 3.686404645508113*^9}, {3.6864048824161177`*^9, 
+   3.6864048919335814`*^9}, {3.6864081374671636`*^9, 3.686408137620879*^9}, 
+   3.686411824809376*^9, 3.6868289756949863`*^9, {3.6868471279980063`*^9, 
+   3.686847128144719*^9}, {3.686847362424162*^9, 3.6868473626335783`*^9}, {
+   3.6868476070050945`*^9, 3.686847607114172*^9}}],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"highlight", "[", 
+  RowBox[{"\[ScriptCapitalT]", ",", 
+   RowBox[{"{", 
+    RowBox[{
+    "\"\<localNodesNumn\>\"", ",", "\"\<nodesNumn\>\"", ",", 
+     "\"\<trianglesNumn\>\""}], "}"}]}], "]"}]], "Input",
+ CellChangeTimes->{{3.684508077303444*^9, 3.684508083719319*^9}, {
+  3.6845112218025494`*^9, 3.6845112302836266`*^9}, {3.6845114223763666`*^9, 
+  3.684511427254013*^9}, {3.68451392112927*^9, 3.68451393847703*^9}, {
+  3.6845193303454266`*^9, 3.684519350897275*^9}, {3.684519735563528*^9, 
+  3.6845197427111645`*^9}, {3.6845200166050024`*^9, 3.684520018994713*^9}, {
+  3.6845967611414733`*^9, 3.6845967616362925`*^9}}],
+
+Cell[BoxData[
+ GraphicsBox[
+  TagBox[
+   DynamicModuleBox[{Typeset`mesh = HoldComplete[
+     MeshRegion[CompressedData["
+1:eJx1kr1KA1EQhRefQPtYxFewidVtfAIh9grayvoUsdA+QsA6voBgb0QsjPkr
+1BBjNiEgbt5As3PnG9i77iFh9szfPTP3Vo/PDk42oig6Wv8zW4a6YODyPHH5
+rJX7Pw9OPCnpswpsWd+wT1g3MdsWvJq9FTsP/POCH74j6LsPwaXarnsWvOg5
+NxbHTx7+sA916U+GJPCnxrcEC+uLxV9WR1/OuWhkSE3XdTPDwnQR93vt6R76
+uoex7ZO49yduVzCzc38FPdO5LxgWdN0Lulo/MO7r6Ndyp4JEdS6UD3X+1FVV
+P3HmCOdmTuZmD22d41DmmtvccOb2805KdefvsWVzoIs4nHrmIH9T7xWd3Ctz
+0Afe1DzeQyPIa+T2Qf7I6v19JXbeWPTPLM4+wnuH5/czLuyxrpw69kgd74J3
+wrvhHRHnnaELjm7yidPP63hytauv9e/OLH6vb1mI4ydvT/zf7iGudOLKyPRP
+peDN6iTc+VT+6ITG7+5cPpbWh7702Za8mdXRJ9Y6OLroU1OLX2htanH6o7ui
+5+BHN3NQB/8Dbbrh8w==
+      "], {
+       Polygon[{{18, 19, 20}, {21, 22, 23}, {24, 25, 26}, {27, 28, 29}, {30, 
+        31, 32}, {33, 34, 35}, {36, 37, 38}, {39, 40, 41}, {42, 43, 44}, {45, 
+        46, 47}, {48, 49, 50}, {51, 52, 53}, {54, 55, 56}, {57, 58, 59}, {60, 
+        61, 62}, {63, 64, 65}, {66, 67, 68}, {69, 70, 71}, {72, 73, 74}, {75, 
+        76, 77}}], 
+       Point[{{1}, {2}, {3}, {4}, {5}, {6}, {7}, {8}, {9}, {10}, {11}, {12}, {
+        13}, {14}, {15}, {16}, {17}, {78}, {79}, {80}, {81}, {82}, {83}, {
+        84}, {85}, {86}, {87}, {88}, {89}, {90}, {91}, {92}, {93}, {94}, {
+        95}, {96}, {97}}]}, 
+      Properties -> {{
+         0, {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 
+          19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 
+          36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 
+          53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 
+          70, 71, 72, 73, 74, 75, 76, 77, 78, 79, 80, 81, 82, 83, 84, 85, 86, 
+          87, 88, 89, 90, 91, 92, 93, 94, 95, 96, 97}} -> (MeshCellStyle -> {
+           RGBColor[1, 0, 0], 
+           RGBColor[1, 0, 0], 
+           RGBColor[1, 0, 0], 
+           RGBColor[1, 0, 0], 
+           RGBColor[1, 0, 0], 
+           RGBColor[1, 0, 0], 
+           RGBColor[1, 0, 0], 
+           RGBColor[1, 0, 0], 
+           RGBColor[1, 0, 0], 
+           RGBColor[1, 0, 0], 
+           RGBColor[1, 0, 0], 
+           RGBColor[1, 0, 0], 
+           RGBColor[1, 0, 0], 
+           RGBColor[1, 0, 0], 
+           RGBColor[1, 0, 0], 
+           RGBColor[1, 0, 0], 
+           RGBColor[1, 0, 0], 
+           RGBColor[0.5, 0, 0.5], 
+           RGBColor[0.5, 0, 0.5], 
+           RGBColor[0.5, 0, 0.5], 
+           RGBColor[0.5, 0, 0.5], 
+           RGBColor[0.5, 0, 0.5], 
+           RGBColor[0.5, 0, 0.5], 
+           RGBColor[0.5, 0, 0.5], 
+           RGBColor[0.5, 0, 0.5], 
+           RGBColor[0.5, 0, 0.5], 
+           RGBColor[0.5, 0, 0.5], 
+           RGBColor[0.5, 0, 0.5], 
+           RGBColor[0.5, 0, 0.5], 
+           RGBColor[0.5, 0, 0.5], 
+           RGBColor[0.5, 0, 0.5], 
+           RGBColor[0.5, 0, 0.5], 
+           RGBColor[0.5, 0, 0.5], 
+           RGBColor[0.5, 0, 0.5], 
+           RGBColor[0.5, 0, 0.5], 
+           RGBColor[0.5, 0, 0.5], 
+           RGBColor[0.5, 0, 0.5], 
+           RGBColor[0.5, 0, 0.5], 
+           RGBColor[0.5, 0, 0.5], 
+           RGBColor[0.5, 0, 0.5], 
+           RGBColor[0.5, 0, 0.5], 
+           RGBColor[0.5, 0, 0.5], 
+           RGBColor[0.5, 0, 0.5], 
+           RGBColor[0.5, 0, 0.5], 
+           RGBColor[0.5, 0, 0.5], 
+           RGBColor[0.5, 0, 0.5], 
+           RGBColor[0.5, 0, 0.5], 
+           RGBColor[0.5, 0, 0.5], 
+           RGBColor[0.5, 0, 0.5], 
+           RGBColor[0.5, 0, 0.5], 
+           RGBColor[0.5, 0, 0.5], 
+           RGBColor[0.5, 0, 0.5], 
+           RGBColor[0.5, 0, 0.5], 
+           RGBColor[0.5, 0, 0.5], 
+           RGBColor[0.5, 0, 0.5], 
+           RGBColor[0.5, 0, 0.5], 
+           RGBColor[0.5, 0, 0.5], 
+           RGBColor[0.5, 0, 0.5], 
+           RGBColor[0.5, 0, 0.5], 
+           RGBColor[0.5, 0, 0.5], 
+           RGBColor[0.5, 0, 0.5], 
+           RGBColor[0.5, 0, 0.5], 
+           RGBColor[0.5, 0, 0.5], 
+           RGBColor[0.5, 0, 0.5], 
+           RGBColor[0.5, 0, 0.5], 
+           RGBColor[0.5, 0, 0.5], 
+           RGBColor[0.5, 0, 0.5], 
+           RGBColor[0.5, 0, 0.5], 
+           RGBColor[0.5, 0, 0.5], 
+           RGBColor[0.5, 0, 0.5], 
+           RGBColor[0.5, 0, 0.5], 
+           RGBColor[0.5, 0, 0.5], 
+           RGBColor[0.5, 0, 0.5], 
+           RGBColor[0.5, 0, 0.5], 
+           RGBColor[0.5, 0, 0.5], 
+           RGBColor[0.5, 0, 0.5], 
+           RGBColor[0.5, 0, 0.5], 
+           RGBColor[0, 1, 0], 
+           RGBColor[0, 1, 0], 
+           RGBColor[0, 1, 0], 
+           RGBColor[0, 1, 0], 
+           RGBColor[0, 1, 0], 
+           RGBColor[0, 1, 0], 
+           RGBColor[0, 1, 0], 
+           RGBColor[0, 1, 0], 
+           RGBColor[0, 1, 0], 
+           RGBColor[0, 1, 0], 
+           RGBColor[0, 1, 0], 
+           RGBColor[0, 1, 0], 
+           RGBColor[0, 1, 0], 
+           RGBColor[0, 1, 0], 
+           RGBColor[0, 1, 0], 
+           RGBColor[0, 1, 0], 
+           RGBColor[0, 1, 0], 
+           RGBColor[0, 1, 0], 
+           RGBColor[0, 1, 0], 
+           RGBColor[0, 1, 0]}), {0, Default} -> (MeshCellStyle -> 
+         Automatic), {
+         0, {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 
+          19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 
+          36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 
+          53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 
+          70, 71, 72, 73, 74, 75, 76, 77, 78, 79, 80, 81, 82, 83, 84, 85, 86, 
+          87, 88, 89, 90, 91, 92, 93, 94, 95, 96, 97}} -> (MeshCellLabel -> {
+           Style[0, 
+            RGBColor[1, 0, 0]], 
+           Style[1, 
+            RGBColor[1, 0, 0]], 
+           Style[2, 
+            RGBColor[1, 0, 0]], 
+           Style[3, 
+            RGBColor[1, 0, 0]], 
+           Style[4, 
+            RGBColor[1, 0, 0]], 
+           Style[5, 
+            RGBColor[1, 0, 0]], 
+           Style[6, 
+            RGBColor[1, 0, 0]], 
+           Style[7, 
+            RGBColor[1, 0, 0]], 
+           Style[8, 
+            RGBColor[1, 0, 0]], 
+           Style[9, 
+            RGBColor[1, 0, 0]], 
+           Style[10, 
+            RGBColor[1, 0, 0]], 
+           Style[11, 
+            RGBColor[1, 0, 0]], 
+           Style[12, 
+            RGBColor[1, 0, 0]], 
+           Style[13, 
+            RGBColor[1, 0, 0]], 
+           Style[14, 
+            RGBColor[1, 0, 0]], 
+           Style[15, 
+            RGBColor[1, 0, 0]], 
+           Style[16, 
+            RGBColor[1, 0, 0]], 
+           Style[0, 
+            RGBColor[0.5, 0, 0.5]], 
+           Style[1, 
+            RGBColor[0.5, 0, 0.5]], 
+           Style[2, 
+            RGBColor[0.5, 0, 0.5]], 
+           Style[0, 
+            RGBColor[0.5, 0, 0.5]], 
+           Style[1, 
+            RGBColor[0.5, 0, 0.5]], 
+           Style[2, 
+            RGBColor[0.5, 0, 0.5]], 
+           Style[0, 
+            RGBColor[0.5, 0, 0.5]], 
+           Style[1, 
+            RGBColor[0.5, 0, 0.5]], 
+           Style[2, 
+            RGBColor[0.5, 0, 0.5]], 
+           Style[0, 
+            RGBColor[0.5, 0, 0.5]], 
+           Style[1, 
+            RGBColor[0.5, 0, 0.5]], 
+           Style[2, 
+            RGBColor[0.5, 0, 0.5]], 
+           Style[0, 
+            RGBColor[0.5, 0, 0.5]], 
+           Style[1, 
+            RGBColor[0.5, 0, 0.5]], 
+           Style[2, 
+            RGBColor[0.5, 0, 0.5]], 
+           Style[0, 
+            RGBColor[0.5, 0, 0.5]], 
+           Style[1, 
+            RGBColor[0.5, 0, 0.5]], 
+           Style[2, 
+            RGBColor[0.5, 0, 0.5]], 
+           Style[0, 
+            RGBColor[0.5, 0, 0.5]], 
+           Style[1, 
+            RGBColor[0.5, 0, 0.5]], 
+           Style[2, 
+            RGBColor[0.5, 0, 0.5]], 
+           Style[0, 
+            RGBColor[0.5, 0, 0.5]], 
+           Style[1, 
+            RGBColor[0.5, 0, 0.5]], 
+           Style[2, 
+            RGBColor[0.5, 0, 0.5]], 
+           Style[0, 
+            RGBColor[0.5, 0, 0.5]], 
+           Style[1, 
+            RGBColor[0.5, 0, 0.5]], 
+           Style[2, 
+            RGBColor[0.5, 0, 0.5]], 
+           Style[0, 
+            RGBColor[0.5, 0, 0.5]], 
+           Style[1, 
+            RGBColor[0.5, 0, 0.5]], 
+           Style[2, 
+            RGBColor[0.5, 0, 0.5]], 
+           Style[0, 
+            RGBColor[0.5, 0, 0.5]], 
+           Style[1, 
+            RGBColor[0.5, 0, 0.5]], 
+           Style[2, 
+            RGBColor[0.5, 0, 0.5]], 
+           Style[0, 
+            RGBColor[0.5, 0, 0.5]], 
+           Style[1, 
+            RGBColor[0.5, 0, 0.5]], 
+           Style[2, 
+            RGBColor[0.5, 0, 0.5]], 
+           Style[0, 
+            RGBColor[0.5, 0, 0.5]], 
+           Style[1, 
+            RGBColor[0.5, 0, 0.5]], 
+           Style[2, 
+            RGBColor[0.5, 0, 0.5]], 
+           Style[0, 
+            RGBColor[0.5, 0, 0.5]], 
+           Style[1, 
+            RGBColor[0.5, 0, 0.5]], 
+           Style[2, 
+            RGBColor[0.5, 0, 0.5]], 
+           Style[0, 
+            RGBColor[0.5, 0, 0.5]], 
+           Style[1, 
+            RGBColor[0.5, 0, 0.5]], 
+           Style[2, 
+            RGBColor[0.5, 0, 0.5]], 
+           Style[0, 
+            RGBColor[0.5, 0, 0.5]], 
+           Style[1, 
+            RGBColor[0.5, 0, 0.5]], 
+           Style[2, 
+            RGBColor[0.5, 0, 0.5]], 
+           Style[0, 
+            RGBColor[0.5, 0, 0.5]], 
+           Style[1, 
+            RGBColor[0.5, 0, 0.5]], 
+           Style[2, 
+            RGBColor[0.5, 0, 0.5]], 
+           Style[0, 
+            RGBColor[0.5, 0, 0.5]], 
+           Style[1, 
+            RGBColor[0.5, 0, 0.5]], 
+           Style[2, 
+            RGBColor[0.5, 0, 0.5]], 
+           Style[0, 
+            RGBColor[0.5, 0, 0.5]], 
+           Style[1, 
+            RGBColor[0.5, 0, 0.5]], 
+           Style[2, 
+            RGBColor[0.5, 0, 0.5]], 
+           Style[0, 
+            RGBColor[0.5, 0, 0.5]], 
+           Style[1, 
+            RGBColor[0.5, 0, 0.5]], 
+           Style[2, 
+            RGBColor[0.5, 0, 0.5]], 
+           Style[0, 
+            RGBColor[0, 1, 0]], 
+           Style[1, 
+            RGBColor[0, 1, 0]], 
+           Style[2, 
+            RGBColor[0, 1, 0]], 
+           Style[3, 
+            RGBColor[0, 1, 0]], 
+           Style[4, 
+            RGBColor[0, 1, 0]], 
+           Style[5, 
+            RGBColor[0, 1, 0]], 
+           Style[6, 
+            RGBColor[0, 1, 0]], 
+           Style[7, 
+            RGBColor[0, 1, 0]], 
+           Style[8, 
+            RGBColor[0, 1, 0]], 
+           Style[9, 
+            RGBColor[0, 1, 0]], 
+           Style[10, 
+            RGBColor[0, 1, 0]], 
+           Style[11, 
+            RGBColor[0, 1, 0]], 
+           Style[12, 
+            RGBColor[0, 1, 0]], 
+           Style[13, 
+            RGBColor[0, 1, 0]], 
+           Style[14, 
+            RGBColor[0, 1, 0]], 
+           Style[15, 
+            RGBColor[0, 1, 0]], 
+           Style[16, 
+            RGBColor[0, 1, 0]], 
+           Style[17, 
+            RGBColor[0, 1, 0]], 
+           Style[18, 
+            RGBColor[0, 1, 0]], 
+           Style[19, 
+            RGBColor[0, 1, 0]]}), {0, Default} -> (MeshCellLabel -> 
+         Automatic)}, 
+      Method -> {
+       "EliminateUnusedCoordinates" -> True, "DeleteDuplicateCoordinates" -> 
+        Automatic, "VertexAlias" -> Identity, "CheckOrientation" -> Automatic,
+         "CoplanarityTolerance" -> Automatic, "CheckIntersections" -> 
+        Automatic, "BoundaryNesting" -> Automatic, "SeparateBoundaries" -> 
+        False, "TJunction" -> Automatic, "PropagateMarkers" -> True, 
+        "ZeroTest" -> Automatic, "Hash" -> 7515915745819609570}, {
+      PlotTheme -> "Lines"}]]}, 
+    TagBox[GraphicsComplexBox[CompressedData["
+1:eJx1kr1KA1EQhRefQPtYxFewidVtfAIh9grayvoUsdA+QsA6voBgb0QsjPkr
+1BBjNiEgbt5As3PnG9i77iFh9szfPTP3Vo/PDk42oig6Wv8zW4a6YODyPHH5
+rJX7Pw9OPCnpswpsWd+wT1g3MdsWvJq9FTsP/POCH74j6LsPwaXarnsWvOg5
+NxbHTx7+sA916U+GJPCnxrcEC+uLxV9WR1/OuWhkSE3XdTPDwnQR93vt6R76
+uoex7ZO49yduVzCzc38FPdO5LxgWdN0Lulo/MO7r6Ndyp4JEdS6UD3X+1FVV
+P3HmCOdmTuZmD22d41DmmtvccOb2805KdefvsWVzoIs4nHrmIH9T7xWd3Ctz
+0Afe1DzeQyPIa+T2Qf7I6v19JXbeWPTPLM4+wnuH5/czLuyxrpw69kgd74J3
+wrvhHRHnnaELjm7yidPP63hytauv9e/OLH6vb1mI4ydvT/zf7iGudOLKyPRP
+peDN6iTc+VT+6ITG7+5cPpbWh7702Za8mdXRJ9Y6OLroU1OLX2htanH6o7ui
+5+BHN3NQB/8Dbbrh8w==
+      "], 
+      {Hue[0.6, 0.3, 0.95], EdgeForm[Hue[0.6, 0.3, 0.75]], 
+       PointBox[{1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 
+        78, 79, 80, 81, 82, 83, 84, 85, 86, 87, 88, 89, 90, 91, 92, 93, 94, 
+        95, 96, 97}], LineBox[CompressedData["
+1:eJwt0EduQgEAA9EvjkAChNBDJ/QSeq+hbDgCB4D777ClWTxZmqVzj9f9GQqC
+YCbesHzgE24RiSIGty+J4xtuCUkiBbe0ZJCFW05+kIdbQYoowa0sFVThVpNf
+1OHWkCZacGtLB1249aSPAdz+ZIgR3MYywRRjfp1jAbelrLCG20a22MFtLwcc
+4XaSf5zhdpErbnB7A205GDc=
+        "]], {{
+         {RGBColor[1, 0, 0], PointBox[{{1}}]}, InsetBox[
+          StyleBox["0",
+           StripOnInput->False,
+           LineColor->RGBColor[1, 0, 0],
+           FrontFaceColor->RGBColor[1, 0, 0],
+           BackFaceColor->RGBColor[1, 0, 0],
+           GraphicsColor->RGBColor[1, 0, 0],
+           FontColor->RGBColor[1, 0, 0]], Offset[{2, 2}, {0., 0.}], 
+          ImageScaled[{0, 0}],
+          BaseStyle->"Graphics"]}, {
+         {RGBColor[1, 0, 0], PointBox[{{2}}]}, InsetBox[
+          StyleBox["1",
+           StripOnInput->False,
+           LineColor->RGBColor[1, 0, 0],
+           FrontFaceColor->RGBColor[1, 0, 0],
+           BackFaceColor->RGBColor[1, 0, 0],
+           GraphicsColor->RGBColor[1, 0, 0],
+           FontColor->RGBColor[1, 0, 0]], 
+          Offset[{2, 2}, {0., 0.3333333333333333}], ImageScaled[{0, 0}],
+          BaseStyle->"Graphics"]}, {
+         {RGBColor[1, 0, 0], PointBox[{{3}}]}, InsetBox[
+          StyleBox["2",
+           StripOnInput->False,
+           LineColor->RGBColor[1, 0, 0],
+           FrontFaceColor->RGBColor[1, 0, 0],
+           BackFaceColor->RGBColor[1, 0, 0],
+           GraphicsColor->RGBColor[1, 0, 0],
+           FontColor->RGBColor[1, 0, 0]], 
+          Offset[{2, 2}, {0., 0.6666666666666666}], ImageScaled[{0, 0}],
+          BaseStyle->"Graphics"]}, {
+         {RGBColor[1, 0, 0], PointBox[{{4}}]}, InsetBox[
+          StyleBox["3",
+           StripOnInput->False,
+           LineColor->RGBColor[1, 0, 0],
+           FrontFaceColor->RGBColor[1, 0, 0],
+           BackFaceColor->RGBColor[1, 0, 0],
+           GraphicsColor->RGBColor[1, 0, 0],
+           FontColor->RGBColor[1, 0, 0]], Offset[{2, 2}, {0., 1.}], 
+          ImageScaled[{0, 0}],
+          BaseStyle->"Graphics"]}, {
+         {RGBColor[1, 0, 0], PointBox[{{5}}]}, InsetBox[
+          StyleBox["4",
+           StripOnInput->False,
+           LineColor->RGBColor[1, 0, 0],
+           FrontFaceColor->RGBColor[1, 0, 0],
+           BackFaceColor->RGBColor[1, 0, 0],
+           GraphicsColor->RGBColor[1, 0, 0],
+           FontColor->RGBColor[1, 0, 0]], 
+          Offset[{2, 2}, {0.3333333333333333, 0.}], ImageScaled[{0, 0}],
+          BaseStyle->"Graphics"]}, {
+         {RGBColor[1, 0, 0], PointBox[{{6}}]}, InsetBox[
+          StyleBox["5",
+           StripOnInput->False,
+           LineColor->RGBColor[1, 0, 0],
+           FrontFaceColor->RGBColor[1, 0, 0],
+           BackFaceColor->RGBColor[1, 0, 0],
+           GraphicsColor->RGBColor[1, 0, 0],
+           FontColor->RGBColor[1, 0, 0]], 
+          Offset[{2, 2}, {0.3333333333333333, 1.}], ImageScaled[{0, 0}],
+          BaseStyle->"Graphics"]}, {
+         {RGBColor[1, 0, 0], PointBox[{{7}}]}, InsetBox[
+          StyleBox["6",
+           StripOnInput->False,
+           LineColor->RGBColor[1, 0, 0],
+           FrontFaceColor->RGBColor[1, 0, 0],
+           BackFaceColor->RGBColor[1, 0, 0],
+           GraphicsColor->RGBColor[1, 0, 0],
+           FontColor->RGBColor[1, 0, 0]], 
+          Offset[{2, 2}, {0.6666666666666666, 0.}], ImageScaled[{0, 0}],
+          BaseStyle->"Graphics"]}, {
+         {RGBColor[1, 0, 0], PointBox[{{8}}]}, InsetBox[
+          StyleBox["7",
+           StripOnInput->False,
+           LineColor->RGBColor[1, 0, 0],
+           FrontFaceColor->RGBColor[1, 0, 0],
+           BackFaceColor->RGBColor[1, 0, 0],
+           GraphicsColor->RGBColor[1, 0, 0],
+           FontColor->RGBColor[1, 0, 0]], 
+          Offset[{2, 2}, {0.6666666666666666, 1.}], ImageScaled[{0, 0}],
+          BaseStyle->"Graphics"]}, {
+         {RGBColor[1, 0, 0], PointBox[{{9}}]}, InsetBox[
+          StyleBox["8",
+           StripOnInput->False,
+           LineColor->RGBColor[1, 0, 0],
+           FrontFaceColor->RGBColor[1, 0, 0],
+           BackFaceColor->RGBColor[1, 0, 0],
+           GraphicsColor->RGBColor[1, 0, 0],
+           FontColor->RGBColor[1, 0, 0]], Offset[{2, 2}, {1., 0.}], 
+          ImageScaled[{0, 0}],
+          BaseStyle->"Graphics"]}, {
+         {RGBColor[1, 0, 0], PointBox[{{10}}]}, InsetBox[
+          StyleBox["9",
+           StripOnInput->False,
+           LineColor->RGBColor[1, 0, 0],
+           FrontFaceColor->RGBColor[1, 0, 0],
+           BackFaceColor->RGBColor[1, 0, 0],
+           GraphicsColor->RGBColor[1, 0, 0],
+           FontColor->RGBColor[1, 0, 0]], 
+          Offset[{2, 2}, {1., 0.3333333333333333}], ImageScaled[{0, 0}],
+          BaseStyle->"Graphics"]}, {
+         {RGBColor[1, 0, 0], PointBox[{{11}}]}, InsetBox[
+          StyleBox["10",
+           StripOnInput->False,
+           LineColor->RGBColor[1, 0, 0],
+           FrontFaceColor->RGBColor[1, 0, 0],
+           BackFaceColor->RGBColor[1, 0, 0],
+           GraphicsColor->RGBColor[1, 0, 0],
+           FontColor->RGBColor[1, 0, 0]], 
+          Offset[{2, 2}, {1., 0.6666666666666666}], ImageScaled[{0, 0}],
+          BaseStyle->"Graphics"]}, {
+         {RGBColor[1, 0, 0], PointBox[{{12}}]}, InsetBox[
+          StyleBox["11",
+           StripOnInput->False,
+           LineColor->RGBColor[1, 0, 0],
+           FrontFaceColor->RGBColor[1, 0, 0],
+           BackFaceColor->RGBColor[1, 0, 0],
+           GraphicsColor->RGBColor[1, 0, 0],
+           FontColor->RGBColor[1, 0, 0]], Offset[{2, 2}, {1., 1.}], 
+          ImageScaled[{0, 0}],
+          BaseStyle->"Graphics"]}, {
+         {RGBColor[1, 0, 0], PointBox[{{13}}]}, InsetBox[
+          StyleBox["12",
+           StripOnInput->False,
+           LineColor->RGBColor[1, 0, 0],
+           FrontFaceColor->RGBColor[1, 0, 0],
+           BackFaceColor->RGBColor[1, 0, 0],
+           GraphicsColor->RGBColor[1, 0, 0],
+           FontColor->RGBColor[1, 0, 0]], Offset[{2, 2}, {0.5, 0.5}], 
+          ImageScaled[{0, 0}],
+          BaseStyle->"Graphics"]}, {
+         {RGBColor[1, 0, 0], PointBox[{{14}}]}, InsetBox[
+          StyleBox["13",
+           StripOnInput->False,
+           LineColor->RGBColor[1, 0, 0],
+           FrontFaceColor->RGBColor[1, 0, 0],
+           BackFaceColor->RGBColor[1, 0, 0],
+           GraphicsColor->RGBColor[1, 0, 0],
+           FontColor->RGBColor[1, 0, 0]], 
+          Offset[{2, 2}, {0.29166666666666663`, 0.29166666666666663`}], 
+          ImageScaled[{0, 0}],
+          BaseStyle->"Graphics"]}, {
+         {RGBColor[1, 0, 0], PointBox[{{15}}]}, InsetBox[
+          StyleBox["14",
+           StripOnInput->False,
+           LineColor->RGBColor[1, 0, 0],
+           FrontFaceColor->RGBColor[1, 0, 0],
+           BackFaceColor->RGBColor[1, 0, 0],
+           GraphicsColor->RGBColor[1, 0, 0],
+           FontColor->RGBColor[1, 0, 0]], 
+          Offset[{2, 2}, {0.7083333333333334, 0.29166666666666663`}], 
+          ImageScaled[{0, 0}],
+          BaseStyle->"Graphics"]}, {
+         {RGBColor[1, 0, 0], PointBox[{{16}}]}, InsetBox[
+          StyleBox["15",
+           StripOnInput->False,
+           LineColor->RGBColor[1, 0, 0],
+           FrontFaceColor->RGBColor[1, 0, 0],
+           BackFaceColor->RGBColor[1, 0, 0],
+           GraphicsColor->RGBColor[1, 0, 0],
+           FontColor->RGBColor[1, 0, 0]], 
+          Offset[{2, 2}, {0.7083333333333333, 0.7083333333333334}], 
+          ImageScaled[{0, 0}],
+          BaseStyle->"Graphics"]}, {
+         {RGBColor[1, 0, 0], PointBox[{{17}}]}, InsetBox[
+          StyleBox["16",
+           StripOnInput->False,
+           LineColor->RGBColor[1, 0, 0],
+           FrontFaceColor->RGBColor[1, 0, 0],
+           BackFaceColor->RGBColor[1, 0, 0],
+           GraphicsColor->RGBColor[1, 0, 0],
+           FontColor->RGBColor[1, 0, 0]], 
+          Offset[{2, 2}, {0.29166666666666663`, 0.7083333333333334}], 
+          ImageScaled[{0, 0}],
+          BaseStyle->"Graphics"]}, {
+         {RGBColor[0.5, 0, 0.5], PointBox[{{18}}]}, InsetBox[
+          StyleBox["0",
+           StripOnInput->False,
+           LineColor->RGBColor[0.5, 0, 0.5],
+           FrontFaceColor->RGBColor[0.5, 0, 0.5],
+           BackFaceColor->RGBColor[0.5, 0, 0.5],
+           GraphicsColor->RGBColor[0.5, 0, 0.5],
+           FontColor->RGBColor[0.5, 0, 0.5]], 
+          Offset[{2, 2}, {0.3145833333333333, 0.014583333333333332`}], 
+          ImageScaled[{0, 0}],
+          BaseStyle->"Graphics"]}, {
+         {RGBColor[0.5, 0, 0.5], PointBox[{{19}}]}, InsetBox[
+          StyleBox["1",
+           StripOnInput->False,
+           LineColor->RGBColor[0.5, 0, 0.5],
+           FrontFaceColor->RGBColor[0.5, 0, 0.5],
+           BackFaceColor->RGBColor[0.5, 0, 0.5],
+           GraphicsColor->RGBColor[0.5, 0, 0.5],
+           FontColor->RGBColor[0.5, 0, 0.5]], 
+          Offset[{2, 2}, {0.2791666666666666, 0.26249999999999996`}], 
+          ImageScaled[{0, 0}],
+          BaseStyle->"Graphics"]}, {
+         {RGBColor[0.5, 0, 0.5], PointBox[{{20}}]}, InsetBox[
+          StyleBox["2",
+           StripOnInput->False,
+           LineColor->RGBColor[0.5, 0, 0.5],
+           FrontFaceColor->RGBColor[0.5, 0, 0.5],
+           BackFaceColor->RGBColor[0.5, 0, 0.5],
+           GraphicsColor->RGBColor[0.5, 0, 0.5],
+           FontColor->RGBColor[0.5, 0, 0.5]], 
+          Offset[{2, 2}, {0.03125, 0.014583333333333332`}], ImageScaled[{0, 0}],
+          BaseStyle->"Graphics"]}, {
+         {RGBColor[0.5, 0, 0.5], PointBox[{{21}}]}, InsetBox[
+          StyleBox["0",
+           StripOnInput->False,
+           LineColor->RGBColor[0.5, 0, 0.5],
+           FrontFaceColor->RGBColor[0.5, 0, 0.5],
+           BackFaceColor->RGBColor[0.5, 0, 0.5],
+           GraphicsColor->RGBColor[0.5, 0, 0.5],
+           FontColor->RGBColor[0.5, 0, 0.5]], 
+          Offset[{2, 2}, {0.26249999999999996`, 0.2791666666666666}], 
+          ImageScaled[{0, 0}],
+          BaseStyle->"Graphics"]}, {
+         {RGBColor[0.5, 0, 0.5], PointBox[{{22}}]}, InsetBox[
+          StyleBox["1",
+           StripOnInput->False,
+           LineColor->RGBColor[0.5, 0, 0.5],
+           FrontFaceColor->RGBColor[0.5, 0, 0.5],
+           BackFaceColor->RGBColor[0.5, 0, 0.5],
+           GraphicsColor->RGBColor[0.5, 0, 0.5],
+           FontColor->RGBColor[0.5, 0, 0.5]], 
+          Offset[{2, 2}, {0.014583333333333332`, 0.3145833333333333}], 
+          ImageScaled[{0, 0}],
+          BaseStyle->"Graphics"]}, {
+         {RGBColor[0.5, 0, 0.5], PointBox[{{23}}]}, InsetBox[
+          StyleBox["2",
+           StripOnInput->False,
+           LineColor->RGBColor[0.5, 0, 0.5],
+           FrontFaceColor->RGBColor[0.5, 0, 0.5],
+           BackFaceColor->RGBColor[0.5, 0, 0.5],
+           GraphicsColor->RGBColor[0.5, 0, 0.5],
+           FontColor->RGBColor[0.5, 0, 0.5]], 
+          Offset[{2, 2}, {0.014583333333333332`, 0.03125}], ImageScaled[{0, 0}],
+          BaseStyle->"Graphics"]}, {
+         {RGBColor[0.5, 0, 0.5], PointBox[{{24}}]}, InsetBox[
+          StyleBox["0",
+           StripOnInput->False,
+           LineColor->RGBColor[0.5, 0, 0.5],
+           FrontFaceColor->RGBColor[0.5, 0, 0.5],
+           BackFaceColor->RGBColor[0.5, 0, 0.5],
+           GraphicsColor->RGBColor[0.5, 0, 0.5],
+           FontColor->RGBColor[0.5, 0, 0.5]], 
+          Offset[{2, 2}, {0.6854166666666667, 0.014583333333333332`}], 
+          ImageScaled[{0, 0}],
+          BaseStyle->"Graphics"]}, {
+         {RGBColor[0.5, 0, 0.5], PointBox[{{25}}]}, InsetBox[
+          StyleBox["1",
+           StripOnInput->False,
+           LineColor->RGBColor[0.5, 0, 0.5],
+           FrontFaceColor->RGBColor[0.5, 0, 0.5],
+           BackFaceColor->RGBColor[0.5, 0, 0.5],
+           GraphicsColor->RGBColor[0.5, 0, 0.5],
+           FontColor->RGBColor[0.5, 0, 0.5]], 
+          Offset[{2, 2}, {0.96875, 0.014583333333333332`}], ImageScaled[{0, 0}],
+          BaseStyle->"Graphics"]}, {
+         {RGBColor[0.5, 0, 0.5], PointBox[{{26}}]}, InsetBox[
+          StyleBox["2",
+           StripOnInput->False,
+           LineColor->RGBColor[0.5, 0, 0.5],
+           FrontFaceColor->RGBColor[0.5, 0, 0.5],
+           BackFaceColor->RGBColor[0.5, 0, 0.5],
+           GraphicsColor->RGBColor[0.5, 0, 0.5],
+           FontColor->RGBColor[0.5, 0, 0.5]], 
+          Offset[{2, 2}, {0.7208333333333333, 0.26249999999999996`}], 
+          ImageScaled[{0, 0}],
+          BaseStyle->"Graphics"]}, {
+         {RGBColor[0.5, 0, 0.5], PointBox[{{27}}]}, InsetBox[
+          StyleBox["0",
+           StripOnInput->False,
+           LineColor->RGBColor[0.5, 0, 0.5],
+           FrontFaceColor->RGBColor[0.5, 0, 0.5],
+           BackFaceColor->RGBColor[0.5, 0, 0.5],
+           GraphicsColor->RGBColor[0.5, 0, 0.5],
+           FontColor->RGBColor[0.5, 0, 0.5]], 
+          Offset[{2, 2}, {0.26249999999999996`, 0.7208333333333333}], 
+          ImageScaled[{0, 0}],
+          BaseStyle->"Graphics"]}, {
+         {RGBColor[0.5, 0, 0.5], PointBox[{{28}}]}, InsetBox[
+          StyleBox["1",
+           StripOnInput->False,
+           LineColor->RGBColor[0.5, 0, 0.5],
+           FrontFaceColor->RGBColor[0.5, 0, 0.5],
+           BackFaceColor->RGBColor[0.5, 0, 0.5],
+           GraphicsColor->RGBColor[0.5, 0, 0.5],
+           FontColor->RGBColor[0.5, 0, 0.5]], 
+          Offset[{2, 2}, {0.014583333333333332`, 0.96875}], ImageScaled[{0, 0}],
+          BaseStyle->"Graphics"]}, {
+         {RGBColor[0.5, 0, 0.5], PointBox[{{29}}]}, InsetBox[
+          StyleBox["2",
+           StripOnInput->False,
+           LineColor->RGBColor[0.5, 0, 0.5],
+           FrontFaceColor->RGBColor[0.5, 0, 0.5],
+           BackFaceColor->RGBColor[0.5, 0, 0.5],
+           GraphicsColor->RGBColor[0.5, 0, 0.5],
+           FontColor->RGBColor[0.5, 0, 0.5]], 
+          Offset[{2, 2}, {0.014583333333333332`, 0.6854166666666667}], 
+          ImageScaled[{0, 0}],
+          BaseStyle->"Graphics"]}, {
+         {RGBColor[0.5, 0, 0.5], PointBox[{{30}}]}, InsetBox[
+          StyleBox["0",
+           StripOnInput->False,
+           LineColor->RGBColor[0.5, 0, 0.5],
+           FrontFaceColor->RGBColor[0.5, 0, 0.5],
+           BackFaceColor->RGBColor[0.5, 0, 0.5],
+           GraphicsColor->RGBColor[0.5, 0, 0.5],
+           FontColor->RGBColor[0.5, 0, 0.5]], 
+          Offset[{2, 2}, {0.03125, 0.9854166666666667}], ImageScaled[{0, 0}],
+          BaseStyle->"Graphics"]}, {
+         {RGBColor[0.5, 0, 0.5], PointBox[{{31}}]}, InsetBox[
+          StyleBox["1",
+           StripOnInput->False,
+           LineColor->RGBColor[0.5, 0, 0.5],
+           FrontFaceColor->RGBColor[0.5, 0, 0.5],
+           BackFaceColor->RGBColor[0.5, 0, 0.5],
+           GraphicsColor->RGBColor[0.5, 0, 0.5],
+           FontColor->RGBColor[0.5, 0, 0.5]], 
+          Offset[{2, 2}, {0.2791666666666666, 0.7375}], ImageScaled[{0, 0}],
+          BaseStyle->"Graphics"]}, {
+         {RGBColor[0.5, 0, 0.5], PointBox[{{32}}]}, InsetBox[
+          StyleBox["2",
+           StripOnInput->False,
+           LineColor->RGBColor[0.5, 0, 0.5],
+           FrontFaceColor->RGBColor[0.5, 0, 0.5],
+           BackFaceColor->RGBColor[0.5, 0, 0.5],
+           GraphicsColor->RGBColor[0.5, 0, 0.5],
+           FontColor->RGBColor[0.5, 0, 0.5]], 
+          Offset[{2, 2}, {0.3145833333333333, 0.9854166666666667}], 
+          ImageScaled[{0, 0}],
+          BaseStyle->"Graphics"]}, {
+         {RGBColor[0.5, 0, 0.5], PointBox[{{33}}]}, InsetBox[
+          StyleBox["0",
+           StripOnInput->False,
+           LineColor->RGBColor[0.5, 0, 0.5],
+           FrontFaceColor->RGBColor[0.5, 0, 0.5],
+           BackFaceColor->RGBColor[0.5, 0, 0.5],
+           GraphicsColor->RGBColor[0.5, 0, 0.5],
+           FontColor->RGBColor[0.5, 0, 0.5]], 
+          Offset[{2, 2}, {0.3020833333333333, 0.32291666666666663`}], 
+          ImageScaled[{0, 0}],
+          BaseStyle->"Graphics"]}, {
+         {RGBColor[0.5, 0, 0.5], PointBox[{{34}}]}, InsetBox[
+          StyleBox["1",
+           StripOnInput->False,
+           LineColor->RGBColor[0.5, 0, 0.5],
+           FrontFaceColor->RGBColor[0.5, 0, 0.5],
+           BackFaceColor->RGBColor[0.5, 0, 0.5],
+           GraphicsColor->RGBColor[0.5, 0, 0.5],
+           FontColor->RGBColor[0.5, 0, 0.5]], 
+          Offset[{2, 2}, {0.4791666666666667, 0.5}], ImageScaled[{0, 0}],
+          BaseStyle->"Graphics"]}, {
+         {RGBColor[0.5, 0, 0.5], PointBox[{{35}}]}, InsetBox[
+          StyleBox["2",
+           StripOnInput->False,
+           LineColor->RGBColor[0.5, 0, 0.5],
+           FrontFaceColor->RGBColor[0.5, 0, 0.5],
+           BackFaceColor->RGBColor[0.5, 0, 0.5],
+           GraphicsColor->RGBColor[0.5, 0, 0.5],
+           FontColor->RGBColor[0.5, 0, 0.5]], 
+          Offset[{2, 2}, {0.3020833333333333, 0.6770833333333334}], 
+          ImageScaled[{0, 0}],
+          BaseStyle->"Graphics"]}, {
+         {RGBColor[0.5, 0, 0.5], PointBox[{{36}}]}, InsetBox[
+          StyleBox["0",
+           StripOnInput->False,
+           LineColor->RGBColor[0.5, 0, 0.5],
+           FrontFaceColor->RGBColor[0.5, 0, 0.5],
+           BackFaceColor->RGBColor[0.5, 0, 0.5],
+           GraphicsColor->RGBColor[0.5, 0, 0.5],
+           FontColor->RGBColor[0.5, 0, 0.5]], 
+          Offset[{2, 2}, {0.63125, 0.014583333333333332`}], ImageScaled[{0, 0}],
+          BaseStyle->"Graphics"]}, {
+         {RGBColor[0.5, 0, 0.5], PointBox[{{37}}]}, InsetBox[
+          StyleBox["1",
+           StripOnInput->False,
+           LineColor->RGBColor[0.5, 0, 0.5],
+           FrontFaceColor->RGBColor[0.5, 0, 0.5],
+           BackFaceColor->RGBColor[0.5, 0, 0.5],
+           GraphicsColor->RGBColor[0.5, 0, 0.5],
+           FontColor->RGBColor[0.5, 0, 0.5]], 
+          Offset[{2, 2}, {0.31249999999999994`, 0.26249999999999996`}], 
+          ImageScaled[{0, 0}],
+          BaseStyle->"Graphics"]}, {
+         {RGBColor[0.5, 0, 0.5], PointBox[{{38}}]}, InsetBox[
+          StyleBox["2",
+           StripOnInput->False,
+           LineColor->RGBColor[0.5, 0, 0.5],
+           FrontFaceColor->RGBColor[0.5, 0, 0.5],
+           BackFaceColor->RGBColor[0.5, 0, 0.5],
+           GraphicsColor->RGBColor[0.5, 0, 0.5],
+           FontColor->RGBColor[0.5, 0, 0.5]], 
+          Offset[{2, 2}, {0.34791666666666665`, 0.014583333333333332`}], 
+          ImageScaled[{0, 0}],
+          BaseStyle->"Graphics"]}, {
+         {RGBColor[0.5, 0, 0.5], PointBox[{{39}}]}, InsetBox[
+          StyleBox["0",
+           StripOnInput->False,
+           LineColor->RGBColor[0.5, 0, 0.5],
+           FrontFaceColor->RGBColor[0.5, 0, 0.5],
+           BackFaceColor->RGBColor[0.5, 0, 0.5],
+           GraphicsColor->RGBColor[0.5, 0, 0.5],
+           FontColor->RGBColor[0.5, 0, 0.5]], 
+          Offset[{2, 2}, {0.6854166666666667, 0.2770833333333333}], 
+          ImageScaled[{0, 0}],
+          BaseStyle->"Graphics"]}, {
+         {RGBColor[0.5, 0, 0.5], PointBox[{{40}}]}, InsetBox[
+          StyleBox["1",
+           StripOnInput->False,
+           LineColor->RGBColor[0.5, 0, 0.5],
+           FrontFaceColor->RGBColor[0.5, 0, 0.5],
+           BackFaceColor->RGBColor[0.5, 0, 0.5],
+           GraphicsColor->RGBColor[0.5, 0, 0.5],
+           FontColor->RGBColor[0.5, 0, 0.5]], 
+          Offset[{2, 2}, {0.33125, 0.2770833333333333}], ImageScaled[{0, 0}],
+          BaseStyle->"Graphics"]}, {
+         {RGBColor[0.5, 0, 0.5], PointBox[{{41}}]}, InsetBox[
+          StyleBox["2",
+           StripOnInput->False,
+           LineColor->RGBColor[0.5, 0, 0.5],
+           FrontFaceColor->RGBColor[0.5, 0, 0.5],
+           BackFaceColor->RGBColor[0.5, 0, 0.5],
+           GraphicsColor->RGBColor[0.5, 0, 0.5],
+           FontColor->RGBColor[0.5, 0, 0.5]], 
+          Offset[{2, 2}, {0.6499999999999999, 0.029166666666666664`}], 
+          ImageScaled[{0, 0}],
+          BaseStyle->"Graphics"]}, {
+         {RGBColor[0.5, 0, 0.5], PointBox[{{42}}]}, InsetBox[
+          StyleBox["0",
+           StripOnInput->False,
+           LineColor->RGBColor[0.5, 0, 0.5],
+           FrontFaceColor->RGBColor[0.5, 0, 0.5],
+           BackFaceColor->RGBColor[0.5, 0, 0.5],
+           GraphicsColor->RGBColor[0.5, 0, 0.5],
+           FontColor->RGBColor[0.5, 0, 0.5]], 
+          Offset[{2, 2}, {0.66875, 0.7229166666666667}], ImageScaled[{0, 0}],
+          BaseStyle->"Graphics"]}, {
+         {RGBColor[0.5, 0, 0.5], PointBox[{{43}}]}, InsetBox[
+          StyleBox["1",
+           StripOnInput->False,
+           LineColor->RGBColor[0.5, 0, 0.5],
+           FrontFaceColor->RGBColor[0.5, 0, 0.5],
+           BackFaceColor->RGBColor[0.5, 0, 0.5],
+           GraphicsColor->RGBColor[0.5, 0, 0.5],
+           FontColor->RGBColor[0.5, 0, 0.5]], 
+          Offset[{2, 2}, {0.35, 0.9708333333333333}], ImageScaled[{0, 0}],
+          BaseStyle->"Graphics"]}, {
+         {RGBColor[0.5, 0, 0.5], PointBox[{{44}}]}, InsetBox[
+          StyleBox["2",
+           StripOnInput->False,
+           LineColor->RGBColor[0.5, 0, 0.5],
+           FrontFaceColor->RGBColor[0.5, 0, 0.5],
+           BackFaceColor->RGBColor[0.5, 0, 0.5],
+           GraphicsColor->RGBColor[0.5, 0, 0.5],
+           FontColor->RGBColor[0.5, 0, 0.5]], 
+          Offset[{2, 2}, {0.31458333333333327`, 0.7229166666666667}], 
+          ImageScaled[{0, 0}],
+          BaseStyle->"Graphics"]}, {
+         {RGBColor[0.5, 0, 0.5], PointBox[{{45}}]}, InsetBox[
+          StyleBox["0",
+           StripOnInput->False,
+           LineColor->RGBColor[0.5, 0, 0.5],
+           FrontFaceColor->RGBColor[0.5, 0, 0.5],
+           BackFaceColor->RGBColor[0.5, 0, 0.5],
+           GraphicsColor->RGBColor[0.5, 0, 0.5],
+           FontColor->RGBColor[0.5, 0, 0.5]], 
+          Offset[{2, 2}, {0.9854166666666667, 0.03125}], ImageScaled[{0, 0}],
+          BaseStyle->"Graphics"]}, {
+         {RGBColor[0.5, 0, 0.5], PointBox[{{46}}]}, InsetBox[
+          StyleBox["1",
+           StripOnInput->False,
+           LineColor->RGBColor[0.5, 0, 0.5],
+           FrontFaceColor->RGBColor[0.5, 0, 0.5],
+           BackFaceColor->RGBColor[0.5, 0, 0.5],
+           GraphicsColor->RGBColor[0.5, 0, 0.5],
+           FontColor->RGBColor[0.5, 0, 0.5]], 
+          Offset[{2, 2}, {0.9854166666666667, 0.3145833333333333}], 
+          ImageScaled[{0, 0}],
+          BaseStyle->"Graphics"]}, {
+         {RGBColor[0.5, 0, 0.5], PointBox[{{47}}]}, InsetBox[
+          StyleBox["2",
+           StripOnInput->False,
+           LineColor->RGBColor[0.5, 0, 0.5],
+           FrontFaceColor->RGBColor[0.5, 0, 0.5],
+           BackFaceColor->RGBColor[0.5, 0, 0.5],
+           GraphicsColor->RGBColor[0.5, 0, 0.5],
+           FontColor->RGBColor[0.5, 0, 0.5]], 
+          Offset[{2, 2}, {0.7375, 0.2791666666666666}], ImageScaled[{0, 0}],
+          BaseStyle->"Graphics"]}, {
+         {RGBColor[0.5, 0, 0.5], PointBox[{{48}}]}, InsetBox[
+          StyleBox["0",
+           StripOnInput->False,
+           LineColor->RGBColor[0.5, 0, 0.5],
+           FrontFaceColor->RGBColor[0.5, 0, 0.5],
+           BackFaceColor->RGBColor[0.5, 0, 0.5],
+           GraphicsColor->RGBColor[0.5, 0, 0.5],
+           FontColor->RGBColor[0.5, 0, 0.5]], 
+          Offset[{2, 2}, {0.6770833333333333, 0.6979166666666667}], 
+          ImageScaled[{0, 0}],
+          BaseStyle->"Graphics"]}, {
+         {RGBColor[0.5, 0, 0.5], PointBox[{{49}}]}, InsetBox[
+          StyleBox["1",
+           StripOnInput->False,
+           LineColor->RGBColor[0.5, 0, 0.5],
+           FrontFaceColor->RGBColor[0.5, 0, 0.5],
+           BackFaceColor->RGBColor[0.5, 0, 0.5],
+           GraphicsColor->RGBColor[0.5, 0, 0.5],
+           FontColor->RGBColor[0.5, 0, 0.5]], 
+          Offset[{2, 2}, {0.32291666666666663`, 0.6979166666666667}], 
+          ImageScaled[{0, 0}],
+          BaseStyle->"Graphics"]}, {
+         {RGBColor[0.5, 0, 0.5], PointBox[{{50}}]}, InsetBox[
+          StyleBox["2",
+           StripOnInput->False,
+           LineColor->RGBColor[0.5, 0, 0.5],
+           FrontFaceColor->RGBColor[0.5, 0, 0.5],
+           BackFaceColor->RGBColor[0.5, 0, 0.5],
+           GraphicsColor->RGBColor[0.5, 0, 0.5],
+           FontColor->RGBColor[0.5, 0, 0.5]], 
+          Offset[{2, 2}, {0.5, 0.5208333333333334}], ImageScaled[{0, 0}],
+          BaseStyle->"Graphics"]}, {
+         {RGBColor[0.5, 0, 0.5], PointBox[{{51}}]}, InsetBox[
+          StyleBox["0",
+           StripOnInput->False,
+           LineColor->RGBColor[0.5, 0, 0.5],
+           FrontFaceColor->RGBColor[0.5, 0, 0.5],
+           BackFaceColor->RGBColor[0.5, 0, 0.5],
+           GraphicsColor->RGBColor[0.5, 0, 0.5],
+           FontColor->RGBColor[0.5, 0, 0.5]], 
+          Offset[{2, 2}, {0.2770833333333333, 0.33125}], ImageScaled[{0, 0}],
+          BaseStyle->"Graphics"]}, {
+         {RGBColor[0.5, 0, 0.5], PointBox[{{52}}]}, InsetBox[
+          StyleBox["1",
+           StripOnInput->False,
+           LineColor->RGBColor[0.5, 0, 0.5],
+           FrontFaceColor->RGBColor[0.5, 0, 0.5],
+           BackFaceColor->RGBColor[0.5, 0, 0.5],
+           GraphicsColor->RGBColor[0.5, 0, 0.5],
+           FontColor->RGBColor[0.5, 0, 0.5]], 
+          Offset[{2, 2}, {0.2770833333333333, 0.6854166666666667}], 
+          ImageScaled[{0, 0}],
+          BaseStyle->"Graphics"]}, {
+         {RGBColor[0.5, 0, 0.5], PointBox[{{53}}]}, InsetBox[
+          StyleBox["2",
+           StripOnInput->False,
+           LineColor->RGBColor[0.5, 0, 0.5],
+           FrontFaceColor->RGBColor[0.5, 0, 0.5],
+           BackFaceColor->RGBColor[0.5, 0, 0.5],
+           GraphicsColor->RGBColor[0.5, 0, 0.5],
+           FontColor->RGBColor[0.5, 0, 0.5]], 
+          Offset[{2, 2}, {0.029166666666666664`, 0.6499999999999999}], 
+          ImageScaled[{0, 0}],
+          BaseStyle->"Graphics"]}, {
+         {RGBColor[0.5, 0, 0.5], PointBox[{{54}}]}, InsetBox[
+          StyleBox["0",
+           StripOnInput->False,
+           LineColor->RGBColor[0.5, 0, 0.5],
+           FrontFaceColor->RGBColor[0.5, 0, 0.5],
+           BackFaceColor->RGBColor[0.5, 0, 0.5],
+           GraphicsColor->RGBColor[0.5, 0, 0.5],
+           FontColor->RGBColor[0.5, 0, 0.5]], 
+          Offset[{2, 2}, {0.7229166666666667, 0.6854166666666667}], 
+          ImageScaled[{0, 0}],
+          BaseStyle->"Graphics"]}, {
+         {RGBColor[0.5, 0, 0.5], PointBox[{{55}}]}, InsetBox[
+          StyleBox["1",
+           StripOnInput->False,
+           LineColor->RGBColor[0.5, 0, 0.5],
+           FrontFaceColor->RGBColor[0.5, 0, 0.5],
+           BackFaceColor->RGBColor[0.5, 0, 0.5],
+           GraphicsColor->RGBColor[0.5, 0, 0.5],
+           FontColor->RGBColor[0.5, 0, 0.5]], 
+          Offset[{2, 2}, {0.7229166666666667, 0.33125}], ImageScaled[{0, 0}],
+          BaseStyle->"Graphics"]}, {
+         {RGBColor[0.5, 0, 0.5], PointBox[{{56}}]}, InsetBox[
+          StyleBox["2",
+           StripOnInput->False,
+           LineColor->RGBColor[0.5, 0, 0.5],
+           FrontFaceColor->RGBColor[0.5, 0, 0.5],
+           BackFaceColor->RGBColor[0.5, 0, 0.5],
+           GraphicsColor->RGBColor[0.5, 0, 0.5],
+           FontColor->RGBColor[0.5, 0, 0.5]], 
+          Offset[{2, 2}, {0.9708333333333333, 0.6499999999999999}], 
+          ImageScaled[{0, 0}],
+          BaseStyle->"Graphics"]}, {
+         {RGBColor[0.5, 0, 0.5], PointBox[{{57}}]}, InsetBox[
+          StyleBox["0",
+           StripOnInput->False,
+           LineColor->RGBColor[0.5, 0, 0.5],
+           FrontFaceColor->RGBColor[0.5, 0, 0.5],
+           BackFaceColor->RGBColor[0.5, 0, 0.5],
+           GraphicsColor->RGBColor[0.5, 0, 0.5],
+           FontColor->RGBColor[0.5, 0, 0.5]], 
+          Offset[{2, 2}, {0.7208333333333332, 0.7375}], ImageScaled[{0, 0}],
+          BaseStyle->"Graphics"]}, {
+         {RGBColor[0.5, 0, 0.5], PointBox[{{58}}]}, InsetBox[
+          StyleBox["1",
+           StripOnInput->False,
+           LineColor->RGBColor[0.5, 0, 0.5],
+           FrontFaceColor->RGBColor[0.5, 0, 0.5],
+           BackFaceColor->RGBColor[0.5, 0, 0.5],
+           GraphicsColor->RGBColor[0.5, 0, 0.5],
+           FontColor->RGBColor[0.5, 0, 0.5]], 
+          Offset[{2, 2}, {0.96875, 0.9854166666666667}], ImageScaled[{0, 0}],
+          BaseStyle->"Graphics"]}, {
+         {RGBColor[0.5, 0, 0.5], PointBox[{{59}}]}, InsetBox[
+          StyleBox["2",
+           StripOnInput->False,
+           LineColor->RGBColor[0.5, 0, 0.5],
+           FrontFaceColor->RGBColor[0.5, 0, 0.5],
+           BackFaceColor->RGBColor[0.5, 0, 0.5],
+           GraphicsColor->RGBColor[0.5, 0, 0.5],
+           FontColor->RGBColor[0.5, 0, 0.5]], 
+          Offset[{2, 2}, {0.6854166666666667, 0.9854166666666667}], 
+          ImageScaled[{0, 0}],
+          BaseStyle->"Graphics"]}, {
+         {RGBColor[0.5, 0, 0.5], PointBox[{{60}}]}, InsetBox[
+          StyleBox["0",
+           StripOnInput->False,
+           LineColor->RGBColor[0.5, 0, 0.5],
+           FrontFaceColor->RGBColor[0.5, 0, 0.5],
+           BackFaceColor->RGBColor[0.5, 0, 0.5],
+           GraphicsColor->RGBColor[0.5, 0, 0.5],
+           FontColor->RGBColor[0.5, 0, 0.5]], 
+          Offset[{2, 2}, {0.7374999999999999, 0.7208333333333333}], 
+          ImageScaled[{0, 0}],
+          BaseStyle->"Graphics"]}, {
+         {RGBColor[0.5, 0, 0.5], PointBox[{{61}}]}, InsetBox[
+          StyleBox["1",
+           StripOnInput->False,
+           LineColor->RGBColor[0.5, 0, 0.5],
+           FrontFaceColor->RGBColor[0.5, 0, 0.5],
+           BackFaceColor->RGBColor[0.5, 0, 0.5],
+           GraphicsColor->RGBColor[0.5, 0, 0.5],
+           FontColor->RGBColor[0.5, 0, 0.5]], 
+          Offset[{2, 2}, {0.9854166666666666, 0.6854166666666667}], 
+          ImageScaled[{0, 0}],
+          BaseStyle->"Graphics"]}, {
+         {RGBColor[0.5, 0, 0.5], PointBox[{{62}}]}, InsetBox[
+          StyleBox["2",
+           StripOnInput->False,
+           LineColor->RGBColor[0.5, 0, 0.5],
+           FrontFaceColor->RGBColor[0.5, 0, 0.5],
+           BackFaceColor->RGBColor[0.5, 0, 0.5],
+           GraphicsColor->RGBColor[0.5, 0, 0.5],
+           FontColor->RGBColor[0.5, 0, 0.5]], 
+          Offset[{2, 2}, {0.9854166666666666, 0.96875}], ImageScaled[{0, 0}],
+          BaseStyle->"Graphics"]}, {
+         {RGBColor[0.5, 0, 0.5], PointBox[{{63}}]}, InsetBox[
+          StyleBox["0",
+           StripOnInput->False,
+           LineColor->RGBColor[0.5, 0, 0.5],
+           FrontFaceColor->RGBColor[0.5, 0, 0.5],
+           BackFaceColor->RGBColor[0.5, 0, 0.5],
+           GraphicsColor->RGBColor[0.5, 0, 0.5],
+           FontColor->RGBColor[0.5, 0, 0.5]], 
+          Offset[{2, 2}, {0.36874999999999997`, 0.9854166666666667}], 
+          ImageScaled[{0, 0}],
+          BaseStyle->"Graphics"]}, {
+         {RGBColor[0.5, 0, 0.5], PointBox[{{64}}]}, InsetBox[
+          StyleBox["1",
+           StripOnInput->False,
+           LineColor->RGBColor[0.5, 0, 0.5],
+           FrontFaceColor->RGBColor[0.5, 0, 0.5],
+           BackFaceColor->RGBColor[0.5, 0, 0.5],
+           GraphicsColor->RGBColor[0.5, 0, 0.5],
+           FontColor->RGBColor[0.5, 0, 0.5]], 
+          Offset[{2, 2}, {0.6874999999999999, 0.7375}], ImageScaled[{0, 0}],
+          BaseStyle->"Graphics"]}, {
+         {RGBColor[0.5, 0, 0.5], PointBox[{{65}}]}, InsetBox[
+          StyleBox["2",
+           StripOnInput->False,
+           LineColor->RGBColor[0.5, 0, 0.5],
+           FrontFaceColor->RGBColor[0.5, 0, 0.5],
+           BackFaceColor->RGBColor[0.5, 0, 0.5],
+           GraphicsColor->RGBColor[0.5, 0, 0.5],
+           FontColor->RGBColor[0.5, 0, 0.5]], 
+          Offset[{2, 2}, {0.6520833333333333, 0.9854166666666667}], 
+          ImageScaled[{0, 0}],
+          BaseStyle->"Graphics"]}, {
+         {RGBColor[0.5, 0, 0.5], PointBox[{{66}}]}, InsetBox[
+          StyleBox["0",
+           StripOnInput->False,
+           LineColor->RGBColor[0.5, 0, 0.5],
+           FrontFaceColor->RGBColor[0.5, 0, 0.5],
+           BackFaceColor->RGBColor[0.5, 0, 0.5],
+           GraphicsColor->RGBColor[0.5, 0, 0.5],
+           FontColor->RGBColor[0.5, 0, 0.5]], 
+          Offset[{2, 2}, {0.32291666666666663`, 0.3020833333333333}], 
+          ImageScaled[{0, 0}],
+          BaseStyle->"Graphics"]}, {
+         {RGBColor[0.5, 0, 0.5], PointBox[{{67}}]}, InsetBox[
+          StyleBox["1",
+           StripOnInput->False,
+           LineColor->RGBColor[0.5, 0, 0.5],
+           FrontFaceColor->RGBColor[0.5, 0, 0.5],
+           BackFaceColor->RGBColor[0.5, 0, 0.5],
+           GraphicsColor->RGBColor[0.5, 0, 0.5],
+           FontColor->RGBColor[0.5, 0, 0.5]], 
+          Offset[{2, 2}, {0.6770833333333334, 0.3020833333333333}], 
+          ImageScaled[{0, 0}],
+          BaseStyle->"Graphics"]}, {
+         {RGBColor[0.5, 0, 0.5], PointBox[{{68}}]}, InsetBox[
+          StyleBox["2",
+           StripOnInput->False,
+           LineColor->RGBColor[0.5, 0, 0.5],
+           FrontFaceColor->RGBColor[0.5, 0, 0.5],
+           BackFaceColor->RGBColor[0.5, 0, 0.5],
+           GraphicsColor->RGBColor[0.5, 0, 0.5],
+           FontColor->RGBColor[0.5, 0, 0.5]], 
+          Offset[{2, 2}, {0.5, 0.4791666666666667}], ImageScaled[{0, 0}],
+          BaseStyle->"Graphics"]}, {
+         {RGBColor[0.5, 0, 0.5], PointBox[{{69}}]}, InsetBox[
+          StyleBox["0",
+           StripOnInput->False,
+           LineColor->RGBColor[0.5, 0, 0.5],
+           FrontFaceColor->RGBColor[0.5, 0, 0.5],
+           BackFaceColor->RGBColor[0.5, 0, 0.5],
+           GraphicsColor->RGBColor[0.5, 0, 0.5],
+           FontColor->RGBColor[0.5, 0, 0.5]], 
+          Offset[{2, 2}, {0.6979166666666667, 0.32291666666666663`}], 
+          ImageScaled[{0, 0}],
+          BaseStyle->"Graphics"]}, {
+         {RGBColor[0.5, 0, 0.5], PointBox[{{70}}]}, InsetBox[
+          StyleBox["1",
+           StripOnInput->False,
+           LineColor->RGBColor[0.5, 0, 0.5],
+           FrontFaceColor->RGBColor[0.5, 0, 0.5],
+           BackFaceColor->RGBColor[0.5, 0, 0.5],
+           GraphicsColor->RGBColor[0.5, 0, 0.5],
+           FontColor->RGBColor[0.5, 0, 0.5]], 
+          Offset[{2, 2}, {0.6979166666666666, 0.6770833333333334}], 
+          ImageScaled[{0, 0}],
+          BaseStyle->"Graphics"]}, {
+         {RGBColor[0.5, 0, 0.5], PointBox[{{71}}]}, InsetBox[
+          StyleBox["2",
+           StripOnInput->False,
+           LineColor->RGBColor[0.5, 0, 0.5],
+           FrontFaceColor->RGBColor[0.5, 0, 0.5],
+           BackFaceColor->RGBColor[0.5, 0, 0.5],
+           GraphicsColor->RGBColor[0.5, 0, 0.5],
+           FontColor->RGBColor[0.5, 0, 0.5]], 
+          Offset[{2, 2}, {0.5208333333333334, 0.5}], ImageScaled[{0, 0}],
+          BaseStyle->"Graphics"]}, {
+         {RGBColor[0.5, 0, 0.5], PointBox[{{72}}]}, InsetBox[
+          StyleBox["0",
+           StripOnInput->False,
+           LineColor->RGBColor[0.5, 0, 0.5],
+           FrontFaceColor->RGBColor[0.5, 0, 0.5],
+           BackFaceColor->RGBColor[0.5, 0, 0.5],
+           GraphicsColor->RGBColor[0.5, 0, 0.5],
+           FontColor->RGBColor[0.5, 0, 0.5]], 
+          Offset[{2, 2}, {0.014583333333333332`, 0.34791666666666665`}], 
+          ImageScaled[{0, 0}],
+          BaseStyle->"Graphics"]}, {
+         {RGBColor[0.5, 0, 0.5], PointBox[{{73}}]}, InsetBox[
+          StyleBox["1",
+           StripOnInput->False,
+           LineColor->RGBColor[0.5, 0, 0.5],
+           FrontFaceColor->RGBColor[0.5, 0, 0.5],
+           BackFaceColor->RGBColor[0.5, 0, 0.5],
+           GraphicsColor->RGBColor[0.5, 0, 0.5],
+           FontColor->RGBColor[0.5, 0, 0.5]], 
+          Offset[{2, 2}, {0.26249999999999996`, 0.31249999999999994`}], 
+          ImageScaled[{0, 0}],
+          BaseStyle->"Graphics"]}, {
+         {RGBColor[0.5, 0, 0.5], PointBox[{{74}}]}, InsetBox[
+          StyleBox["2",
+           StripOnInput->False,
+           LineColor->RGBColor[0.5, 0, 0.5],
+           FrontFaceColor->RGBColor[0.5, 0, 0.5],
+           BackFaceColor->RGBColor[0.5, 0, 0.5],
+           GraphicsColor->RGBColor[0.5, 0, 0.5],
+           FontColor->RGBColor[0.5, 0, 0.5]], 
+          Offset[{2, 2}, {0.014583333333333332`, 0.63125}], ImageScaled[{0, 0}],
+          BaseStyle->"Graphics"]}, {
+         {RGBColor[0.5, 0, 0.5], PointBox[{{75}}]}, InsetBox[
+          StyleBox["0",
+           StripOnInput->False,
+           LineColor->RGBColor[0.5, 0, 0.5],
+           FrontFaceColor->RGBColor[0.5, 0, 0.5],
+           BackFaceColor->RGBColor[0.5, 0, 0.5],
+           GraphicsColor->RGBColor[0.5, 0, 0.5],
+           FontColor->RGBColor[0.5, 0, 0.5]], 
+          Offset[{2, 2}, {0.9854166666666667, 0.63125}], ImageScaled[{0, 0}],
+          BaseStyle->"Graphics"]}, {
+         {RGBColor[0.5, 0, 0.5], PointBox[{{76}}]}, InsetBox[
+          StyleBox["1",
+           StripOnInput->False,
+           LineColor->RGBColor[0.5, 0, 0.5],
+           FrontFaceColor->RGBColor[0.5, 0, 0.5],
+           BackFaceColor->RGBColor[0.5, 0, 0.5],
+           GraphicsColor->RGBColor[0.5, 0, 0.5],
+           FontColor->RGBColor[0.5, 0, 0.5]], 
+          Offset[{2, 2}, {0.7375, 0.31249999999999994`}], ImageScaled[{0, 0}],
+          BaseStyle->"Graphics"]}, {
+         {RGBColor[0.5, 0, 0.5], PointBox[{{77}}]}, InsetBox[
+          StyleBox["2",
+           StripOnInput->False,
+           LineColor->RGBColor[0.5, 0, 0.5],
+           FrontFaceColor->RGBColor[0.5, 0, 0.5],
+           BackFaceColor->RGBColor[0.5, 0, 0.5],
+           GraphicsColor->RGBColor[0.5, 0, 0.5],
+           FontColor->RGBColor[0.5, 0, 0.5]], 
+          Offset[{2, 2}, {0.9854166666666667, 0.34791666666666665`}], 
+          ImageScaled[{0, 0}],
+          BaseStyle->"Graphics"]}, {
+         {RGBColor[0, 1, 0], PointBox[{{78}}]}, InsetBox[
+          StyleBox["0",
+           StripOnInput->False,
+           LineColor->RGBColor[0, 1, 0],
+           FrontFaceColor->RGBColor[0, 1, 0],
+           BackFaceColor->RGBColor[0, 1, 0],
+           GraphicsColor->RGBColor[0, 1, 0],
+           FontColor->RGBColor[0, 1, 0]], 
+          Offset[{2, 2}, {0.20833333333333331`, 0.09722222222222221}], 
+          ImageScaled[{0, 0}],
+          BaseStyle->"Graphics"]}, {
+         {RGBColor[0, 1, 0], PointBox[{{79}}]}, InsetBox[
+          StyleBox["1",
+           StripOnInput->False,
+           LineColor->RGBColor[0, 1, 0],
+           FrontFaceColor->RGBColor[0, 1, 0],
+           BackFaceColor->RGBColor[0, 1, 0],
+           GraphicsColor->RGBColor[0, 1, 0],
+           FontColor->RGBColor[0, 1, 0]], 
+          Offset[{2, 2}, {0.09722222222222221, 0.20833333333333331`}], 
+          ImageScaled[{0, 0}],
+          BaseStyle->"Graphics"]}, {
+         {RGBColor[0, 1, 0], PointBox[{{80}}]}, InsetBox[
+          StyleBox["2",
+           StripOnInput->False,
+           LineColor->RGBColor[0, 1, 0],
+           FrontFaceColor->RGBColor[0, 1, 0],
+           BackFaceColor->RGBColor[0, 1, 0],
+           GraphicsColor->RGBColor[0, 1, 0],
+           FontColor->RGBColor[0, 1, 0]], 
+          Offset[{2, 2}, {0.7916666666666666, 0.09722222222222221}], 
+          ImageScaled[{0, 0}],
+          BaseStyle->"Graphics"]}, {
+         {RGBColor[0, 1, 0], PointBox[{{81}}]}, InsetBox[
+          StyleBox["3",
+           StripOnInput->False,
+           LineColor->RGBColor[0, 1, 0],
+           FrontFaceColor->RGBColor[0, 1, 0],
+           BackFaceColor->RGBColor[0, 1, 0],
+           GraphicsColor->RGBColor[0, 1, 0],
+           FontColor->RGBColor[0, 1, 0]], 
+          Offset[{2, 2}, {0.09722222222222221, 0.7916666666666666}], 
+          ImageScaled[{0, 0}],
+          BaseStyle->"Graphics"]}, {
+         {RGBColor[0, 1, 0], PointBox[{{82}}]}, InsetBox[
+          StyleBox["4",
+           StripOnInput->False,
+           LineColor->RGBColor[0, 1, 0],
+           FrontFaceColor->RGBColor[0, 1, 0],
+           BackFaceColor->RGBColor[0, 1, 0],
+           GraphicsColor->RGBColor[0, 1, 0],
+           FontColor->RGBColor[0, 1, 0]], 
+          Offset[{2, 2}, {0.20833333333333331`, 0.9027777777777778}], 
+          ImageScaled[{0, 0}],
+          BaseStyle->"Graphics"]}, {
+         {RGBColor[0, 1, 0], PointBox[{{83}}]}, InsetBox[
+          StyleBox["5",
+           StripOnInput->False,
+           LineColor->RGBColor[0, 1, 0],
+           FrontFaceColor->RGBColor[0, 1, 0],
+           BackFaceColor->RGBColor[0, 1, 0],
+           GraphicsColor->RGBColor[0, 1, 0],
+           FontColor->RGBColor[0, 1, 0]], 
+          Offset[{2, 2}, {0.36111111111111105`, 0.5}], ImageScaled[{0, 0}],
+          BaseStyle->"Graphics"]}, {
+         {RGBColor[0, 1, 0], PointBox[{{84}}]}, InsetBox[
+          StyleBox["6",
+           StripOnInput->False,
+           LineColor->RGBColor[0, 1, 0],
+           FrontFaceColor->RGBColor[0, 1, 0],
+           BackFaceColor->RGBColor[0, 1, 0],
+           GraphicsColor->RGBColor[0, 1, 0],
+           FontColor->RGBColor[0, 1, 0]], 
+          Offset[{2, 2}, {0.43055555555555547`, 0.09722222222222221}], 
+          ImageScaled[{0, 0}],
+          BaseStyle->"Graphics"]}, {
+         {RGBColor[0, 1, 0], PointBox[{{85}}]}, InsetBox[
+          StyleBox["7",
+           StripOnInput->False,
+           LineColor->RGBColor[0, 1, 0],
+           FrontFaceColor->RGBColor[0, 1, 0],
+           BackFaceColor->RGBColor[0, 1, 0],
+           GraphicsColor->RGBColor[0, 1, 0],
+           FontColor->RGBColor[0, 1, 0]], 
+          Offset[{2, 2}, {0.5555555555555555, 0.19444444444444442`}], 
+          ImageScaled[{0, 0}],
+          BaseStyle->"Graphics"]}, {
+         {RGBColor[0, 1, 0], PointBox[{{86}}]}, InsetBox[
+          StyleBox["8",
+           StripOnInput->False,
+           LineColor->RGBColor[0, 1, 0],
+           FrontFaceColor->RGBColor[0, 1, 0],
+           BackFaceColor->RGBColor[0, 1, 0],
+           GraphicsColor->RGBColor[0, 1, 0],
+           FontColor->RGBColor[0, 1, 0]], 
+          Offset[{2, 2}, {0.4444444444444444, 0.8055555555555556}], 
+          ImageScaled[{0, 0}],
+          BaseStyle->"Graphics"]}, {
+         {RGBColor[0, 1, 0], PointBox[{{87}}]}, InsetBox[
+          StyleBox["9",
+           StripOnInput->False,
+           LineColor->RGBColor[0, 1, 0],
+           FrontFaceColor->RGBColor[0, 1, 0],
+           BackFaceColor->RGBColor[0, 1, 0],
+           GraphicsColor->RGBColor[0, 1, 0],
+           FontColor->RGBColor[0, 1, 0]], 
+          Offset[{2, 2}, {0.9027777777777778, 0.20833333333333331`}], 
+          ImageScaled[{0, 0}],
+          BaseStyle->"Graphics"]}, {
+         {RGBColor[0, 1, 0], PointBox[{{88}}]}, InsetBox[
+          StyleBox["10",
+           StripOnInput->False,
+           LineColor->RGBColor[0, 1, 0],
+           FrontFaceColor->RGBColor[0, 1, 0],
+           BackFaceColor->RGBColor[0, 1, 0],
+           GraphicsColor->RGBColor[0, 1, 0],
+           FontColor->RGBColor[0, 1, 0]], 
+          Offset[{2, 2}, {0.5, 0.638888888888889}], ImageScaled[{0, 0}],
+          BaseStyle->"Graphics"]}, {
+         {RGBColor[0, 1, 0], PointBox[{{89}}]}, InsetBox[
+          StyleBox["11",
+           StripOnInput->False,
+           LineColor->RGBColor[0, 1, 0],
+           FrontFaceColor->RGBColor[0, 1, 0],
+           BackFaceColor->RGBColor[0, 1, 0],
+           GraphicsColor->RGBColor[0, 1, 0],
+           FontColor->RGBColor[0, 1, 0]], 
+          Offset[{2, 2}, {0.19444444444444442`, 0.5555555555555555}], 
+          ImageScaled[{0, 0}],
+          BaseStyle->"Graphics"]}, {
+         {RGBColor[0, 1, 0], PointBox[{{90}}]}, InsetBox[
+          StyleBox["12",
+           StripOnInput->False,
+           LineColor->RGBColor[0, 1, 0],
+           FrontFaceColor->RGBColor[0, 1, 0],
+           BackFaceColor->RGBColor[0, 1, 0],
+           GraphicsColor->RGBColor[0, 1, 0],
+           FontColor->RGBColor[0, 1, 0]], 
+          Offset[{2, 2}, {0.8055555555555555, 0.5555555555555555}], 
+          ImageScaled[{0, 0}],
+          BaseStyle->"Graphics"]}, {
+         {RGBColor[0, 1, 0], PointBox[{{91}}]}, InsetBox[
+          StyleBox["13",
+           StripOnInput->False,
+           LineColor->RGBColor[0, 1, 0],
+           FrontFaceColor->RGBColor[0, 1, 0],
+           BackFaceColor->RGBColor[0, 1, 0],
+           GraphicsColor->RGBColor[0, 1, 0],
+           FontColor->RGBColor[0, 1, 0]], 
+          Offset[{2, 2}, {0.7916666666666666, 0.9027777777777778}], 
+          ImageScaled[{0, 0}],
+          BaseStyle->"Graphics"]}, {
+         {RGBColor[0, 1, 0], PointBox[{{92}}]}, InsetBox[
+          StyleBox["14",
+           StripOnInput->False,
+           LineColor->RGBColor[0, 1, 0],
+           FrontFaceColor->RGBColor[0, 1, 0],
+           BackFaceColor->RGBColor[0, 1, 0],
+           GraphicsColor->RGBColor[0, 1, 0],
+           FontColor->RGBColor[0, 1, 0]], 
+          Offset[{2, 2}, {0.9027777777777777, 0.7916666666666666}], 
+          ImageScaled[{0, 0}],
+          BaseStyle->"Graphics"]}, {
+         {RGBColor[0, 1, 0], PointBox[{{93}}]}, InsetBox[
+          StyleBox["15",
+           StripOnInput->False,
+           LineColor->RGBColor[0, 1, 0],
+           FrontFaceColor->RGBColor[0, 1, 0],
+           BackFaceColor->RGBColor[0, 1, 0],
+           GraphicsColor->RGBColor[0, 1, 0],
+           FontColor->RGBColor[0, 1, 0]], 
+          Offset[{2, 2}, {0.5694444444444444, 0.9027777777777778}], 
+          ImageScaled[{0, 0}],
+          BaseStyle->"Graphics"]}, {
+         {RGBColor[0, 1, 0], PointBox[{{94}}]}, InsetBox[
+          StyleBox["16",
+           StripOnInput->False,
+           LineColor->RGBColor[0, 1, 0],
+           FrontFaceColor->RGBColor[0, 1, 0],
+           BackFaceColor->RGBColor[0, 1, 0],
+           GraphicsColor->RGBColor[0, 1, 0],
+           FontColor->RGBColor[0, 1, 0]], 
+          Offset[{2, 2}, {0.5, 0.36111111111111105`}], ImageScaled[{0, 0}],
+          BaseStyle->"Graphics"]}, {
+         {RGBColor[0, 1, 0], PointBox[{{95}}]}, InsetBox[
+          StyleBox["17",
+           StripOnInput->False,
+           LineColor->RGBColor[0, 1, 0],
+           FrontFaceColor->RGBColor[0, 1, 0],
+           BackFaceColor->RGBColor[0, 1, 0],
+           GraphicsColor->RGBColor[0, 1, 0],
+           FontColor->RGBColor[0, 1, 0]], 
+          Offset[{2, 2}, {0.6388888888888888, 0.5}], ImageScaled[{0, 0}],
+          BaseStyle->"Graphics"]}, {
+         {RGBColor[0, 1, 0], PointBox[{{96}}]}, InsetBox[
+          StyleBox["18",
+           StripOnInput->False,
+           LineColor->RGBColor[0, 1, 0],
+           FrontFaceColor->RGBColor[0, 1, 0],
+           BackFaceColor->RGBColor[0, 1, 0],
+           GraphicsColor->RGBColor[0, 1, 0],
+           FontColor->RGBColor[0, 1, 0]], 
+          Offset[{2, 2}, {0.09722222222222221, 0.43055555555555547`}], 
+          ImageScaled[{0, 0}],
+          BaseStyle->"Graphics"]}, {
+         {RGBColor[0, 1, 0], PointBox[{{97}}]}, InsetBox[
+          StyleBox["19",
+           StripOnInput->False,
+           LineColor->RGBColor[0, 1, 0],
+           FrontFaceColor->RGBColor[0, 1, 0],
+           BackFaceColor->RGBColor[0, 1, 0],
+           GraphicsColor->RGBColor[0, 1, 0],
+           FontColor->RGBColor[0, 1, 0]], 
+          Offset[{2, 2}, {0.9027777777777778, 0.43055555555555547`}], 
+          ImageScaled[{0, 0}],
+          BaseStyle->"Graphics"]}}}],
+     MouseAppearanceTag["LinkHand"]],
+    AllowKernelInitialization->False],
+   "MeshGraphics",
+   AutoDelete->True,
+   Editable->False,
+   Selectable->False],
+  DefaultBaseStyle->{
+   "Graphics", FrontEnd`GraphicsHighlightColor -> 
+    Hue[0.1, 1, 0.7]}]], "Output",
+ CellChangeTimes->{{3.6868250588617926`*^9, 3.686825072638915*^9}, 
+   3.6868251224783454`*^9, 3.686828980186574*^9, 3.686847149893634*^9, 
+   3.6868473667056384`*^9, 3.6868476114393616`*^9}]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["Export", "Subsection",
+ CellChangeTimes->{{3.6840454884553785`*^9, 3.6840454902245455`*^9}}],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"(*", " ", 
+   RowBox[{"set", " ", "your", " ", "home", " ", "directory"}], " ", "*)"}], 
+  "\[IndentingNewLine]", 
+  RowBox[{
+   RowBox[{
+    RowBox[{"SetDirectory", "@", 
+     RowBox[{"NotebookDirectory", "[", "]"}]}], ";"}], "\[IndentingNewLine]", 
+   RowBox[{"export", "@", "\[ScriptCapitalT]"}]}]}]], "Input",
+ CellChangeTimes->{{3.6845077664506836`*^9, 3.684507778149158*^9}, {
+   3.6845980975885434`*^9, 3.6845981001026793`*^9}, 3.6868222658097267`*^9, 
+   3.686829152970972*^9}],
+
+Cell[BoxData["\<\"mesh.ntn\"\>"], "Output",
+ CellChangeTimes->{{3.6868250592245393`*^9, 3.6868250733863993`*^9}, 
+   3.6868251229291353`*^9, 3.6868289809025583`*^9, {3.6868291487496347`*^9, 
+   3.686829153935139*^9}, 3.686829245320875*^9, {3.6868293176567764`*^9, 
+   3.686829344837322*^9}, 3.6868293881711826`*^9, 3.6868471501244287`*^9, 
+   3.6868473669332447`*^9, 3.686847611873897*^9}]
+}, Open  ]]
+}, Open  ]]
+}, Open  ]]
+}, Open  ]]
+},
+WindowSize->{1350, 685},
+WindowMargins->{{-8, Automatic}, {Automatic, 0}},
+Magnification:>1.1 Inherited,
+FrontEndVersion->"10.4 for Microsoft Windows (64-bit) (February 25, 2016)",
+StyleDefinitions->"Default.nb"
+]
+(* End of Notebook Content *)
+
+(* Internal cache information *)
+(*CellTagsOutline
+CellTagsIndex->{}
+*)
+(*CellTagsIndex
+CellTagsIndex->{}
+*)
+(*NotebookFileOutline
+Notebook[{
+Cell[558, 20, 394, 6, 32, "Input"],
+Cell[CellGroupData[{
+Cell[977, 30, 144, 2, 99, "Title"],
+Cell[1124, 34, 845, 16, 55, "Text"],
+Cell[CellGroupData[{
+Cell[1994, 54, 317, 4, 69, "Section"],
+Cell[2314, 60, 2027, 51, 253, "Input"],
+Cell[CellGroupData[{
+Cell[4366, 115, 140, 2, 32, "Input"],
+Cell[4509, 119, 1248, 30, 411, "Output"]
+}, Open  ]]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[5806, 155, 365, 4, 69, "Section"],
+Cell[6174, 161, 735, 12, 32, "Input"],
+Cell[6912, 175, 1194, 18, 32, "Input"],
+Cell[CellGroupData[{
+Cell[8131, 197, 645, 12, 32, "Input"],
+Cell[8779, 211, 59333, 1396, 414, "Output"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[68149, 1612, 98, 1, 47, "Subsection"],
+Cell[CellGroupData[{
+Cell[68272, 1617, 520, 12, 73, "Input"],
+Cell[68795, 1631, 389, 5, 90, "Output"]
+}, Open  ]]
+}, Open  ]]
+}, Open  ]]
+}, Open  ]]
+}
+]
+*)
+

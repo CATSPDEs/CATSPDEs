@@ -1,7 +1,7 @@
 #include <stdexcept>
 #include "SingletonLogger.hpp"
 
-SingletonLogger::SingletonLogger() {
+SingletonLogger::SingletonLogger() : mute(false) {
 	rlutil::saveDefaultColor();
 	rlutil::setBackgroundColor(0);
 	//for (int i = 0; i < 16; i++) {
@@ -37,6 +37,7 @@ SingletonLogger& SingletonLogger::instance() {
 }
 
 void SingletonLogger::beg(std::string const & message) {
+	if (mute) return;
 	rlutil::setColor(9);
 	std::cout  << tab() << "[beg] ";
 	rlutil::setColor(15);
@@ -46,6 +47,7 @@ void SingletonLogger::beg(std::string const & message) {
 }
 
 void SingletonLogger::end() {
+	if (mute) return;
 	if (_processes.size() == 0) {
 		wrn("there is nothing to end");
 		return;
@@ -74,6 +76,7 @@ void SingletonLogger::err(std::string const & message) const {
 }
 
 void SingletonLogger::log(std::string const & message) const {
+	if (mute) return;
 	rlutil::setColor(11);
 	std::cout << tab() << "[log] ";
 	rlutil::setColor(7);
@@ -81,6 +84,7 @@ void SingletonLogger::log(std::string const & message) const {
 }
 
 void SingletonLogger::log() {
+	if (mute) return;
 	rlutil::setColor(11);
 	std::cout << tab() << "[log] ";
 	rlutil::setColor(7);
@@ -88,13 +92,6 @@ void SingletonLogger::log() {
 	// clear buf
 	buf.str(std::string());
 	buf.clear();
-}
-
-void SingletonLogger::inp(std::string const & message) const {
-	rlutil::setColor(10);
-	std::cout << tab() << "[inp] ";
-	rlutil::setColor(7);
-	std::cout << _format(message) << ":\n" << tab() << "      ";
 }
 
 bool SingletonLogger::yes(std::string const & message) const {
