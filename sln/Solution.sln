@@ -15,8 +15,6 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Wave Interference", "Wave I
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "CATSPDEs Kitty Logo Problem", "CATSPDEs Kitty Logo Problem\CATSPDEs Kitty Logo Problem.vcxproj", "{AD10CA30-BC62-4E9F-8C2D-9FE863E99FD2}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "FEM for Stokes System", "FEM for Stokes System\FEM for Stokes System.vcxproj", "{A2C59D33-FB4A-4079-BE20-D933AD767D8C}"
-EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Red–Green Refinement Timing", "Red–Green Refinement Timing\Red–Green Refinement Timing.vcxproj", "{A6B773B2-63EE-4155-89BC-60F78E850CEA}"
 EndProject
 Project("{6989167D-11E4-40FE-8C1A-2192A86A7E90}") = "Harwell–Boeing IO (FORTRAN Static Library)", "Harwell–Boeing IO (FORTRAN Static Library)\Harwell–Boeing IO (FORTRAN Static Library).vfproj", "{9A459118-4163-4432-9982-B53EAD506FC7}"
@@ -24,6 +22,8 @@ EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Δ P1 CR — Δ P0 L Interpolant Visualization", "Δ P1 CR — Δ P0 L Interpolant Visualization\Δ P1 CR — Δ P0 L Interpolant Visualization.vcxproj", "{ECCBCEA2-5CEA-4DFC-A3F4-486188EC5CC7}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Projection and Restriction Operators for Stokes Problem", "Projection and Restriction Operators for Stokes Problem\Projection and Restriction Operators for Stokes Problem.vcxproj", "{CAA249FB-0C6C-451B-B078-555D7CBE75FC}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "mFEM for Oseen Problem", "mFEM for Oseen Problem\mFEM for Oseen Problem.vcxproj", "{28152AD1-265A-42AF-919C-C5E3E8D45B94}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -81,14 +81,6 @@ Global
 		{AD10CA30-BC62-4E9F-8C2D-9FE863E99FD2}.Release|x64.Build.0 = Release|x64
 		{AD10CA30-BC62-4E9F-8C2D-9FE863E99FD2}.Release|x86.ActiveCfg = Release|Win32
 		{AD10CA30-BC62-4E9F-8C2D-9FE863E99FD2}.Release|x86.Build.0 = Release|Win32
-		{A2C59D33-FB4A-4079-BE20-D933AD767D8C}.Debug|x64.ActiveCfg = Debug|x64
-		{A2C59D33-FB4A-4079-BE20-D933AD767D8C}.Debug|x64.Build.0 = Debug|x64
-		{A2C59D33-FB4A-4079-BE20-D933AD767D8C}.Debug|x86.ActiveCfg = Debug|Win32
-		{A2C59D33-FB4A-4079-BE20-D933AD767D8C}.Debug|x86.Build.0 = Debug|Win32
-		{A2C59D33-FB4A-4079-BE20-D933AD767D8C}.Release|x64.ActiveCfg = Release|x64
-		{A2C59D33-FB4A-4079-BE20-D933AD767D8C}.Release|x64.Build.0 = Release|x64
-		{A2C59D33-FB4A-4079-BE20-D933AD767D8C}.Release|x86.ActiveCfg = Release|Win32
-		{A2C59D33-FB4A-4079-BE20-D933AD767D8C}.Release|x86.Build.0 = Release|Win32
 		{A6B773B2-63EE-4155-89BC-60F78E850CEA}.Debug|x64.ActiveCfg = Debug|x64
 		{A6B773B2-63EE-4155-89BC-60F78E850CEA}.Debug|x64.Build.0 = Debug|x64
 		{A6B773B2-63EE-4155-89BC-60F78E850CEA}.Debug|x86.ActiveCfg = Debug|Win32
@@ -121,6 +113,14 @@ Global
 		{CAA249FB-0C6C-451B-B078-555D7CBE75FC}.Release|x64.Build.0 = Release|x64
 		{CAA249FB-0C6C-451B-B078-555D7CBE75FC}.Release|x86.ActiveCfg = Release|Win32
 		{CAA249FB-0C6C-451B-B078-555D7CBE75FC}.Release|x86.Build.0 = Release|Win32
+		{28152AD1-265A-42AF-919C-C5E3E8D45B94}.Debug|x64.ActiveCfg = Debug|x64
+		{28152AD1-265A-42AF-919C-C5E3E8D45B94}.Debug|x64.Build.0 = Debug|x64
+		{28152AD1-265A-42AF-919C-C5E3E8D45B94}.Debug|x86.ActiveCfg = Debug|Win32
+		{28152AD1-265A-42AF-919C-C5E3E8D45B94}.Debug|x86.Build.0 = Debug|Win32
+		{28152AD1-265A-42AF-919C-C5E3E8D45B94}.Release|x64.ActiveCfg = Release|x64
+		{28152AD1-265A-42AF-919C-C5E3E8D45B94}.Release|x64.Build.0 = Release|x64
+		{28152AD1-265A-42AF-919C-C5E3E8D45B94}.Release|x86.ActiveCfg = Release|Win32
+		{28152AD1-265A-42AF-919C-C5E3E8D45B94}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -21,7 +21,7 @@ int main() {
 			);
 			Triangulation Omega;
 			Omega.AbstractMesh::import("mesh.ntn");
-			DirichletCondition2D DirichletBC(
+			DirichletScalarCondition2D DirichletBC(
 				[](Node2D const & p) { return 1.; }
 			);
 		logger.end();

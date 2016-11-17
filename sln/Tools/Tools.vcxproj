@@ -150,7 +150,7 @@
     <ClInclude Include="BandMatrix.hpp" />
     <ClInclude Include="BoundaryConditions.hpp" />
     <ClInclude Include="CSRMatrix.hpp" />
-    <ClInclude Include="Function.hpp" />
+    <ClInclude Include="Mapping.hpp" />
     <ClInclude Include="Parameters.hpp" />
     <ClInclude Include="Predicate.hpp" />
     <ClInclude Include="rlutil.h" />

@@ -63,9 +63,6 @@
     <ClInclude Include="Node.hpp">
       <Filter>Common</Filter>
     </ClInclude>
-    <ClInclude Include="Function.hpp">
-      <Filter>Common</Filter>
-    </ClInclude>
     <ClInclude Include="AdjacencyList.hpp">
       <Filter>Common</Filter>
     </ClInclude>
@@ -164,6 +161,9 @@
     </ClInclude>
     <ClInclude Include="DenseSquareMatrix.hpp">
       <Filter>Matrices\Implementations</Filter>
+    </ClInclude>
+    <ClInclude Include="Mapping.hpp">
+      <Filter>Common</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

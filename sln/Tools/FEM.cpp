@@ -14,7 +14,7 @@ namespace FEM {
 		> FEM::DivGrad::linearLagrangeAssembler(
 			DiffusionReactionEqn2D const & PDE, 
 			Triangulation const & Omega,
-			DirichletCondition2D const & DirichletBC
+			DirichletScalarCondition2D const & DirichletBC
 		) {
 			// data structures for final linear system A.xi = b:
 			SymmetricCSlCMatrix<double> A; // system matrix
@@ -143,7 +143,7 @@ namespace FEM {
 				std::vector<double> // rhs vector
 			> linearLagrangeSetter(
 				DiffusionReactionEqn2D const & PDE,
-				DirichletCondition2D const & DirichletBC,
+				DirichletScalarCondition2D const & DirichletBC,
 				Triangulation& Omega, // initial mesh
 				Index numbOfMeshLevels
 			) {

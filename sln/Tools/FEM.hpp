@@ -44,7 +44,7 @@ namespace FEM {
 		> linearLagrangeAssembler(
 			DiffusionReactionEqn2D const &, // (1) PDE,
 			Triangulation const &, // (2) discretized domain (mesh),
-			DirichletCondition2D const & // (3) and BCs that connects (1) and (2)
+			DirichletScalarCondition2D const & // (3) and BCs that connects (1) and (2)
 		);
 
 		namespace Multigrid {
@@ -61,7 +61,7 @@ namespace FEM {
 				std::vector<double> // rhs vector
 			> linearLagrangeSetter(
 				DiffusionReactionEqn2D const & PDE,
-				DirichletCondition2D const & DirichletBC,
+				DirichletScalarCondition2D const & DirichletBC,
 				Triangulation&, // initial coarse mesh
 				Index // numb of mesh levels
 			);
@@ -75,7 +75,17 @@ namespace FEM {
 		}
 
 	}
-	namespace Stokes {
+	
+	namespace Mixed {
+		
+		//boost::tuple<
+		//	SymmetricCSlCMatrix<double>, // assembled system matrix and
+		//	std::vector<double> // rhs vector
+		//> linearLagrangeAssembler(
+		//	OseenProblem2D const &, // (1) PDE,
+		//	Triangulation const &, // (2) discretized domain (mesh),
+		//	DirichletScalarCondition2D const & // (3) and BCs that connects (1) and (2)
+		//);
 
 	}
 

@@ -2,6 +2,8 @@
 #include <functional>
 #include "Node.hpp"
 
+// D := node dimension
+
 template <LocalIndex D>
 using Predicate = std::function<bool(Node<D> const &)>;
 

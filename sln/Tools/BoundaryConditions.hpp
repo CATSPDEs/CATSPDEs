@@ -1,23 +1,21 @@
 ﻿#pragma once
-//#include <stdexcept>
-//#include <vector>
-//#include <memory>
-#include "Function.hpp"
+#include "Mapping.hpp"
 #include "Predicate.hpp"
 
-template <LocalIndex D>
+template <LocalIndex N, LocalIndex M>
 class DirichletCondition {
-	Function<D> _v;
-	Predicate<D> _p;
+	Mapping<N, M> _v;
+	Predicate<N>  _p;
 public:
-	explicit DirichletCondition(Function<D> const & v = zeroFunc<D>, Predicate<D> const & p = constTrue<D>)
+	explicit DirichletCondition(Mapping<N, M> const & v = constZero<N, M>, Predicate<N> const & p = constTrue<N>)
 		: _v(v)
 		, _p(p) {}
-	double operator()(Node<D> const & p) const { return _v(p); }
-	bool shouldBeEnforcedAt(Node<D> const & p) const { return _p(p); }
+	auto operator()        (Node<N> const & p) const { return _v(p); }
+	bool shouldBeEnforcedAt(Node<N> const & p) const { return _p(p); }
 };
 
-using DirichletCondition2D = DirichletCondition<2>;
+using DirichletScalarCondition2D = DirichletCondition<2, 1>;
+using DirichletVectorCondition2D = DirichletCondition<2, 2>;
 
 //class AbstractBC { // boundary condition (any kind)
 //protected:

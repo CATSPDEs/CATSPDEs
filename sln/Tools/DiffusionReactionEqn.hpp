@@ -1,22 +1,22 @@
 ﻿#pragma once
-#include "Function.hpp"
+#include "Mapping.hpp"
 
 template <LocalIndex D>
 class DiffusionReactionEqn { // –∇.(a ∇u) + cu = f
-	Function<D> _a, _c, _f;
+	ScalarField<D> _a, _c, _f;
 public:
-	explicit DiffusionReactionEqn(Function<D> a = oneFunc, Function<D> c = zeroFunc, Function<D> f = zeroFunc) 
+	explicit DiffusionReactionEqn(ScalarField<D> a = constUnity<D, 1>, ScalarField<D> c = constZero<D, 1>, ScalarField<D> f = constZero<D, 1>)
 		// Laplace’s eqn by default
 		: _a(a)
 		, _c(c)
 		, _f(f) {}
 	~DiffusionReactionEqn() {}
-	Function<D> diffusionTerm() const { return _a; }
-	Function<D> reactionTerm () const { return _c; }
-	Function<D> forceTerm    () const { return _f; }
-	double diffusionTerm(Node<D> const & p) const { return _a(p); }
-	double reactionTerm (Node<D> const & p) const { return _c(p); }
-	double forceTerm    (Node<D> const & p) const { return _f(p); }
+	auto diffusionTerm() const { return _a; }
+	auto reactionTerm () const { return _c; }
+	auto forceTerm    () const { return _f; }
+	auto diffusionTerm(Node<D> const & p) const { return _a(p); }
+	auto reactionTerm (Node<D> const & p) const { return _c(p); }
+	auto forceTerm    (Node<D> const & p) const { return _f(p); }
 };
 
 using DiffusionReactionEqn2D = DiffusionReactionEqn<2>;
