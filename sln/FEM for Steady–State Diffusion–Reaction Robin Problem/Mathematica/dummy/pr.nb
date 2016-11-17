@@ -1,0 +1,308 @@
+(* Content-type: application/vnd.wolfram.mathematica *)
+
+(*** Wolfram Notebook File ***)
+(* http://www.wolfram.com/nb *)
+
+(* CreatedBy='Mathematica 10.4' *)
+
+(*CacheID: 234*)
+(* Internal cache information:
+NotebookFileLineBreakTest
+NotebookFileLineBreakTest
+NotebookDataPosition[       158,          7]
+NotebookDataLength[     11883,        300]
+NotebookOptionsPosition[     10932,        263]
+NotebookOutlinePosition[     11279,        278]
+CellTagsIndexPosition[     11236,        275]
+WindowFrame->Normal*)
+
+(* Beginning of Notebook Content *)
+Notebook[{
+Cell[BoxData[
+ RowBox[{"NotebookEvaluate", "[", 
+  "\"\<D:\\\\Documents\\\\GitHubVisualStudio\\\\CATSPDEs \
+project\\\\CATSPDEs\\\\sln\\\\Tools\\\\Mathematica\\\\triangulation.nb\>\"", 
+  "]"}]], "Input",
+ CellChangeTimes->{{3.6872519395037785`*^9, 3.6872519629537973`*^9}, {
+  3.687252024355481*^9, 3.687252063002549*^9}}],
+
+Cell[BoxData[
+ RowBox[{"NotebookEvaluate", "[", 
+  "\"\<D:\\\\Documents\\\\GitHubVisualStudio\\\\CATSPDEs \
+project\\\\CATSPDEs\\\\sln\\\\Tools\\\\Mathematica\\\\FEinterpolants.nb\>\"", 
+  "]"}]], "Input",
+ CellChangeTimes->{{3.687252076260225*^9, 3.6872520821185837`*^9}}],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"SetDirectory", "@", 
+  RowBox[{"NotebookDirectory", "[", "]"}]}]], "Input",
+ CellChangeTimes->{3.6872826016972895`*^9}],
+
+Cell[BoxData["\<\"D:\\\\Documents\\\\GitHubVisualStudio\\\\CATSPDEs project\\\
+\\CATSPDEs\\\\sln\\\\FEM for Steady\[Dash]State Diffusion\[Dash]Reaction \
+Robin Problem\\\\Mathematica\\\\dummy\"\>"], "Output",
+ CellChangeTimes->{3.6872826023602057`*^9}]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"ToCharacterCode", "[", 
+   RowBox[{"\"\<\[LongDash]\>\"", ",", "\"\<Unicode\>\""}], "]"}], 
+  RowBox[{"(*", "OK", "*)"}]}]], "Input",
+ CellChangeTimes->{{3.6872827400206757`*^9, 3.687282771866183*^9}}],
+
+Cell[BoxData[
+ RowBox[{"{", "8212", "}"}]], "Output",
+ CellChangeTimes->{{3.687282746835435*^9, 3.6872827726690016`*^9}}]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"FromCharacterCode", "[", "8212", "]"}]], "Input",
+ CellChangeTimes->{{3.6872830009966817`*^9, 3.687283002553446*^9}}],
+
+Cell[BoxData["\<\"\[LongDash]\"\>"], "Output",
+ CellChangeTimes->{3.687283003686256*^9}]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"R", "=", 
+   RowBox[{"Table", "[", 
+    RowBox[{
+     RowBox[{"Import", "[", 
+      RowBox[{
+      "\"\<D:/Documents/GitHubVisualStudio/CATSPDEs project/CATSPDEs/sln/FEM \
+for Steady\>\"", "<>", 
+       RowBox[{"FromCharacterCode", "[", 
+        RowBox[{"8212", ",", "\"\<Unicode\>\""}], "]"}], "<>", 
+       "\"\<State Diffusion\>\"", "<>", 
+       RowBox[{"FromCharacterCode", "[", 
+        RowBox[{"8212", ",", "\"\<Unicode\>\""}], "]"}], "<>", 
+       "\"\<Reaction Robin Problem/Mathematica/dummy/restrictions/\>\"", "<>", 
+       RowBox[{"ToString", "@", "i"}], "<>", "\"\<_R.rra\>\""}], "]"}], ",", 
+     RowBox[{"{", 
+      RowBox[{"i", ",", "0", ",", "3"}], "}"}]}], "]"}]}], ";"}]], "Input",
+ CellChangeTimes->{{3.687278998903167*^9, 3.6872790400063596`*^9}, {
+  3.687279220298359*^9, 3.687279241294846*^9}, {3.6872794675380397`*^9, 
+  3.6872794797833543`*^9}, {3.6872798337632113`*^9, 3.687279833914813*^9}, {
+  3.687281726413932*^9, 3.6872817265156965`*^9}, {3.687282076298397*^9, 
+  3.687282079873607*^9}, {3.6872822340717087`*^9, 3.6872822751529427`*^9}, {
+  3.6872823740679293`*^9, 3.6872824105863395`*^9}, {3.6872826832759867`*^9, 
+  3.6872827123555517`*^9}, {3.687282957428491*^9, 3.687282983651012*^9}, {
+  3.6872830240340295`*^9, 3.6872830289509563`*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  StyleBox[
+   RowBox[{"Import", "::", "nffil"}], "MessageName"], 
+  RowBox[{
+  ":", " "}], "\<\"File not found during \
+\[NoBreak]\\!\\(\\*RowBox[{\\\"Import\\\"}]\\)\[NoBreak]. \\!\\(\\*ButtonBox[\
+\\\"\[RightSkeleton]\\\", ButtonStyle->\\\"Link\\\", ButtonFrame->None, \
+ButtonData:>\\\"paclet:ref/message/Import/nffil\\\", ButtonNote -> \
+\\\"Import::nffil\\\"]\\)\"\>"}]], "Message", "MSG",
+ CellChangeTimes->{
+  3.6872820811732893`*^9, 3.6872822802594185`*^9, {3.687282375482042*^9, 
+   3.6872823990850925`*^9}, 3.687282713973149*^9, 3.687282985306671*^9, 
+   3.6872830301095495`*^9}],
+
+Cell[BoxData[
+ RowBox[{
+  StyleBox[
+   RowBox[{"Import", "::", "nffil"}], "MessageName"], 
+  RowBox[{
+  ":", " "}], "\<\"File not found during \
+\[NoBreak]\\!\\(\\*RowBox[{\\\"Import\\\"}]\\)\[NoBreak]. \\!\\(\\*ButtonBox[\
+\\\"\[RightSkeleton]\\\", ButtonStyle->\\\"Link\\\", ButtonFrame->None, \
+ButtonData:>\\\"paclet:ref/message/Import/nffil\\\", ButtonNote -> \
+\\\"Import::nffil\\\"]\\)\"\>"}]], "Message", "MSG",
+ CellChangeTimes->{
+  3.6872820811732893`*^9, 3.6872822802594185`*^9, {3.687282375482042*^9, 
+   3.6872823990850925`*^9}, 3.687282713973149*^9, 3.687282985306671*^9, 
+   3.6872830302711535`*^9}],
+
+Cell[BoxData[
+ RowBox[{
+  StyleBox[
+   RowBox[{"Import", "::", "nffil"}], "MessageName"], 
+  RowBox[{
+  ":", " "}], "\<\"File not found during \
+\[NoBreak]\\!\\(\\*RowBox[{\\\"Import\\\"}]\\)\[NoBreak]. \\!\\(\\*ButtonBox[\
+\\\"\[RightSkeleton]\\\", ButtonStyle->\\\"Link\\\", ButtonFrame->None, \
+ButtonData:>\\\"paclet:ref/message/Import/nffil\\\", ButtonNote -> \
+\\\"Import::nffil\\\"]\\)\"\>"}]], "Message", "MSG",
+ CellChangeTimes->{
+  3.6872820811732893`*^9, 3.6872822802594185`*^9, {3.687282375482042*^9, 
+   3.6872823990850925`*^9}, 3.687282713973149*^9, 3.687282985306671*^9, 
+   3.687283030432259*^9}],
+
+Cell[BoxData[
+ RowBox[{
+  StyleBox[
+   RowBox[{"General", "::", "stop"}], "MessageName"], 
+  RowBox[{
+  ":", " "}], "\<\"Further output of \
+\[NoBreak]\\!\\(\\*StyleBox[RowBox[{\\\"Import\\\", \\\"::\\\", \
+\\\"nffil\\\"}], \\\"MessageName\\\"]\\)\[NoBreak] will be suppressed during \
+this calculation. \\!\\(\\*ButtonBox[\\\"\[RightSkeleton]\\\", \
+ButtonStyle->\\\"Link\\\", ButtonFrame->None, \
+ButtonData:>\\\"paclet:ref/message/General/stop\\\", ButtonNote -> \
+\\\"General::stop\\\"]\\)\"\>"}]], "Message", "MSG",
+ CellChangeTimes->{
+  3.6872820811732893`*^9, 3.6872822802594185`*^9, {3.687282375482042*^9, 
+   3.6872823990850925`*^9}, 3.687282713973149*^9, 3.687282985306671*^9, 
+   3.687283030595868*^9}]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{
+   RowBox[{
+    RowBox[{
+     RowBox[{"MatrixPlot", "[", 
+      RowBox[{
+       RowBox[{"Transpose", "@", "#"}], ",", 
+       RowBox[{"MaxPlotPoints", "\[Rule]", "\[Infinity]"}], ",", 
+       RowBox[{"Mesh", "\[Rule]", "All"}]}], "]"}], "&"}], "/@", "R"}], "//", 
+   "GraphicsRow"}], "//", 
+  RowBox[{
+   RowBox[{"Show", "[", 
+    RowBox[{"#", ",", 
+     RowBox[{"ImageSize", "\[Rule]", "Large"}]}], "]"}], "&"}]}]], "Input",
+ CellChangeTimes->{{3.687279251371149*^9, 3.6872793999118166`*^9}, {
+   3.6872794403692083`*^9, 3.687279448191001*^9}, 3.6872795169487324`*^9, {
+   3.687281735038903*^9, 3.687281778576024*^9}}],
+
+Cell[BoxData[
+ GraphicsBox[{{}, InsetBox[
+    GraphicsBox[{RasterBox[CompressedData["
+1:eJzt2LEOwUAcx/EmJmMTu3gEg01yi8Rgwi4iMZssRonV6i08igdg6mCQGDyC
+CtYOVf3d/+7bpPmQGO6+1yvVWawmy0aSJL38TPPz9fp9PBwi4q/ub81Rf353
+s8Gluz5c3W463rbTU2WfR0Ssyn/ff0K9v1mfl/XxI9a5L9gvxar6sC7Fhvr9
+zrrTwQer6s86os9yn49z/Mw3DHmuqcfYOluZl5VxIvqwL9gvfsrzptZQ/09D
+W3Kd1NOBzuXke8pP6YkYntb3tfXxh9qB31da6YNcV8wLi2Xdy0m3OMw2reMw
+O3/efw/9uGKR/lrpr5X+Wumvlf5a6a+V/lrpr5X+Wumvlf5a6a+V/lrpr5X+
+Wunvl09iv+oK
+       "], {{0, 0}, {17, 53}}, {0, 1}], {
+       {GrayLevel[
+         NCache[-1 + GoldenRatio, 0.6180339887498949]], 
+        StyleBox[
+         LineBox[{{{0, 53}, {17, 53}}, {{0, 52}, {17, 52}}, {{0, 51}, {17, 
+          51}}, {{0, 50}, {17, 50}}, {{0, 49}, {17, 49}}, {{0, 48}, {17, 
+          48}}, {{0, 47}, {17, 47}}, {{0, 46}, {17, 46}}, {{0, 45}, {17, 
+          45}}, {{0, 44}, {17, 44}}, {{0, 43}, {17, 43}}, {{0, 42}, {17, 
+          42}}, {{0, 41}, {17, 41}}, {{0, 40}, {17, 40}}, {{0, 39}, {17, 
+          39}}, {{0, 38}, {17, 38}}, {{0, 37}, {17, 37}}, {{0, 36}, {17, 
+          36}}, {{0, 35}, {17, 35}}, {{0, 34}, {17, 34}}, {{0, 33}, {17, 
+          33}}, {{0, 32}, {17, 32}}, {{0, 31}, {17, 31}}, {{0, 30}, {17, 
+          30}}, {{0, 29}, {17, 29}}, {{0, 28}, {17, 28}}, {{0, 27}, {17, 
+          27}}, {{0, 26}, {17, 26}}, {{0, 25}, {17, 25}}, {{0, 24}, {17, 
+          24}}, {{0, 23}, {17, 23}}, {{0, 22}, {17, 22}}, {{0, 21}, {17, 
+          21}}, {{0, 20}, {17, 20}}, {{0, 19}, {17, 19}}, {{0, 18}, {17, 
+          18}}, {{0, 17}, {17, 17}}, {{0, 16}, {17, 16}}, {{0, 15}, {17, 
+          15}}, {{0, 14}, {17, 14}}, {{0, 13}, {17, 13}}, {{0, 12}, {17, 
+          12}}, {{0, 11}, {17, 11}}, {{0, 10}, {17, 10}}, {{0, 9}, {17, 
+          9}}, {{0, 8}, {17, 8}}, {{0, 7}, {17, 7}}, {{0, 6}, {17, 6}}, {{0, 
+          5}, {17, 5}}, {{0, 4}, {17, 4}}, {{0, 3}, {17, 3}}, {{0, 2}, {17, 
+          2}}, {{0, 1}, {17, 1}}, {{0, 0}, {17, 0}}}],
+         Antialiasing->False]}, 
+       {GrayLevel[
+         NCache[-1 + GoldenRatio, 0.6180339887498949]], 
+        StyleBox[
+         LineBox[{{{0, 0}, {0, 53}}, {{1, 0}, {1, 53}}, {{2, 0}, {2, 53}}, {{
+          3, 0}, {3, 53}}, {{4, 0}, {4, 53}}, {{5, 0}, {5, 53}}, {{6, 0}, {6, 
+          53}}, {{7, 0}, {7, 53}}, {{8, 0}, {8, 53}}, {{9, 0}, {9, 53}}, {{10,
+           0}, {10, 53}}, {{11, 0}, {11, 53}}, {{12, 0}, {12, 53}}, {{13, 
+          0}, {13, 53}}, {{14, 0}, {14, 53}}, {{15, 0}, {15, 53}}, {{16, 0}, {
+          16, 53}}, {{17, 0}, {17, 53}}}],
+         Antialiasing->False]}}},
+     Frame->True,
+     FrameLabel->{None, None},
+     FrameTicks->{{{{52.5, 
+          FormBox["1", TraditionalForm]}, {33.5, 
+          FormBox["20", TraditionalForm]}, {13.5, 
+          FormBox["40", TraditionalForm]}, {0.5, 
+          FormBox["53", TraditionalForm]}}, {{52.5, 
+          FormBox["1", TraditionalForm]}, {33.5, 
+          FormBox["20", TraditionalForm]}, {13.5, 
+          FormBox["40", TraditionalForm]}, {0.5, 
+          FormBox["53", TraditionalForm]}}}, {{{0.5, 
+          FormBox["1", TraditionalForm]}, {4.5, 
+          FormBox["5", TraditionalForm]}, {9.5, 
+          FormBox["10", TraditionalForm]}, {16.5, 
+          FormBox["17", TraditionalForm]}}, {{0.5, 
+          FormBox["1", TraditionalForm]}, {4.5, 
+          FormBox["5", TraditionalForm]}, {9.5, 
+          FormBox["10", TraditionalForm]}, {16.5, 
+          FormBox["17", TraditionalForm]}}}},
+     GridLinesStyle->Directive[
+       GrayLevel[0.5, 0.4]],
+     Method->{
+      "AxisPadding" -> Scaled[0.02], "DefaultBoundaryStyle" -> Automatic, 
+       "DefaultPlotStyle" -> Automatic, "DomainPadding" -> Scaled[0.02], 
+       "RangePadding" -> Scaled[0.05]}], {189., -589.235294117647}, 
+    ImageScaled[{0.5, 0.5}], {360., 1122.3529411764705`}], {}},
+  ContentSelectable->True,
+  ImageSize->Large,
+  PlotRangePadding->{6, 5}]], "Output",
+ CellChangeTimes->{
+  3.6872794129234915`*^9, {3.6872794511566105`*^9, 3.6872794853706303`*^9}, 
+   3.687279519227235*^9, 3.687279837156657*^9, 3.687280926858204*^9, {
+   3.6872817094248486`*^9, 3.6872817798634367`*^9}}]
+}, Open  ]]
+},
+WindowSize->{1366, 685},
+WindowMargins->{{-8, Automatic}, {Automatic, -8}},
+FrontEndVersion->"10.4 for Microsoft Windows (64-bit) (February 25, 2016)",
+StyleDefinitions->"Default.nb"
+]
+(* End of Notebook Content *)
+
+(* Internal cache information *)
+(*CellTagsOutline
+CellTagsIndex->{}
+*)
+(*CellTagsIndex
+CellTagsIndex->{}
+*)
+(*NotebookFileOutline
+Notebook[{
+Cell[558, 20, 323, 6, 31, "Input"],
+Cell[884, 28, 273, 5, 31, "Input"],
+Cell[CellGroupData[{
+Cell[1182, 37, 143, 3, 31, "Input"],
+Cell[1328, 42, 252, 3, 31, "Output"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[1617, 50, 236, 5, 31, "Input"],
+Cell[1856, 57, 121, 2, 31, "Output"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[2014, 64, 141, 2, 31, "Input"],
+Cell[2158, 68, 88, 1, 31, "Output"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[2283, 74, 1309, 25, 72, "Input"],
+Cell[3595, 101, 614, 13, 21, "Message"],
+Cell[4212, 116, 614, 13, 21, "Message"],
+Cell[4829, 131, 612, 13, 21, "Message"],
+Cell[5444, 146, 713, 15, 21, "Message"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[6194, 166, 654, 17, 31, "Input"],
+Cell[6851, 185, 4065, 75, 735, "Output"]
+}, Open  ]]
+}
+]
+*)
+

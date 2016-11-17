@@ -1,73 +1,99 @@
 #include <fstream>
-#include <string>
 #include "FEM.hpp"
+#include "SingletonLogger.hpp"
 
 // model soln
-inline double u(Node& p) {
+inline double u(Node const & p) {
 	return p.x() * p.x() + p.y() * p.y() + 1.;
 }
 
 // input R × R —> R functions for PDE
-inline double a(Node& p) {
+inline double a(Node const & p) {
 	return 1.;
 }
-inline double c(Node& p) {
+inline double c(Node const & p) {
 	return 3.;
 }
-inline double f(Node& p) {
+inline double f(Node const & p) {
 	return  3. * ( p.x() * p.x() + p.y() * p.y() ) - 1.;
 }
 
 // BCs
 
 // pure Neumann
-inline double N1(Node& p) {
+inline double N1(Node const & p) {
 	return 2.;
 }
 // pure Robin
-inline double N2(Node& p) {
+inline double N2(Node const & p) {
 	return 4.;
 }
 
+
+
 int main() {
-	char problem = '\0';
-	while (problem != 'D' && problem != 'N' && problem != 'R') {
-		cout << "choose pure BCs (D, N or R): ";
-		cin >> problem;
-	}
-	unsigned refCount;
-	cout << "numb of refinements: ";
-	cin >> refCount;
-	string path("Mathematica/Model Problem Analysis/tests/"), currentPath;
+	string oPath("Mathematica/Model Problem Analysis/tests/"), oCurrentPath;
+	// logger
+	SingletonLogger& logger = SingletonLogger::instance();
 	try {
-		Triangulation Omega; // unit square mesh
-		DiffusionReactionEqn PDE(a, c, f);
-		// BCs
-		shared_ptr<AbstractBC> BC;
-		if      (problem == 'D') BC = make_shared<DirichletBC>(u);       // pure Dirichlet test,
-		else if (problem == 'N') BC = make_shared<NeumannBC>(N1);        // pure Neumann, and
-		else                     BC = make_shared<RobinBC>(oneFunc, N2); // pure Robin
-		BoundaryConditions BCs({ BC });
-		vector<double> soln(Omega.numbOfNodes());
+		// choose problem (pure BCs)
+		size_t problemIndex = logger.opt(
+			"choose pure BCs",
+			{ "Dirichlet", "Neumann", "Robin" }
+		); 
+
+		// numb of mesh refinements
+		logger.inp("numb of refinements");
+		unsigned refCount;
+		cin >> refCount;
+
+		// set the problem
+		logger.beg("generate coarse mesh, set PDE, set BCs");
+			Triangulation Omega; // unit square mesh
+			DiffusionReactionEqn PDE(a, c, f);
+			// BCs
+			shared_ptr<AbstractBC> BC;
+			if (problemIndex == 0)      BC = make_shared<DirichletBC>(u);       // pure Dirichlet test,
+			else if (problemIndex == 1) BC = make_shared<NeumannBC>(N1);        // pure Neumann, and
+			else                        BC = make_shared<RobinBC>(oneFunc, N2); // pure Robin
+			BoundaryConditions BCs({ BC });
+			vector<double> soln(Omega.numbOfNodes());
+		logger.end();
+
+		// solve
 		for (unsigned i = 0; i < refCount; ++i) {
-			// (1) refine
-			Omega.refine();
-			// (2) solve
-			soln = FEM::computeDiscreteSolution(PDE, Omega, BCs);
-			// (3) save the result
-			currentPath = path + to_string(i + 1) + "/";
-			ofstream oXi(currentPath + "xi.dat"),
-			         oU(currentPath + "u.dat"),
-			         oH(currentPath + "deltaH.dat");
-			oXi << soln;
-			oU << FEM::constructVector(u, Omega); // save vector constructed from model soln
-			oH << Omega.longestEdge();
-			Omega.save(ofstream(currentPath + "nodes.dat"), ofstream(currentPath + "triangles.dat"));
+			logger.beg("iteration " + to_string(i + 1));
+
+				// (1) refine
+				logger.beg("refine mesh");
+					Omega.refine();
+				logger.end();
+
+				// (2) solve
+				logger.beg("compute FE-solution");
+					soln = FEM::computeDiscreteSolution(PDE, Omega, BCs);
+				logger.end();
+
+				// (3) save the result
+				logger.beg("save results to " + oPath);
+					oCurrentPath = oPath + to_string(i + 1) + "/";
+					ofstream oXi(oCurrentPath + "xi.dat"),
+					         oH (oCurrentPath + "h.dat");
+					oXi << soln;
+					oH << Omega.longestEdge();
+					Omega.save(ofstream(oCurrentPath + "nodes.dat"), ofstream(oCurrentPath + "triangles.dat"));
+				logger.end();
+
+			logger.end();
 		}
-		ofstream oNumbOfTests(path + "numbOfRows.dat");
-		oNumbOfTests << refCount;
+
+		ofstream oRefCount    (oPath + "refCount.dat"),
+		         oProblemIndex(oPath + "problemIndex.dat");
+		oRefCount << refCount;
+		oProblemIndex << problemIndex;
 	}
 	catch (exception const & e) {
-		cout << e.what() << endl;
+		logger.err(e.what());
 	}
+	return 0;
 }
