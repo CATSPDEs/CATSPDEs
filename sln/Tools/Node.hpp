@@ -25,7 +25,7 @@ using AbstractNode = std::array<double, D>;
 		return .5 * (u + v);
 	}
 
-	// זproduct (3D)
+	// ×–product (3D)
 	inline AbstractNode<3> crossProduct(AbstractNode<3> const & u, AbstractNode<3> const & v) {
 		return {
 			u[1] * v[2] - u[2] * v[1],
@@ -34,7 +34,7 @@ using AbstractNode = std::array<double, D>;
 		};
 	}
 
-	// זproduct (2D)
+	// ×–product (2D)
 	inline AbstractNode<3> crossProduct(AbstractNode<2> const & u, AbstractNode<2> const & v) {
 		return { 0., 0, u[0] * v[1] - u[1] * v[0] };
 	}

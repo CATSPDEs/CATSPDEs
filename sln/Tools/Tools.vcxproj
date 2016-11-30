@@ -142,6 +142,7 @@
     <ClInclude Include="Index.hpp" />
     <ClInclude Include="InitialConditions.hpp" />
     <ClInclude Include="AbstractTransposeMultipliableMatrix.hpp" />
+    <ClInclude Include="OseenProblem.hpp" />
     <ClInclude Include="ProjectionSolvers.hpp" />
     <ClInclude Include="Node.hpp" />
     <ClInclude Include="DiffusionReactionEqn.hpp" />
