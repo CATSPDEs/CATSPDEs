@@ -1,4 +1,4 @@
-#include "FEM.hpp"
+ï»¿#include "FEM.hpp"
 #include "SymmetricContainer.hpp" // for local matrices
 #include "DenseSquareMatrix.hpp"
 
@@ -24,12 +24,12 @@ namespace FEM {
 			logger.end();
 			std::vector<double> b(Omega.numbOfNodes(), 0.), // load vector
 								xi(Omega.numbOfNodes(), 0.); // discrete solution	
-			Triangle elementNodes, elementMiddleNodes; // …of current element
+			Triangle elementNodes, elementMiddleNodes; // â€¦of current element
 			std::array<Node2D, 2> ribNodes; // nodes spanning a rib of the current triangle that is part of bndry
 			double measure; // area of ith triangle / length of bndry edge of ith thiangle
 			std::unordered_map<Index, double> ind2val; // for Dirichlet BCs
 
-			auto computeLocalStiffnessMatrix = [&]() { // we have 3 × 3 element matricies for linear Lagrange shapes
+			auto computeLocalStiffnessMatrix = [&]() { // we have 3 Ã— 3 element matricies for linear Lagrange shapes
 				SymmetricContainer<double> s(3);
 				s(0, 0) = (elementNodes[1][0] - elementNodes[2][0]) * (elementNodes[1][0] - elementNodes[2][0]) +
 						  (elementNodes[1][1] - elementNodes[2][1]) * (elementNodes[1][1] - elementNodes[2][1]);
@@ -72,7 +72,7 @@ namespace FEM {
 					PDE.forceTerm(elementNodes[0]) - PDE.forceTerm(elementNodes[1])
 				}) *= measure / 60.;
 			};
-			// we have 2 × 2 element matricies for Robin BCs (just like element matrix in 1D)
+			// we have 2 Ã— 2 element matricies for Robin BCs (just like element matrix in 1D)
 	
 			logger.beg("assemble system matrix and rhs vector");
 				for (size_t i = 0; i < Omega.numbOfElements(); ++i) {
@@ -133,7 +133,7 @@ namespace FEM {
 				std::vector<double> const &, // rhs
 				std::vector<double> const & // initial guess
 			)> smoother;
-			Index gamma = 1; // numb of recursive coarse iterations (1 for V–cycle, 2 for W–cycle)
+			Index gamma = 1; // numb of recursive coarse iterations (1 for Vâ€“cycle, 2 for Wâ€“cycle)
 			std::vector<CSCMatrix<double>> prolongations; // prolongation matrices
 			std::vector<SymmetricCSlCMatrix<double>> matrices; // assembled system matrices
 			Index numbOfMeshLevels() { return matrices.size(); }
@@ -254,6 +254,119 @@ namespace FEM {
 
 	}
 
+	namespace Mixed {
+
+		//boost::tuple<
+		//	SymmetricCSlCMatrix<double>, // assembled system matrix and
+		//	std::vector<double> // rhs vector
+		//> 
+		void
+		P2P1Assembler(
+			OseenProblem2D const & PDE, // (1) PDE,
+			Triangulation const & Omega, // (2) discretized domain (mesh),
+			DirichletVectorCondition2D const & DirichletBC // (3) and BCs that connects (1) and (2)
+		) {
+			// quadrature rule for master triangle
+			// exact up to 4th degree polynomials
+			boost::tuple<
+				std::vector<Node2D>,
+				std::vector<double>
+			> quadratureRule( {	// nodes		
+					{ .44594849091597, .44594849091597 },
+					{ .44594849091597, .10810301816807 },
+					{ .10810301816807, .44594849091597 },
+					{ .09157621350977, .09157621350977 },
+					{ .09157621350977, .81684757298046 },
+					{ .81684757298046, .09157621350977 }
+				}, { // weights
+					0.111690794839005, 
+					0.111690794839005, 
+					0.111690794839005,
+					0.05497587182766, 
+					0.05497587182766, 
+					0.05497587182766 
+				}
+			);
+			auto& qNodes   = boost::get<0>(quadratureRule);
+			auto& qWeights = boost::get<1>(quadratureRule);
+			// Î”P1L shape funcs
+			std::vector<ScalarField2D> s1 = {
+				[](Node2D const & p) { return 1. - p[0] - p[1]; },
+				[](Node2D const & p) { return p[0]; },
+				[](Node2D const & p) { return p[1]; },
+			};
+			// Î”P2L shape funcs
+			std::vector<ScalarField2D> s2 = {
+				[](Node2D const & p) { return (-1. + p[0] + p[1]) * (-1. + 2. * p[0] + 2. * p[1]); },
+				[](Node2D const & p) { return p[0] * (-1. + 2. * p[0]); },
+				[](Node2D const & p) { return -1. * (1. - 2. * p[1]) * p[1]; },
+				[](Node2D const & p) { return 4. * p[0] * p[1]; },
+				[](Node2D const & p) { return -4. * p[1] * (-1. + p[0] + p[1]); },
+				[](Node2D const & p) { return 4. * p[0] * (1. - p[0] - p[1]); }
+			};
+			// gradients of â€³
+			std::vector<VectorField2D> gradsOfS2 = {
+				[](Node2D const & p) -> Node2D { return { 
+						-1. + 2. * p[0] + 2. * p[1] + 2. * (-1. + p[0] + p[1]), 
+						-1. + 2. * p[0] + 2. * p[1] + 2. * (-1. + p[0] + p[1]) 
+				}; },
+				[](Node2D const & p) -> Node2D { return { -1. + 4. * p[0], 0. }; },
+				[](Node2D const & p) -> Node2D { return { 0., -1. + 4. * p[1] }; },
+				[](Node2D const & p) -> Node2D { return { 4. * p[1], 4. * p[0] }; },
+				[](Node2D const & p) -> Node2D { return { 
+					-4. * p[1], 
+					-4. * p[1] - 4. * (-1. + p[0] + p[1]) 
+				}; },
+				[](Node2D const & p) -> Node2D { return {
+					-4. * p[0] + 4. * (1. - p[0] - p[1]), 
+					-4. * p[0] 
+				}; }
+			};
+			// values of shapes at quadrature nodes,
+			// shapeVal[i][j] := value of s2[i] at qNodes[j]
+			std::vector<std::vector<double>> shapeVal;
+			shapeVal.reserve(s2.size());
+			std::for_each(s2.begin(), s2.end(), [&](auto const & s) {
+				std::vector<double> values(qNodes.size());
+				std::transform(qNodes.begin(), qNodes.end(), values.begin(), [&](auto const & node) { return s(node); });
+				shapeVal.emplace_back(values);
+			});
+			// values of gradients of shapes at quadrature nodes,
+			// gradsVal[i][j] := value of âˆ‡s2[i] at qNodes[j]
+			std::vector<std::vector<Node2D>> gradsVal;
+			gradsVal.reserve(s2.size());
+			std::for_each(gradsOfS2.begin(), gradsOfS2.end(), [&](auto const & gradOfS) {
+				std::vector<Node2D> values(qNodes.size());
+				std::transform(qNodes.begin(), qNodes.end(), values.begin(), [&](auto const & node) { return gradOfS(node); });
+				gradsVal.emplace_back(values);
+			});
+			// compute local mass matrix
+			std::vector<double> values;
+			SymmetricContainer<double> localMassMatrix(s2.size());
+			for (LocalIndex i = 0; i < s2.size(); ++i)
+				for (LocalIndex j = i; j < s2.size(); ++j) {
+					std::transform(shapeVal[i].begin(), shapeVal[i].end(), shapeVal[j].begin(), values.begin(), std::multiplies<double>());
+					localMassMatrix(i, j) = qWeights * values;
+				}
+			SymmetricContainer<double> localStiffnessMatrix(s2.size());
+
+			localMassMatrix.export(logger.buf);
+			logger.log();
+
+			for (Index t = 0; t < Omega.numbOfElements(); ++t) {
+				auto detJ = 2. * area(Omega.getElement(t));
+				// compute local stiffness matrix
+				for (LocalIndex i = 0; i < s2.size(); ++i)
+					for (LocalIndex j = i; j < s2.size(); ++j) {
+						std::transform(shapeVal[i].begin(), shapeVal[i].end(), shapeVal[j].begin(), values.begin(), std::multiplies<double>());
+						localMassMatrix(i, j) = qWeights * values;
+					}
+
+			}
+		}
+
+	}
+
 }
 
 //SymmetricContainer<double> FEM::computeLocalMassMatrix(Function reactionTerm, 
@@ -307,7 +420,7 @@ namespace FEM {
 //                                             array<Node, 3>& middleNodes,
 //                                             double area) {
 //	array<double, 3> f;
-//	// …assuming forceTerm(x, y) lives in P_1:
+//	// â€¦assuming forceTerm(x, y) lives in P_1:
 //	/*
 //	return (f = {
 //	2. * forceTerm(nodes[0]) + forceTerm(nodes[1]) + forceTerm(nodes[2]),
@@ -315,7 +428,7 @@ namespace FEM {
 //	     forceTerm(nodes[0]) + forceTerm(nodes[1]) + 2. * forceTerm(nodes[2])
 //	}) *= area / 12.; 
 //	*/
-//	// …assuming forceTerm(x, y) lives in P_2(ith triangle):
+//	// â€¦assuming forceTerm(x, y) lives in P_2(ith triangle):
 //	return (f = {
 //		2. * forceTerm(nodes[0]) - forceTerm(nodes[1]) - forceTerm(nodes[2]) +
 //		4. * forceTerm(middleNodes[0]) + 8. * (forceTerm(middleNodes[1]) + forceTerm(middleNodes[2])),
