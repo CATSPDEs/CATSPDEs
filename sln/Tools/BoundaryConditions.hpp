@@ -7,7 +7,7 @@ class DirichletCondition {
 	Mapping<N, M> _v;
 	Predicate<N>  _p;
 public:
-	explicit DirichletCondition(Mapping<N, M> const & v = constZero<N, M>, Predicate<N> const & p = constTrue<N>)
+	explicit DirichletCondition(Mapping<N, M> const & v, Predicate<N> const & p = constTrue<N>)
 		: _v(v)
 		, _p(p) {}
 	auto operator()        (Node<N> const & p) const { return _v(p); }
