@@ -1,15 +1,43 @@
 #include "SingletonLogger.hpp"
-#include "Node.hpp"
+#include "FEM.hpp"
 
 // logger
 SingletonLogger& logger = SingletonLogger::instance();
 
+using namespace FEM::Mixed;
+using std::string;
+
 int main() {
+	string iPath("Mathematica/");
 	try {
-		Node2D a = {1., 2.};
-		Node<1> b = 3.;
-		logger.buf << midNode(a,a);
-		logger.log();
+		// set PDE
+		OseenProblem2D PDE(
+			1.,
+			[](Node2D const & p) -> Node2D {
+				return	{ p[0], p[1] };
+			},
+			.5,
+			[](Node2D const & p) -> Node2D {
+				return { 1., 1. };
+			},
+			[](Node2D const & p) {
+				return norm(p);
+			}
+		);
+		// import and set up mesh
+		Triangulation Omega;
+		Omega.AbstractMesh::import(iPath + "mesh.ntn");
+		// set up BCs
+		DirichletVectorCondition2D DirichletBC(
+			[](Node2D const &) -> Node2D {
+				return { 0., 0. };
+			}
+		);
+
+		P2P1Assembler(PDE, Omega, DirichletBC);
+
+		//logger.buf << PDE.massTerm();
+		//logger.log();
 	}
 	catch (std::exception const & e) {
 		logger.err(e.what());

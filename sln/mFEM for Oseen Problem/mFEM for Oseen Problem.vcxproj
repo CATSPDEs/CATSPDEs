@@ -84,7 +84,7 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>..\Tools</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\Tools;C:\Program Files\boost\boost_1_62_0</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -112,7 +112,7 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>..\Tools</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\Tools;C:\Program Files\boost\boost_1_62_0</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -122,8 +122,13 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="..\Tools\FEM.cpp" />
     <ClCompile Include="..\Tools\SingletonLogger.cpp" />
+    <ClCompile Include="..\Tools\Triangulation.cpp" />
     <ClCompile Include="user.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <Library Include="..\Harwell–Boeing IO (FORTRAN Static Library)\x64\Release\Harwell–Boeing IO (FORTRAN Static Library).lib" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
