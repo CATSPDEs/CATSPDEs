@@ -33,11 +33,11 @@ public:
 	Index getOrder()   const { return _w; } // for square matrices (just for convenience)
 	AbstractMatrix& import(std::istream& input = std::cin) {
 		T dummy;
-		setZero(); // clear matrix
+		*this = 0.; // clear matrix
 		for (Index i = 0; i < _h; ++i)
 			for (Index j = 0; j < _w; ++i) {
 				input >> dummy;
-				if (dummy) _set(i, j) = dummy; // to avoid exceptions if matrix portrait
+				if (dummy) _set(i, j) = dummy; // to avoid exceptions if matrix pattern
 				// doesn’t allow element w/ indicies (i, j)
 			}
 		return *this;
