@@ -1,9 +1,9 @@
 #pragma once
-#include "AbstractMatrix.hpp"
+#include "AbstractMultipliableMatrix.hpp"
 
 template <typename T>
 class DenseSquareMatrix : 
-	public AbstractMatrix<T> {
+	public AbstractMultipliableMatrix<T> {
 	T** _A;
 	T*  _beg;
 	// to be implemented
@@ -11,12 +11,14 @@ class DenseSquareMatrix :
 	T  _get(Index i, Index j) const final { return _A[i][j]; };
 public:
 	explicit DenseSquareMatrix(Index n = 1);
+	DenseSquareMatrix(std::initializer_list<std::initializer_list<T>> lst);
 	DenseSquareMatrix(AbstractMatrix const &);
 	~DenseSquareMatrix();
 	DenseSquareMatrix& operator=(T const & val) final {
 		for (Index i = 0; i < _w * _w; ++i) _beg[i] = val;
 		return *this;
 	}
+	void mult(T const * by, T* result) const final;
 	std::vector<T> GaussElimination(std::vector<T> const &);
 };
 
@@ -30,6 +32,17 @@ DenseSquareMatrix<T>::DenseSquareMatrix(Index n)
 	size_t i;
 	for (i = 0; i < n; ++i) _A[i] = _beg + i * n;
 	for (i = 0; i < n * n; ++i) _beg[i] = 0.;
+}
+
+template <typename T>
+DenseSquareMatrix<T>::DenseSquareMatrix(std::initializer_list<std::initializer_list<T>> lst)
+	: DenseSquareMatrix<T>(lst.size()) {
+	Index i = 0, j = 0;
+	for (auto const & row : lst) {
+		for (auto const & val : row) _A[i][j++] = val;
+		j = 0;
+		++i;
+	}
 }
 
 template <typename T>
@@ -48,6 +61,15 @@ template <typename T>
 DenseSquareMatrix<T>::~DenseSquareMatrix() {
 	delete[] _beg;
 	delete[] _A;
+}
+
+template <typename T>
+void DenseSquareMatrix<T>::mult(T const * by, T* result) const {
+	for (Index i = 0; i < _h; ++i) {
+		result[i] = 0.;
+		for (Index j = 0; j < _w; ++j)
+			result[i] += _A[i][j] * by[j];
+	}
 }
 
 template <typename T>

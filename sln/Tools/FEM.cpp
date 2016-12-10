@@ -290,13 +290,13 @@ namespace FEM {
 			auto& qNodes   = boost::get<0>(quadratureRule);
 			auto& qWeights = boost::get<1>(quadratureRule);
 			// ΔP1L shape funcs
-			std::vector<ScalarField2D> s1 = {
+			std::vector<ScalarField2D> pressureShapes = {
 				[](Node2D const & p) { return 1. - p[0] - p[1]; },
 				[](Node2D const & p) { return p[0]; },
 				[](Node2D const & p) { return p[1]; },
 			};
 			// ΔP2L shape funcs
-			std::vector<ScalarField2D> s2 = {
+			std::vector<ScalarField2D> velocityShapes = {
 				[](Node2D const & p) { return (-1. + p[0] + p[1]) * (-1. + 2. * p[0] + 2. * p[1]); },
 				[](Node2D const & p) { return p[0] * (-1. + 2. * p[0]); },
 				[](Node2D const & p) { return -1. * (1. - 2. * p[1]) * p[1]; },
@@ -305,7 +305,7 @@ namespace FEM {
 				[](Node2D const & p) { return 4. * p[0] * (1. - p[0] - p[1]); }
 			};
 			// gradients of ″
-			std::vector<VectorField2D> gradsOfS2 = {
+			std::vector<VectorField2D> gradsOfVelocityShapes = {
 				[](Node2D const & p) -> Node2D { return { 
 						-1. + 2. * p[0] + 2. * p[1] + 2. * (-1. + p[0] + p[1]), 
 						-1. + 2. * p[0] + 2. * p[1] + 2. * (-1. + p[0] + p[1]) 
@@ -323,44 +323,54 @@ namespace FEM {
 				}; }
 			};
 			// values of shapes at quadrature nodes,
-			// shapeVal[i][j] := value of s2[i] at qNodes[j]
+			// shapeVal[i][j] := value of velocityShapes[i] at qNodes[j]
 			std::vector<std::vector<double>> shapeVal;
-			shapeVal.reserve(s2.size());
-			std::for_each(s2.begin(), s2.end(), [&](auto const & s) {
+			shapeVal.reserve(velocityShapes.size());
+			std::for_each(velocityShapes.begin(), velocityShapes.end(), [&](auto const & s) {
 				std::vector<double> values(qNodes.size());
 				std::transform(qNodes.begin(), qNodes.end(), values.begin(), [&](auto const & node) { return s(node); });
 				shapeVal.emplace_back(values);
 			});
 			// values of gradients of shapes at quadrature nodes,
-			// gradsVal[i][j] := value of ∇s2[i] at qNodes[j]
+			// gradsVal[i][j] := value of ∇velocityShapes[i] at qNodes[j]
 			std::vector<std::vector<Node2D>> gradsVal;
-			gradsVal.reserve(s2.size());
-			std::for_each(gradsOfS2.begin(), gradsOfS2.end(), [&](auto const & gradOfS) {
+			gradsVal.reserve(velocityShapes.size());
+			std::for_each(gradsOfVelocityShapes.begin(), gradsOfVelocityShapes.end(), [&](auto const & gradOfS) {
 				std::vector<Node2D> values(qNodes.size());
 				std::transform(qNodes.begin(), qNodes.end(), values.begin(), [&](auto const & node) { return gradOfS(node); });
 				gradsVal.emplace_back(values);
 			});
 			// compute local mass matrix
-			std::vector<double> values;
-			SymmetricContainer<double> localMassMatrix(s2.size());
-			for (LocalIndex i = 0; i < s2.size(); ++i)
-				for (LocalIndex j = i; j < s2.size(); ++j) {
-					std::transform(shapeVal[i].begin(), shapeVal[i].end(), shapeVal[j].begin(), values.begin(), std::multiplies<double>());
+			std::vector<double> values(qNodes.size());
+			SymmetricContainer<double> localMassMatrix(velocityShapes.size());
+			for (LocalIndex i = 0; i < velocityShapes.size(); ++i)
+				for (LocalIndex j = i; j < velocityShapes.size(); ++j) {
+					std::transform(shapeVal[j].begin(), shapeVal[j].end(), shapeVal[i].begin(), values.begin(), std::multiplies<double>());
 					localMassMatrix(i, j) = qWeights * values;
 				}
-			SymmetricContainer<double> localStiffnessMatrix(s2.size());
-
-			localMassMatrix.export(logger.buf);
-			logger.log();
-
+			SymmetricContainer<double> localStiffnessMatrix(velocityShapes.size());
 			for (Index t = 0; t < Omega.numbOfElements(); ++t) {
+				auto nodes = Omega.getElement(t);
+				// jacobian–related
 				auto detJ = 2. * area(Omega.getElement(t));
+				DenseSquareMatrix<double> JInverseTranspose {
+					{ nodes[2][1] - nodes[0][1], nodes[0][1] - nodes[1][1] },
+					{ nodes[0][0] - nodes[2][0], nodes[1][0] - nodes[0][0] }
+				};
+				JInverseTranspose /= detJ;
 				// compute local stiffness matrix
-				for (LocalIndex i = 0; i < s2.size(); ++i)
-					for (LocalIndex j = i; j < s2.size(); ++j) {
-						std::transform(shapeVal[i].begin(), shapeVal[i].end(), shapeVal[j].begin(), values.begin(), std::multiplies<double>());
-						localMassMatrix(i, j) = qWeights * values;
+				for (LocalIndex i = 0; i < velocityShapes.size(); ++i)
+					for (LocalIndex j = i; j < velocityShapes.size(); ++j) {
+						std::transform(gradsVal[j].begin(), gradsVal[j].end(), gradsVal[i].begin(), values.begin(), [&](auto const & v1, auto const & v2) { return (JInverseTranspose * v1) * (JInverseTranspose * v2); });
+						localStiffnessMatrix(i, j) = detJ * qWeights * values;
 					}
+
+				if (t == 8) {
+					JInverseTranspose.export(logger.buf);
+					logger.log();
+					localStiffnessMatrix.export(logger.buf);
+					logger.log();
+				}
 
 			}
 		}

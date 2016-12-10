@@ -35,12 +35,12 @@ std::vector<T> operator-(std::vector<T> const & u, std::vector<T> const & v) {
 
 // multiply by a scaler
 template <typename T>
-std::vector<T>& operator*=(std::vector<T>& u, T scaler) {
+std::vector<T>& operator*=(std::vector<T>& u, T const & scaler) {
 	std::for_each(u.begin(), u.end(), [&](T& elem) { elem *= scaler; });
 	return u;
 }
 template <typename T>
-std::vector<T> operator*(T scaler, std::vector<T> const & u) {
+std::vector<T> operator*(T const & scaler, std::vector<T> const & u) {
 	auto t(u);
 	return t *= scaler;
 }

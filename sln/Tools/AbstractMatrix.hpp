@@ -59,4 +59,13 @@ public:
 		std::ofstream output(outputStr);
 		export(output);
 	}
+	virtual AbstractMatrix& operator*=(T const & val) {
+		for (Index i = 0; i < _h; ++i) 
+			for (Index j = 0; j < _w; ++j)
+				_set(i, j) = val * _get(i, j);
+		return *this;
+	}
+	AbstractMatrix& operator/=(T const & val) {
+		return operator*=(1. / val);
+	}
 };

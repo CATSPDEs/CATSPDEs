@@ -27,6 +27,8 @@ int main() {
 		// import and set up mesh
 		Triangulation Omega;
 		Omega.AbstractMesh::import(iPath + "mesh.ntn");
+		Omega.enumerateRibs();
+		Omega.AbstractMesh::export(iPath + "mesh.ntr", { {"format", "NTR"} });
 		// set up BCs
 		DirichletVectorCondition2D DirichletBC(
 			[](Node2D const &) -> Node2D {

@@ -13,4 +13,8 @@ public:
 		mult(u.data(), v.data());
 		return v;
 	}
+	template <Index N>
+	std::vector<T> operator*(std::array<T, N> const & a) { 
+		return operator*(std::vector<T>(a.begin(), a.end()));
+	}
 };
