@@ -36,14 +36,17 @@ public:
 	{
 	}
 	explicit CSCMatrix(Index h = 1, Index w = 1, Index nnz = 0);
-	~CSCMatrix() {}
 	// virtual methods to be implemented
 	Index nnz() const final { return _colptr[_w]; }
 	CSCMatrix& operator=(T const & val) final;
 	void mult(T const * by, T* result) const final;
 	void multByTranspose(T const * by, T* result) const final;
+	// i/o
 	CSCMatrix& importSparse(std::istream& from = cin) final;
 	void       exportSparse(std::ostream& to   = cout) const final;
+	// almost same methods from base class (in order to work w/ strings instead of streams)
+	using AbstractSparseMatrix::importSparse;
+	using AbstractSparseMatrix::exportSparse;
 	HarwellBoeingHeader importHarwellBoeing(std::string const &) final; // load from Harwell–Boeing file
 	void                exportHarwellBoeing(std::string const &, Parameters const & params = {}) const final;
 };
@@ -65,7 +68,6 @@ template <typename T>
 T& CSCMatrix<T>::_set(Index i, Index j) {
 	for (Index k = _colptr[j]; k < _colptr[j + 1]; ++k)
 		if (_rowind[k] == i) return _values[k];
-		//else if (_rowind[k] > i) throw invalid_argument("pattern of sparse matrix does not allow to change element w/ these indicies");
 	throw std::invalid_argument("pattern of sparse matrix does not allow to change element w/ these indicies");
 }
 
@@ -73,7 +75,6 @@ template <typename T>
 T CSCMatrix<T>::_get(Index i, Index j) const {
 	for (Index k = _colptr[j]; k < _colptr[j + 1]; ++k)
 		if (_rowind[k] == i) return _values[k];
-		//else if (_rowind[k] > i) return 0.;
 	return 0.;
 }
 
@@ -87,21 +88,16 @@ CSCMatrix<T>& CSCMatrix<T>::operator=(T const & val) {
 
 template <typename T>
 void CSCMatrix<T>::mult(T const * by, T* result) const {
-	Index i, j;
-	std::fill(result, result + _h, 0.); // clear resulting vector
-	for (j = 0; j < _w; ++j)
-		for (i = _colptr[j]; i < _colptr[j + 1]; ++i)
+	for (Index j = 0; j < _w; ++j)
+		for (Index i = _colptr[j]; i < _colptr[j + 1]; ++i)
 			result[_rowind[i]] += _values[i] * by[j];
 }
 
 template <typename T>
 void CSCMatrix<T>::multByTranspose(T const * by, T* result) const {
-	Index i, j;
-	for (j = 0; j < _w; ++j) {
-		result[j] = 0.;
-		for (i = _colptr[j]; i < _colptr[j + 1]; ++i)
+	for (Index j = 0; j < _w; ++j) 
+		for (Index i = _colptr[j]; i < _colptr[j + 1]; ++i)
 			result[j] += _values[i] * by[_rowind[i]];
-	}
 }
 
 template <typename T>

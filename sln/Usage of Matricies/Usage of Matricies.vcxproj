@@ -126,7 +126,7 @@
     <ClCompile Include="user.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <Library Include="..\Harwell–Boeing IO (FORTRAN Static Library)\x64\Debug\Harwell–Boeing IO (FORTRAN Static Library).lib" />
+    <Library Include="..\Harwell–Boeing IO (FORTRAN Static Library)\x64\Release\Harwell–Boeing IO (FORTRAN Static Library).lib" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

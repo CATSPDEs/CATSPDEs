@@ -3,8 +3,6 @@
 #include "AbstractFEMatrix.hpp"
 #include "AbstractHarwellBoeingMatrix.hpp"
 #include "AbstractMultipliableMatrix.hpp"
-// TODO:
-//#include "IDecomposable.hpp"
 
 /*
 	Alexander Žilyakov, Sep 2016
@@ -28,8 +26,8 @@ public: // TEMP
 	// stands for Symmetric Compressed Sparse (lower triangular) Column
 	std::vector<Index> _colptr, // vector of column pointers and
 	                   _rowind; // ″         row indicies (see example to get what these guys are)
-	std::vector<double> _lval, // vector of elements of lower triangular part of matrix (raw by raw)
-	                    _diag; // ″         diagonal elements (for FEM / FVM is always > 0, 
+	std::vector<T>     _lval, // vector of elements of lower triangular part of matrix (raw by raw)
+	                   _diag; // ″         diagonal elements (for FEM / FVM is always > 0, 
 			                   // so we store it explicitly)
 	// example of 6 × 6 matrix:
 	//		
@@ -53,31 +51,30 @@ public: // TEMP
 	// makes sense!
 	//
 	// virtual methods to be implemented
-	T& _set(size_t, size_t) final;
-	T  _get(size_t, size_t) const final;
+	T& _set(Index, Index) final;
+	T  _get(Index, Index) const final;
 public:
-	explicit SymmetricCSlCMatrix(size_t n = 1, size_t nnz = 0); // order of matrix and numb of nonzero elems in lower triangular part
-	~SymmetricCSlCMatrix() {}
+	explicit SymmetricCSlCMatrix(Index n = 1, Index nnz = 0); // order of matrix and numb of nonzero elems in lower triangular part
 	// virtual methods to be implemented
 	Index nnz() const final { return 2 * _colptr[_w] + _w; } // “+ _w” because of _diag
 	SymmetricCSlCMatrix& operator=(T const &) final;
 	void mult(T const * by, T* result) const final;
+	// i/o
 	SymmetricCSlCMatrix& importSparse(std::istream& from = cin) final;
 	void                 exportSparse(std::ostream& to = cout) const final;
+	// almost same methods from base class (in order to work w/ strings instead of streams)
+	using AbstractSparseMatrix::importSparse;
+	using AbstractSparseMatrix::exportSparse;
 	SymmetricCSlCMatrix& generatePatternFrom(AdjacencyList const &) final;
 	HarwellBoeingHeader importHarwellBoeing(std::string const &) final; // load from Harwell–Boeing file
 	void                exportHarwellBoeing(std::string const &, Parameters const & params = {}) const final;
 	SymmetricCSlCMatrix& enforceDirichletBCs(std::unordered_map<Index, T> const &, std::vector<T>&) final;
-	// TODO:
-	//SymmetricCSlCMatrix& decompose() override;
-	//vector<T> forwardSubstitution(vector<T> const &) const override;
-	//vector<T> backwardSubstitution(vector<T> const &) const override;
 };
 
 // implementation
 
 template <typename T>
-SymmetricCSlCMatrix<T>::SymmetricCSlCMatrix(size_t n, size_t nnz)
+SymmetricCSlCMatrix<T>::SymmetricCSlCMatrix(Index n, Index nnz)
 	: AbstractMatrix<T>(n, n)
 	, _colptr(n + 1)
 	, _rowind(nnz)
@@ -89,22 +86,20 @@ SymmetricCSlCMatrix<T>::SymmetricCSlCMatrix(size_t n, size_t nnz)
 // private methods
 
 template <typename T>
-T& SymmetricCSlCMatrix<T>::_set(size_t i, size_t j) {
+T& SymmetricCSlCMatrix<T>::_set(Index i, Index j) {
 	if (i == j) return _diag[i];
 	if (i < j) std::swap(i, j); // switch to lower triangular part
-	for (size_t k = _colptr[j]; k < _colptr[j + 1]; ++k)
+	for (Index k = _colptr[j]; k < _colptr[j + 1]; ++k)
 		if (_rowind[k] == i) return _lval[k];
-		else if (_rowind[k] > i) throw std::invalid_argument("pattern of sparse matrix does not allow to change element w/ these indicies");
 	throw std::invalid_argument("pattern of sparse matrix does not allow to change element w/ these indicies");
 }
 
 template <typename T>
-T SymmetricCSlCMatrix<T>::_get(size_t i, size_t j) const {
+T SymmetricCSlCMatrix<T>::_get(Index i, Index j) const {
 	if (i == j) return _diag[i];
 	if (i < j) std::swap(i, j);
-	for (size_t k = _colptr[j]; k < _colptr[j + 1]; ++k)
+	for (Index k = _colptr[j]; k < _colptr[j + 1]; ++k)
 		if (_rowind[k] == i) return _lval[k];
-		else if (_rowind[k] > i) return 0.;
 	return 0.;
 }
 
@@ -119,13 +114,13 @@ SymmetricCSlCMatrix<T>& SymmetricCSlCMatrix<T>::operator=(T const & val) {
 
 template <typename T>
 void SymmetricCSlCMatrix<T>::mult(T const * by, T* result) const { // = multByTranspose() since A = A^T
-	size_t i, j;
-	for (j = 0; j < _w; ++j) result[j] = _diag[j] * by[j];
-	for (j = 0; j < _w; ++j) 
-		for (i = _colptr[j]; i < _colptr[j + 1]; ++i) {
+	for (Index j = 0; j < _w; ++j) {
+		result[j] += _diag[j] * by[j];
+		for (Index i = _colptr[j]; i < _colptr[j + 1]; ++i) {
 			result[_rowind[i]] += _lval[i] * by[j];
-			result[j]        += _lval[i] * by[_rowind[i]];
+			result[j]          += _lval[i] * by[_rowind[i]];
 		}
+	}
 }
 
 template <typename T>
@@ -137,7 +132,7 @@ SymmetricCSlCMatrix<T>& SymmetricCSlCMatrix<T>::importSparse(std::istream& input
 	// (4) _colptr[n] elements of _rowind,
 	// (5) _colptr[n] elements of _lval, and
 	// (6) n        elements of _diag
-	size_t nnz;
+	Index nnz;
 	input >> _h >> nnz;
 	_w = _h;
 	_colptr.resize(_w + 1);
@@ -164,7 +159,7 @@ SymmetricCSlCMatrix<T>& SymmetricCSlCMatrix<T>::generatePatternFrom(AdjacencyLis
 	_diag.resize(_w);
 	// (2) compute column pointers
 	_colptr.resize(_w + 1, 0);
-	size_t i;
+	Index i;
 	for (i = 0; i < _w; ++i)
 		_colptr[i + 1] = _colptr[i] + adjList[i].size();
 	// (3) compute row indicies
@@ -194,9 +189,9 @@ HarwellBoeingHeader SymmetricCSlCMatrix<T>::importHarwellBoeing(std::string cons
 	//// HB stores diagonal in lower triangular part, but we in CATSPDEs prefer to store it
 	//// separately since in FEM / FDM / FVM diags are nonzero
 	//// so we need to fix column pointers, row indicies, and separate diagonal from values array
-	//vector<size_t> rowind(_colptr[_w]);
+	//vector<Index> rowind(_colptr[_w]);
 	//vector<T>      values(_colptr[_w]);
-	//size_t diagSize; // numb of diag elements stored as a part of lower triangle of HB matrix
+	//Index diagSize; // numb of diag elements stored as a part of lower triangle of HB matrix
 	//loadHarwellBoeingStruct_f90(
 	//	fileName.c_str(), 
 	//	&header,
@@ -210,8 +205,8 @@ HarwellBoeingHeader SymmetricCSlCMatrix<T>::importHarwellBoeing(std::string cons
 	//// shrink
 	//_rowind.resize(_rowind.size() - diagSize);
 	//_lval.resize(_lval.size() - diagSize);
-	//for_each(_colptr.begin(), _colptr.end(), [](size_t& i) { --i; });
-	//for_each(_rowind.begin(), _rowind.end(), [](size_t& i) { --i; });
+	//for_each(_colptr.begin(), _colptr.end(), [](Index& i) { --i; });
+	//for_each(_rowind.begin(), _rowind.end(), [](Index& i) { --i; });
 
 	return header;
 }

@@ -28,7 +28,7 @@ public:
 	void wrn(std::string const &) const; // print warning
 	void err(std::string const &) const; // print error
 	template <typename T>
-	void inp(std::string const &, T&) const; // print input invite and get input value
+	SingletonLogger& inp(std::string const &, T&); // print input invite and get input value
 	bool yes(std::string const &) const; // true if get 'y' from stdin
 	size_t opt(std::string const &, std::vector<std::string> const &); // choose vector element (get index from stdin), return its index
 	std::string tab() const { // tabulations
@@ -37,10 +37,11 @@ public:
 };
 
 template <typename T>
-void SingletonLogger::inp(std::string const & message, T& val) const {
+SingletonLogger& SingletonLogger::inp(std::string const & message, T& val) {
 	rlutil::setColor(10);
 	std::cout << tab() << "[inp] ";
 	rlutil::setColor(7);
 	std::cout << _format(message) << ":\n" << tab() << "      ";
 	std::cin >> val;
+	return *this;
 }

@@ -11,7 +11,7 @@ public:
 	virtual void                  exportSparse(std::ostream& to   = cout) const = 0; // save matrix to stdout (sparse form)
 	AbstractSparseMatrix& importSparse(std::string const & fromStr) {
 		std::ifstream from(fromStr);
-		return import(from);
+		return importSparse(from);
 	}
 	void exportSparse(std::string const & toStr) const {
 		std::ofstream to(toStr);

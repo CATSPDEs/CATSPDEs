@@ -159,14 +159,14 @@
     <ClInclude Include="ProjectionSolvers.hpp">
       <Filter>Solvers</Filter>
     </ClInclude>
-    <ClInclude Include="DenseSquareMatrix.hpp">
-      <Filter>Matrices\Implementations</Filter>
-    </ClInclude>
     <ClInclude Include="Mapping.hpp">
       <Filter>Common</Filter>
     </ClInclude>
     <ClInclude Include="OseenProblem.hpp">
       <Filter>PDEs</Filter>
+    </ClInclude>
+    <ClInclude Include="DenseMatrix.hpp">
+      <Filter>Matrices\Implementations</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

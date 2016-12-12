@@ -59,6 +59,11 @@ std::ostream& operator<<(std::ostream& output, std::vector<T> const & u) {
 	return output;
 }
 template <typename T>
+void import(std::vector<T>& u, std::string const & importString) {
+	std::ifstream import(importString);
+	import >> u;
+}
+template <typename T>
 void export(std::vector<T> const & u, std::string const & outputString) {
 	std::ofstream output(outputString);
 	output << u;
