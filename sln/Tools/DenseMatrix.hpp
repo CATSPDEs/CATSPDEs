@@ -1,4 +1,5 @@
 #pragma once
+#include <algorithm> // for_each
 #include "AbstractTransposeMultipliableMatrix.hpp"
 
 template <typename T>
@@ -10,16 +11,18 @@ class DenseMatrix :
 	T  _get(Index i, Index j) const final { return _A[i][j]; };
 public:
 	// create h × w zero matrix
-	DenseMatrix(Index h, Index w)
-		: AbstractMatrix(h, w)
+	explicit DenseMatrix(Index h, Index w = h)
+		: AbstractMatrix<T>(h, w)
 		, _A(h, std::vector<T>(w, 0.))
 	{}
 	// create matrix from ini lists, e.g. from { {11, 12}, {21, 22} }
 	DenseMatrix(std::initializer_list<std::initializer_list<T>> const &);
 	// densify any matrix
 	DenseMatrix(AbstractMatrix const &);
-	DenseSquareMatrix& operator=(T const & val) final {
-		std::fill(_A, val);
+	DenseMatrix& operator=(T const & val) final {
+		std::for_each(_A.begin(), _A.end(), [&](auto& row) {
+			std::fill(row.begin(), row.end(), val);
+		});
 		return *this;
 	}
 	void mult           (T const * by, T* result) const final;
@@ -58,26 +61,27 @@ template <typename T>
 void DenseMatrix<T>::multByTranspose(T const * by, T* result) const {
 	for (Index j = 0; j < _w; ++j)
 		for (Index i = 0; i < _h; ++i)
-			result[j] += _A[j][i] * by[i];
+			result[j] += _A[i][j] * by[i];
 }
 
 template <typename T>
 std::vector<T> DenseMatrix<T>::GaussElimination(std::vector<T> const & bConst) {
 	if (_w != _h) throw std::invalid_argument("matrix must be square");
-	std::vector<T> x(_w), b(bConst);
+	auto n = getOrder();
+	std::vector<T> x(n), b(bConst);
 	SignedIndex i;
 	Index j, k, maxIndex;
 	T maxElem, mult, sum;
-	for (i = 0; i < _h - 1; ++i) {
+	for (i = 0; i < n - 1; ++i) {
 		// partial pivoting
 		maxElem = _A[maxIndex = i][i];
-		for (k = i + 1; k < _h; ++k) // find row w / max element
+		for (k = i + 1; k < n; ++k) // find row w / max element
 			if (_A[k][i] > maxElem) 
 				maxElem = _A[maxIndex = k][i];
 		_A[i].swap(_A[maxIndex]);
 		std::swap(b[i], b[maxIndex]);
 		// here Gauss goes!
-		for (k = i + 1; k < _h; ++k) {
+		for (k = i + 1; k < n; ++k) {
 			if (_A[k][i] == 0.) continue;
 			mult = _A[k][i] / _A[i][i];
 			for (j = i + 1; j < n; ++j)
