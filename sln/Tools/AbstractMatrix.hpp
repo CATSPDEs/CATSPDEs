@@ -18,6 +18,8 @@ public:
 		, _w(w) {
 		if (_w < 1 || _h < 1) throw std::out_of_range("order of matrix must be at least one");
 	}
+	// square matrix
+	AbstractMatrix(Index n) : AbstractMatrix(n, n) {}
 	virtual ~AbstractMatrix() {}
 	virtual AbstractMatrix& operator=(T const & val) = 0; // set all entries = @val (so we can “clear” matrix w/ A = 0.)
 	T  operator()(Index i, Index j) const {

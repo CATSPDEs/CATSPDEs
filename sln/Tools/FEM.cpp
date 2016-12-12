@@ -1,5 +1,5 @@
 ﻿#include "FEM.hpp"
-#include "SymmetricContainer.hpp" // for local matrices
+#include "SymmetricMatrix.hpp" // for local matrices
 #include "DenseSquareMatrix.hpp"
 
 extern SingletonLogger& logger;
@@ -30,7 +30,7 @@ namespace FEM {
 			std::unordered_map<Index, double> ind2val; // for Dirichlet BCs
 
 			auto computeLocalStiffnessMatrix = [&]() { // we have 3 × 3 element matricies for linear Lagrange shapes
-				SymmetricContainer<double> s(3);
+				SymmetricMatrix<double> s(3);
 				s(0, 0) = (elementNodes[1][0] - elementNodes[2][0]) * (elementNodes[1][0] - elementNodes[2][0]) +
 						  (elementNodes[1][1] - elementNodes[2][1]) * (elementNodes[1][1] - elementNodes[2][1]);
 				s(0, 1) = (elementNodes[0][0] - elementNodes[2][0]) * (elementNodes[2][0] - elementNodes[1][0]) +
@@ -51,7 +51,7 @@ namespace FEM {
 				return s;
 			};
 			auto computeLocalMassMatrix = [&]() {
-				SymmetricContainer<double> m(3);
+				SymmetricMatrix<double> m(3);
 				m(0, 0) = measure * (6. * PDE.reactionTerm(elementNodes[0]) + 2. * PDE.reactionTerm(elementNodes[1]) + 2. * PDE.reactionTerm(elementNodes[2])) / 60.;
 				m(0, 1) = measure * (2. * PDE.reactionTerm(elementNodes[0]) + 2. * PDE.reactionTerm(elementNodes[1]) + PDE.reactionTerm(elementNodes[2])) / 60.;
 				m(0, 2) = measure * (2. * PDE.reactionTerm(elementNodes[0]) + PDE.reactionTerm(elementNodes[1]) + 2. * PDE.reactionTerm(elementNodes[2])) / 60.;
@@ -342,13 +342,13 @@ namespace FEM {
 			});
 			// compute local mass matrix
 			std::vector<double> values(qNodes.size());
-			SymmetricContainer<double> localMassMatrix(velocityShapes.size());
+			SymmetricMatrix<double> localMassMatrix(velocityShapes.size());
 			for (LocalIndex i = 0; i < velocityShapes.size(); ++i)
 				for (LocalIndex j = i; j < velocityShapes.size(); ++j) {
 					std::transform(shapeVal[j].begin(), shapeVal[j].end(), shapeVal[i].begin(), values.begin(), std::multiplies<double>());
 					localMassMatrix(i, j) = qWeights * values;
 				}
-			SymmetricContainer<double> localStiffnessMatrix(velocityShapes.size());
+			SymmetricMatrix<double> localStiffnessMatrix(velocityShapes.size());
 			for (Index t = 0; t < Omega.numbOfElements(); ++t) {
 				auto nodes = Omega.getElement(t);
 				// jacobian–related
@@ -379,10 +379,10 @@ namespace FEM {
 
 }
 
-//SymmetricContainer<double> FEM::computeLocalMassMatrix(Function reactionTerm, 
+//SymmetricMatrix<double> FEM::computeLocalMassMatrix(Function reactionTerm, 
 //                                                       array<Node, 3>& nodes, 
 //                                                       double area) {
-//	SymmetricContainer<double> m(3);
+//	SymmetricMatrix<double> m(3);
 //	m(0, 0) = area * (6. * reactionTerm(nodes[0]) + 2. * reactionTerm(nodes[1]) + 2. * reactionTerm(nodes[2])) / 60.;
 //	m(0, 1) = area * (2. * reactionTerm(nodes[0]) + 2. * reactionTerm(nodes[1]) + reactionTerm(nodes[2])) / 60.;
 //	m(0, 2) = area * (2. * reactionTerm(nodes[0]) + reactionTerm(nodes[1]) + 2. * reactionTerm(nodes[2])) / 60.;
@@ -392,11 +392,11 @@ namespace FEM {
 //	return m;
 //}
 //
-//SymmetricContainer<double> FEM::computeLocalStiffnessMatrix(Function diffusionTerm,
+//SymmetricMatrix<double> FEM::computeLocalStiffnessMatrix(Function diffusionTerm,
 //                                                            array<Node, 3>& nodes,
 //                                                            array<Node, 3>& middleNodes,
 //                                                            double area) {
-//	SymmetricContainer<double> s(3);
+//	SymmetricMatrix<double> s(3);
 //	s(0, 0) = (nodes[1].x() - nodes[2].x()) * (nodes[1].x() - nodes[2].x()) +
 //	          (nodes[1].y() - nodes[2].y()) * (nodes[1].y() - nodes[2].y());
 //	s(0, 1) = (nodes[0].x() - nodes[2].x()) * (nodes[2].x() - nodes[1].x()) +
@@ -450,10 +450,10 @@ namespace FEM {
 //}
 //
 //
-//SymmetricContainer<double> FEM::computeLocalRobinMatrix(BoundaryConditions const & BCs,
+//SymmetricMatrix<double> FEM::computeLocalRobinMatrix(BoundaryConditions const & BCs,
 //                                                        array<Node, 2>& nodes,
 //                                                        double length) {
-//	SymmetricContainer<double> r(2);
+//	SymmetricMatrix<double> r(2);
 //	r(0, 0) = length * ( 3. * BCs.RobinCoefficient(nodes[0]) +      BCs.RobinCoefficient(nodes[1]) ) / 12.;
 //	r(0, 1) = length * (      BCs.RobinCoefficient(nodes[0]) +      BCs.RobinCoefficient(nodes[1]) ) / 12.;
 //	r(1, 1) = length * (      BCs.RobinCoefficient(nodes[0]) + 3. * BCs.RobinCoefficient(nodes[1]) ) / 12.;

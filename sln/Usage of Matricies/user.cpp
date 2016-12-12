@@ -136,30 +136,21 @@ int main() {
 			logger.end();
 		}
 		else if (testNum == 3) {
-			/*
-				(3) CSR–matrix
-			*/
-			//logger.beg("CSR matrix test");
-			//	ifstream iCSR("Mathematica/matrices/csr.dat"),
-			//			 iU("Mathematica/matrices/csr_vector.dat"),
-			//			 iV("Mathematica/matrices/csr_vector_t.dat");
-			//	ofstream oCSRxU("Mathematica/matrices/csr_mult.dat"),
-			//			 oCSRxV("Mathematica/matrices/csr_mult_t.dat");
-			//	size_t rows, cols, nnz;
-			//	logger.log("loading matrix");
-			//	iCSR >> rows >> cols >> nnz;
-			//	CSRMatrix<double> CSR(rows, cols, nnz);
-			//	iCSR >> CSR;
-			//	CSR.save(logger.buf << "fullform:\n");
-			//	logger.log();
-			//	vector<double> u(cols), v(rows);
-			//	iU >> u;
-			//	iV >> v;
-			//	logger.beg("mult() / multTranspose testing\nresults: Mathematica/matrices/csr_mult(_t).dat");
-			//		oCSRxU << CSR * u;
-			//		oCSRxV << CSR.t() * v;
-			//	logger.end();
-			//logger.end();
+			logger.beg("SymmetricMatrix test");
+				logger.beg("create form ini list");
+					SymmetricMatrix<double> A {
+						11., 12., 13.,
+						     22., 23.,
+						          33.
+					};
+					A.export(logger.buf << "created matrix:\n");
+					logger.log();
+					logger.log("divide by 4.");
+					A /= 4.;
+					A.export(logger.buf << "modified matrix:\n");
+					logger.log();
+				logger.end();
+			logger.end();
 		}
 		else if (testNum == 4) {
 			logger.beg("DenseMatrix test");

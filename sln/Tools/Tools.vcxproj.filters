@@ -45,9 +45,6 @@
     <ClInclude Include="array.hpp">
       <Filter>Utilities</Filter>
     </ClInclude>
-    <ClInclude Include="CSRMatrix.hpp">
-      <Filter>Matrices\Implementations</Filter>
-    </ClInclude>
     <ClInclude Include="CurvilinearEdge.hpp">
       <Filter>Meshes\Triangulation</Filter>
     </ClInclude>
@@ -144,9 +141,6 @@
     <ClInclude Include="AbstractFEMatrix.hpp">
       <Filter>Matrices</Filter>
     </ClInclude>
-    <ClInclude Include="SymmetricContainer.hpp">
-      <Filter>Matrices\Implementations</Filter>
-    </ClInclude>
     <ClInclude Include="AbstractMesh.hpp">
       <Filter>Meshes</Filter>
     </ClInclude>
@@ -167,6 +161,12 @@
     </ClInclude>
     <ClInclude Include="DenseMatrix.hpp">
       <Filter>Matrices\Implementations</Filter>
+    </ClInclude>
+    <ClInclude Include="SymmetricMatrix.hpp">
+      <Filter>Matrices\Implementations</Filter>
+    </ClInclude>
+    <ClInclude Include="CSRMatrix.hpp">
+      <Filter>Matrices\Implementations\To Refactor</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

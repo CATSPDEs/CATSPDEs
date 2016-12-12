@@ -15,7 +15,7 @@ vector<vector<double>> FEM_t::CN3(HyperbolicPDE const & PDE,
 	vector<double> b(Omega.numbOfNodes(), 0.); // load vector
 	vector<vector<double>> xi(t.size(), b); // discrete solution—xi[m][i] is our solution at time = t[m] and at node_i
 	// data structures for assemby of A and b:
-	SymmetricContainer<double> localMassMatrixChi(3), localMassMatrixSigma(3), // for hat functions on triangles 
+	SymmetricMatrix<double> localMassMatrixChi(3), localMassMatrixSigma(3), // for hat functions on triangles 
 	                           localStiffnessMatrix(3), // we have 3 × 3 element matricies
 	                           localRobinMatrix_m(2), // and 2 × 2 element matricies for Robin BCs (just like element matrix in 1D)
 	                           localRobinMatrix_m_2(2); // computed on t[m] and t[m - 2]—for CN3–scheme
@@ -146,7 +146,7 @@ vector<vector<double>> FEM_t::BDF3(HyperbolicPDE const & PDE,
 	vector<double> b(Omega.numbOfNodes(), 0.); // load vector
 	vector<vector<double>> xi(t.size(), b); // discrete solution—xi[m][i] is our solution at time = t[m] and at node_i
 	// data structures for assemby of A and b:
-	SymmetricContainer<double> localMassMatrixChi(3), localMassMatrixSigma(3), // for hat functions on triangles 
+	SymmetricMatrix<double> localMassMatrixChi(3), localMassMatrixSigma(3), // for hat functions on triangles 
 	                           localStiffnessMatrix(3), // we have 3 × 3 element matricies
 	                           localRobinMatrix(2); // and 2 × 2 element matricies for Robin BCs (just like element matrix in 1D)
 	array<double, 3> localLoadVector; // and their
@@ -255,10 +255,10 @@ vector<vector<double>> FEM_t::BDF3(HyperbolicPDE const & PDE,
 }
 
 
-SymmetricContainer<double> FEM_t::computeLocalMassMatrix(Function reactionTerm,
+SymmetricMatrix<double> FEM_t::computeLocalMassMatrix(Function reactionTerm,
                                                          array<Node, 3>& nodes,
                                                          double area) {
-	SymmetricContainer<double> m(3);
+	SymmetricMatrix<double> m(3);
 	m(0, 0) = area * (6. * reactionTerm(nodes[0]) + 2. * reactionTerm(nodes[1]) + 2. * reactionTerm(nodes[2])) / 60.;
 	m(0, 1) = area * (2. * reactionTerm(nodes[0]) + 2. * reactionTerm(nodes[1]) + reactionTerm(nodes[2])) / 60.;
 	m(0, 2) = area * (2. * reactionTerm(nodes[0]) + reactionTerm(nodes[1]) + 2. * reactionTerm(nodes[2])) / 60.;
@@ -268,11 +268,11 @@ SymmetricContainer<double> FEM_t::computeLocalMassMatrix(Function reactionTerm,
 	return m;
 }
 
-SymmetricContainer<double> FEM_t::computeLocalStiffnessMatrix(Function diffusionTerm,
+SymmetricMatrix<double> FEM_t::computeLocalStiffnessMatrix(Function diffusionTerm,
                                                               array<Node, 3>& nodes,
                                                               array<Node, 3>& middleNodes,
                                                               double area) {
-	SymmetricContainer<double> s(3);
+	SymmetricMatrix<double> s(3);
 	s(0, 0) = (nodes[1].x() - nodes[2].x()) * (nodes[1].x() - nodes[2].x()) +
 		(nodes[1].y() - nodes[2].y()) * (nodes[1].y() - nodes[2].y());
 	s(0, 1) = (nodes[0].x() - nodes[2].x()) * (nodes[2].x() - nodes[1].x()) +
@@ -318,11 +318,11 @@ array<double, 3> FEM_t::computeLocalLoadVector(Function_t forceTerm,
 }
 
 
-SymmetricContainer<double> FEM_t::computeLocalRobinMatrix(BoundaryConditions_t const & BCs,
+SymmetricMatrix<double> FEM_t::computeLocalRobinMatrix(BoundaryConditions_t const & BCs,
                                                           double t,
                                                           array<Node, 2>& nodes,
                                                           double length) {
-	SymmetricContainer<double> r(2);
+	SymmetricMatrix<double> r(2);
 	r(0, 0) = length * (3. * BCs.RobinCoefficient(nodes[0], t) + BCs.RobinCoefficient(nodes[1], t)) / 12.;
 	r(0, 1) = length * (BCs.RobinCoefficient(nodes[0], t) + BCs.RobinCoefficient(nodes[1], t)) / 12.;
 	r(1, 1) = length * (BCs.RobinCoefficient(nodes[0], t) + 3. * BCs.RobinCoefficient(nodes[1], t)) / 12.;

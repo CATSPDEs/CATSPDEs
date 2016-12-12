@@ -11,7 +11,7 @@ class DenseMatrix :
 	T  _get(Index i, Index j) const final { return _A[i][j]; };
 public:
 	// create h × w zero matrix
-	explicit DenseMatrix(Index h, Index w = h)
+	explicit DenseMatrix(Index h, Index w)
 		: AbstractMatrix<T>(h, w)
 		, _A(h, std::vector<T>(w, 0.))
 	{}

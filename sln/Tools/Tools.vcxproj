@@ -157,7 +157,7 @@
     <ClInclude Include="rlutil.h" />
     <ClInclude Include="SingletonLogger.hpp" />
     <ClInclude Include="StokesMatrix.hpp" />
-    <ClInclude Include="SymmetricContainer.hpp" />
+    <ClInclude Include="SymmetricMatrix.hpp" />
     <ClInclude Include="SymmetricCSlCMatrix.hpp" />
     <ClInclude Include="SymmetricCSlRMatrix.hpp" />
     <ClInclude Include="TimeFrames.hpp" />

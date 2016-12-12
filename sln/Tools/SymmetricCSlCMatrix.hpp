@@ -56,7 +56,7 @@ public: // TEMP
 public:
 	explicit SymmetricCSlCMatrix(Index n = 1, Index nnz = 0); // order of matrix and numb of nonzero elems in lower triangular part
 	// virtual methods to be implemented
-	Index nnz() const final { return 2 * _colptr[_w] + _w; } // “+ _w” because of _diag
+	Index nnz() const final { return _colptr[_w] + _w; } // “+ _w” because of _diag
 	SymmetricCSlCMatrix& operator=(T const &) final;
 	void mult(T const * by, T* result) const final;
 	// i/o
@@ -75,7 +75,7 @@ public:
 
 template <typename T>
 SymmetricCSlCMatrix<T>::SymmetricCSlCMatrix(Index n, Index nnz)
-	: AbstractMatrix<T>(n, n)
+	: AbstractMatrix<T>(n)
 	, _colptr(n + 1)
 	, _rowind(nnz)
 	, _lval(nnz)
