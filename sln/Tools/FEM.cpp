@@ -1,6 +1,6 @@
 ﻿#include "FEM.hpp"
 #include "SymmetricMatrix.hpp" // for local matrices
-#include "DenseSquareMatrix.hpp"
+#include "DenseMatrix.hpp"
 
 extern SingletonLogger& logger;
 
@@ -243,7 +243,7 @@ namespace FEM {
 				}
 				else { // we are at the coarsest grid
 					logger.beg("compute exact soln");
-						DenseSquareMatrix<double> B(matrices.front());
+						DenseMatrix<double> B(matrices.front());
 						auto z = B.GaussElimination(f);
 					logger.end();
 					return z;
@@ -353,7 +353,7 @@ namespace FEM {
 				auto nodes = Omega.getElement(t);
 				// jacobian–related
 				auto detJ = 2. * area(Omega.getElement(t));
-				DenseSquareMatrix<double> JInverseTranspose {
+				DenseMatrix<double> JInverseTranspose {
 					{ nodes[2][1] - nodes[0][1], nodes[0][1] - nodes[1][1] },
 					{ nodes[0][0] - nodes[2][0], nodes[1][0] - nodes[0][0] }
 				};

@@ -102,14 +102,14 @@ int main() {
 	try {
 		logger.beg("load initial mesh from\n" + iPath);
 			Triangulation Omega;
-			Omega.AbstractMesh::import(iPath + "mesh.ntn");
+			Omega.import(iPath + "mesh.ntn");
 			Omega.enumerateRibs();
 			auto numbOfNodesCoarse = Omega.numbOfNodes(),
 			     numbOfTrianglesCoarse = Omega.numbOfElements(),
 			     numbOfRibsCoarse = Omega.numbOfRibs();
 			auto ribsNumnCoarse = Omega.getRibsNumeration();
 			// … compute system matrix …
-			Omega.AbstractMesh::export(oPath + "meshes/0_mesh.ntr", { {"format", "NTR"} });
+			Omega.export(oPath + "meshes/0_mesh.ntr", { {"format", "NTR"} });
 			//vector<double> xi;
 			//for (Node const & p : Omega.computeMiddleNodes(ribsNumnCoarse)) xi.push_back(u(p));
 			//ofstream oXi(oPath + "0_xi.dat");
@@ -126,7 +126,7 @@ int main() {
 					Omega.refine();
 				logger.end();
 				logger.beg("save fine mesh to\n" + oPath + "meshes");
-					Omega.AbstractMesh::export(oPath + "meshes/" + to_string(currentMeshLevel) + "_mesh.ntr", {{ "format", "NTR" }});
+					Omega.export(oPath + "meshes/" + to_string(currentMeshLevel) + "_mesh.ntr", {{ "format", "NTR" }});
 				logger.end();
 				// … compute system matrix …
 				logger.beg("build pattern and fill in values of Restriction matrix");

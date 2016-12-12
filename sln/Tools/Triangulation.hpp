@@ -54,6 +54,10 @@ public:
 	// virtual methods to be implemented
 	Triangulation& import(std::istream& from = std::cin) final;
 	void export(std::ostream& to = std::cout, Parameters const & params = {}) const final;
+	// in order to work w/ strings, not streams
+	using AbstractMesh::import;
+	using AbstractMesh::export;
+
 	Triangulation& refine(Index numbOfRefinements = 1) final;
 
 	Triangulation& computeNeighbors(); // O(m^2), m := numb of triangles (because we need to construct _neighbors list manually)

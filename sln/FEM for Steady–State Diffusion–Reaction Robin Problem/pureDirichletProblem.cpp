@@ -20,7 +20,7 @@ int main() {
 				[](Node2D const & p) { return 2.*(-1. + p[0])*p[0] + 2.*(-1. + p[1])*p[1]; }
 			);
 			Triangulation Omega;
-			Omega.AbstractMesh::import("mesh.ntn");
+			Omega.import("mesh.ntn");
 			DirichletScalarCondition2D DirichletBC(
 				[](Node2D const & p) { return 1.; }
 			);
@@ -81,7 +81,7 @@ int main() {
 				}
 			logger.end();
 			logger.beg("export residuals norms history");
-				//Omega.AbstractMesh::export(oPath + "mesh.nt");
+				//Omega.export(oPath + "mesh.nt");
 				export(xi, oPath + "xi.dat");
 				export(r, oPath + "MG.dat");
 			logger.end();
@@ -255,52 +255,13 @@ int main() {
 				++gamma;
 			logger.end();
 			logger.beg("try 10 MG iterations");
-				//logger.mute = true;
+				logger.mute = true;
 				std::vector<double> xi(A.getOrder(), 0.), r;
 				for (Index i = 0; i < 10; ++i)
 					xi = iteration(numbOfMeshLevels, xi, b);
-				//logger.mute = false;
+				logger.mute = false;
 			logger.end();
 		}
-		//Omega.AbstractMesh::export(oPath + "0_mesh.nt");
-		//logger.beg("setup multigrid data");
-		//	auto multigridData = multigridLinearLagrangeSetter(
-		//		PDE, DirichletBC, Omega, 2
-		//	);
-		//logger.end();
-
-		//Omega.AbstractMesh::export(oPath + "2_mesh.nt");
-
-		//auto restrictions = boost::get<0>(multigridData);
-		//for (Index i = 0; i < restrictions.size(); ++i) {
-		//	restrictions[i].exportHarwellBoeing(oPath + "restrictions/" + to_string(i) + "_R.rra");
-		//	restrictions[i].export(oPath + "restrictions/" + to_string(i) + "_R.dat");
-		//}
-
-		//Omega.refine(2);
-		//logger.beg("assemble system");
-		//	auto system = linearLagrangeAssembler(PDE, Omega, DirichletBC);
-		//	auto A = boost::get<0>(system);
-		//	auto b = boost::get<1>(system);
-		//logger.end();
-		////logger.beg("solve w/ CG");
-		////	auto res = ProjectionSolvers::Krylov::CG(A, b, boost::none);
-		////	auto xi = boost::get<0>(res);
-		////	auto numbOfIterations = boost::get<1>(res);
-		////	logger.log("numb of iterations = " + to_string(numbOfIterations));
-		////logger.end();
-		//logger.beg("solve w/ Jacobi");
-		//	auto result = ProjectionSolvers::Smoothers::Jacobi(A, b, 1., boost::none, 200);
-		//	auto xi = boost::get<0>(result);
-		//	auto residuals = boost::get<1>(result);
-		//logger.end();
-		//logger.beg("export");
-		//	Omega.AbstractMesh::export(oPath + "mesh.nt");
-		//	export(xi, oPath + "xi.dat");
-		//	export(residuals, oPath + "residuals.dat");
-		//	//A.export(oPath + "matrices/A.dat");
-		//	//export(b, oPath + "matrices/b.dat");
-		//logger.end();
 	}
 	catch (std::exception const & e) {
 		logger.err(e.what());
