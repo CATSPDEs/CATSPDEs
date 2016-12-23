@@ -27,7 +27,7 @@ int main() {
 		HyperbolicPDE waveEqn; // hom. wave eqn	
 		InitialConditions ICs; // zero position and velocity
 		// BCs
-		BoundaryConditions_t BCs({ 
+		BoundaryCondition_t BCs({ 
 			make_shared<DirichletBC_t>(G1_D, G1), // sine wave at strips’ ends,
 			make_shared<DirichletBC_t>(zeroFunc_t, G2), // fixed hole, and
 			make_shared<NeumannBC_t>() // free boundary elsewhere

@@ -68,6 +68,17 @@ void SingletonLogger::wrn(std::string const & message) const {
 	std::cout << _format(message) << '\n';
 }
 
+void SingletonLogger::wrn() {
+	// if (mute) return;
+	rlutil::setColor(13);
+	std::cout << tab() << "[wrn] ";
+	rlutil::setColor(7);
+	std::cout << _format(buf.str()) << '\n';
+	// clear buf
+	buf.str(std::string());
+	buf.clear();
+}
+
 void SingletonLogger::err(std::string const & message) const {
 	rlutil::setColor(12);
 	std::cout << tab() << "[err] ";

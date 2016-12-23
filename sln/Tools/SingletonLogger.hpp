@@ -26,6 +26,7 @@ public:
 	void log(std::string const &) const; // print message w/ "[log]" prefix
 	void log(); // print formatted buf 
 	void wrn(std::string const &) const; // print warning
+	void wrn(); // print formatted buf 
 	void err(std::string const &) const; // print error
 	template <typename T>
 	SingletonLogger& inp(std::string const &, T&); // print input invite and get input value

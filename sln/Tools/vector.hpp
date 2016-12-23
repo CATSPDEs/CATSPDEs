@@ -1,12 +1,13 @@
 #pragma once
 #include <vector>
+#include <fstream> // i/o
+#include <iomanip> // setprecision for i/o
+#include "Index.hpp"
 
+// dot product
 template <typename T>
-T operator*(std::vector<T> const & u, std::vector<T> const & v) { // dot product
-	T dotProduct = 0;
-	for (size_t i = 0; i < u.size(); ++i)
-		dotProduct += u[i] * v[i];
-	return dotProduct;
+T operator*(std::vector<T> const & u, std::vector<T> const & v) {
+	return std::inner_product(u.begin(), u.end(), v.begin(), 0.);
 }
 
 // sum two vectors
@@ -75,20 +76,20 @@ template <typename T>
 std::ostream& operator<<(std::ostream& output, std::vector<std::vector<T>> const & u) {
 	output.precision(15); // double precision
 	output << std::scientific << std::showpos;
-	for (size_t i = 0; i < u.size(); ++i) {
-		for (size_t j = 0; j < u[i].size(); ++j)
+	for (Index i = 0; i < u.size(); ++i) {
+		for (Index j = 0; j < u[i].size(); ++j)
 			output << u[i][j] << ' ';
 		output << '\n';
 	}
 	return output;
 }
 
-template <typename T, size_t N>
+template <typename T, Index N>
 std::ostream& operator<<(std::ostream& output, std::vector<std::array<T, N>> const & u) {
 	output.precision(15); // double precision
 	output << std::scientific << std::showpos;
-	for (size_t i = 0; i < u.size(); ++i) {
-		for (size_t j = 0; j < N; ++j)
+	for (Index i = 0; i < u.size(); ++i) {
+		for (Index j = 0; j < N; ++j)
 			output << u[i][j] << ' ';
 		output << '\n';
 	}

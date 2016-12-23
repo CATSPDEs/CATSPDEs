@@ -8,23 +8,23 @@
 #include "TimeFrames.hpp"
 // (3) and IBCs that connects (1) and (2)
 #include "InitialConditions.hpp"
-#include "BoundaryConditions_t.hpp"
+#include "BoundaryCondition_t.hpp"
 // for local matrices
 #include "SymmetricMatrix.hpp" 
 
 namespace FEM_t {
 	// Crank–Nicolson scheme, 3 time frames
-	vector<vector<double>> CN3(HyperbolicPDE const &, TimeFrames const &, Triangulation&, InitialConditions const &, BoundaryConditions_t&, 
+	vector<vector<double>> CN3(HyperbolicPDE const &, TimeFrames const &, Triangulation&, InitialConditions const &, BoundaryCondition_t&, 
 	                           Function_t u = emptyFunc_t); // exact soln (if we are dealing w / model problem)
 	// Backward difference formula, 3 time frames
-	vector<vector<double>> BDF3(HyperbolicPDE const &, TimeFrames const &, Triangulation&, InitialConditions const &, BoundaryConditions_t&, 
+	vector<vector<double>> BDF3(HyperbolicPDE const &, TimeFrames const &, Triangulation&, InitialConditions const &, BoundaryCondition_t&, 
 	                            Function_t u = emptyFunc_t);
 	// helpers
 	SymmetricMatrix<double> computeLocalMassMatrix     (Function, array<Node, 3>&, double);
 	SymmetricMatrix<double> computeLocalStiffnessMatrix(Function, array<Node, 3>&, array<Node, 3>&, double);
 	array<double, 3>           computeLocalLoadVector     (Function_t, double, array<Node, 3>&, array<Node, 3>&, double);
-	SymmetricMatrix<double> computeLocalRobinMatrix    (BoundaryConditions_t const &, double, array<Node, 2>&, double length);
-	array<double, 2>           computeLocalRobinVector    (BoundaryConditions_t const &, double, array<Node, 2>&, double length);
+	SymmetricMatrix<double> computeLocalRobinMatrix    (BoundaryCondition_t const &, double, array<Node, 2>&, double length);
+	array<double, 2>           computeLocalRobinVector    (BoundaryCondition_t const &, double, array<Node, 2>&, double length);
 	// make vector of model soln
 	vector<vector<double>> constructVector(Function_t, TimeFrames const &, Triangulation&);
 	// save boundary nodes

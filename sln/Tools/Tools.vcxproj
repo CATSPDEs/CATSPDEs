@@ -121,18 +121,19 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="AbstractFEMatrix.hpp" />
+    <ClInclude Include="AbstractFiniteElement.hpp" />
     <ClInclude Include="AbstractMatrix.hpp" />
+    <ClInclude Include="AbstractQuadratureRule.hpp" />
     <ClInclude Include="AdjacencyList.hpp" />
     <ClInclude Include="array.hpp" />
-    <ClInclude Include="BoundaryConditions_t.hpp" />
     <ClInclude Include="constants.hpp" />
     <ClInclude Include="CSCMatrix.hpp" />
     <ClInclude Include="CSlRMatrix.hpp" />
     <ClInclude Include="Curve.hpp" />
     <ClInclude Include="CurvilinearEdge.hpp" />
     <ClInclude Include="DenseMatrix.hpp" />
+    <ClInclude Include="DivGradFEM.hpp" />
     <ClInclude Include="Element.hpp" />
-    <ClInclude Include="FEM.hpp" />
     <ClInclude Include="FEM_t.hpp" />
     <ClInclude Include="AbstractHarwellBoeingMatrix.hpp" />
     <ClInclude Include="HarwellBoeingHeader.hpp" />
@@ -142,6 +143,10 @@
     <ClInclude Include="Index.hpp" />
     <ClInclude Include="InitialConditions.hpp" />
     <ClInclude Include="AbstractTransposeMultipliableMatrix.hpp" />
+    <ClInclude Include="Mapping.hpp" />
+    <ClInclude Include="SmartMapping.hpp" />
+    <ClInclude Include="MasterTriangleQuadratureRule.hpp" />
+    <ClInclude Include="MixedFEM.hpp" />
     <ClInclude Include="OseenProblem.hpp" />
     <ClInclude Include="ProjectionSolvers.hpp" />
     <ClInclude Include="Node.hpp" />
@@ -149,9 +154,9 @@
     <ClInclude Include="AbstractMesh.hpp" />
     <ClInclude Include="AbstractSparseMatrix.hpp" />
     <ClInclude Include="BandMatrix.hpp" />
-    <ClInclude Include="BoundaryConditions.hpp" />
+    <ClInclude Include="BoundaryCondition.hpp" />
     <ClInclude Include="CSRMatrix.hpp" />
-    <ClInclude Include="Mapping.hpp" />
+    <ClInclude Include="AbstractMapping.hpp" />
     <ClInclude Include="Parameters.hpp" />
     <ClInclude Include="Predicate.hpp" />
     <ClInclude Include="rlutil.h" />
@@ -161,15 +166,17 @@
     <ClInclude Include="SymmetricCSlCMatrix.hpp" />
     <ClInclude Include="SymmetricCSlRMatrix.hpp" />
     <ClInclude Include="TimeFrames.hpp" />
-    <ClInclude Include="Function_t.hpp" />
+    <ClInclude Include="Triangle_P1_Lagrange.hpp" />
+    <ClInclude Include="Triangle_P2_Lagrange.hpp" />
     <ClInclude Include="Triangulation.hpp" />
     <ClInclude Include="vector.hpp" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="BandMatrix.cpp" />
     <ClCompile Include="CSlRMatrix.cpp" />
-    <ClCompile Include="FEM.cpp" />
+    <ClCompile Include="DivGradFEM.cpp" />
     <ClCompile Include="FEM_t.cpp" />
+    <ClCompile Include="MixedFEM.cpp" />
     <ClCompile Include="SingletonLogger.cpp" />
     <ClCompile Include="StokesMatrix.cpp" />
     <ClCompile Include="SymmetricCSlRMatrix.cpp" />

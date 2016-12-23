@@ -10,10 +10,10 @@
 NotebookFileLineBreakTest
 NotebookFileLineBreakTest
 NotebookDataPosition[       158,          7]
-NotebookDataLength[     45805,       1131]
-NotebookOptionsPosition[     44174,       1069]
-NotebookOutlinePosition[     44520,       1084]
-CellTagsIndexPosition[     44477,       1081]
+NotebookDataLength[     46199,       1140]
+NotebookOptionsPosition[     44533,       1077]
+NotebookOutlinePosition[     44878,       1092]
+CellTagsIndexPosition[     44835,       1089]
 WindowFrame->Normal*)
 
 (* Beginning of Notebook Content *)
@@ -232,19 +232,26 @@ Cell["Create Mesh \[ScriptCapitalT] from Symbolic Region", "Subsection",
 
 Cell[BoxData[
  RowBox[{
+  RowBox[{"<<", "NDSolve`FEM`"}], ";"}]], "Input"],
+
+Cell[BoxData[
+ RowBox[{
   RowBox[{"create\[ScriptCapitalT]fromRegion", "[", 
    RowBox[{"\[CapitalOmega]_", ",", 
-    RowBox[{"maxCellMeasure_:", "\[Infinity]"}]}], "]"}], ":=", 
+    RowBox[{"maxCellMeasure_:", "\[Infinity]"}], ",", 
+    RowBox[{"maxBoundaryCellMeasure_:", "\[Infinity]"}]}], "]"}], ":=", 
   RowBox[{"Module", "[", 
    RowBox[{
     RowBox[{"{", "femMesh", "}"}], ",", "\[IndentingNewLine]", 
     RowBox[{
-     RowBox[{"<<", "NDSolve`FEM`"}], ";", "\[IndentingNewLine]", 
      RowBox[{"femMesh", "=", 
       RowBox[{"ToElementMesh", "[", 
-       RowBox[{"\[CapitalOmega]", ",", 
+       RowBox[{"\[CapitalOmega]", ",", "\[IndentingNewLine]", 
         RowBox[{"\"\<MaxCellMeasure\>\"", "\[Rule]", " ", "maxCellMeasure"}], 
-        ",", 
+        ",", "\[IndentingNewLine]", 
+        RowBox[{
+        "\"\<MaxBoundaryCellMeasure\>\"", "\[Rule]", 
+         "maxBoundaryCellMeasure"}], ",", "\[IndentingNewLine]", 
         RowBox[{"\"\<MeshOrder\>\"", "\[Rule]", "1"}], ",", 
         RowBox[{"\"\<MeshElementType\>\"", "\[Rule]", "TriangleElement"}]}], 
        "]"}]}], ";", "\[IndentingNewLine]", 
@@ -384,7 +391,8 @@ Cell[BoxData[
    3.684512788365442*^9, 3.684512789466679*^9}, {3.6845200931382847`*^9, 
    3.6845201001996326`*^9}, {3.684594182071188*^9, 3.68459451193808*^9}, 
    3.6845954667229347`*^9, {3.6864869853669405`*^9, 3.686487012284938*^9}, {
-   3.6868290579681063`*^9, 3.686829071145713*^9}}]
+   3.6868290579681063`*^9, 3.686829071145713*^9}, {3.6905505571801586`*^9, 
+   3.6905505579758053`*^9}, {3.6905536566333017`*^9, 3.690553714655213*^9}}]
 }, Open  ]],
 
 Cell[CellGroupData[{
@@ -1068,7 +1076,7 @@ Cell[BoxData[
 }, Open  ]]
 },
 WindowSize->{1350, 676},
-WindowMargins->{{-7, Automatic}, {Automatic, 0}},
+WindowMargins->{{0, Automatic}, {Automatic, 0}},
 FrontEndVersion->"10.4 for Microsoft Windows (64-bit) (February 25, 2016)",
 StyleDefinitions->"Default.nb"
 ]
@@ -1098,7 +1106,7 @@ Cell[4792, 137, 1003, 27, 72, "Input"]
 }, Open  ]],
 Cell[CellGroupData[{
 Cell[5832, 169, 142, 1, 43, "Subsection"],
-Cell[5977, 172, 745, 16, 105, "Input"]
+Cell[5977, 172, 745, 16, 72, "Input"]
 }, Open  ]],
 Cell[CellGroupData[{
 Cell[6759, 193, 134, 1, 43, "Subsection"],
@@ -1109,27 +1117,28 @@ Cell[CellGroupData[{
 Cell[7651, 222, 165, 2, 63, "Section"],
 Cell[CellGroupData[{
 Cell[7841, 228, 167, 2, 43, "Subsection"],
-Cell[8011, 232, 6000, 154, 302, "Input"]
+Cell[8011, 232, 74, 2, 31, "Input"],
+Cell[8088, 236, 6282, 158, 342, "Input"]
 }, Open  ]],
 Cell[CellGroupData[{
-Cell[14048, 391, 213, 3, 43, "Subsection"],
-Cell[14264, 396, 8324, 174, 852, "Input"]
+Cell[14407, 399, 213, 3, 43, "Subsection"],
+Cell[14623, 404, 8324, 174, 852, "Input"]
 }, Open  ]],
 Cell[CellGroupData[{
-Cell[22625, 575, 162, 2, 43, "Subsection"],
-Cell[22790, 579, 4347, 89, 485, "Input"]
+Cell[22984, 583, 162, 2, 43, "Subsection"],
+Cell[23149, 587, 4347, 89, 452, "Input"]
 }, Open  ]]
 }, Open  ]],
 Cell[CellGroupData[{
-Cell[27186, 674, 108, 1, 63, "Section"],
+Cell[27545, 682, 108, 1, 63, "Section"],
 Cell[CellGroupData[{
-Cell[27319, 679, 128, 1, 43, "Subsection"],
-Cell[27450, 682, 399, 11, 31, "Input"]
+Cell[27678, 687, 128, 1, 43, "Subsection"],
+Cell[27809, 690, 399, 11, 31, "Input"]
 }, Closed]],
 Cell[CellGroupData[{
-Cell[27886, 698, 125, 1, 35, "Subsection"],
-Cell[28014, 701, 3637, 87, 319, "Input"],
-Cell[31654, 790, 12480, 274, 932, "Input"]
+Cell[28245, 706, 125, 1, 35, "Subsection"],
+Cell[28373, 709, 3637, 87, 319, "Input"],
+Cell[32013, 798, 12480, 274, 932, "Input"]
 }, Open  ]]
 }, Open  ]]
 }, Open  ]]

@@ -24,7 +24,7 @@ int main() {
 		Triangulation Omega(Node(0., 0.), Node(1., 1.)); // simple square mesh
 		HyperbolicPDE PDE(chi, sigma, a, f);
 		InitialConditions ICs(initialPosition, initialVelocity);
-		BoundaryConditions_t BCs({
+		BoundaryCondition_t BCs({
 			make_shared<DirichletBC_t>(G1_D, G1),
 			make_shared<NeumannBC_t>(G2_N, G2),
 			make_shared<RobinBC_t>(G3_R, G3_N)

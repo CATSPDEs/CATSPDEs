@@ -30,4 +30,6 @@ public:
 		mult(u.data(), v.data());
 		return v;
 	}
+	// array version
+	using AbstractMultipliableMatrix::operator*;
 };

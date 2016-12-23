@@ -15,7 +15,10 @@ public:
 	}
 	// array version
 	template <Index N>
-	std::vector<T> operator*(std::array<T, N> const & a) { 
-		return operator*(std::vector<T>(a.begin(), a.end()));
+	auto operator*(std::array<T, N> const & a) { 
+		auto u = operator*(std::vector<T>(a.begin(), a.end()));
+		std::array<T, N> v;
+		std::copy_n(u.begin(), N, v.begin());
+		return v;
 	}
 };

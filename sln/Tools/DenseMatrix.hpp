@@ -11,10 +11,11 @@ class DenseMatrix :
 	T  _get(Index i, Index j) const final { return _A[i][j]; };
 public:
 	// create h × w zero matrix
-	explicit DenseMatrix(Index h, Index w)
+	DenseMatrix(Index h, Index w)
 		: AbstractMatrix<T>(h, w)
 		, _A(h, std::vector<T>(w, 0.))
 	{}
+	explicit DenseMatrix(Index n = 1) : DenseMatrix(n, n) {}
 	// create matrix from ini lists, e.g. from { {11, 12}, {21, 22} }
 	DenseMatrix(std::initializer_list<std::initializer_list<T>> const &);
 	// densify any matrix

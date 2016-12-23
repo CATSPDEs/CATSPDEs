@@ -3,8 +3,6 @@
 #include <boost/optional/optional.hpp>
 #include "AbstractMultipliableMatrix.hpp"
 
-extern SingletonLogger& logger;
-
 namespace ProjectionSolvers {
 
 	namespace Smoothers {

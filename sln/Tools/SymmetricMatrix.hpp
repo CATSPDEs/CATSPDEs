@@ -40,3 +40,9 @@ public:
 		return *this;
 	}
 };
+
+template <typename T>
+inline SymmetricMatrix<T> operator*(T const & scalar, SymmetricMatrix<T> const & A) {
+	auto B = A;
+	return B *= scalar;
+}

@@ -34,6 +34,30 @@
     <Filter Include="Matrices\Implementations\To Refactor">
       <UniqueIdentifier>{272c08f6-8445-46b7-adab-cc07307aaf59}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Finite Elements">
+      <UniqueIdentifier>{8c8898d2-96a0-4187-b287-2390bd360928}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Finite Elements\Lagrange Family">
+      <UniqueIdentifier>{d0bd0a83-3aa8-4567-a554-2df0c43447be}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Finite Elements\Exotic FEs">
+      <UniqueIdentifier>{9d39bc3e-ae73-4684-9a94-02d9fc0cb4d3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Common\Mappings">
+      <UniqueIdentifier>{e24fe647-dbff-419c-af19-54a07525b0c8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Solvers\Finite Element Methods">
+      <UniqueIdentifier>{bdbf5593-ca17-4386-bdf9-c9e722cdc949}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Solvers\SLAE Solvers">
+      <UniqueIdentifier>{18568653-13c2-4725-b4ee-34c082a5eccb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Solvers\Temp">
+      <UniqueIdentifier>{c30a1b27-4106-4942-ad4e-1b1914174fd5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Quadrature Rules">
+      <UniqueIdentifier>{3dc0b677-22e3-48aa-a734-ea9ad0f8b2ca}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AbstractSparseMatrix.hpp">
@@ -54,9 +78,6 @@
     <ClInclude Include="DiffusionReactionEqn.hpp">
       <Filter>PDEs</Filter>
     </ClInclude>
-    <ClInclude Include="BoundaryConditions.hpp">
-      <Filter>PDEs</Filter>
-    </ClInclude>
     <ClInclude Include="Node.hpp">
       <Filter>Common</Filter>
     </ClInclude>
@@ -66,26 +87,11 @@
     <ClInclude Include="HyperbolicPDE.hpp">
       <Filter>PDEs</Filter>
     </ClInclude>
-    <ClInclude Include="FEM.hpp">
-      <Filter>Solvers</Filter>
-    </ClInclude>
     <ClInclude Include="TimeFrames.hpp">
       <Filter>PDEs</Filter>
     </ClInclude>
-    <ClInclude Include="Predicate.hpp">
-      <Filter>Common</Filter>
-    </ClInclude>
-    <ClInclude Include="Function_t.hpp">
-      <Filter>Common</Filter>
-    </ClInclude>
     <ClInclude Include="InitialConditions.hpp">
       <Filter>PDEs</Filter>
-    </ClInclude>
-    <ClInclude Include="BoundaryConditions_t.hpp">
-      <Filter>PDEs</Filter>
-    </ClInclude>
-    <ClInclude Include="FEM_t.hpp">
-      <Filter>Solvers</Filter>
     </ClInclude>
     <ClInclude Include="IDecomposable.hpp">
       <Filter>Matrices</Filter>
@@ -147,15 +153,6 @@
     <ClInclude Include="Index.hpp">
       <Filter>Common</Filter>
     </ClInclude>
-    <ClInclude Include="Element.hpp">
-      <Filter>Meshes</Filter>
-    </ClInclude>
-    <ClInclude Include="ProjectionSolvers.hpp">
-      <Filter>Solvers</Filter>
-    </ClInclude>
-    <ClInclude Include="Mapping.hpp">
-      <Filter>Common</Filter>
-    </ClInclude>
     <ClInclude Include="OseenProblem.hpp">
       <Filter>PDEs</Filter>
     </ClInclude>
@@ -168,14 +165,53 @@
     <ClInclude Include="CSRMatrix.hpp">
       <Filter>Matrices\Implementations\To Refactor</Filter>
     </ClInclude>
+    <ClInclude Include="Predicate.hpp">
+      <Filter>Common\Mappings</Filter>
+    </ClInclude>
+    <ClInclude Include="AbstractMapping.hpp">
+      <Filter>Common\Mappings</Filter>
+    </ClInclude>
+    <ClInclude Include="AbstractFiniteElement.hpp">
+      <Filter>Finite Elements</Filter>
+    </ClInclude>
+    <ClInclude Include="Triangle_P1_Lagrange.hpp">
+      <Filter>Finite Elements\Lagrange Family</Filter>
+    </ClInclude>
+    <ClInclude Include="Triangle_P2_Lagrange.hpp">
+      <Filter>Finite Elements\Lagrange Family</Filter>
+    </ClInclude>
+    <ClInclude Include="Element.hpp">
+      <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="AbstractQuadratureRule.hpp">
+      <Filter>Quadrature Rules</Filter>
+    </ClInclude>
+    <ClInclude Include="FEM_t.hpp">
+      <Filter>Solvers\Temp</Filter>
+    </ClInclude>
+    <ClInclude Include="ProjectionSolvers.hpp">
+      <Filter>Solvers\SLAE Solvers</Filter>
+    </ClInclude>
+    <ClInclude Include="BoundaryCondition.hpp">
+      <Filter>PDEs</Filter>
+    </ClInclude>
+    <ClInclude Include="DivGradFEM.hpp">
+      <Filter>Solvers\Finite Element Methods</Filter>
+    </ClInclude>
+    <ClInclude Include="MixedFEM.hpp">
+      <Filter>Solvers\Finite Element Methods</Filter>
+    </ClInclude>
+    <ClInclude Include="MasterTriangleQuadratureRule.hpp">
+      <Filter>Quadrature Rules</Filter>
+    </ClInclude>
+    <ClInclude Include="SmartMapping.hpp">
+      <Filter>Common\Mappings</Filter>
+    </ClInclude>
+    <ClInclude Include="Mapping.hpp">
+      <Filter>Common\Mappings</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="FEM.cpp">
-      <Filter>Solvers</Filter>
-    </ClCompile>
-    <ClCompile Include="FEM_t.cpp">
-      <Filter>Solvers</Filter>
-    </ClCompile>
     <ClCompile Include="StokesMatrix.cpp">
       <Filter>Matrices\Implementations</Filter>
     </ClCompile>
@@ -193,6 +229,15 @@
     </ClCompile>
     <ClCompile Include="Triangulation.cpp">
       <Filter>Meshes\Triangulation</Filter>
+    </ClCompile>
+    <ClCompile Include="FEM_t.cpp">
+      <Filter>Solvers\Temp</Filter>
+    </ClCompile>
+    <ClCompile Include="MixedFEM.cpp">
+      <Filter>Solvers\Finite Element Methods</Filter>
+    </ClCompile>
+    <ClCompile Include="DivGradFEM.cpp">
+      <Filter>Solvers\Finite Element Methods</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

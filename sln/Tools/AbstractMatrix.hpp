@@ -1,9 +1,5 @@
 #pragma once
-#include <fstream>
-#include <iomanip> // setprecision for i/o
 #include <stdexcept> // exceptions handling
-#include "SingletonLogger.hpp" // for logs
-#include "Index.hpp"
 #include "vector.hpp" // vector operations (*, +, ...)
 
 template <typename T>

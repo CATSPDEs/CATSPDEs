@@ -7,7 +7,7 @@ vector<vector<double>> FEM_t::CN3(HyperbolicPDE const & PDE,
                                   TimeFrames const & t,
                                   Triangulation& Omega,
                                   InitialConditions const & ICs,
-                                  BoundaryConditions_t& BCs,
+                                  BoundaryCondition_t& BCs,
                                   Function_t u) {
 	if (t.size() < 2) throw invalid_argument("CN3() needs at least 2 time frames to compute soln");
 	// data structures for final linear system A.xi[m] = b:
@@ -138,7 +138,7 @@ vector<vector<double>> FEM_t::BDF3(HyperbolicPDE const & PDE,
                                    TimeFrames const & t,
                                    Triangulation& Omega,
                                    InitialConditions const & ICs,
-                                   BoundaryConditions_t& BCs,
+                                   BoundaryCondition_t& BCs,
                                    Function_t u) {
 	if (t.size() < 2) throw invalid_argument("BDF3() needs at least 2 time frames to compute soln");
 	// data structures for final linear system A.xi[m] = b:
@@ -318,7 +318,7 @@ array<double, 3> FEM_t::computeLocalLoadVector(Function_t forceTerm,
 }
 
 
-SymmetricMatrix<double> FEM_t::computeLocalRobinMatrix(BoundaryConditions_t const & BCs,
+SymmetricMatrix<double> FEM_t::computeLocalRobinMatrix(BoundaryCondition_t const & BCs,
                                                           double t,
                                                           array<Node, 2>& nodes,
                                                           double length) {
@@ -329,7 +329,7 @@ SymmetricMatrix<double> FEM_t::computeLocalRobinMatrix(BoundaryConditions_t cons
 	return r;
 }
 
-array<double, 2> FEM_t::computeLocalRobinVector(BoundaryConditions_t const & BCs,
+array<double, 2> FEM_t::computeLocalRobinVector(BoundaryCondition_t const & BCs,
                                                 double t,
                                                 array<Node, 2>& nodes,
                                                 double length) {
