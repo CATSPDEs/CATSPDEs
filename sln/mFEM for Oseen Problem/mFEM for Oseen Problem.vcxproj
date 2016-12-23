@@ -122,7 +122,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="..\Tools\FEM.cpp" />
+    <ClCompile Include="..\Tools\MixedFEM.cpp" />
     <ClCompile Include="..\Tools\SingletonLogger.cpp" />
     <ClCompile Include="..\Tools\Triangulation.cpp" />
     <ClCompile Include="user.cpp" />
