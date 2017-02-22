@@ -19,13 +19,13 @@ public:
 		, _ReInv(ReInv)
 		, _f(f)
 		, _g(g) {}
-	auto massTerm() const { return _alpha; }
-	auto NewtonTerm() const { return _w; }
+	auto massCoef() const { return _alpha; }
+	auto windField() const { return _w; }
 	auto inverseReynoldsNumber() const { return _ReInv; }
 	auto ReynoldsNumber() const { return 1. / _ReInv; }
 	auto forceTerm() const { return _f; }
 	auto continuityTerm() const { return _g; }
-	auto NewtonTerm(Node<D> const & p) const { return _w(p); }
+	auto windField(Node<D> const & p) const { return _w(p); }
 	auto forceTerm(Node<D> const & p) const { return _f(p); }
 	auto continuityTerm(Node<D> const & p) const { return _g(p); }
 };

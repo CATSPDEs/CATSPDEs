@@ -60,7 +60,7 @@ double l1(Node2D const & p, Triangle const & t) {
 	);
 }
 
-double l2(Node2D const & p, Triangle const & t) {
+double l2(Node2D const & p, Triangle2D const & t) {
 	return (
 		t[2][0] * ( t[0][1] - p[1]    ) +
 		p[0]    * ( t[2][1] - t[0][1] ) +
@@ -72,7 +72,7 @@ double l2(Node2D const & p, Triangle const & t) {
 	);
 }
 
-double l3(Node2D const & p, Triangle const & t) {
+double l3(Node2D const & p, Triangle2D const & t) {
 	return (
 		t[1][0] * ( p[1]    - t[0][1] ) +
 		p[0]    * ( t[0][1] - t[1][1] ) +
@@ -93,7 +93,7 @@ using std::ifstream;
 using std::ofstream;
 
 int main() {
-	array<double(*)(Node2D const &, Triangle const &), 3> shapes = { l1, l2, l3 };
+	array<double(*)(Node2D const &, Triangle2D const &), 3> shapes = { l1, l2, l3 };
 	// path
 	string iPath("Mathematica/Generate Mesh/"),
 	       oPath("Mathematica/Projection and Restriction Visualization/");

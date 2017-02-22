@@ -1,161 +1,253 @@
 #pragma once
 #include <boost/tuple/tuple.hpp>
 #include <boost/optional/optional.hpp>
-#include "AbstractMultipliableMatrix.hpp"
+#include "AbstractPreconditioner.hpp"
+#include "SingletonLogger.hpp"
 
 namespace ProjectionSolvers {
 
+	// helpers
+	enum class StoppingCriterion { absolute, relative };
+
+	using Preconditioner = std::function<std::vector<double>(std::vector<double> const &)>;
+
+	inline void logInitialResidual(double r_0, Index max = 1) {
+		auto& logger = SingletonLogger::instance();
+		logger.buf << "start solving\n" 
+		           << "|| r_" << std::setfill('0') << std::setw(std::to_string(max).length()) << '0' << " || = " << std::scientific << r_0;
+		logger.log();
+	}
+
+	inline void logResidualReduction(double r_old, double r_new, Index i, Index max = 1) {
+		auto& logger = SingletonLogger::instance();
+		logger.buf << "|| r_" << std::setfill('0') << std::setw(std::to_string(max).length()) << i << " || = " << std::scientific << r_new << ", "
+		           << "reduction factor = " << r_old / r_new;
+		logger.log();
+	}
+
+	inline void logFinalResidual(double r_0, double r_n, Index i, Index max = 1) {
+		auto& logger = SingletonLogger::instance();
+		logger.buf << "stop solving\n"
+		           << "|| r_" << std::setfill('0') << std::setw(std::to_string(max).length()) << i << " || = " << std::scientific << r_n << ", "
+		           << "|| r_" << i << " || / || r_0 || = " << r_n / r_0;
+		logger.log();
+	}
+
 	namespace Smoothers {
 
-		inline
-		boost::tuple<
-			std::vector<double>, // soln
-			std::vector<double> // norms of residuals
-		> 
-		Jacobi(
-			AbstractMultipliableMatrix<double>& A, // system matrix
+		inline std::vector<double> relaxedJacobi(
+			AbstractPreconditioner<double>& A, // system matrix
 			std::vector<double> const & b, // rhs
 			boost::optional<std::vector<double>> const & x_0 = boost::none, // initial guess
 			double omega = 1., // relaxation parameter
-			Index numbOfIterations = 10000, // numb of iterations
-			double const eps = 10e-17
+			Index n = 10000, // numb of iterations
+			double const eps = 10e-17,
+			StoppingCriterion stop = StoppingCriterion::absolute,
+			Index i_log = 0 // log residual reduction on every i_log iteration (0 for never)
 		) {
 			// W (x_i+1 - x_i) = r_i,
+			// A = L + D + U
 			// W := omega^-1 diag(A)
-			auto x = x_0.value_or(std::vector<double>(A.getOrder(), 0.)),
-			     r = b - A * x;
-			std::vector<double> residualsNorms;
-			for (Index i = 0; i < numbOfIterations; ++i) {
-				residualsNorms.emplace_back(norm(r));
-				for (Index j = 0; j < A.getOrder(); ++j)
-					x[j] += omega * r[j] / A(j, j);
-				r = b - A * x;
-				if (norm(r) < eps) break;
+			auto& logger = SingletonLogger::instance();
+			auto x = x_0.value_or(std::vector<double>(A.getOrder())),
+			     r_0 = b - A * x, r = r_0;
+			decltype(x) r_new;
+			double norm_r_0 = norm(r_0);
+			logInitialResidual(norm_r_0, n);
+			Index i;
+			for (i = 1; i <= n; ++i) {
+				x += omega * A.diagSubst(r);
+				r_new = b - A * x;
+				if (i_log && i % i_log == 0) logResidualReduction(norm(r), norm(r_new), i, n);
+				r = r_new;
+				if      (stop == StoppingCriterion::absolute && norm(r)            < eps) break;
+				else if (stop == StoppingCriterion::relative && norm(r) / norm_r_0 < eps) break;
 			}
-			return boost::make_tuple(x, residualsNorms);
+			logFinalResidual(norm_r_0, norm(r), i > n ? n : i, n);
+			if (eps != 0. && i > n) logger.wrn("Jacobi exceeded max numb of iterations");
+			return x;
 		}
 
-		inline
-		boost::tuple<
-			std::vector<double>, // soln
-			std::vector<double> // norms of residuals
-		> 
-		GaussSeidel(
-			SymmetricCSlCMatrix<double>& A, // system matrix
+		inline std::vector<double> forwSOR(
+			AbstractPreconditioner<double>& A, // system matrix
 			std::vector<double> const & b, // rhs
 			boost::optional<std::vector<double>> const & x_0 = boost::none, // initial guess
 			double omega = 1., // relaxation parameter
-			Index numbOfIterations = 10000, // numb of iterations
-			double const eps = 10e-17
+			Index n = 10000, // numb of iterations
+			double const eps = 10e-17,
+			StoppingCriterion stop = StoppingCriterion::absolute,
+			Index i_log = 0 // log residual reduction on every i_log iteration (0 for never)
 		) {
 			// W (x_i+1 - x_i) = r_i,
 			// A = L + D + R,
 			// W := omega^-1 (omega L + D)
 			// omega in (0, 2) for A = A^T > 0
-			auto x = x_0.value_or(std::vector<double>(A.getOrder(), 0.)),
-			     r = b - A * x;
-			std::vector<double> residualsNorms;
-			for (Index i = 0; i < numbOfIterations; ++i) {
-				residualsNorms.emplace_back(norm(r));
-				if (norm(r) < eps) break;
-				auto y(r);
-				for (Index j = 0; j < A.getOrder(); ++j) {
-					y[j] *= omega / A(j, j);
-					x[j] += y[j];
-					for (Index k = A._colptr[j]; k < A._colptr[j + 1]; ++k)
-						y[A._rowind[k]] -= A._lval[k] * y[j];
-				}
-				r = b - A * x;
+			auto& logger = SingletonLogger::instance();
+			auto x = x_0.value_or(std::vector<double>(A.getOrder())),
+				r_0 = b - A * x, r = r_0;
+			decltype(x) r_new;
+			double norm_r_0 = norm(r_0);
+			logInitialResidual(norm_r_0, n);
+			Index i;
+			for (i = 1; i <= n; ++i) {
+				x += A.forwSubst(r, 1. / omega);
+				r_new = b - A * x;
+				if (i_log && i % i_log == 0) logResidualReduction(norm(r), norm(r_new), i, n);
+				r = r_new;
+				if      (stop == StoppingCriterion::absolute && norm(r)            < eps) break;
+				else if (stop == StoppingCriterion::relative && norm(r) / norm_r_0 < eps) break;
 			}
-			return boost::make_tuple(x, residualsNorms);
+			logFinalResidual(norm_r_0, norm(r), i > n ? n : i, n);
+			if (eps != 0. && i > n) logger.wrn("SOR exceeded max numb of iterations");
+			return x;
+		}
+
+		inline std::vector<double> backSOR(
+			AbstractPreconditioner<double>& A, // system matrix
+			std::vector<double> const & b, // rhs
+			boost::optional<std::vector<double>> const & x_0 = boost::none, // initial guess
+			double omega = 1., // relaxation parameter
+			Index n = 10000, // numb of iterations
+			double const eps = 10e-17,
+			StoppingCriterion stop = StoppingCriterion::absolute,
+			Index i_log = 0 // log residual reduction on every i_log iteration (0 for never)
+		) {
+			// W (x_i+1 - x_i) = r_i,
+			// A = L + D + R,
+			// W := omega^-1 (omega U + D)
+			// omega in (0, 2) for A = A^T > 0
+			auto& logger = SingletonLogger::instance();
+			auto x = x_0.value_or(std::vector<double>(A.getOrder())),
+				r_0 = b - A * x, r = r_0;
+			decltype(x) r_new;
+			double norm_r_0 = norm(r_0);
+			logInitialResidual(norm_r_0, n);
+			Index i;
+			for (i = 1; i <= n; ++i) {
+				x += A.backSubst(r, 1. / omega);
+				r_new = b - A * x;
+				if (i_log && i % i_log == 0) logResidualReduction(norm(r), norm(r_new), i, n);
+				r = r_new;
+				if      (stop == StoppingCriterion::absolute && norm(r)            < eps) break;
+				else if (stop == StoppingCriterion::relative && norm(r) / norm_r_0 < eps) break;
+			}
+			logFinalResidual(norm_r_0, norm(r), i > n ? n : i, n);
+			if (eps != 0. && i > n) logger.wrn("SOR exceeded max numb of iterations");
+			return x;
+		}
+
+		inline std::vector<double> SSOR(
+			AbstractPreconditioner<double>& A, // system matrix
+			std::vector<double> const & b, // rhs
+			boost::optional<std::vector<double>> const & x_0 = boost::none, // initial guess
+			double omega = 1., // relaxation parameter
+			Index n = 10000, // numb of iterations
+			double const eps = 10e-17,
+			StoppingCriterion stop = StoppingCriterion::absolute,
+			Index i_log = 0 // log residual reduction on every i_log iteration (0 for never)
+		) {
+			// W (x_i+1 - x_i) = r_i,
+			// A = L + D + R,
+			// W_0 := (2 - omega)^-1 (L + omega^-1 D) (omega^-1 D)^-1 (omega^-1 D + U)
+			// omega in (0, 2) for A = A^T > 0
+			auto& logger = SingletonLogger::instance();
+			auto x = x_0.value_or(std::vector<double>(A.getOrder())),
+				r_0 = b - A * x, r = r_0;
+			decltype(x) r_new;
+			double norm_r_0 = norm(r_0), omegaInv = 1. / omega;
+			logInitialResidual(norm_r_0, n);
+			Index i;
+			for (i = 1; i <= n; ++i) {
+				x += (2. * omegaInv - 1.) * A.backSubst(A.multDiag(A.forwSubst(r, omegaInv)), omegaInv);
+				r_new = b - A * x;
+				if (i_log && i % i_log == 0) logResidualReduction(norm(r), norm(r_new), i, n);
+				r = r_new;
+				if      (stop == StoppingCriterion::absolute && norm(r)            < eps) break;
+				else if (stop == StoppingCriterion::relative && norm(r) / norm_r_0 < eps) break;
+			}
+			logFinalResidual(norm_r_0, norm(r), i > n ? n : i, n);
+			if (eps != 0. && i > n) logger.wrn("SSOR exceeded max numb of iterations");
+			return x;
 		}
 
 	}
 
 	namespace Krylov {
 
-		inline
-		boost::tuple<
-			std::vector<double>, // soln vector
-			std::vector<double> // norms of residuals
-			//Index // numb of iterations
-		> CG(
+		inline std::vector<double> CG(
 			AbstractMultipliableMatrix<double> & A,
 			std::vector<double> const & b,
 			boost::optional<std::vector<double>> const & x_0 = boost::none,
-			double const eps = 10e-17
+			double const eps = 10e-17,
+			StoppingCriterion stop = StoppingCriterion::absolute,
+			Index i_log = 0 // log residual reduction on every i_log iteration (0 for never)
 		) {
+			auto& logger = SingletonLogger::instance();
 			auto x = x_0.value_or(std::vector<double>(A.getOrder(), 0.)),
 			     r = b - A * x,
 			     p = r;
-			auto r_x_r = r * r, normOfb = norm(b);
-			Index i, maxNumbOfIterations = 1.5 * A.getOrder();
-			std::vector<double> residualsNorms;
-			for (i = 0; i < maxNumbOfIterations; ++i) {
-				residualsNorms.emplace_back(sqrt(r_x_r));
-				if (residualsNorms.back() < eps) break;
-				if (i % 50 == 0) {
-					logger.buf << "|| r_" << i << " || = " << std::scientific << residualsNorms.back();
-					logger.log();
-				}
-				auto A_x_p = A * p;
-				auto alpha = r_x_r / (A_x_p * p);
+			auto r_x_r_0 = r * r, r_x_r = r_x_r_0;
+			decltype(x) A_x_p;
+			decltype(r_x_r) r_x_r_new, alpha;
+			Index i, // current iter
+			      n = 3 * A.getOrder(), // max numb of iters
+			      i_rec = floor(.01 * A.getOrder()) + 1; // recompute residual on every i_rec iteration (1% of system size)
+			logInitialResidual(sqrt(r_x_r_0), n);
+			for (i = 1; i <= n; ++i) {
+				A_x_p = A * p;
+				alpha = r_x_r / (A_x_p * p);
 				x += alpha * p;
-				r -= alpha * A_x_p;
-				auto r_x_r_new = r * r;
+				r = i % i_rec ? r - alpha * A_x_p : b - A * x;
+				r_x_r_new = r * r;
+				if (i_log && i % i_log == 0) logResidualReduction(sqrt(r_x_r), sqrt(r_x_r_new), i, n);
 				p = r + (r_x_r_new / r_x_r) * p;
-				r_x_r = r_x_r_new;
+				r_x_r = r_x_r_new;				
+				if      (stop == StoppingCriterion::absolute && sqrt(r_x_r)           < eps) break;
+				else if (stop == StoppingCriterion::relative && sqrt(r_x_r / r_x_r_0) < eps) break;
 			}
-			if (i == maxNumbOfIterations)
-				logger.wrn(
-					"CG exceeded max numb of iterations: i = " + std::to_string(maxNumbOfIterations) + ", matrix size = " + std::to_string(A.getOrder()) + '\n' +
-					"|| r_i || = " + std::to_string(norm(r))
-				);
-			return boost::make_tuple(x, residualsNorms);
+			logFinalResidual(sqrt(r_x_r_0), norm(b - A * x), i > n ? n : i, n);
+			if (i > n) logger.wrn("CG exceeded max numb of iterations");
+			return x;
 		}
 
-		inline
-		boost::tuple<
-			std::vector<double>, // soln vector
-			std::vector<double> // norms of residuals
-		> PCG(
+		inline std::vector<double> PCG(
+			Preconditioner const & B,
 			AbstractMultipliableMatrix<double> & A,
 			std::vector<double> const & b,
-			std::function<std::vector<double>(
-				std::vector<double> const &
-			)> const & B, // preconditioner 
 			boost::optional<std::vector<double>> const & x_0 = boost::none,
-			double const eps = 10e-17
+			double const eps = 10e-17,
+			StoppingCriterion stop = StoppingCriterion::absolute,
+			Index i_log = 0
 		) {
-			auto x = x_0.value_or(std::vector<double>(A.getOrder(), 0.)),
+			auto& logger = SingletonLogger::instance();
+			auto x = x_0.value_or(std::vector<double>(A.getOrder())),
 			     r = b - A * x,
 			     z = B(r),
 			     p = z;
-			auto r_x_z = r * z;
+			auto r_x_z_0 = r * z, r_x_z = r_x_z_0;
 			decltype(x) A_x_p;
 			decltype(r_x_z) r_x_z_new, alpha;
-			Index i, maxNumbOfIterations = 1.5 * A.getOrder();
-			std::vector<double> residualsNorms;
-			for (i = 0; i < maxNumbOfIterations; ++i) {
-				residualsNorms.emplace_back(norm(r));
-				logger.buf << "|| r_" << i << " || = " << std::scientific << residualsNorms.back();
-				logger.log();
-				if (residualsNorms.back() < eps) break;
+			Index i, 
+			      n = 3 * A.getOrder(),
+			      i_rec = floor(.01 * A.getOrder()) + 1;
+			logger.log("here || . || denotes B-norm\n(B is a preconditioner and mimics inverse of A)");
+			logInitialResidual(sqrt(r_x_z_0), n);
+			for (i = 1; i <= n; ++i) {
 				A_x_p = A * p;
 				alpha = r_x_z / (A_x_p * p);
 				x += alpha * p;
-				r = b - A * x; // r -= alpha * A_x_p;
+				r -= alpha * A_x_p; // r = b - A * x; 
 				z = B(r);
 				r_x_z_new = r * z;
+				if (i_log && i % i_log == 0) logResidualReduction(sqrt(r_x_z), sqrt(r_x_z_new), i, n);
 				p = z + (r_x_z_new / r_x_z) * p;
-				r_x_z = r_x_z_new;
+				r_x_z = r_x_z_new;				
+				if      (stop == StoppingCriterion::absolute && sqrt(r_x_z)           < eps) break;
+				else if (stop == StoppingCriterion::relative && sqrt(r_x_z / r_x_z_0) < eps) break;
 			}
-			if (i == maxNumbOfIterations)
-				logger.wrn(
-					"CG exceeded max numb of iterations: i = " + std::to_string(maxNumbOfIterations) + ", matrix size = " + std::to_string(A.getOrder()) + '\n' +
-					"|| r_i || = " + std::to_string(norm(r))
-				);
-			return boost::make_tuple(x, residualsNorms);
+			logFinalResidual(sqrt(r_x_z_0), sqrt(r_x_z), i > n ? n : i, n);
+			if (i > n) logger.wrn("PCG exceeded max numb of iterations");
+			return x;
 		}
 
 	}

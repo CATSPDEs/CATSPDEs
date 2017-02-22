@@ -1,7 +1,6 @@
 ﻿#pragma once
 #include <boost/optional.hpp>
 #include "AbstractMesh.hpp"
-#include "AdjacencyList.hpp"
 //#include "Curve.hpp"
 //#include "CurvilinearEdge.hpp"
 
@@ -63,7 +62,6 @@ public:
 	Triangulation& computeNeighbors(); // O(m^2), m := numb of triangles (because we need to construct _neighbors list manually)
 	Triangulation& enumerateRibs(); // O(m), m := numb of triangles
 	
-	AdjacencyList generateAdjList() const; // nodes’ neighbors [we need it to construct portrait of CSlR matrix],
 	/* 
 	(I) model domains constructors
 	*/

@@ -1,7 +1,7 @@
 #include <stdexcept>
 #include "SingletonLogger.hpp"
 
-SingletonLogger::SingletonLogger() : mute(false) {
+SingletonLogger::SingletonLogger() : _inputCounter(0), mute(false) {
 	rlutil::saveDefaultColor();
 	rlutil::setBackgroundColor(0);
 	//for (int i = 0; i < 16; i++) {
@@ -95,7 +95,11 @@ void SingletonLogger::log(std::string const & message) const {
 }
 
 void SingletonLogger::log() {
-	if (mute) return;
+	if (mute) {
+		buf.str(std::string());
+		buf.clear();
+		return;
+	}
 	rlutil::setColor(11);
 	std::cout << tab() << "[log] ";
 	rlutil::setColor(7);
@@ -105,7 +109,7 @@ void SingletonLogger::log() {
 	buf.clear();
 }
 
-bool SingletonLogger::yes(std::string const & message) const {
+bool SingletonLogger::yes(std::string const & message) {
 	rlutil::setColor(10);
 	std::cout << tab() << "[inp] ";
 	rlutil::setColor(7);
@@ -116,6 +120,13 @@ bool SingletonLogger::yes(std::string const & message) const {
 	std::cout << ": ";
 	char flag;
 	std::cin >> flag;
+	// echo
+	std::string choice = flag == 'y' ? "yes" : "no";
+	std::cout << tab() << "   -> " << choice << '\n';
+	// input buffer
+	++_inputCounter;
+	_inputValues << flag << '\n';
+	_inputDescriptions << _inputCounter << ". " << message << '\n';
 	if (flag == 'y') return true;
 	return false;
 }
@@ -145,5 +156,23 @@ size_t SingletonLogger::opt(std::string const & message, std::vector<std::string
 	std::cout << ": ";
 	std::cin >> i;
 	if (i >= choices.size()) i = choices.size() - 1;
+	// echo
+	std::cout << tab() << "   -> " << choices[i] << '\n';
+	// input buffer
+	++_inputCounter;
+	_inputValues << i << '\n';
+	_inputDescriptions << _inputCounter << ". " << message << '\n';
+	for (size_t j = 0; j < choices.size(); ++j) _inputDescriptions << "\t(" << j << ") " << choices[j] << '\n';
 	return i;
+}
+
+void SingletonLogger::exp(std::string const & fname) {
+	std::ofstream output(fname);
+	output << _inputValues.str() << '\n' << _inputDescriptions.str();
+	// clear
+	_inputCounter = 0;
+	_inputValues.str(std::string());
+	_inputValues.clear();
+	_inputDescriptions.str(std::string());
+	_inputDescriptions.clear();
 }

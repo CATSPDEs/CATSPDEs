@@ -81,9 +81,6 @@
     <ClInclude Include="Node.hpp">
       <Filter>Common</Filter>
     </ClInclude>
-    <ClInclude Include="AdjacencyList.hpp">
-      <Filter>Common</Filter>
-    </ClInclude>
     <ClInclude Include="HyperbolicPDE.hpp">
       <Filter>PDEs</Filter>
     </ClInclude>
@@ -101,9 +98,6 @@
     </ClInclude>
     <ClInclude Include="constants.hpp">
       <Filter>Common</Filter>
-    </ClInclude>
-    <ClInclude Include="StokesMatrix.hpp">
-      <Filter>Matrices\Implementations</Filter>
     </ClInclude>
     <ClInclude Include="AbstractMultipliableMatrix.hpp">
       <Filter>Matrices</Filter>
@@ -210,6 +204,30 @@
     <ClInclude Include="Mapping.hpp">
       <Filter>Common\Mappings</Filter>
     </ClInclude>
+    <ClInclude Include="MasterSegmentQuadratureRule.hpp">
+      <Filter>Quadrature Rules</Filter>
+    </ClInclude>
+    <ClInclude Include="CSlCMatrix.hpp">
+      <Filter>Matrices\Implementations</Filter>
+    </ClInclude>
+    <ClInclude Include="Triangle_P1_CrouzeixRaviart.hpp">
+      <Filter>Finite Elements\Exotic FEs</Filter>
+    </ClInclude>
+    <ClInclude Include="SaddlePointMatrix.hpp">
+      <Filter>Matrices\Implementations</Filter>
+    </ClInclude>
+    <ClInclude Include="Triangle_P0_Lagrange.hpp">
+      <Filter>Finite Elements\Lagrange Family</Filter>
+    </ClInclude>
+    <ClInclude Include="L2Projection.hpp">
+      <Filter>Solvers\Finite Element Methods</Filter>
+    </ClInclude>
+    <ClInclude Include="Multigrid.hpp">
+      <Filter>Solvers\SLAE Solvers</Filter>
+    </ClInclude>
+    <ClInclude Include="AbstractPreconditioner.hpp">
+      <Filter>Matrices</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="StokesMatrix.cpp">
@@ -237,6 +255,9 @@
       <Filter>Solvers\Finite Element Methods</Filter>
     </ClCompile>
     <ClCompile Include="DivGradFEM.cpp">
+      <Filter>Solvers\Finite Element Methods</Filter>
+    </ClCompile>
+    <ClCompile Include="L2Projection.cpp">
       <Filter>Solvers\Finite Element Methods</Filter>
     </ClCompile>
   </ItemGroup>

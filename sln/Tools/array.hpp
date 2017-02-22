@@ -84,7 +84,7 @@ std::array<T, N> midNode(std::array<T, N> const & u, std::array<T, N> const & v)
 	return .5 * (u + v);
 }
 
-// זproduct (3D)
+// ×—product (3D)
 template <typename T>
 inline std::array<T, 3> crossProduct(std::array<T, 3> const & u, std::array<T, 3> const & v) {
 	return{
@@ -94,7 +94,7 @@ inline std::array<T, 3> crossProduct(std::array<T, 3> const & u, std::array<T, 3
 	};
 }
 
-// זproduct (2D)
+// ×—product (2D)
 template <typename T>
 inline std::array<T, 3> crossProduct(std::array<T, 2> const & u, std::array<T, 2> const & v) {
 	return{ 0., 0, u[0] * v[1] - u[1] * v[0] };
@@ -124,3 +124,7 @@ template <typename T>          struct ArrayTypedef<T, 1> { typedef T type; };
 // and our smart array is
 template <typename T, Index D>
 using SmartArray = typename ArrayTypedef<T, D>::type;
+
+inline double norm(double u) {
+	return fabs(u);
+}

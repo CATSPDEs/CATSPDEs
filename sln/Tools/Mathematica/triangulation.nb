@@ -10,10 +10,10 @@
 NotebookFileLineBreakTest
 NotebookFileLineBreakTest
 NotebookDataPosition[       158,          7]
-NotebookDataLength[     46199,       1140]
-NotebookOptionsPosition[     44533,       1077]
-NotebookOutlinePosition[     44878,       1092]
-CellTagsIndexPosition[     44835,       1089]
+NotebookDataLength[     46862,       1153]
+NotebookOptionsPosition[     45196,       1090]
+NotebookOutlinePosition[     45541,       1105]
+CellTagsIndexPosition[     45498,       1102]
 WindowFrame->Normal*)
 
 (* Beginning of Notebook Content *)
@@ -801,7 +801,9 @@ Cell[BoxData[
   RowBox[{"highlight", "[", 
    RowBox[{"\[ScriptCapitalT]_", ",", 
     RowBox[{"what_:", 
-     RowBox[{"{", "}"}]}]}], "]"}], ":=", 
+     RowBox[{"{", "}"}]}], ",", 
+    RowBox[{"p_:", ".1"}], ",", 
+    RowBox[{"plotRange_:", "All"}]}], "]"}], ":=", 
   RowBox[{"Module", "[", "\[IndentingNewLine]", 
    RowBox[{
     RowBox[{"{", "\[IndentingNewLine]", 
@@ -816,7 +818,7 @@ Cell[BoxData[
          RowBox[{"\[ScriptCapitalT]", "[", 
           RowBox[{"[", "\"\<nodes\>\"", "]"}], "]"}], ",", 
          RowBox[{"scaledNodes", "[", 
-          RowBox[{"\[ScriptCapitalT]", ",", ".1"}], "]"}]}], "]"}]}], ",", 
+          RowBox[{"\[ScriptCapitalT]", ",", "p"}], "]"}]}], "]"}]}], ",", 
       "\[IndentingNewLine]", 
       RowBox[{"currentNumbOfNodes", "=", 
        RowBox[{
@@ -1030,6 +1032,12 @@ Cell[BoxData[
             "\[IndentingNewLine]", "localNodesNumn"}], "\[IndentingNewLine]", 
            "]"}]}], "\[IndentingNewLine]", "]"}]}], ",", 
        "\[IndentingNewLine]", "None", ",", "\[IndentingNewLine]", 
+       RowBox[{"PlotRange", "\[Rule]", "plotRange"}], ",", 
+       "\[IndentingNewLine]", 
+       RowBox[{"(*", 
+        RowBox[{
+         RowBox[{"PlotRangeClipping", "\[Rule]", "True"}], ","}], "*)"}], 
+       "\[IndentingNewLine]", 
        RowBox[{"PlotTheme", "\[Rule]", "\"\<Lines\>\""}]}], 
       "\[IndentingNewLine]", "]"}]}]}], "\[IndentingNewLine]", 
    "]"}]}]], "Input",
@@ -1070,7 +1078,12 @@ Cell[BoxData[
    3.6845197906944885`*^9, 3.6845198073582244`*^9}, {3.6845199725032787`*^9, 
    3.6845200083628283`*^9}, {3.684520071528466*^9, 3.684520071976379*^9}, {
    3.6845201288427343`*^9, 3.6845201484416466`*^9}, {3.6846006751991825`*^9, 
-   3.6846007217611732`*^9}, {3.6868237122602644`*^9, 3.686823713483692*^9}}]
+   3.6846007217611732`*^9}, {3.6868237122602644`*^9, 3.686823713483692*^9}, {
+   3.692179432067339*^9, 3.6921794352136035`*^9}, {3.692180917556059*^9, 
+   3.692180967673137*^9}, {3.69253153686241*^9, 3.6925315435696583`*^9}, {
+   3.6931742704574327`*^9, 3.693174279895306*^9}, {3.693174393667801*^9, 
+   3.693174406346243*^9}, {3.693174446930109*^9, 3.6931745029326572`*^9}, {
+   3.6931749690323205`*^9, 3.6931749730940714`*^9}}]
 }, Open  ]]
 }, Open  ]]
 }, Open  ]]
@@ -1138,7 +1151,7 @@ Cell[27809, 690, 399, 11, 31, "Input"]
 Cell[CellGroupData[{
 Cell[28245, 706, 125, 1, 35, "Subsection"],
 Cell[28373, 709, 3637, 87, 319, "Input"],
-Cell[32013, 798, 12480, 274, 932, "Input"]
+Cell[32013, 798, 13143, 287, 972, "Input"]
 }, Open  ]]
 }, Open  ]]
 }, Open  ]]

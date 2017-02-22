@@ -123,11 +123,12 @@
     <ClInclude Include="AbstractFEMatrix.hpp" />
     <ClInclude Include="AbstractFiniteElement.hpp" />
     <ClInclude Include="AbstractMatrix.hpp" />
+    <ClInclude Include="AbstractPreconditioner.hpp" />
     <ClInclude Include="AbstractQuadratureRule.hpp" />
-    <ClInclude Include="AdjacencyList.hpp" />
     <ClInclude Include="array.hpp" />
     <ClInclude Include="constants.hpp" />
     <ClInclude Include="CSCMatrix.hpp" />
+    <ClInclude Include="CSlCMatrix.hpp" />
     <ClInclude Include="CSlRMatrix.hpp" />
     <ClInclude Include="Curve.hpp" />
     <ClInclude Include="CurvilinearEdge.hpp" />
@@ -143,7 +144,10 @@
     <ClInclude Include="Index.hpp" />
     <ClInclude Include="InitialConditions.hpp" />
     <ClInclude Include="AbstractTransposeMultipliableMatrix.hpp" />
+    <ClInclude Include="L2Projection.hpp" />
     <ClInclude Include="Mapping.hpp" />
+    <ClInclude Include="MasterSegmentQuadratureRule.hpp" />
+    <ClInclude Include="Multigrid.hpp" />
     <ClInclude Include="SmartMapping.hpp" />
     <ClInclude Include="MasterTriangleQuadratureRule.hpp" />
     <ClInclude Include="MixedFEM.hpp" />
@@ -161,11 +165,13 @@
     <ClInclude Include="Predicate.hpp" />
     <ClInclude Include="rlutil.h" />
     <ClInclude Include="SingletonLogger.hpp" />
-    <ClInclude Include="StokesMatrix.hpp" />
+    <ClInclude Include="SaddlePointMatrix.hpp" />
     <ClInclude Include="SymmetricMatrix.hpp" />
     <ClInclude Include="SymmetricCSlCMatrix.hpp" />
     <ClInclude Include="SymmetricCSlRMatrix.hpp" />
     <ClInclude Include="TimeFrames.hpp" />
+    <ClInclude Include="Triangle_P0_Lagrange.hpp" />
+    <ClInclude Include="Triangle_P1_CrouzeixRaviart.hpp" />
     <ClInclude Include="Triangle_P1_Lagrange.hpp" />
     <ClInclude Include="Triangle_P2_Lagrange.hpp" />
     <ClInclude Include="Triangulation.hpp" />
@@ -176,6 +182,7 @@
     <ClCompile Include="CSlRMatrix.cpp" />
     <ClCompile Include="DivGradFEM.cpp" />
     <ClCompile Include="FEM_t.cpp" />
+    <ClCompile Include="L2Projection.cpp" />
     <ClCompile Include="MixedFEM.cpp" />
     <ClCompile Include="SingletonLogger.cpp" />
     <ClCompile Include="StokesMatrix.cpp" />

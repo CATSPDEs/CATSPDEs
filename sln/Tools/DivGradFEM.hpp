@@ -6,8 +6,7 @@
 // PDE
 #include "DiffusionReactionEqn.hpp"
 #include "BoundaryCondition.hpp"
-// matrices
-#include "CSCMatrix.hpp" // restriction (prolongation) operators
+// matrix
 #include "SymmetricCSlCMatrix.hpp" // for final linear system matrix
 // FEs
 #include "AbstractFiniteElement.hpp"
@@ -46,38 +45,13 @@ namespace FEM {
 		boost::tuple<
 			SymmetricCSlCMatrix<double>, // assembled system matrix and
 			std::vector<double> // rhs vector
-		> linearLagrangeAssembler(
+		> assembleSystem(
 			DiffusionReactionEqn2D const &, // (1) PDE,
-			Triangulation const &, // (2) discretized domain (mesh),
-			ScalarBoundaryCondition2D const & // (3) and BCs that connects (1) and (2)
-			);
-
-		namespace Multigrid {
-
-			extern std::function<std::vector<double>(
-				SymmetricCSlCMatrix<double>&, // system matrix
-				std::vector<double> const &, // rhs
-				std::vector<double> const & // initial guess
-				)> smoother;
-			extern Index gamma; // numb of recursive coarse iterations (1 for V–cycle, 2 for W–cycle)
-
-			boost::tuple<
-				SymmetricCSlCMatrix<double>, // assembled system matrix and
-				std::vector<double> // rhs vector
-			> linearLagrangeSetter(
-				DiffusionReactionEqn2D const &,
-				ScalarBoundaryCondition2D const &,
-				Triangulation&, // initial coarse mesh
-				Index // numb of mesh levels
-			);
-
-			std::vector<double> iteration( // for solving A.z = f
-				Index, // current mesh level
-				std::vector<double> const &, // initial approximation to soln
-				std::vector<double> const & // rhs
-			);
-
-		}
+			Triangulation const &, // (2) discretized domain (mesh), and BCs to connect (1) and (2):
+			ScalarBoundaryCondition2D const &, // natural BC,
+			ScalarBoundaryCondition2D const &, // essential BC
+			TriangularScalarFiniteElement const &
+		);
 
 	}
 

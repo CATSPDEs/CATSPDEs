@@ -24,10 +24,10 @@
     <ClCompile Include="..\Tools\SingletonLogger.cpp">
       <Filter>Source Files\External Tools</Filter>
     </ClCompile>
-    <ClCompile Include="..\Tools\Triangulation.cpp">
+    <ClCompile Include="..\Tools\MixedFEM.cpp">
       <Filter>Source Files\External Tools</Filter>
     </ClCompile>
-    <ClCompile Include="..\Tools\MixedFEM.cpp">
+    <ClCompile Include="..\Tools\Triangulation.cpp">
       <Filter>Source Files\External Tools</Filter>
     </ClCompile>
   </ItemGroup>

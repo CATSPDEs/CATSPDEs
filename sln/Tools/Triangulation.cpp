@@ -30,6 +30,20 @@ Triangulation& Triangulation::import(std::istream& from) {
 		from >> neighbors;
 		_neighbors.emplace(neighbors);
 	}
+	else if (meshType == "NTR") { // nodes, triangles, and ribs
+		Index r;
+		decltype(_ribs->second) ribs(t);
+		from >> r >> _nodes >> _elements >> ribs;
+		_ribs.emplace(std::make_pair(r, ribs));
+	}
+	else if (meshType == "NTNR") { // nodes, triangles, neighbors, and ribs
+		Index r;
+		std::vector<std::array<SignedIndex, 3>> neighbors(t);
+		decltype(_ribs->second) ribs(t);
+		from >> r >> _nodes >> _elements >> neighbors >> ribs;
+		_neighbors.emplace(neighbors);
+		_ribs.emplace(std::make_pair(r, ribs));
+	}
 	else throw std::invalid_argument("unknown mesh type");
 	return *this;
 }
@@ -200,19 +214,7 @@ Triangulation& Triangulation::enumerateRibs() {
 				numeration[i][j] = numeration[n][(*k)[0]];
 			}
 		}
-	std::pair<Index, std::vector<std::array<Index, 3>>> ribs{ currentRibIndex, numeration };
+	std::pair<Index, std::vector<std::array<Index, 3>>> ribs { currentRibIndex, numeration };
 	_ribs.emplace(ribs);
 	return *this;
-}
-
-AdjacencyList Triangulation::generateAdjList() const {
-	AdjacencyList adjList(numbOfNodes());
-	for (Index i = 0; i < numbOfElements(); ++i) {
-		auto l2g = getNodesIndicies(i);
-		std::sort(l2g.begin(), l2g.end());
-		adjList[l2g[0]].insert(l2g[1]);
-		adjList[l2g[0]].insert(l2g[2]);
-		adjList[l2g[1]].insert(l2g[2]);
-	}
-	return adjList;
 }

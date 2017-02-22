@@ -3,7 +3,7 @@
 
 template <typename T>
 class AbstractTransposeMultipliableMatrix 
-	: public AbstractMultipliableMatrix<T> {
+	: virtual public AbstractMultipliableMatrix<T> {
 	// enables v = A^T.u operation
 	bool _t; 
 public:

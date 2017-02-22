@@ -9,6 +9,14 @@ template <typename T>
 T operator*(std::vector<T> const & u, std::vector<T> const & v) {
 	return std::inner_product(u.begin(), u.end(), v.begin(), 0.);
 }
+template <typename T, Index N>
+T operator*(std::vector<T> const & u, std::array<T, N> const & v) {
+	return std::inner_product(u.begin(), u.end(), v.begin(), 0.);
+}
+template <typename T, Index N>
+T operator*(std::array<T, N> const & u, std::vector<T> const & v) {
+	return std::inner_product(u.begin(), u.end(), v.begin(), 0.);
+}
 
 // sum two vectors
 template <typename T>

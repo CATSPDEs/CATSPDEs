@@ -1,5 +1,5 @@
 #pragma once
-#include <iostream>
+#include <fstream>
 #include <sstream>
 #include <ctime>
 #include <string>
@@ -12,6 +12,9 @@ class SingletonLogger {
 	std::stack<time_t> _processes; // stack of started proccesses
 	double _diff(clock_t t1, clock_t t2) const { return fabs(t2 - t1) / CLOCKS_PER_SEC; }
 	std::string _format(std::string const &) const;
+	// for input history
+	std::ostringstream _inputValues, _inputDescriptions;
+	size_t _inputCounter;
 	// singleton
 	SingletonLogger();
 	SingletonLogger(SingletonLogger const &);
@@ -30,11 +33,12 @@ public:
 	void err(std::string const &) const; // print error
 	template <typename T>
 	SingletonLogger& inp(std::string const &, T&); // print input invite and get input value
-	bool yes(std::string const &) const; // true if get 'y' from stdin
+	bool yes(std::string const &); // true if get 'y' from stdin
 	size_t opt(std::string const &, std::vector<std::string> const &); // choose vector element (get index from stdin), return its index
 	std::string tab() const { // tabulations
 		return std::string(_processes.size(), '\t'); 
 	} 
+	void exp(std::string const &); // export inp commands
 };
 
 template <typename T>
@@ -44,5 +48,11 @@ SingletonLogger& SingletonLogger::inp(std::string const & message, T& val) {
 	rlutil::setColor(7);
 	std::cout << _format(message) << ":\n" << tab() << "      ";
 	std::cin >> val;
+	// echo
+	std::cout << tab() << "   -> value = " << val << '\n';
+	// input buffer
+	++_inputCounter;
+	_inputValues << val << '\n';
+	_inputDescriptions << _inputCounter << ". " << message << '\n';
 	return *this;
 }

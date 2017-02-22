@@ -19,11 +19,11 @@ public:
 	virtual ~AbstractMatrix() {}
 	virtual AbstractMatrix& operator=(T const & val) = 0; // set all entries = @val (so we can “clear” matrix w/ A = 0.)
 	T  operator()(Index i, Index j) const {
-		if (i >= _h || j >= _w) throw std::out_of_range("matrix does not contain element w/ these indicies");
+		if (i >= _h || j >= _w) throw std::out_of_range("matrix does not contain element w/ these indicies (i or j > order)");
 		return _get(i, j);
 	}
 	T& operator()(Index i, Index j) { 
-		if (i >= _h || j >= _w) throw std::out_of_range("matrix does not contain element w/ these indicies");
+		if (i >= _h || j >= _w) throw std::out_of_range("matrix does not contain element w/ these indicies (i or j > order)");
 		return _set(i, j); 
 	}
 	Index numbOfCols() const { return _w; }
@@ -42,7 +42,7 @@ public:
 	}
 	void export(std::ostream& output = std::cout) const {
 		output << _h << ' ' << _w << '\n';
-		output << std::setprecision(3/*15*/) << std::scientific << std::showpos;
+		output << std::setprecision(15) << std::scientific << std::showpos;
 		for (Index i = 0; i < _h; ++i) {
 			for (Index j = 0; j < _w; ++j)
 				output << _get(i, j) << ' ';
@@ -65,5 +65,17 @@ public:
 	}
 	AbstractMatrix& operator/=(T const & val) {
 		return operator*=(1. / val);
+	}
+	virtual std::vector<T> getRow(Index i) const {
+		std::vector<T> row(_w);
+		for (Index j = 0; j < _w; ++j)
+			row[j] = _get(i, j);
+		return row;
+	}
+	virtual std::vector<T> getCol(Index j) const {
+		std::vector<T> col(_h);
+		for (Index i = 0; i < _h; ++i)
+			col[i] = _get(i, j);
+		return col;
 	}
 };
