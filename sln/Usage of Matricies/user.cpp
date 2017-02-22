@@ -130,6 +130,20 @@ int main() {
 					}
 					logger.log("check results w/ Mathematica/SymmetricCSlC.nb!");
 				logger.end();
+				logger.beg("precond test");
+					double w = 1.5;
+					std::vector<double> x(A.getOrder());
+					for (Index i = 0; i < x.size(); ++i) x[i] = i + 1.;
+					logger.log("x := < 1, 2, ..., n >, w := 1.5");
+					logger.log("A := L + D + U, U = L^T");
+					logger.buf << "forw subst, [ L + w D]^-1 . x = " << A.forwSubst(x, w) << '\n'
+					           << "back subst, [ U + w D]^-1 . x = " << A.backSubst(x, w) << '\n'
+					           << "diag subst, [       D]^-1 . x = " << A.diagSubst(x);
+					logger.log();
+					export(A.forwSubst(x, w), oPath + "forw.dat");
+					export(A.backSubst(x, w), oPath + "back.dat");
+					export(A.diagSubst(x),    oPath + "diag.dat");
+				logger.end();
 				logger.beg("Harwell-Boeing i/o test");
 				// …
 				logger.end();

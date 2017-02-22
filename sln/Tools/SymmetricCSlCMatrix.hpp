@@ -1,8 +1,6 @@
 ﻿#pragma once
 #include <type_traits> // is_same 
-#include "AbstractFEMatrix.hpp"
-#include "AbstractHarwellBoeingMatrix.hpp"
-#include "AbstractMultipliableMatrix.hpp"
+#include "CSlCMatrix.hpp"
 
 /*
 	Alexander Žilyakov, Sep 2016
@@ -18,10 +16,7 @@ template <typename T>
 class SymmetricCSlCMatrix
 	: public AbstractFEMatrix<T>
 	, public AbstractHarwellBoeingMatrix<T>
-	, public AbstractMultipliableMatrix<T> {
-
-public: // TEMP
-
+	, public AbstractPreconditioner<T> {
 	// fancy name, yeah
 	// stands for Symmetric Compressed Sparse (lower triangular) Column
 	std::vector<Index> _colptr, // vector of column pointers and
@@ -54,6 +49,7 @@ public: // TEMP
 	T& _set(Index, Index) final;
 	T  _get(Index, Index) const final;
 public:
+	SymmetricCSlCMatrix(std::vector<Index> const & colptr, std::vector<Index> const & rowind, std::vector<T> const & lval, std::vector<T> const & diag) : AbstractMatrix(diag.size()), _colptr(colptr), _rowind(rowind), _lval(lval), _diag(diag) {}
 	explicit SymmetricCSlCMatrix(Index n = 1, Index nnz = 0); // order of matrix and numb of nonzero elems in lower triangular part
 	// virtual methods to be implemented
 	Index nnz() const final { return _colptr[_w] + _w; } // “+ _w” because of _diag
@@ -65,10 +61,19 @@ public:
 	// almost same methods from base class (in order to work w/ strings instead of streams)
 	using AbstractSparseMatrix::importSparse;
 	using AbstractSparseMatrix::exportSparse;
-	SymmetricCSlCMatrix& generatePatternFrom(AdjacencyList const &) final;
 	HarwellBoeingHeader importHarwellBoeing(std::string const &) final; // load from Harwell–Boeing file
 	void                exportHarwellBoeing(std::string const &, Parameters const & params = {}) const final;
-	SymmetricCSlCMatrix& enforceDirichletBCs(std::unordered_map<Index, T> const &, std::vector<T>&) final;
+	SymmetricCSlCMatrix& generatePatternFrom(DOFsConnectivityList const &) final;
+	SymmetricCSlCMatrix& enforceDirichletBCs(Index2Value<T> const &, T*) final;
+	// precond
+	std::vector<T> forwSubst(std::vector<T> const &, double w = 1.) const final;
+	std::vector<T> backSubst(std::vector<T> const &, double w = 1.) const final;
+	std::vector<T> diagSubst(std::vector<T> const &) const final;
+	std::vector<T> multDiag(std::vector<T> const &) const final;
+	// explicit conversion to non-symmetric format http://en.cppreference.com/w/cpp/language/cast_operator
+	explicit operator CSlCMatrix<T>() const {
+		return { _colptr, _rowind, _lval, _lval, _diag };
+	}
 };
 
 // implementation
@@ -153,21 +158,15 @@ void SymmetricCSlCMatrix<T>::exportSparse(std::ostream& output) const {
 }
 
 template <typename T>
-SymmetricCSlCMatrix<T>& SymmetricCSlCMatrix<T>::generatePatternFrom(AdjacencyList const & adjList) {
-	// (1) matrix size
-	_h = _w = adjList.size();
-	_diag.resize(_w);
-	// (2) compute column pointers
-	_colptr.resize(_w + 1, 0);
-	Index i;
-	for (i = 0; i < _w; ++i)
-		_colptr[i + 1] = _colptr[i] + adjList[i].size();
-	// (3) compute row indicies
+SymmetricCSlCMatrix<T>& SymmetricCSlCMatrix<T>::generatePatternFrom(DOFsConnectivityList const & list) {
+	// (1) compute column pointers
+	for (Index i = 0; i < _w; ++i) _colptr[i + 1] = _colptr[i] + list[i].size();
+	// (2) compute row indicies
 	_rowind.reserve(_colptr[_w]);
 	_lval.resize(_colptr[_w]);
-	for (i = 0; i < _w; ++i)
-		for (auto neighbour : adjList[i])
-			_rowind.emplace_back(neighbour);
+	for (Index col = 0; col < _w; ++col)
+		for (auto row : list[col])
+			_rowind.emplace_back(row);
 	return *this;
 }
 
@@ -217,7 +216,7 @@ void SymmetricCSlCMatrix<T>::exportHarwellBoeing(std::string const & fileName, P
 }
 
 template <typename T>
-SymmetricCSlCMatrix<T>& SymmetricCSlCMatrix<T>::enforceDirichletBCs(std::unordered_map<Index, T> const & ind2val, std::vector<T>& rhs) {
+SymmetricCSlCMatrix<T>& SymmetricCSlCMatrix<T>::enforceDirichletBCs(Index2Value<T> const & ind2val, T* rhs) {
 	for (Index i = 0; i < getOrder(); ++i) { // for each row (column)…
 		auto kvpIter = ind2val.find(i);
 		if (kvpIter != ind2val.end()) {
@@ -236,4 +235,53 @@ SymmetricCSlCMatrix<T>& SymmetricCSlCMatrix<T>::enforceDirichletBCs(std::unorder
 				}
 	}
 	return *this;
+}
+
+// find y := [ L + wD ]^-1 . x
+template <typename T>
+std::vector<T> SymmetricCSlCMatrix<T>::forwSubst(std::vector<T> const & x, double w = 1.) const {
+	std::vector<T> y { x };
+	Index i, j, k;
+	for (j = 0; j < getOrder(); ++j) {
+		y[j] /= (w * _diag[j]);
+		for (k = _colptr[j]; k < _colptr[j + 1]; ++k) {
+			i = _rowind[k];
+			auto& l_ij = _lval[k];
+			y[i] -= l_ij * y[j];
+		}
+	}
+	return y;
+}
+
+// find y := [ U + wD ]^-1 . x
+template <typename T>
+std::vector<T> SymmetricCSlCMatrix<T>::backSubst(std::vector<T> const & x, double w = 1.) const {
+	std::vector<T> y { x };
+	SignedIndex i;
+	Index j, k;
+	for (i = getOrder() - 1; i >= 0; --i) {
+		for (k = _colptr[i]; k < _colptr[i + 1]; ++k) {
+			j = _rowind[k];
+			auto& u_ij = _lval[k]; // = l_ji
+			y[i] -= u_ij * y[j];
+		}
+		y[i] /= (w * _diag[i]);
+	}
+	return y;
+}
+
+template <typename T>
+std::vector<T> SymmetricCSlCMatrix<T>::diagSubst(std::vector<T> const & x) const {
+	std::vector<T> y(getOrder());
+	for (Index i = 0; i < getOrder(); ++i)
+		y[i] = x[i] / _diag[i];
+	return y;
+}
+
+template <typename T>
+std::vector<T> SymmetricCSlCMatrix<T>::multDiag(std::vector<T> const & x) const {
+	std::vector<T> y(getOrder());
+	for (Index i = 0; i < getOrder(); ++i)
+		y[i] = x[i] * _diag[i];
+	return y;
 }

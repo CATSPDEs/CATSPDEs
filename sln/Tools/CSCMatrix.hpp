@@ -1,6 +1,7 @@
 ﻿#pragma once
 #include <algorithm> // for_each
 #include <type_traits> // is_same 
+#include "AbstractFEMatrix.hpp"
 #include "AbstractHarwellBoeingMatrix.hpp"
 #include "AbstractTransposeMultipliableMatrix.hpp"
 
@@ -16,7 +17,8 @@ template <typename T> using HBMatrix = CSCMatrix<T>;
 
 template <typename T>
 class CSCMatrix
-	: public AbstractHarwellBoeingMatrix<T>
+	: public AbstractFEMatrix<T>
+	, public AbstractHarwellBoeingMatrix<T>
 	, public AbstractTransposeMultipliableMatrix<T> {
 	// …it’s similar to CSR (check out CSRMatrix.hpp for details) except 
 	// _values vector contains nozero matrix values col by col, not row by row
@@ -49,6 +51,8 @@ public:
 	using AbstractSparseMatrix::exportSparse;
 	HarwellBoeingHeader importHarwellBoeing(std::string const &) final; // load from Harwell–Boeing file
 	void                exportHarwellBoeing(std::string const &, Parameters const & params = {}) const final;
+	CSCMatrix& generatePatternFrom(DOFsConnectivityList const &) final;
+	CSCMatrix& enforceDirichletBCs(Index2Value<T> const &, T*) final;
 };
 
 // implementation
@@ -213,4 +217,34 @@ void CSCMatrix<T>::exportHarwellBoeing(std::string const & fileName, Parameters 
 	saveHarwellBoeingHeader_f90(fileName.c_str(), &header);
 	// (3) save struct
 	saveHarwellBoeingStruct_f90(fileName.c_str(), &header, _colptr.data(), _rowind.data(), reinterpret_cast<double const *>(_values.data()));
+}
+
+template <typename T>
+CSCMatrix<T>& CSCMatrix<T>::generatePatternFrom(DOFsConnectivityList const & list) {
+	// (1) compute column pointers
+	for (Index i = 0; i < _w; ++i) _colptr[i + 1] = _colptr[i] + list[i].size();
+	// (2) compute row indicies
+	_rowind.reserve(_colptr[_w]);
+	_values.resize(_colptr[_w]);
+	for (Index col = 0; col < _w; ++col)
+		for (auto row : list[col])
+			_rowind.emplace_back(row);
+	return *this;
+}
+
+template <typename T>
+CSCMatrix<T>& CSCMatrix<T>::enforceDirichletBCs(Index2Value<T> const & ind2val, T* rhs) {
+	// zero out column and fix rhs
+	// wrn: works for non-square matrices, we do not set diag values to unities
+	// if you want so, use CSlC / symmetric CSlC matrix instead
+	decltype(ind2val.begin()) kvpIter;
+	Index i, j, k;
+	for (j = 0; j < _w; ++j) 
+		if ((kvpIter = ind2val.find(j)) != ind2val.end())
+			for (k = _colptr[j]; k < _colptr[j + 1]; ++k) {
+				i = _rowind[k];
+				rhs[i] -= _values[k] * kvpIter->second;
+				_values[k] = 0.;
+			}
+	return *this;
 }
