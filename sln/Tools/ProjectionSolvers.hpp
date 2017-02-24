@@ -180,18 +180,21 @@ namespace ProjectionSolvers {
 			boost::optional<std::vector<double>> const & x_0 = boost::none,
 			double const eps = 10e-17,
 			StoppingCriterion stop = StoppingCriterion::absolute,
-			Index i_log = 0 // log residual reduction on every i_log iteration (0 for never)
+			Index i_log = 0, // log residual reduction on every i_log iteration (0 for never)
+			Index i_rec = 15 // recompute residual via b - A.x every i_rec iterations
 		) {
 			auto& logger = SingletonLogger::instance();
-			auto x = x_0.value_or(std::vector<double>(A.getOrder(), 0.)),
+			// ini			
+			Index i, // current iter
+			      n = 3 * A.getOrder(); // max numb of iters
+			auto x = x_0.value_or(std::vector<double>(A.getOrder())),
 			     r = b - A * x,
 			     p = r;
 			auto r_x_r_0 = r * r, r_x_r = r_x_r_0;
+			// dummy
 			decltype(x) A_x_p;
 			decltype(r_x_r) r_x_r_new, alpha;
-			Index i, // current iter
-			      n = 3 * A.getOrder(), // max numb of iters
-			      i_rec = floor(.01 * A.getOrder()) + 1; // recompute residual on every i_rec iteration (1% of system size)
+			// start
 			logInitialResidual(sqrt(r_x_r_0), n);
 			for (i = 1; i <= n; ++i) {
 				A_x_p = A * p;
@@ -202,10 +205,10 @@ namespace ProjectionSolvers {
 				if (i_log && i % i_log == 0) logResidualReduction(sqrt(r_x_r), sqrt(r_x_r_new), i, n);
 				p = r + (r_x_r_new / r_x_r) * p;
 				r_x_r = r_x_r_new;				
-				if      (stop == StoppingCriterion::absolute && sqrt(r_x_r)           < eps) break;
-				else if (stop == StoppingCriterion::relative && sqrt(r_x_r / r_x_r_0) < eps) break;
+				if (stop == StoppingCriterion::absolute && sqrt(r_x_r)           < eps ||
+				    stop == StoppingCriterion::relative && sqrt(r_x_r / r_x_r_0) < eps) break;
 			}
-			logFinalResidual(sqrt(r_x_r_0), norm(b - A * x), i > n ? n : i, n);
+			logFinalResidual(sqrt(r_x_r_0), sqrt(r_x_r), i > n ? n : i, n);
 			if (i > n) logger.wrn("CG exceeded max numb of iterations");
 			return x;
 		}
@@ -217,36 +220,100 @@ namespace ProjectionSolvers {
 			boost::optional<std::vector<double>> const & x_0 = boost::none,
 			double const eps = 10e-17,
 			StoppingCriterion stop = StoppingCriterion::absolute,
-			Index i_log = 0
+			Index i_log = 0,
+			Index i_rec = 15
 		) {
 			auto& logger = SingletonLogger::instance();
+			// ini
+			Index i, n = 3 * A.getOrder();
 			auto x = x_0.value_or(std::vector<double>(A.getOrder())),
 			     r = b - A * x,
 			     z = B(r),
 			     p = z;
 			auto r_x_z_0 = r * z, r_x_z = r_x_z_0;
+			// dummy
 			decltype(x) A_x_p;
-			decltype(r_x_z) r_x_z_new, alpha;
-			Index i, 
-			      n = 3 * A.getOrder(),
-			      i_rec = floor(.01 * A.getOrder()) + 1;
+			double r_x_z_new, alpha;
+			// start
 			logger.log("here || . || denotes B-norm\n(B is a preconditioner and mimics inverse of A)");
 			logInitialResidual(sqrt(r_x_z_0), n);
 			for (i = 1; i <= n; ++i) {
 				A_x_p = A * p;
 				alpha = r_x_z / (A_x_p * p);
 				x += alpha * p;
-				r -= alpha * A_x_p; // r = b - A * x; 
+				r = i % i_rec ? r - alpha * A_x_p : b - A * x;
 				z = B(r);
 				r_x_z_new = r * z;
 				if (i_log && i % i_log == 0) logResidualReduction(sqrt(r_x_z), sqrt(r_x_z_new), i, n);
 				p = z + (r_x_z_new / r_x_z) * p;
 				r_x_z = r_x_z_new;				
-				if      (stop == StoppingCriterion::absolute && sqrt(r_x_z)           < eps) break;
-				else if (stop == StoppingCriterion::relative && sqrt(r_x_z / r_x_z_0) < eps) break;
+				if (stop == StoppingCriterion::absolute && sqrt(r_x_z)           < eps ||
+				    stop == StoppingCriterion::relative && sqrt(r_x_z / r_x_z_0) < eps) break;
 			}
 			logFinalResidual(sqrt(r_x_z_0), sqrt(r_x_z), i > n ? n : i, n);
 			if (i > n) logger.wrn("PCG exceeded max numb of iterations");
+			return x;
+		}
+
+		inline std::vector<double> BiCGStab(
+			AbstractMultipliableMatrix<double> & A,
+			std::vector<double> const & b,
+			boost::optional<std::vector<double>> const & x_0 = boost::none,
+			double const eps = 10e-17,
+			StoppingCriterion stop = StoppingCriterion::absolute,
+			Index i_log = 0,
+			Index i_rec = 15
+		) {
+			auto& logger = SingletonLogger::instance();
+			// ini
+			Index i, n = 3 * A.getOrder();
+			auto x = x_0.value_or(std::vector<double>(A.getOrder())),
+			     r = b - A * x, 
+			     rbar = r, 
+			     p = r;
+			auto r_x_rbar = r * rbar,
+			     norm_r_0 = norm(r);
+			// dummy
+			double norm_r, norm_r_new, r_x_rbar_new, alpha, omega, beta;
+			decltype(x) A_x_p, A_x_s, s;
+			// start
+			logInitialResidual(norm_r_0, n);
+			for (i = 1; i <= n; ++i) {
+				// (1) BiCG… step:
+				A_x_p = A * p;
+				alpha = r_x_rbar / (A_x_p * rbar);
+				s = r - alpha * A_x_p;
+				// s := residual after BiCG… step
+				// check norm(s), if small enough: x += alpha * p and stop (Henk van der Vorst, p. 152)
+				norm_r_new = norm(s);
+				if (stop == StoppingCriterion::absolute && norm_r_new            < eps ||
+					stop == StoppingCriterion::relative && norm_r_new / norm_r_0 < eps) {
+					if (i_log && i % i_log == 0) logResidualReduction(norm_r, norm_r_new, i, n);
+					logger.log("stopped after BiCG... iteration");
+					norm_r = norm_r_new;
+					x += alpha * p;
+					break;
+				}
+				// (2) otherwise, make …Stab step:
+				A_x_s = A * s;
+				omega = (A_x_s * s) / (A_x_s * A_x_s);
+				x += alpha * p + omega * s;
+				r = i % i_rec ? s - omega * A_x_s : b - A * x;
+				r_x_rbar_new = r * rbar; 
+				norm_r_new = norm(r);
+				if (i_log && i % i_log == 0) logResidualReduction(norm_r, norm_r_new, i, n);
+				beta = (r_x_rbar_new / r_x_rbar) * (alpha / omega);
+				p = r + beta * (p - omega * A_x_p);
+				r_x_rbar = r_x_rbar_new; 
+				norm_r = norm_r_new;
+				if (stop == StoppingCriterion::absolute && norm_r < eps ||
+					stop == StoppingCriterion::relative && norm_r / norm_r_0 < eps) {
+					logger.log("stopped after ...Stab iteration");
+					break;
+				}
+			}
+			logFinalResidual(norm_r_0, norm_r, i > n ? n : i, n);
+			if (i > n) logger.wrn("BiCGStab exceeded max numb of iterations");
 			return x;
 		}
 

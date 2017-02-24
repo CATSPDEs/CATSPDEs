@@ -1,8 +1,8 @@
 2
 0
-2
 0
-4
+0
+2
 2
 1e-09
 1
@@ -12,19 +12,22 @@
 	(0) Laplace w/ hom. Dirichlet BCs (zero analytical soln)
 	(1) Poisson w/ inhom. Robin BCs
 	(2) Diffusion-Reaction w/ mixed Dirichlet and Robin BCs
-2. refine initial mesh n times, n
-3. choose finite element
+2. mesh type
+	(0) uniform.ntn
+	(1) nonuniform.ntn
+3. refine initial mesh n times, n
+4. choose finite element
 	(0) Lagrange P1
 	(1) Lagrange P2
 	(2) Crouzeix-Raviart P1
-4. numb of mesh levels (refinements)
-5. choose solving technique
+5. numb of mesh levels (refinements)
+6. choose solving technique
 	(0) MG
 	(1) PCG w/ MG as an inner iteration
 	(2) CG
 	(3) Smoother
-6. set eps for solver
-7. stopping criterion
+7. set eps for solver
+8. stopping criterion
 	(0) absolute
 	(1) relative
-8. log every nth iteration, n
+9. log every nth iteration, n
