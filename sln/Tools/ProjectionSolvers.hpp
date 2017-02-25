@@ -41,7 +41,7 @@ namespace ProjectionSolvers {
 			boost::optional<std::vector<double>> const & x_0 = boost::none, // initial guess
 			double omega = 1., // relaxation parameter
 			Index n = 10000, // numb of iterations
-			double const eps = 10e-17,
+			double eps = 10e-17,
 			StoppingCriterion stop = StoppingCriterion::absolute,
 			Index i_log = 0 // log residual reduction on every i_log iteration (0 for never)
 		) {
@@ -74,7 +74,7 @@ namespace ProjectionSolvers {
 			boost::optional<std::vector<double>> const & x_0 = boost::none, // initial guess
 			double omega = 1., // relaxation parameter
 			Index n = 10000, // numb of iterations
-			double const eps = 10e-17,
+			double eps = 10e-17,
 			StoppingCriterion stop = StoppingCriterion::absolute,
 			Index i_log = 0 // log residual reduction on every i_log iteration (0 for never)
 		) {
@@ -108,7 +108,7 @@ namespace ProjectionSolvers {
 			boost::optional<std::vector<double>> const & x_0 = boost::none, // initial guess
 			double omega = 1., // relaxation parameter
 			Index n = 10000, // numb of iterations
-			double const eps = 10e-17,
+			double eps = 10e-17,
 			StoppingCriterion stop = StoppingCriterion::absolute,
 			Index i_log = 0 // log residual reduction on every i_log iteration (0 for never)
 		) {
@@ -142,7 +142,7 @@ namespace ProjectionSolvers {
 			boost::optional<std::vector<double>> const & x_0 = boost::none, // initial guess
 			double omega = 1., // relaxation parameter
 			Index n = 10000, // numb of iterations
-			double const eps = 10e-17,
+			double eps = 10e-17,
 			StoppingCriterion stop = StoppingCriterion::absolute,
 			Index i_log = 0 // log residual reduction on every i_log iteration (0 for never)
 		) {
@@ -178,7 +178,7 @@ namespace ProjectionSolvers {
 			AbstractMultipliableMatrix<double> & A,
 			std::vector<double> const & b,
 			boost::optional<std::vector<double>> const & x_0 = boost::none,
-			double const eps = 10e-17,
+			double eps = 10e-17,
 			StoppingCriterion stop = StoppingCriterion::absolute,
 			Index i_log = 0, // log residual reduction on every i_log iteration (0 for never)
 			Index i_rec = 15 // recompute residual via b - A.x every i_rec iterations
@@ -218,7 +218,7 @@ namespace ProjectionSolvers {
 			AbstractMultipliableMatrix<double> & A,
 			std::vector<double> const & b,
 			boost::optional<std::vector<double>> const & x_0 = boost::none,
-			double const eps = 10e-17,
+			double eps = 10e-17,
 			StoppingCriterion stop = StoppingCriterion::absolute,
 			Index i_log = 0,
 			Index i_rec = 15
@@ -259,7 +259,7 @@ namespace ProjectionSolvers {
 			AbstractMultipliableMatrix<double> & A,
 			std::vector<double> const & b,
 			boost::optional<std::vector<double>> const & x_0 = boost::none,
-			double const eps = 10e-17,
+			double eps = 10e-17,
 			StoppingCriterion stop = StoppingCriterion::absolute,
 			Index i_log = 0,
 			Index i_rec = 15
@@ -272,9 +272,9 @@ namespace ProjectionSolvers {
 			     rbar = r, 
 			     p = r;
 			auto r_x_rbar = r * rbar,
-			     norm_r_0 = norm(r);
+			     norm_r_0 = norm(r), norm_r = norm_r_0;
 			// dummy
-			double norm_r, norm_r_new, r_x_rbar_new, alpha, omega, beta;
+			double norm_r_new, r_x_rbar_new, alpha, omega, beta;
 			decltype(x) A_x_p, A_x_s, s;
 			// start
 			logInitialResidual(norm_r_0, n);
@@ -317,6 +317,71 @@ namespace ProjectionSolvers {
 			return x;
 		}
 
+		inline std::vector<double> PBiCGStab(
+			Preconditioner const & B,
+			AbstractMultipliableMatrix<double> & A,
+			std::vector<double> const & b,
+			boost::optional<std::vector<double>> const & x_0 = boost::none,
+			double eps = 10e-17,
+			StoppingCriterion stop = StoppingCriterion::absolute,
+			Index i_log = 0,
+			Index i_rec = 15
+		) {
+			auto& logger = SingletonLogger::instance();
+			// ini
+			Index i, n = 3 * A.getOrder();
+			auto x = x_0.value_or(std::vector<double>(A.getOrder())),
+			     r = b - A * x, 
+			     rbar = r, 
+			     p = r;
+			auto r_x_rbar = r * rbar,
+			     norm_r_0 = norm(r), norm_r = norm_r_0;
+			// dummy
+			double norm_r_new, r_x_rbar_new, alpha, omega, beta;
+			decltype(x) B_x_p, AB_x_p, B_x_s, AB_x_s, s;
+			// start
+			logInitialResidual(norm_r_0, n);
+			for (i = 1; i <= n; ++i) {
+				// (1) BiCG… step:
+				B_x_p = B(p);
+				AB_x_p = A * B_x_p;
+				alpha = r_x_rbar / (AB_x_p * rbar);
+				s = r - alpha * AB_x_p;
+				// s := residual after BiCG… step
+				// check norm(s), if small enough: x += alpha * p and stop (Henk van der Vorst, p. 152)
+				norm_r_new = norm(s);
+				if (stop == StoppingCriterion::absolute && norm_r_new            < eps ||
+					stop == StoppingCriterion::relative && norm_r_new / norm_r_0 < eps) {
+					if (i_log && i % i_log == 0) logResidualReduction(norm_r, norm_r_new, i, n);
+					logger.log("stopped after BiCG... iteration");
+					norm_r = norm_r_new;
+					x += alpha * B_x_p;
+					break;
+				}
+				// (2) otherwise, make …Stab step:
+				B_x_s = B(s);
+				AB_x_s = A * B_x_s;
+				omega = (AB_x_s * s) / (AB_x_s * AB_x_s);
+				x += alpha * B_x_p + omega * B_x_s;
+				r = i % i_rec ? s - omega * AB_x_s : b - A * x;
+				r_x_rbar_new = r * rbar; 
+				norm_r_new = norm(r);
+				if (i_log && i % i_log == 0) logResidualReduction(norm_r, norm_r_new, i, n);
+				beta = (r_x_rbar_new / r_x_rbar) * (alpha / omega);
+				p = r + beta * (p - omega * AB_x_p);
+				r_x_rbar = r_x_rbar_new; 
+				norm_r = norm_r_new;
+				if (stop == StoppingCriterion::absolute && norm_r < eps ||
+					stop == StoppingCriterion::relative && norm_r / norm_r_0 < eps) {
+					logger.log("stopped after ...Stab iteration");
+					break;
+				}
+			}
+			logFinalResidual(norm_r_0, norm_r, i > n ? n : i, n);
+			if (i > n) logger.wrn("BiCGStab exceeded max numb of iterations");
+			return x;
+		}
+
 	}
 
 }
@@ -325,7 +390,7 @@ namespace ProjectionSolvers {
 //std::pair<std::vector<double>, size_t> BCG(T const &A,
 //	std::vector<double> const &b,
 //	std::vector<double> const &x0, 
-//	double const eps) {
+//	double eps) {
 //	static_assert(std::is_base_of<IRealMatrix, T>::value, "matrix class must be a descendant of IRealMatrix");
 //	std::vector<double> r1 = b - A*x0;
 //	std::vector<double> r2 = r1;
@@ -355,7 +420,7 @@ namespace ProjectionSolvers {
 //std::pair<std::vector<double>, size_t> ILUBCG(T &A,
 //	std::vector<double> const &b,
 //	std::vector<double> const &x0,
-//	double const eps) {
+//	double eps) {
 //	static_assert(std::is_base_of<IRealMatrix, T>::value, "matrix class must be a descendant of IRealMatrix");
 //	CSlRMatrix LU(A.ILU());
 //	std::vector<double> r1 = b - A*x0;
@@ -387,7 +452,7 @@ namespace ProjectionSolvers {
 //std::pair<std::vector<double>, size_t> BiCGStab(T const &A,
 //	std::vector<double> const &b,
 //	std::vector<double> const &x0,
-//	double const eps) {
+//	double eps) {
 //	static_assert(std::is_base_of<IRealMatrix, T>::value, "matrix class must be a descendant of IRealMatrix");
 //	std::vector<double> r1 = b - A*x0;
 //	std::vector<double> r2 = r1;
@@ -417,7 +482,7 @@ namespace ProjectionSolvers {
 //std::pair<std::vector<double>, size_t> ILUBiCGStab(T &A,
 //	std::vector<double> const &b,
 //	std::vector<double> const &x0,
-//	double const eps) {
+//	double eps) {
 //	static_assert(std::is_base_of<IRealMatrix, T>::value, "matrix class must be a descendant of IRealMatrix");
 //	CSlRMatrix LU(A.ILU());
 //	std::vector<double> r1 = b - A*x0;

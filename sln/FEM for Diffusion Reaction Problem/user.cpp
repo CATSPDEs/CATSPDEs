@@ -106,9 +106,9 @@ int main() {
 		logger.inp("numb of mesh levels (refinements)", numbOfMeshLevels);
 		logger.end();
 		auto method = logger.opt("choose solving technique", {
-			"MG",
-			"PCG w/ MG as an inner iteration",
-			"CG",
+			"Multigrig",
+			"Krylov solver w/ MG as an inner iteration",
+			"Krylov method as stand-alone solver",
 			"Smoother"
 		});
 		logger.beg("set iterative solver data");
@@ -185,66 +185,74 @@ int main() {
 		}
 		else if (method == 1) {
 			logger.beg("setup multigrid data");
-			Index maxNumbOfIterations;
-			logger.inp("max numb of iterations", maxNumbOfIterations);
-			vector<string> smoothersNames{ "relaxed Jacobi", "forward SOR", "backward SOR", "SSOR" };
-			auto dummy = Smoothers::relaxedJacobi;
-			vector<decltype(dummy)> smoothers{
-				Smoothers::relaxedJacobi,
-				Smoothers::forwSOR,
-				Smoothers::backSOR,
-				Smoothers::SSOR
-			};
-			auto smoothersIndex = logger.opt("smoothing technique", smoothersNames);
-			Index nu;
-			logger.inp("numb of pre- and post-smoothing iterations", nu);
-			double omega;
-			logger.inp("relaxation parameter", omega);
-			Smoother<SymmetricCSlCMatrix<double>> smoother = [&](SymmetricCSlCMatrix<double>& A, std::vector<double> const & b, std::vector<double> const & x_0) {
-				return smoothers[smoothersIndex](A, b, x_0, omega, nu, 0., StoppingCriterion::absolute, 0);
-			};
-			auto gamma = logger.opt("set recursive calls type", { "V-cycle", "W-cycle" });
-			++gamma;
-			Index numbOfInnerIterations;
-			logger.inp("numb of iterations for inner solver", numbOfInnerIterations);
-			auto transfer = (TransferType)logger.opt("grid transfer type", { "canonical", "L2" });
-			Multigrid<SymmetricCSlCMatrix<double>> MG{
-				FE, Omega, numbOfMeshLevels,
-				[&](Triangulation const & Omega) {
-					return assembleSystem(PDE, Omega, RobinBC, DirichletBC, FE);
-				},
-				transfer
-			};
-			auto& A = MG.A();
-			auto& b = MG.b();
+				using namespace Krylov;
+				using namespace Smoothers;
+				auto outerSolver = PCG;
+				vector<decltype(outerSolver)> KrylovSolvers { PCG, PBiCGStab };
+				auto KrylovSolversIndex = logger.opt("choose outer solver", { "CG", "BiCGStab" });
+				Index maxNumbOfIterations;
+				logger.inp("max numb of iterations", maxNumbOfIterations);
+				auto innerSolver = Smoothers::relaxedJacobi;
+				vector<decltype(innerSolver)> smoothers {
+					Smoothers::relaxedJacobi,
+					Smoothers::forwSOR,
+					Smoothers::backSOR,
+					Smoothers::SSOR
+				};
+				auto smoothersIndex = logger.opt("smoothing technique", { "relaxed Jacobi", "forward SOR", "backward SOR", "SSOR" });
+				Index nu;
+				logger.inp("numb of pre- and post-smoothing iterations", nu);
+				double omega;
+				logger.inp("relaxation parameter", omega);
+				Smoother<SymmetricCSlCMatrix<double>> smoother = [&](SymmetricCSlCMatrix<double>& A, std::vector<double> const & b, std::vector<double> const & x_0) {
+					return smoothers[smoothersIndex](A, b, x_0, omega, nu, 0., StoppingCriterion::absolute, 0);
+				};
+				auto gamma = logger.opt("set recursive calls type", { "V-cycle", "W-cycle" });
+				++gamma;
+				Index numbOfInnerIterations;
+				logger.inp("numb of iterations for inner solver", numbOfInnerIterations);
+				auto transfer = (TransferType)logger.opt("grid transfer type", { "canonical", "L2" });
+				Multigrid<SymmetricCSlCMatrix<double>> MG{
+					FE, Omega, numbOfMeshLevels,
+					[&](Triangulation const & Omega) {
+						return assembleSystem(PDE, Omega, RobinBC, DirichletBC, FE);
+					},
+					transfer
+				};
+				auto& A = MG.A();
+				auto& b = MG.b();
 			logger.end();
-			logger.beg("solve w/ PCG");
-			x = Krylov::PCG([&](std::vector<double> const & x) {
-				std::vector<double> y(A.getOrder());
-				logger.mute = true;
-				for (Index i = 0; i < numbOfInnerIterations; ++i)
-					y = MG(numbOfMeshLevels, x, y, smoother, gamma);
-				logger.mute = false;
-				return y;
-			}, A, b, shuffle(A.getOrder()), eps, stop, i_log);
+			logger.beg("solve");
+				x = KrylovSolvers[KrylovSolversIndex]([&](std::vector<double> const & x) {
+					std::vector<double> y(A.getOrder());
+					logger.mute = true;
+					for (Index i = 0; i < numbOfInnerIterations; ++i)
+						y = MG(numbOfMeshLevels, x, y, smoother, gamma);
+					logger.mute = false;
+					return y;
+				}, A, b, shuffle(A.getOrder()), eps, stop, i_log, 15);
 			logger.end();
 			// save stdin commands
-			logger.exp("pcg.txt");
+			logger.exp("pkrylov.txt");
 		}
 		else if (method == 2) {
+			using namespace Krylov;
+			auto dummy = CG;
+			vector<decltype(dummy)> KrylovSolvers { CG, BiCGStab };
+			auto KrylovSolversIndex = logger.opt("choose solver", { "CG", "BiCGStab" });
 			logger.beg("refine mesh");
-			Omega.refine(numbOfMeshLevels);
+				Omega.refine(numbOfMeshLevels);
 			logger.end();
 			logger.beg("assemble system");
-			auto system = assembleSystem(PDE, Omega, RobinBC, DirichletBC, FE);
-			auto& A = get<0>(system);
-			auto& b = get<1>(system);
+				auto system = assembleSystem(PDE, Omega, RobinBC, DirichletBC, FE);
+				auto& A = get<0>(system);
+				auto& b = get<1>(system);
 			logger.end();
-			logger.beg("solve w/ CG");
-			x = Krylov::CG(A, b, shuffle(A.getOrder()), eps, stop, i_log);
+			logger.beg("solve");
+				x = KrylovSolvers[KrylovSolversIndex](A, b, shuffle(A.getOrder()), eps, stop, i_log, 15);
 			logger.end();
 			// save stdin commands
-			logger.exp("cg.txt");
+			logger.exp("krylov.txt");
 		}
 		else if (method == 3) {
 			logger.beg("setup solver data");

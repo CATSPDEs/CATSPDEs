@@ -4,9 +4,10 @@
 0
 3
 1
-1e-07
+1e-09
 1
 1
+0
 100
 3
 1
@@ -29,27 +30,30 @@
 	(2) Crouzeix-Raviart P1
 5. numb of mesh levels (refinements)
 6. choose solving technique
-	(0) MG
-	(1) PCG w/ MG as an inner iteration
-	(2) CG
+	(0) Multigrig
+	(1) Krylov solver w/ MG as an inner iteration
+	(2) Krylov method as stand-alone solver
 	(3) Smoother
 7. set eps for solver
 8. stopping criterion
 	(0) absolute
 	(1) relative
 9. log every nth iteration, n
-10. max numb of iterations
-11. smoothing technique
+10. choose outer solver
+	(0) CG
+	(1) BiCGStab
+11. max numb of iterations
+12. smoothing technique
 	(0) relaxed Jacobi
 	(1) forward SOR
 	(2) backward SOR
 	(3) SSOR
-12. numb of pre- and post-smoothing iterations
-13. relaxation parameter
-14. set recursive calls type
+13. numb of pre- and post-smoothing iterations
+14. relaxation parameter
+15. set recursive calls type
 	(0) V-cycle
 	(1) W-cycle
-15. numb of iterations for inner solver
-16. grid transfer type
+16. numb of iterations for inner solver
+17. grid transfer type
 	(0) canonical
 	(1) L2

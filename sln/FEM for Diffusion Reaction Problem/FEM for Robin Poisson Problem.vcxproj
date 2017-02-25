@@ -133,8 +133,8 @@
     <Library Include="..\Harwell–Boeing IO (FORTRAN Static Library)\x64\Release\Harwell–Boeing IO (FORTRAN Static Library).lib" />
   </ItemGroup>
   <ItemGroup>
-    <Text Include="cg.txt" />
-    <Text Include="pcg.txt" />
+    <Text Include="krylov.txt" />
+    <Text Include="pkrylov.txt" />
     <Text Include="smoothers.txt" />
     <Text Include="mg.txt" />
   </ItemGroup>

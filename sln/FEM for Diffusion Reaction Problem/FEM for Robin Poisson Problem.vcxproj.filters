@@ -46,10 +46,10 @@
     <Text Include="mg.txt">
       <Filter>stdin</Filter>
     </Text>
-    <Text Include="pcg.txt">
+    <Text Include="krylov.txt">
       <Filter>stdin</Filter>
     </Text>
-    <Text Include="cg.txt">
+    <Text Include="pkrylov.txt">
       <Filter>stdin</Filter>
     </Text>
   </ItemGroup>

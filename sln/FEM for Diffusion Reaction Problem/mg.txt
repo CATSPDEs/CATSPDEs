@@ -1,19 +1,19 @@
 2
-1
 0
 0
-2
 0
-1e-07
-1
-1
-100
 3
-5
+0
+1e-09
+1
+1
+1
+3
+1
+1
 1
 0
-0
-n
+1
 
 1. choose problem
 	(0) Laplace w/ hom. Dirichlet BCs (zero analytical soln)
@@ -29,9 +29,9 @@ n
 	(2) Crouzeix-Raviart P1
 5. numb of mesh levels (refinements)
 6. choose solving technique
-	(0) MG
-	(1) PCG w/ MG as an inner iteration
-	(2) CG
+	(0) Multigrig
+	(1) Krylov solver w/ MG as an inner iteration
+	(2) Krylov method as stand-alone solver
 	(3) Smoother
 7. set eps for solver
 8. stopping criterion
