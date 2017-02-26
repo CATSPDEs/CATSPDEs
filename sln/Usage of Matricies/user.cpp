@@ -3,6 +3,7 @@
 #include "SymmetricCSlCMatrix.hpp"
 #include "SymmetricMatrix.hpp"
 #include "DenseMatrix.hpp"
+#include "BlockMatrix.hpp"
 #include "SingletonLogger.hpp"
 
 /*
@@ -35,7 +36,8 @@ int main() {
 			"CSlC", 
 			"SymmetricCSlC", 
 			"SymmetricMatrix",
-			"DenseMatrix"
+			"DenseMatrix",
+			"BlockMatrix"
 		});
 		if (testNum == 0) {
 			logger.beg("CSC matrix test");
@@ -214,6 +216,39 @@ int main() {
 						logger.log();
 					logger.end();
 				logger.end();
+			logger.end();
+		} 
+		else if (testNum == 5) {
+			logger.beg("BlockMatrix test");
+				DenseMatrix<int> A11 { // = A22
+					{ 1, 2, 3 },
+					{ 4, 5, 6 },
+					{ 7, 8, 9 }
+				};
+				DenseMatrix<int> A12 { // = A22
+					{ 1, 2, 3, 6 },
+					{ 4, 5, 6, 6 }
+				};
+				A11.export(logger.buf << "A11 = A22:\n");
+				logger.log();
+				BlockMatrix<int> A {
+					{ nullptr, nullptr },
+					{ nullptr, &A12 },
+					{ &A11, &A12 },
+				};
+
+				//CSCMatrix<double> A {
+				//	{ 0, 1, 1, 3, 3, 4, 6 }, // colptr
+				//	{ 0, 0, 1, 1, 0, 1 }, // rowind
+				//	{ 1., 2., 3., 4., 5., 6., }, // values
+				//	2   // h
+				//};
+				//CSCMatrix<double> C {
+				//	{ 0, 1, 1, 3, 3, 4, 6 }, // colptr
+				//	{ 0, 0, 1, 1, 0, 1 }, // rowind
+				//	{ 1., 2., 3., 4., 5., 6., }, // values
+				//	2   // h
+				//};
 			logger.end();
 		}
 	}

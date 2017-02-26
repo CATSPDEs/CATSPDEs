@@ -213,9 +213,6 @@
     <ClInclude Include="Triangle_P1_CrouzeixRaviart.hpp">
       <Filter>Finite Elements\Exotic FEs</Filter>
     </ClInclude>
-    <ClInclude Include="SaddlePointMatrix.hpp">
-      <Filter>Matrices\Implementations</Filter>
-    </ClInclude>
     <ClInclude Include="Triangle_P0_Lagrange.hpp">
       <Filter>Finite Elements\Lagrange Family</Filter>
     </ClInclude>
@@ -227,6 +224,9 @@
     </ClInclude>
     <ClInclude Include="AbstractPreconditioner.hpp">
       <Filter>Matrices</Filter>
+    </ClInclude>
+    <ClInclude Include="BlockMatrix.hpp">
+      <Filter>Matrices\Implementations</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

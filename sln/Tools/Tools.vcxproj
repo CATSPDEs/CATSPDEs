@@ -165,7 +165,7 @@
     <ClInclude Include="Predicate.hpp" />
     <ClInclude Include="rlutil.h" />
     <ClInclude Include="SingletonLogger.hpp" />
-    <ClInclude Include="SaddlePointMatrix.hpp" />
+    <ClInclude Include="BlockMatrix.hpp" />
     <ClInclude Include="SymmetricMatrix.hpp" />
     <ClInclude Include="SymmetricCSlCMatrix.hpp" />
     <ClInclude Include="SymmetricCSlRMatrix.hpp" />
