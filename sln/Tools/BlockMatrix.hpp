@@ -10,9 +10,8 @@ class BlockMatrix
 	: public AbstractMultipliableMatrix<T> {
 	Index _hb, _wb; // numb of row and col blocks
 	std::vector<Index> _blockRowStartIndicies, _blockColStartIndicies;
-	// the first element of (i, j)–block has row index _blockRowStartIndicies[i] and _blockColStartIndicies[j]
-	std::vector<std::vector<AbstractMultipliableMatrix<T>*>> _A; // pointers to blocks
-
+	// the first element of (i, j)–block has row index _blockRowStartIndicies[i] and col index _blockColStartIndicies[j]
+	std::vector<std::vector<AbstractMultipliableMatrix<T>*>> _blocksPtr; // pointers to blocks
 	T& _set(Index i, Index j) final {
 		throw std::logic_error("not implemented");
 	}
@@ -27,47 +26,52 @@ public:
 		, _blockColStartIndicies(_wb) {
 		for (auto const & row : iniList) {
 			if (row.size() != _wb) throw std::invalid_argument("ini list does not represent a block matrix");
-			_A.emplace_back(row);
+			_blocksPtr.emplace_back(row);
 		}
+		Index numbOfCols, numbOfRows;
 		// (1) build blocks’ col starting indicies
 		for (Index bj = 0; bj < _wb - 1; ++bj) {
 			_blockColStartIndicies[bj + 1] = _blockColStartIndicies[bj];
-			Index numbOfCols = 0;
+			numbOfCols = 0;
 			for (Index bi = 0; bi < _hb; ++bi) 
-				if (_A[bi][bj]) {
-					if (!numbOfCols) numbOfCols = _A[bi][bj]->numbOfCols();
-					else if (numbOfCols != _A[bi][bj]->numbOfCols()) throw std::invalid_argument("blocks of different width: check block col #" + std::to_string(bj));
+				if (_blocksPtr[bi][bj]) {
+					if (!numbOfCols) numbOfCols = _blocksPtr[bi][bj]->numbOfCols();
+					else if (numbOfCols != _blocksPtr[bi][bj]->numbOfCols()) throw std::invalid_argument("blocks of different width: check block col #" + std::to_string(bj));
 				}
 			_blockColStartIndicies[bj + 1] += numbOfCols;
 		}
-		// (2) check numb of cols of last block col for equality 
-		for (Index bi = 0, numbOfCols = 0; bi < _hb; ++bi)
-			if (_A[bi][_wb - 1]) {
-				if (!numbOfCols) numbOfCols = _A[bi][_wb - 1]->numbOfCols();
-				else if (numbOfCols != _A[bi][_wb - 1]->numbOfCols()) throw std::invalid_argument("blocks of different width: check last block col");
+		// (2) check numb of cols of last block col for equality and compute _w
+		numbOfCols = 0;
+		for (Index bi = 0; bi < _hb; ++bi)
+			if (_blocksPtr[bi][_wb - 1]) {
+				if (!numbOfCols) numbOfCols = _blocksPtr[bi][_wb - 1]->numbOfCols();
+				else if (numbOfCols != _blocksPtr[bi][_wb - 1]->numbOfCols()) throw std::invalid_argument("blocks of different width: check last block col");
 			}
+		_w = _blockColStartIndicies.back() + numbOfCols;
 		// ″ for row indicies
 		for (Index bi = 0; bi < _hb - 1; ++bi) {
 			_blockRowStartIndicies[bi + 1] = _blockRowStartIndicies[bi];
-			Index numbOfRows = 0;
+			numbOfRows = 0;
 			for (Index bj = 0; bj < _wb; ++bj)
-				if (_A[bi][bj]) {
-					if (!numbOfRows) numbOfRows = _A[bi][bj]->numbOfRows();
-					else if (numbOfRows != _A[bi][bj]->numbOfRows()) throw std::invalid_argument("blocks of different height: check block row #" + std::to_string(bi));
+				if (_blocksPtr[bi][bj]) {
+					if (!numbOfRows) numbOfRows = _blocksPtr[bi][bj]->numbOfRows();
+					else if (numbOfRows != _blocksPtr[bi][bj]->numbOfRows()) throw std::invalid_argument("blocks of different height: check block row #" + std::to_string(bi));
 				}
 			_blockRowStartIndicies[bi + 1] += numbOfRows;
 		}
-		for (Index bj = 0, numbOfRows = 0; bj < _wb; ++bj)
-			if (_A[_hb - 1][bj]) {
-				if (!numbOfRows) numbOfRows = _A[_hb - 1][bj]->numbOfRows();
-				else if (numbOfRows != _A[_hb - 1][bj]->numbOfRows()) throw std::invalid_argument("blocks of different height: check last block row");
+		numbOfRows = 0;
+		for (Index bj = 0; bj < _wb; ++bj)
+			if (_blocksPtr[_hb - 1][bj]) {
+				if (!numbOfRows) numbOfRows = _blocksPtr[_hb - 1][bj]->numbOfRows();
+				else if (numbOfRows != _blocksPtr[_hb - 1][bj]->numbOfRows()) throw std::invalid_argument("blocks of different height: check last block row");
 			}
-		std::cout << "block col starting indicies: " << _blockColStartIndicies << '\n' << _blockRowStartIndicies;
+		_h = _blockRowStartIndicies.back() + numbOfRows;
+		// std::cout << "block col starting indicies: " << _blockColStartIndicies << '\n' << _blockRowStartIndicies << '\n' << _h << ' ' << _w;
 	}
 	BlockMatrix& operator=(T const & val) final {
 		throw std::logic_error("not implemented");
 		// TODO: operator=
-		//std::for_each(_A.begin(), _A.end(), [&](auto& row) {
+		//std::for_each(_blocksPtr.begin(), _blocksPtr.end(), [&](auto& row) {
 		//	std::for_each(row.begin(), row.end(), [&](auto& mtx) {
 		//		if (mtx) *mtx = val;
 		//	});
@@ -75,7 +79,9 @@ public:
 		//return *this;
 	}
 	void mult(T const * by, T* result) const final {
-		throw std::logic_error("not implemented");
+		for (Index bi = 0; bi < _hb; ++bi) // for each block row and
+			for (Index bj = 0; bj < _wb; ++bj) // col, do…
+				if (_blocksPtr[bi][bj]) _blocksPtr[bi][bj]->mult(by + _blockColStartIndicies[bj], result + _blockRowStartIndicies[bi]);
 	}
 };
 

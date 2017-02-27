@@ -172,6 +172,7 @@ SymmetricCSlCMatrix<T>& SymmetricCSlCMatrix<T>::generatePatternFrom(DOFsConnecti
 
 template <typename T>
 HarwellBoeingHeader SymmetricCSlCMatrix<T>::importHarwellBoeing(std::string const & fileName) {
+	throw std::logic_error("not implemented");
 	// load header
 	HarwellBoeingHeader header;
 	loadHarwellBoeingHeader_f90(fileName.c_str(), &header);
@@ -212,7 +213,7 @@ HarwellBoeingHeader SymmetricCSlCMatrix<T>::importHarwellBoeing(std::string cons
 
 template <typename T>
 void SymmetricCSlCMatrix<T>::exportHarwellBoeing(std::string const & fileName, Parameters const & params) const {
-	// …
+	throw std::logic_error("not implemented");
 }
 
 template <typename T>

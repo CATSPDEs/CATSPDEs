@@ -222,8 +222,7 @@ int main() {
 			logger.beg("BlockMatrix test");
 				DenseMatrix<int> A11 { // = A22
 					{ 1, 2, 3 },
-					{ 4, 5, 6 },
-					{ 7, 8, 9 }
+					{ 4, 5, 6 }
 				};
 				DenseMatrix<int> A12 { // = A22
 					{ 1, 2, 3, 6 },
@@ -236,7 +235,9 @@ int main() {
 					{ nullptr, &A12 },
 					{ &A11, &A12 },
 				};
-
+				vector<int> u(A.numbOfCols(), 1);
+				logger.buf << "block mult:\n" << A * u;
+				logger.log();
 				//CSCMatrix<double> A {
 				//	{ 0, 1, 1, 3, 3, 4, 6 }, // colptr
 				//	{ 0, 0, 1, 1, 0, 1 }, // rowind
