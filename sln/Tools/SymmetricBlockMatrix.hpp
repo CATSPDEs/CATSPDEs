@@ -6,12 +6,12 @@
 */
 
 template <typename T>
-class SymmetricBlockMatrix
-	: public AbstractMultipliableMatrix<T> {
+class SymmetricBlockMatrix 
+	: public AbstractMultipliableMatrix<T> { // aggregation
 	std::vector<Index> _blockStartIndicies;
 	// the first element of (i, j)–block has row index _blockStartIndicies[i] and col index _blockStartIndicies[j]
-	std::vector<std::vector<AbstractMultipliableMatrix<T>*>>          _diagBlocksPtr; // pointers to diag symmetric blocks
-	std::vector<std::vector<AbstractTransposeMultipliableMatrix<T>*>> _lvalBlocksPtr; // pointers to blocks of lower triangular part, col by col
+	std::vector<AbstractMultipliableMatrix<T>*>          _diagBlocksPtr; // pointers to diag symmetric blocks
+	std::vector<AbstractTransposeMultipliableMatrix<T>*> _lvalBlocksPtr; // pointers to blocks of lower triangular part, col by col
 	T& _set(Index i, Index j) final {
 		throw std::logic_error("not implemented");
 	}
@@ -28,34 +28,35 @@ public:
 		, _lvalBlocksPtr(lvalIniList) 
 	{
 		Index n = _diagBlocksPtr.size(), m = _lvalBlocksPtr.size();
-		if ((n * n - n) / 2 != m) throw std::invalid_argument("invalid symmetric block matrix: check diag / lower triangle sizes");
-		// build starting indicies
-		_h = 0;
-		for (Index bj = 0, k = 0; bj < n - 1; ++bj) {
-			Index numbOfCols = 0; 
-			if (_diagBlocksPtr[bj]) numbOfCols = _diagBlocksPtr[bj]->getOrder();
-			else for (Index bi = bj + 1; bi < n; ++bi, ++k) if (_lvalBlocksPtr[k]) numbOfCols = _lvalBlocksPtr[k]->numbOfCols();
-			if (_lvalBlocksPtr[k - 1]) _h = numbOfCols;
-			_blockStartIndicies[bj + 1] = _blockStartIndicies[bj] + numbOfCols;
+		if ((n * n - n) / 2 != m) throw std::invalid_argument("invalid symmetric block matrix: check numb of blocks in diag or lower triangular part");
+		std::vector<Index> blockSizes(n);
+		auto modifyOnce = [](Index& what, Index val) {
+			if (what && what != val) throw std::invalid_argument("invalid block sizes of symmetric block matrix");
+			what = val;
+		};
+		for (Index bj = 0, k = 0; bj < n; ++bj) {
+			if (_diagBlocksPtr[bj]) modifyOnce(blockSizes[bj], _diagBlocksPtr[bj]->getOrder());
+			for (Index bi = bj + 1; bi < n; ++bi, ++k)
+				if (_lvalBlocksPtr[k]) modifyOnce(blockSizes[bi], _lvalBlocksPtr[k]->numbOfRows());
 		}
-		_w = (_h += _blockStartIndicies.back());
-		// TODO: check block sizes
-		// std::cout << "block col starting indicies: " << _blockColStartIndicies << '\n' << _blockRowStartIndicies << '\n' << _h << ' ' << _w;
+		for (Index bj = 1; bj < n; ++bj)
+			_blockStartIndicies[bj] = _blockStartIndicies[bj - 1] + blockSizes[bj - 1];
+		_h = _w = _blockStartIndicies.back() + blockSizes.back();
+		// std::cout << "block starting indicies: " << _blockStartIndicies << '\n' << '\n' << _h;
 	}
 	SymmetricBlockMatrix& operator=(T const & val) final {
 		throw std::logic_error("not implemented");
-		// TODO: operator=
-		//std::for_each(_blocksPtr.begin(), _blocksPtr.end(), [&](auto& row) {
-		//	std::for_each(row.begin(), row.end(), [&](auto& mtx) {
-		//		if (mtx) *mtx = val;
-		//	});
-		//});
-		//return *this;
 	}
 	void mult(T const * by, T* result) const final {
-		throw std::logic_error("not implemented");
-		for (Index bi = 0; bi < _hb; ++bi) // for each block row and
-			for (Index bj = 0; bj < _wb; ++bj) // col, do…
-				if (_blocksPtr[bi][bj]) _blocksPtr[bi][bj]->mult(by + _blockColStartIndicies[bj], result + _blockRowStartIndicies[bi]);
+		Index n = _diagBlocksPtr.size();
+		for (Index bj = 0, k = 0; bj < n; ++bj) {
+			if (_diagBlocksPtr[bj]) 
+				_diagBlocksPtr[bj]->mult(by + _blockStartIndicies[bj], result + _blockStartIndicies[bj]);
+			for (Index bi = bj + 1; bi < n; ++bi, ++k)
+				if (_lvalBlocksPtr[k]) {
+					_lvalBlocksPtr[k]->mult           (by + _blockStartIndicies[bj], result + _blockStartIndicies[bi]);
+					_lvalBlocksPtr[k]->multByTranspose(by + _blockStartIndicies[bi], result + _blockStartIndicies[bj]);
+				}
+		}
 	}
 };

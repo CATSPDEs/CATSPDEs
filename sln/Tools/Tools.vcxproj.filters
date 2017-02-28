@@ -228,11 +228,11 @@
     <ClInclude Include="BlockMatrix.hpp">
       <Filter>Matrices\Implementations</Filter>
     </ClInclude>
+    <ClInclude Include="SymmetricBlockMatrix.hpp">
+      <Filter>Matrices\Implementations</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="StokesMatrix.cpp">
-      <Filter>Matrices\Implementations</Filter>
-    </ClCompile>
     <ClCompile Include="SingletonLogger.cpp">
       <Filter>Utilities\Logger</Filter>
     </ClCompile>

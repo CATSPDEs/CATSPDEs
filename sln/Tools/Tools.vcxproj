@@ -166,6 +166,7 @@
     <ClInclude Include="rlutil.h" />
     <ClInclude Include="SingletonLogger.hpp" />
     <ClInclude Include="BlockMatrix.hpp" />
+    <ClInclude Include="SymmetricBlockMatrix.hpp" />
     <ClInclude Include="SymmetricMatrix.hpp" />
     <ClInclude Include="SymmetricCSlCMatrix.hpp" />
     <ClInclude Include="SymmetricCSlRMatrix.hpp" />
@@ -185,7 +186,6 @@
     <ClCompile Include="L2Projection.cpp" />
     <ClCompile Include="MixedFEM.cpp" />
     <ClCompile Include="SingletonLogger.cpp" />
-    <ClCompile Include="StokesMatrix.cpp" />
     <ClCompile Include="SymmetricCSlRMatrix.cpp" />
     <ClCompile Include="Triangulation.cpp" />
   </ItemGroup>

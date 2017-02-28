@@ -4,6 +4,7 @@
 #include "SymmetricMatrix.hpp"
 #include "DenseMatrix.hpp"
 #include "BlockMatrix.hpp"
+#include "SymmetricBlockMatrix.hpp"
 #include "SingletonLogger.hpp"
 
 /*
@@ -37,7 +38,8 @@ int main() {
 			"SymmetricCSlC", 
 			"SymmetricMatrix",
 			"DenseMatrix",
-			"BlockMatrix"
+			"BlockMatrix",
+			"SymmetricBlockMatrix"
 		});
 		if (testNum == 0) {
 			logger.beg("CSC matrix test");
@@ -220,36 +222,62 @@ int main() {
 		} 
 		else if (testNum == 5) {
 			logger.beg("BlockMatrix test");
-				DenseMatrix<int> A11 { // = A22
+				DenseMatrix<int> a {
 					{ 1, 2, 3 },
 					{ 4, 5, 6 }
 				};
-				DenseMatrix<int> A12 { // = A22
+				DenseMatrix<int> b {
 					{ 1, 2, 3, 6 },
 					{ 4, 5, 6, 6 }
 				};
-				A11.export(logger.buf << "A11 = A22:\n");
+				a.export(logger.buf);
+				b.export(logger.buf);
 				logger.log();
 				BlockMatrix<int> A {
 					{ nullptr, nullptr },
-					{ nullptr, &A12 },
-					{ &A11, &A12 },
+					{ nullptr, &b },
+					{ &a, &b },
 				};
 				vector<int> u(A.numbOfCols(), 1);
 				logger.buf << "block mult:\n" << A * u;
 				logger.log();
-				//CSCMatrix<double> A {
-				//	{ 0, 1, 1, 3, 3, 4, 6 }, // colptr
-				//	{ 0, 0, 1, 1, 0, 1 }, // rowind
-				//	{ 1., 2., 3., 4., 5., 6., }, // values
-				//	2   // h
-				//};
-				//CSCMatrix<double> C {
-				//	{ 0, 1, 1, 3, 3, 4, 6 }, // colptr
-				//	{ 0, 0, 1, 1, 0, 1 }, // rowind
-				//	{ 1., 2., 3., 4., 5., 6., }, // values
-				//	2   // h
-				//};
+			logger.end();
+		}
+		else if (testNum == 6) {
+			logger.beg("SymmetricBlockMatrix test");
+				// little example of typical saddle point matrix
+				// resulting for CFD problems 
+				DenseMatrix<int> A11 {
+					{ 1, 2, 3 },
+					{ 4, 5, 6 },
+					{ 7, 8, 9 }
+				};
+				auto& A22 = A11;
+				CSCMatrix<int> A31 {
+					{ 0, 1, 1, 3 }, // colptr
+					{ 0, 0, 1 }, // rowind
+					{ 1, 2, 3 }, // values
+					2   // h
+				}, A32 {
+					{ 0, 0, 1, 3 }, // colptr
+					{ 1, 0, 1 }, // rowind
+					{ 1, 2, 3 }, // values
+					2   // h
+				};
+				A11.export(logger.buf << "A11 = A22:\n");
+				A31.export(logger.buf << "A31:\n");
+				A32.export(logger.buf << "A32:\n");
+				logger.log();
+				SymmetricBlockMatrix<int> A {
+					{ &A11, &A22, nullptr }, // diag blocks
+					{ // lval blocks
+						nullptr, 
+						&A31, &A32
+					}
+				};
+				vector<int> u(A.getOrder(), 1);
+				logger.buf << "block mult:\n" << A * u;
+				logger.log();
 			logger.end();
 		}
 	}
