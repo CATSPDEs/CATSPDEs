@@ -178,6 +178,7 @@ namespace ProjectionSolvers {
 			AbstractMultipliableMatrix<double> & A,
 			std::vector<double> const & b,
 			boost::optional<std::vector<double>> const & x_0 = boost::none,
+			Index n = 0, // max numb of iters (0 for auto)
 			double eps = 10e-17,
 			StoppingCriterion stop = StoppingCriterion::absolute,
 			Index i_log = 0, // log residual reduction on every i_log iteration (0 for never)
@@ -185,8 +186,8 @@ namespace ProjectionSolvers {
 		) {
 			auto& logger = SingletonLogger::instance();
 			// ini			
-			Index i, // current iter
-			      n = 3 * A.getOrder(); // max numb of iters
+			if (!n) n = 3 * A.getOrder(); // max numb of iters
+			Index i; // current iter
 			auto x = x_0.value_or(std::vector<double>(A.getOrder())),
 			     r = b - A * x,
 			     p = r;
@@ -218,6 +219,7 @@ namespace ProjectionSolvers {
 			AbstractMultipliableMatrix<double> & A,
 			std::vector<double> const & b,
 			boost::optional<std::vector<double>> const & x_0 = boost::none,
+			Index n = 0,
 			double eps = 10e-17,
 			StoppingCriterion stop = StoppingCriterion::absolute,
 			Index i_log = 0,
@@ -225,7 +227,8 @@ namespace ProjectionSolvers {
 		) {
 			auto& logger = SingletonLogger::instance();
 			// ini
-			Index i, n = 3 * A.getOrder();
+			if (!n) n = 3 * A.getOrder(); // max numb of iters
+			Index i; // current iter
 			auto x = x_0.value_or(std::vector<double>(A.getOrder())),
 			     r = b - A * x,
 			     z = B(r),
@@ -259,6 +262,7 @@ namespace ProjectionSolvers {
 			AbstractMultipliableMatrix<double> & A,
 			std::vector<double> const & b,
 			boost::optional<std::vector<double>> const & x_0 = boost::none,
+			Index n = 0,
 			double eps = 10e-17,
 			StoppingCriterion stop = StoppingCriterion::absolute,
 			Index i_log = 0,
@@ -266,7 +270,8 @@ namespace ProjectionSolvers {
 		) {
 			auto& logger = SingletonLogger::instance();
 			// ini
-			Index i, n = 20;//3 * A.getOrder();
+			if (!n) n = 3 * A.getOrder(); // max numb of iters
+			Index i; // current iter
 			auto x = x_0.value_or(std::vector<double>(A.getOrder())),
 			     r = b - A * x, 
 			     rbar = r, 
@@ -322,6 +327,7 @@ namespace ProjectionSolvers {
 			AbstractMultipliableMatrix<double> & A,
 			std::vector<double> const & b,
 			boost::optional<std::vector<double>> const & x_0 = boost::none,
+			Index n = 0,
 			double eps = 10e-17,
 			StoppingCriterion stop = StoppingCriterion::absolute,
 			Index i_log = 0,
@@ -329,7 +335,8 @@ namespace ProjectionSolvers {
 		) {
 			auto& logger = SingletonLogger::instance();
 			// ini
-			Index i, n = 3 * A.getOrder();
+			if (!n) n = 3 * A.getOrder(); // max numb of iters
+			Index i; // current iter
 			auto x = x_0.value_or(std::vector<double>(A.getOrder())),
 			     r = b - A * x, 
 			     rbar = r, 
