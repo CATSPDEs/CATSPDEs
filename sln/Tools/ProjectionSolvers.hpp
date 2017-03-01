@@ -181,7 +181,7 @@ namespace ProjectionSolvers {
 			double eps = 10e-17,
 			StoppingCriterion stop = StoppingCriterion::absolute,
 			Index i_log = 0, // log residual reduction on every i_log iteration (0 for never)
-			Index i_rec = 15 // recompute residual via b - A.x every i_rec iterations
+			Index i_rec = 15 // recompute residual via b - A.x every i_rec iterations (0 for never)
 		) {
 			auto& logger = SingletonLogger::instance();
 			// ini			
@@ -200,7 +200,7 @@ namespace ProjectionSolvers {
 				A_x_p = A * p;
 				alpha = r_x_r / (A_x_p * p);
 				x += alpha * p;
-				r = i % i_rec ? r - alpha * A_x_p : b - A * x;
+				r = !i_rec || i % i_rec ? r - alpha * A_x_p : b - A * x;
 				r_x_r_new = r * r;
 				if (i_log && i % i_log == 0) logResidualReduction(sqrt(r_x_r), sqrt(r_x_r_new), i, n);
 				p = r + (r_x_r_new / r_x_r) * p;
@@ -241,7 +241,7 @@ namespace ProjectionSolvers {
 				A_x_p = A * p;
 				alpha = r_x_z / (A_x_p * p);
 				x += alpha * p;
-				r = i % i_rec ? r - alpha * A_x_p : b - A * x;
+				r = !i_rec || i % i_rec ? r - alpha * A_x_p : b - A * x;
 				z = B(r);
 				r_x_z_new = r * z;
 				if (i_log && i % i_log == 0) logResidualReduction(sqrt(r_x_z), sqrt(r_x_z_new), i, n);
@@ -266,7 +266,7 @@ namespace ProjectionSolvers {
 		) {
 			auto& logger = SingletonLogger::instance();
 			// ini
-			Index i, n = 3 * A.getOrder();
+			Index i, n = 20;//3 * A.getOrder();
 			auto x = x_0.value_or(std::vector<double>(A.getOrder())),
 			     r = b - A * x, 
 			     rbar = r, 
@@ -298,7 +298,7 @@ namespace ProjectionSolvers {
 				A_x_s = A * s;
 				omega = (A_x_s * s) / (A_x_s * A_x_s);
 				x += alpha * p + omega * s;
-				r = i % i_rec ? s - omega * A_x_s : b - A * x;
+				r = !i_rec || i % i_rec ? s - omega * A_x_s : b - A * x;
 				r_x_rbar_new = r * rbar; 
 				norm_r_new = norm(r);
 				if (i_log && i % i_log == 0) logResidualReduction(norm_r, norm_r_new, i, n);
@@ -363,7 +363,7 @@ namespace ProjectionSolvers {
 				AB_x_s = A * B_x_s;
 				omega = (AB_x_s * s) / (AB_x_s * AB_x_s);
 				x += alpha * B_x_p + omega * B_x_s;
-				r = i % i_rec ? s - omega * AB_x_s : b - A * x;
+				r = !i_rec || i % i_rec ? s - omega * AB_x_s : b - A * x;
 				r_x_rbar_new = r * rbar; 
 				norm_r_new = norm(r);
 				if (i_log && i % i_log == 0) logResidualReduction(norm_r, norm_r_new, i, n);

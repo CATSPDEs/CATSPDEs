@@ -10,14 +10,16 @@
 // FEs
 #include "AbstractFiniteElement.hpp"
 // for global system matrix
-#include "SaddlePointMatrix.hpp"
+#include "CSlCMatrix.hpp"
+#include "CSCMatrix.hpp"
 
 namespace FEM {
 
 	namespace Mixed {
 
 		boost::tuple<
-			SaddlePointMatrix<double>, // assembled system matrix and
+			CSlCMatrix<double>, // diffusion + convection + reaction matrix
+			CSCMatrix<double>, CSCMatrix<double>, // divirgence matrices 
 			std::vector<double> // rhs vector
 		>
 		assembleSystem(

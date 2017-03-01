@@ -1,0 +1,19 @@
+1
+0
+1
+1e-10
+0
+100
+
+1. choose problem
+	(0) Stokes problem
+	(1) Oseen problem
+2. choose FE pair
+	(0) Taylor-Hood
+	(1) Crouzeix-Raviart
+3. numb of mesh levels (refinements)
+4. set eps for solver
+5. stopping criterion
+	(0) absolute
+	(1) relative
+6. log every nth iteration, n

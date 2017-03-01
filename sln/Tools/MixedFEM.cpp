@@ -15,7 +15,8 @@ namespace FEM {
 	namespace Mixed {
 
 		boost::tuple<
-			SaddlePointMatrix<double>, // assembled system matrix and
+			CSlCMatrix<double>, // diffusion + convection + reaction matrix
+			CSCMatrix<double>, CSCMatrix<double>, // divirgence matrices 
 			std::vector<double> // rhs vector
 		>
 		assembleSystem(
@@ -45,7 +46,7 @@ namespace FEM {
 			auto pressureMasterShapes = pressureFE.getShapesOf(master);
 			auto velocityMasterShapes = velocityFE.getShapesOf(master);
 			auto velocityMasterSGrads = velocityFE.getSGradsOf(master);
-			// Newton matrix integrand has max polynomial degree
+			// Convection matrix integrand has max polynomial degree
 			// so we need it in order to choose quadrature rule
 			LocalIndex deg = ceil(velocityFE.deg() + (velocityFE.deg() - 1.) + velocityFE.deg());
 			logger.buf << "polynomial degree for Gaussian quadrature: " << deg;
@@ -75,7 +76,7 @@ namespace FEM {
 			SymmetricMatrix<double> localMassMatrixSkeleton(velocityMasterShapes.size()),
 			                        localMassMatrix(velocityMasterShapes.size()),
 			                        localStiffnessMatrix(velocityMasterShapes.size());
-			DenseMatrix<double>     localNewtonMatrix(velocityMasterShapes.size()),
+			DenseMatrix<double>     localConvectionMatrix(velocityMasterShapes.size()),
 			                        localDivergenceMatrix1(pressureMasterShapes.size(), velocityMasterShapes.size()),
 			                        localDivergenceMatrix2(pressureMasterShapes.size(), velocityMasterShapes.size());
 			std::vector<double>     localLoadVector1(velocityMasterShapes.size()),
@@ -163,10 +164,10 @@ namespace FEM {
 							localStiffnessMatrix(i, j) = PDE.inverseReynoldsNumber() * detJ * qRuleTriangle.computeQuadrature([&](Node2D const & p) {
 								return (JInverseTranspose * velocityMasterSGrads[j](p)) * (JInverseTranspose * velocityMasterSGrads[i](p));
 							}, deg);
-					// compute local Newton matrix
+					// compute local Convection matrix
 					for (LocalIndex i = 0; i < velocityMasterShapes.size(); ++i)
 						for (LocalIndex j = 0; j < velocityMasterShapes.size(); ++j) 
-							localNewtonMatrix(i, j) = detJ * qRuleTriangle.computeQuadrature([&](Node2D const & p) {
+							localConvectionMatrix(i, j) = detJ * qRuleTriangle.computeQuadrature([&](Node2D const & p) {
 								return (PDE.windField(T(p)) * (JInverseTranspose * velocityMasterSGrads[j](p))) * velocityMasterShapes[i](p);
 							}, deg);
 					// compute local divergence matrix
@@ -216,7 +217,7 @@ namespace FEM {
 					auto l2gPre = pressureFE.getDOFsNumeration(Omega, t);
 					for (LocalIndex i = 0; i < velocityMasterShapes.size(); ++i) {
 						for (LocalIndex j = 0; j < velocityMasterShapes.size(); ++j)
-							A11(l2gVel[i], l2gVel[j]) += localMassMatrix(i, j) + localStiffnessMatrix(i, j) + localNewtonMatrix(i, j);
+							A11(l2gVel[i], l2gVel[j]) += localMassMatrix(i, j) + localStiffnessMatrix(i, j) + localConvectionMatrix(i, j);
 						f[l2gVel[i]    ] += localLoadVector1[i];
 						f[l2gVel[i] + n] += localLoadVector2[i];
 					}
@@ -236,7 +237,7 @@ namespace FEM {
 				B1.enforceDirichletBCs(ind2val[0], f.data() + 2 * n);
 				B2.enforceDirichletBCs(ind2val[1], f.data() + 2 * n);
 			logger.end();
-			return { { A11, B1, B2 }, f };
+			return { A11, B1, B2, f };
 		}
 
 	}
