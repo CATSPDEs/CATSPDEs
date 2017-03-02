@@ -83,7 +83,7 @@ int main() {
 		}, DirichletBC{ DirichletCondition, strongBCsPredicate };
 		// mesh
 		Index initialRefCount;
-		vector<string> meshType{ "uniform.ntn", "nonuniform.ntn" };
+		vector<string> meshType { "uniform.ntn", "nonuniform.ntn" };
 		auto meshTypeIndex = logger.opt("mesh type", meshType);
 		logger.inp("refine initial mesh n times, n", initialRefCount);
 		logger.beg("import initial mesh");

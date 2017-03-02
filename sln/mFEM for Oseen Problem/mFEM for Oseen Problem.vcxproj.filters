@@ -30,6 +30,12 @@
     <ClCompile Include="..\Tools\Triangulation.cpp">
       <Filter>Source Files\External Tools</Filter>
     </ClCompile>
+    <ClCompile Include="..\Tools\DivGradFEM.cpp">
+      <Filter>Source Files\External Tools</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Tools\L2Projection.cpp">
+      <Filter>Source Files\External Tools</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Library Include="..\Harwell–Boeing IO (FORTRAN Static Library)\x64\Release\Harwell–Boeing IO (FORTRAN Static Library).lib">

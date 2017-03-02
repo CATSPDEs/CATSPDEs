@@ -303,7 +303,10 @@ namespace ProjectionSolvers {
 				A_x_s = A * s;
 				omega = (A_x_s * s) / (A_x_s * A_x_s);
 				x += alpha * p + omega * s;
-				r = !i_rec || i % i_rec ? s - omega * A_x_s : b - A * x;
+				r = i_rec && i % i_rec == 0 ? b - A * x : s - omega * A_x_s;
+
+				if (i_rec && i % i_rec == 0) logger.log("rec!");
+
 				r_x_rbar_new = r * rbar; 
 				norm_r_new = norm(r);
 				if (i_log && i % i_log == 0) logResidualReduction(norm_r, norm_r_new, i, n);

@@ -122,6 +122,8 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="..\Tools\DivGradFEM.cpp" />
+    <ClCompile Include="..\Tools\L2Projection.cpp" />
     <ClCompile Include="..\Tools\MixedFEM.cpp" />
     <ClCompile Include="..\Tools\SingletonLogger.cpp" />
     <ClCompile Include="..\Tools\Triangulation.cpp" />
