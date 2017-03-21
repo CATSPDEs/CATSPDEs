@@ -10,10 +10,10 @@
 NotebookFileLineBreakTest
 NotebookFileLineBreakTest
 NotebookDataPosition[       158,          7]
-NotebookDataLength[     46862,       1153]
-NotebookOptionsPosition[     45196,       1090]
-NotebookOutlinePosition[     45541,       1105]
-CellTagsIndexPosition[     45498,       1102]
+NotebookDataLength[     49236,       1207]
+NotebookOptionsPosition[     47528,       1143]
+NotebookOutlinePosition[     47873,       1158]
+CellTagsIndexPosition[     47830,       1155]
 WindowFrame->Normal*)
 
 (* Beginning of Notebook Content *)
@@ -392,7 +392,50 @@ Cell[BoxData[
    3.6845201001996326`*^9}, {3.684594182071188*^9, 3.68459451193808*^9}, 
    3.6845954667229347`*^9, {3.6864869853669405`*^9, 3.686487012284938*^9}, {
    3.6868290579681063`*^9, 3.686829071145713*^9}, {3.6905505571801586`*^9, 
-   3.6905505579758053`*^9}, {3.6905536566333017`*^9, 3.690553714655213*^9}}]
+   3.6905505579758053`*^9}, {3.6905536566333017`*^9, 3.690553714655213*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"create\[ScriptCapitalT]fromElementMesh", "[", "femMesh_", "]"}], ":=", 
+  RowBox[{"<|", "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{"\"\<format\>\"", "\[Rule]", "\"\<NTN\>\""}], ",", 
+    "\[IndentingNewLine]", 
+    RowBox[{"\"\<nodes\>\"", "\[Rule]", 
+     RowBox[{"femMesh", "[", 
+      RowBox[{"[", "1", "]"}], "]"}]}], ",", "\[IndentingNewLine]", 
+    RowBox[{"\"\<triangles\>\"", "\[Rule]", 
+     RowBox[{
+      RowBox[{"femMesh", "[", 
+       RowBox[{"[", 
+        RowBox[{"2", ",", "1", ",", "1"}], "]"}], "]"}], "-", "1"}]}], ",", 
+    "\[IndentingNewLine]", 
+    RowBox[{"\"\<neighbors\>\"", "\[Rule]", 
+     RowBox[{"(", 
+      RowBox[{
+       RowBox[{
+        RowBox[{
+         RowBox[{
+          RowBox[{
+           RowBox[{"If", "[", 
+            RowBox[{
+             RowBox[{"#", "<", "0"}], ",", 
+             RowBox[{"-", "#"}], ",", "#"}], "]"}], "&"}], "/@", "#"}], "&"}],
+         "/@", 
+        RowBox[{"(", 
+         RowBox[{
+          RowBox[{"femMesh", "[", "\"\<ElementConnectivity\>\"", "]"}], "[", 
+          RowBox[{"[", "1", "]"}], "]"}], ")"}]}], "-", "1"}], ")"}]}], ",", 
+    "\[IndentingNewLine]", 
+    RowBox[{"\"\<ribs\>\"", "\[Rule]", 
+     RowBox[{"{", "}"}]}]}], " ", "\[IndentingNewLine]", "|>"}]}]], "Input",
+ CellChangeTimes->{{3.698054108809263*^9, 3.6980541810911937`*^9}, {
+   3.6990092981165032`*^9, 3.6990093747638645`*^9}, 3.6990095338383665`*^9, {
+   3.699009649341071*^9, 3.699009665138188*^9}, {3.6990097254004087`*^9, 
+   3.699009728014926*^9}, {3.6990101127599907`*^9, 3.6990101219401693`*^9}, {
+   3.6990105272421103`*^9, 3.6990105479742823`*^9}, {3.6990106124337063`*^9, 
+   3.6990106130129175`*^9}, {3.699010687562622*^9, 3.699010698734864*^9}, {
+   3.699010734028843*^9, 3.699010738506837*^9}}]
 }, Open  ]],
 
 Cell[CellGroupData[{
@@ -891,10 +934,11 @@ Cell[BoxData[
               RowBox[{
                RowBox[{"Point", "[", 
                 RowBox[{"currentNumbOfNodes", "+", "t"}], "]"}], ",", 
-               "Green"}], "]"}], ",", 
+               RowBox[{"Darker", "@", "Green"}]}], "]"}], ",", 
              RowBox[{"Style", "[", 
               RowBox[{
-               RowBox[{"t", "-", "1"}], ",", "Green"}], "]"}]}], "]"}], ",", 
+               RowBox[{"t", "-", "1"}], ",", 
+               RowBox[{"Darker", "@", "Green"}]}], "]"}]}], "]"}], ",", 
            RowBox[{"{", 
             RowBox[{"t", ",", 
              RowBox[{"numbOf\[CapitalDelta]", "@", "\[ScriptCapitalT]"}]}], 
@@ -1038,7 +1082,13 @@ Cell[BoxData[
         RowBox[{
          RowBox[{"PlotRangeClipping", "\[Rule]", "True"}], ","}], "*)"}], 
        "\[IndentingNewLine]", 
-       RowBox[{"PlotTheme", "\[Rule]", "\"\<Lines\>\""}]}], 
+       RowBox[{"PlotTheme", "\[Rule]", "\"\<Lines\>\""}], ",", 
+       "\[IndentingNewLine]", 
+       RowBox[{"MeshCellStyle", "\[Rule]", 
+        RowBox[{"{", 
+         RowBox[{
+          RowBox[{"{", 
+           RowBox[{"1", ",", "All"}], "}"}], "\[Rule]", "Black"}], "}"}]}]}], 
       "\[IndentingNewLine]", "]"}]}]}], "\[IndentingNewLine]", 
    "]"}]}]], "Input",
  CellChangeTimes->{{3.684509245279018*^9, 3.684509272954872*^9}, {
@@ -1083,7 +1133,10 @@ Cell[BoxData[
    3.692180967673137*^9}, {3.69253153686241*^9, 3.6925315435696583`*^9}, {
    3.6931742704574327`*^9, 3.693174279895306*^9}, {3.693174393667801*^9, 
    3.693174406346243*^9}, {3.693174446930109*^9, 3.6931745029326572`*^9}, {
-   3.6931749690323205`*^9, 3.6931749730940714`*^9}}]
+   3.6931749690323205`*^9, 3.6931749730940714`*^9}, {3.6987396143989134`*^9, 
+   3.6987396323578167`*^9}, {3.698739714881406*^9, 3.6987397220236773`*^9}, {
+   3.6990227447352557`*^9, 3.69902275058978*^9}, {3.699022780715701*^9, 
+   3.699022782979972*^9}, {3.6990228285132613`*^9, 3.6990228306557035`*^9}}]
 }, Open  ]]
 }, Open  ]]
 }, Open  ]]
@@ -1131,27 +1184,28 @@ Cell[7651, 222, 165, 2, 63, "Section"],
 Cell[CellGroupData[{
 Cell[7841, 228, 167, 2, 43, "Subsection"],
 Cell[8011, 232, 74, 2, 31, "Input"],
-Cell[8088, 236, 6282, 158, 342, "Input"]
+Cell[8088, 236, 6282, 158, 342, "Input"],
+Cell[14373, 396, 1789, 41, 152, "Input"]
 }, Open  ]],
 Cell[CellGroupData[{
-Cell[14407, 399, 213, 3, 43, "Subsection"],
-Cell[14623, 404, 8324, 174, 852, "Input"]
+Cell[16199, 442, 213, 3, 43, "Subsection"],
+Cell[16415, 447, 8324, 174, 852, "Input"]
 }, Open  ]],
 Cell[CellGroupData[{
-Cell[22984, 583, 162, 2, 43, "Subsection"],
-Cell[23149, 587, 4347, 89, 452, "Input"]
+Cell[24776, 626, 162, 2, 43, "Subsection"],
+Cell[24941, 630, 4347, 89, 452, "Input"]
 }, Open  ]]
 }, Open  ]],
 Cell[CellGroupData[{
-Cell[27545, 682, 108, 1, 63, "Section"],
+Cell[29337, 725, 108, 1, 63, "Section"],
 Cell[CellGroupData[{
-Cell[27678, 687, 128, 1, 43, "Subsection"],
-Cell[27809, 690, 399, 11, 31, "Input"]
+Cell[29470, 730, 128, 1, 43, "Subsection"],
+Cell[29601, 733, 399, 11, 31, "Input"]
 }, Closed]],
 Cell[CellGroupData[{
-Cell[28245, 706, 125, 1, 35, "Subsection"],
-Cell[28373, 709, 3637, 87, 319, "Input"],
-Cell[32013, 798, 13143, 287, 972, "Input"]
+Cell[30037, 749, 125, 1, 35, "Subsection"],
+Cell[30165, 752, 3637, 87, 319, "Input"],
+Cell[33805, 841, 13683, 297, 992, "Input"]
 }, Open  ]]
 }, Open  ]]
 }, Open  ]]

@@ -18,6 +18,20 @@ T operator*(std::array<T, N> const & u, std::vector<T> const & v) {
 	return std::inner_product(u.begin(), u.end(), v.begin(), 0.);
 }
 
+// linear combination
+template <typename T>
+std::vector<T> operator*(std::vector<T> const & weights, std::vector<std::vector<T>> const & vectors) {
+	return std::inner_product(vectors.begin(), vectors.end(), weights.begin(), 0.);
+}
+template <typename T, Index N>
+std::array<T, N> operator*(std::vector<T> const & weights, std::vector<std::array<T, N>> const & vectors) {
+	std::array<T, N> res;
+	std::fill(res.begin(), res.end(), 0.);
+	for (Index i = 0; i < weights.size(); ++i)
+		res += weights[i] * vectors[i];
+	return res;
+}
+
 // sum two vectors
 template <typename T>
 std::vector<T>& operator+=(std::vector<T>& u, std::vector<T> const & v) {

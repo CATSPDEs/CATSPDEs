@@ -16,9 +16,6 @@
     <Filter Include="Meshes">
       <UniqueIdentifier>{6ed50528-e528-4884-abd6-31c918082dc4}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Meshes\Triangulation">
-      <UniqueIdentifier>{c17f61b4-efe3-4565-b502-81b20402b00b}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Common">
       <UniqueIdentifier>{cca77161-f3a4-44a8-8c8d-13e3de612ab0}</UniqueIdentifier>
     </Filter>
@@ -49,14 +46,20 @@
     <Filter Include="Solvers\Finite Element Methods">
       <UniqueIdentifier>{bdbf5593-ca17-4386-bdf9-c9e722cdc949}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Solvers\SLAE Solvers">
-      <UniqueIdentifier>{18568653-13c2-4725-b4ee-34c082a5eccb}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Solvers\Temp">
       <UniqueIdentifier>{c30a1b27-4106-4942-ad4e-1b1914174fd5}</UniqueIdentifier>
     </Filter>
     <Filter Include="Quadrature Rules">
       <UniqueIdentifier>{3dc0b677-22e3-48aa-a734-ea9ad0f8b2ca}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Solvers\Nonlinear &amp; SLAE Solvers">
+      <UniqueIdentifier>{18568653-13c2-4725-b4ee-34c082a5eccb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Meshes\2D">
+      <UniqueIdentifier>{c17f61b4-efe3-4565-b502-81b20402b00b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Meshes\1D">
+      <UniqueIdentifier>{75bb3f1f-d88c-4d81-8d87-24bbc4390990}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -70,10 +73,10 @@
       <Filter>Utilities</Filter>
     </ClInclude>
     <ClInclude Include="CurvilinearEdge.hpp">
-      <Filter>Meshes\Triangulation</Filter>
+      <Filter>Meshes\2D</Filter>
     </ClInclude>
     <ClInclude Include="Curve.hpp">
-      <Filter>Meshes\Triangulation</Filter>
+      <Filter>Meshes\2D</Filter>
     </ClInclude>
     <ClInclude Include="DiffusionReactionEqn.hpp">
       <Filter>PDEs</Filter>
@@ -94,7 +97,7 @@
       <Filter>Matrices</Filter>
     </ClInclude>
     <ClInclude Include="Triangulation.hpp">
-      <Filter>Meshes\Triangulation</Filter>
+      <Filter>Meshes\2D</Filter>
     </ClInclude>
     <ClInclude Include="constants.hpp">
       <Filter>Common</Filter>
@@ -184,7 +187,7 @@
       <Filter>Solvers\Temp</Filter>
     </ClInclude>
     <ClInclude Include="ProjectionSolvers.hpp">
-      <Filter>Solvers\SLAE Solvers</Filter>
+      <Filter>Solvers\Nonlinear &amp; SLAE Solvers</Filter>
     </ClInclude>
     <ClInclude Include="BoundaryCondition.hpp">
       <Filter>PDEs</Filter>
@@ -220,7 +223,7 @@
       <Filter>Solvers\Finite Element Methods</Filter>
     </ClInclude>
     <ClInclude Include="Multigrid.hpp">
-      <Filter>Solvers\SLAE Solvers</Filter>
+      <Filter>Solvers\Nonlinear &amp; SLAE Solvers</Filter>
     </ClInclude>
     <ClInclude Include="AbstractPreconditioner.hpp">
       <Filter>Matrices</Filter>
@@ -230,6 +233,18 @@
     </ClInclude>
     <ClInclude Include="SymmetricBlockMatrix.hpp">
       <Filter>Matrices\Implementations</Filter>
+    </ClInclude>
+    <ClInclude Include="NonlinearSolvers.hpp">
+      <Filter>Solvers\Nonlinear &amp; SLAE Solvers</Filter>
+    </ClInclude>
+    <ClInclude Include="FEInterpolant.hpp">
+      <Filter>Finite Elements</Filter>
+    </ClInclude>
+    <ClInclude Include="SegmentMesh.hpp">
+      <Filter>Meshes\1D</Filter>
+    </ClInclude>
+    <ClInclude Include="Segment_P1_Lagrange.hpp">
+      <Filter>Finite Elements\Lagrange Family</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -246,7 +261,7 @@
       <Filter>Matrices\Implementations\To Refactor</Filter>
     </ClCompile>
     <ClCompile Include="Triangulation.cpp">
-      <Filter>Meshes\Triangulation</Filter>
+      <Filter>Meshes\2D</Filter>
     </ClCompile>
     <ClCompile Include="FEM_t.cpp">
       <Filter>Solvers\Temp</Filter>
@@ -259,6 +274,9 @@
     </ClCompile>
     <ClCompile Include="L2Projection.cpp">
       <Filter>Solvers\Finite Element Methods</Filter>
+    </ClCompile>
+    <ClCompile Include="SegmentMesh.cpp">
+      <Filter>Meshes\1D</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

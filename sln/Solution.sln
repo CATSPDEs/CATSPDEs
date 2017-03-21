@@ -27,6 +27,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "L2 Projection for FE Interp
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "FEM for Diffusion Reaction Problem", "FEM for Diffusion Reaction Problem\FEM for Robin Poisson Problem.vcxproj", "{342EEBFD-762B-4AAE-B73B-AD86CAA5EB3C}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "FEM for Magnetostatic Poisson Problem", "FEM for Magnetostatic Poisson Problem\FEM for Magnetostatic Poisson Problem.vcxproj", "{06B40F2B-5766-4953-8AEF-41408D6B3D61}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -131,6 +133,14 @@ Global
 		{342EEBFD-762B-4AAE-B73B-AD86CAA5EB3C}.Release|x64.Build.0 = Release|x64
 		{342EEBFD-762B-4AAE-B73B-AD86CAA5EB3C}.Release|x86.ActiveCfg = Release|Win32
 		{342EEBFD-762B-4AAE-B73B-AD86CAA5EB3C}.Release|x86.Build.0 = Release|Win32
+		{06B40F2B-5766-4953-8AEF-41408D6B3D61}.Debug|x64.ActiveCfg = Debug|x64
+		{06B40F2B-5766-4953-8AEF-41408D6B3D61}.Debug|x64.Build.0 = Debug|x64
+		{06B40F2B-5766-4953-8AEF-41408D6B3D61}.Debug|x86.ActiveCfg = Debug|Win32
+		{06B40F2B-5766-4953-8AEF-41408D6B3D61}.Debug|x86.Build.0 = Debug|Win32
+		{06B40F2B-5766-4953-8AEF-41408D6B3D61}.Release|x64.ActiveCfg = Release|x64
+		{06B40F2B-5766-4953-8AEF-41408D6B3D61}.Release|x64.Build.0 = Release|x64
+		{06B40F2B-5766-4953-8AEF-41408D6B3D61}.Release|x86.ActiveCfg = Release|Win32
+		{06B40F2B-5766-4953-8AEF-41408D6B3D61}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -66,5 +66,6 @@ public:
 	template <LocalIndex N>
 	using SmartScalarField = SmartMapping<N, 1>;
 
+	using SmartScalarField1D = SmartScalarField<1>;
 	using SmartScalarField2D = SmartScalarField<2>;
 	using SmartScalarField3D = SmartScalarField<3>;

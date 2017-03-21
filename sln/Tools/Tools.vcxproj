@@ -135,6 +135,7 @@
     <ClInclude Include="DenseMatrix.hpp" />
     <ClInclude Include="DivGradFEM.hpp" />
     <ClInclude Include="Element.hpp" />
+    <ClInclude Include="FEInterpolant.hpp" />
     <ClInclude Include="FEM_t.hpp" />
     <ClInclude Include="AbstractHarwellBoeingMatrix.hpp" />
     <ClInclude Include="HarwellBoeingHeader.hpp" />
@@ -148,6 +149,9 @@
     <ClInclude Include="Mapping.hpp" />
     <ClInclude Include="MasterSegmentQuadratureRule.hpp" />
     <ClInclude Include="Multigrid.hpp" />
+    <ClInclude Include="NonlinearSolvers.hpp" />
+    <ClInclude Include="SegmentMesh.hpp" />
+    <ClInclude Include="Segment_P1_Lagrange.hpp" />
     <ClInclude Include="SmartMapping.hpp" />
     <ClInclude Include="MasterTriangleQuadratureRule.hpp" />
     <ClInclude Include="MixedFEM.hpp" />
@@ -185,6 +189,7 @@
     <ClCompile Include="FEM_t.cpp" />
     <ClCompile Include="L2Projection.cpp" />
     <ClCompile Include="MixedFEM.cpp" />
+    <ClCompile Include="SegmentMesh.cpp" />
     <ClCompile Include="SingletonLogger.cpp" />
     <ClCompile Include="SymmetricCSlRMatrix.cpp" />
     <ClCompile Include="Triangulation.cpp" />

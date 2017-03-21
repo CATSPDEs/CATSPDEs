@@ -13,9 +13,9 @@ public:
 		: _a(a)
 		, _c(c)
 		, _f(f) {}
-	auto diffusionTerm() const { return _a; }
-	auto reactionTerm () const { return _c; }
-	auto forceTerm    () const { return _f; }
+	auto& diffusionTerm() { return _a; }
+	auto& reactionTerm () { return _c; }
+	auto& forceTerm    () { return _f; }
 	auto diffusionTerm(Node<D> const & p) const { return _a(p); }
 	auto reactionTerm (Node<D> const & p) const { return _c(p); }
 	auto forceTerm    (Node<D> const & p) const { return _f(p); }

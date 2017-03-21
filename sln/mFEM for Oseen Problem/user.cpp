@@ -198,9 +198,6 @@ int main() {
 					y1(A11.getOrder()), 
 					y2(A11.getOrder()), 
 					y3(pressureMassMatrix.getOrder());
-
-				// log sizes!!
-
 				// (1) Laplace block
 				logger.mute = true;
 				for (Index i = 0; i < numbOfInnerIterations; ++i) {

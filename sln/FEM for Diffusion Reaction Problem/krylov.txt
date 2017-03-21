@@ -1,13 +1,14 @@
 2
+1
 0
 0
 0
 2
-2
-1e-09
+0
+1e-12
 1
-10
-1
+300
+0
 
 1. choose problem
 	(0) Laplace w/ hom. Dirichlet BCs (zero analytical soln)
@@ -27,11 +28,12 @@
 	(1) Krylov solver w/ MG as an inner iteration
 	(2) Krylov method as stand-alone solver
 	(3) Smoother
-7. set eps for solver
-8. stopping criterion
+7. max numb of iterations
+8. set eps for solver
+9. stopping criterion
 	(0) absolute
 	(1) relative
-9. log every nth iteration, n
-10. choose solver
+10. log every nth iteration, n
+11. choose solver
 	(0) CG
 	(1) BiCGStab

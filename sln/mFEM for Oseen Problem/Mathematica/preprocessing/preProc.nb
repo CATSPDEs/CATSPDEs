@@ -10,10 +10,10 @@
 NotebookFileLineBreakTest
 NotebookFileLineBreakTest
 NotebookDataPosition[       158,          7]
-NotebookDataLength[     27088,        705]
-NotebookOptionsPosition[     25267,        644]
-NotebookOutlinePosition[     25613,        659]
-CellTagsIndexPosition[     25570,        656]
+NotebookDataLength[     30239,        771]
+NotebookOptionsPosition[     28270,        704]
+NotebookOutlinePosition[     28615,        719]
+CellTagsIndexPosition[     28572,        716]
 WindowFrame->Normal*)
 
 (* Beginning of Notebook Content *)
@@ -101,7 +101,7 @@ Cell[BoxData[
   RowBox[{"\[CapitalOmega]", ",", 
    RowBox[{"AspectRatio", "\[Rule]", "Automatic"}]}], "]"}]], "Input",
  CellChangeTimes->{{3.689160334023346*^9, 3.689160365331356*^9}}]
-}, Closed]],
+}, Open  ]],
 
 Cell[CellGroupData[{
 
@@ -136,6 +136,8 @@ Cell[BoxData[
   3.693059910557438*^9}, {3.693060089346941*^9, 3.693060109466322*^9}, {
   3.6930607199459896`*^9, 3.693060725483525*^9}}],
 
+Cell[CellGroupData[{
+
 Cell[BoxData[
  RowBox[{"highlight", "[", 
   RowBox[{"\[ScriptCapitalT]", ",", 
@@ -146,15 +148,73 @@ Cell[BoxData[
   3.692531553918827*^9, 3.6925315618019724`*^9}, {3.693166063350422*^9, 
   3.6931660759780874`*^9}, {3.6931749410950823`*^9, 3.693174946500581*^9}}],
 
+Cell[BoxData[
+ GraphicsBox[
+  TagBox[
+   DynamicModuleBox[{Typeset`mesh = HoldComplete[
+     MeshRegion[{{0., 0.}, {0., 0.3333333333333333}, {0., 
+      0.6666666666666666}, {0., 1.}, {0.3333333333333333, 0.}, {
+      0.3333333333333333, 1.}, {0.6666666666666666, 0.}, {0.6666666666666666, 
+      1.}, {1., 0.}, {1., 0.3333333333333333}, {1., 0.6666666666666666}, {1., 
+      1.}, {0.5, 0.5}, {0.29166666666666663`, 0.29166666666666663`}, {
+      0.7083333333333334, 0.29166666666666663`}, {0.7083333333333333, 
+      0.7083333333333334}, {0.29166666666666663`, 0.7083333333333334}}, {
+       Polygon[{{5, 14, 1}, {14, 2, 1}, {7, 9, 15}, {17, 4, 3}, {4, 17, 6}, {
+        14, 13, 17}, {7, 14, 5}, {15, 14, 7}, {16, 6, 17}, {9, 10, 15}, {16, 
+        17, 13}, {14, 17, 3}, {16, 15, 11}, {16, 12, 8}, {16, 11, 12}, {6, 16,
+         8}, {14, 15, 13}, {15, 16, 13}, {2, 14, 3}, {11, 15, 10}}]}, 
+      Method -> {
+       "EliminateUnusedCoordinates" -> True, "DeleteDuplicateCoordinates" -> 
+        Automatic, "VertexAlias" -> Identity, "CheckOrientation" -> Automatic,
+         "CoplanarityTolerance" -> Automatic, "CheckIntersections" -> 
+        Automatic, "BoundaryNesting" -> Automatic, "SeparateBoundaries" -> 
+        False, "TJunction" -> Automatic, "PropagateMarkers" -> True, 
+        "ZeroTest" -> Automatic, "Hash" -> 2904197480696530137}, {
+      PlotRange -> All, PlotTheme -> "Lines"}]]}, 
+    TagBox[
+     GraphicsComplexBox[{{0., 0.}, {0., 0.3333333333333333}, {0., 
+      0.6666666666666666}, {0., 1.}, {0.3333333333333333, 0.}, {
+      0.3333333333333333, 1.}, {0.6666666666666666, 0.}, {0.6666666666666666, 
+      1.}, {1., 0.}, {1., 0.3333333333333333}, {1., 0.6666666666666666}, {1., 
+      1.}, {0.5, 0.5}, {0.29166666666666663`, 0.29166666666666663`}, {
+      0.7083333333333334, 0.29166666666666663`}, {0.7083333333333333, 
+      0.7083333333333334}, {0.29166666666666663`, 0.7083333333333334}}, 
+      {Hue[0.6, 0.3, 0.95], EdgeForm[Hue[0.6, 0.3, 0.75]], 
+       LineBox[{{5, 14}, {14, 1}, {1, 5}, {14, 2}, {2, 1}, {7, 9}, {9, 15}, {
+        15, 7}, {17, 4}, {4, 3}, {3, 17}, {17, 6}, {6, 4}, {14, 13}, {13, 
+        17}, {17, 14}, {7, 14}, {5, 7}, {15, 14}, {16, 6}, {17, 16}, {9, 
+        10}, {10, 15}, {13, 16}, {3, 14}, {16, 15}, {15, 11}, {11, 16}, {16, 
+        12}, {12, 8}, {8, 16}, {11, 12}, {8, 6}, {15, 13}, {3, 2}, {10, 
+        11}}]}],
+     MouseAppearanceTag["LinkHand"]],
+    AllowKernelInitialization->False],
+   "MeshGraphics",
+   AutoDelete->True,
+   Editable->False,
+   Selectable->False],
+  DefaultBaseStyle->{
+   "Graphics", FrontEnd`GraphicsHighlightColor -> Hue[0.1, 1, 0.7]},
+  PlotRange->All]], "Output",
+ CellChangeTimes->{3.6976242359543753`*^9, 3.6976288178742523`*^9, 
+  3.697628950295272*^9, 3.697716163449016*^9}]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
 Cell[BoxData[{
  RowBox[{
   RowBox[{"SetDirectory", "@", 
    RowBox[{"NotebookDirectory", "[", "]"}]}], ";"}], "\[IndentingNewLine]", 
  RowBox[{"export", "@", "\[ScriptCapitalT]"}]}], "Input",
  CellChangeTimes->{{3.6892170116005635`*^9, 3.689217026797408*^9}, {
-  3.689511586624792*^9, 3.689511588279358*^9}}]
-}, Closed]]
-}, Closed]],
+  3.689511586624792*^9, 3.689511588279358*^9}}],
+
+Cell[BoxData["\<\"mesh.ntn\"\>"], "Output",
+ CellChangeTimes->{3.6976242445342765`*^9, 3.6976288305114326`*^9, 
+  3.6976289525150805`*^9, 3.697716165861931*^9}]
+}, Open  ]]
+}, Open  ]]
+}, Open  ]],
 
 Cell[CellGroupData[{
 
@@ -642,8 +702,8 @@ Cell[BoxData[
 }, Open  ]]
 }, Open  ]]
 },
-WindowSize->{1350, 685},
-WindowMargins->{{-8, Automatic}, {Automatic, 0}},
+WindowSize->{1350, 676},
+WindowMargins->{{0, Automatic}, {Automatic, 0}},
 FrontEndVersion->"10.4 for Microsoft Windows (64-bit) (February 25, 2016)",
 StyleDefinitions->"Default.nb"
 ]
@@ -667,44 +727,50 @@ Cell[CellGroupData[{
 Cell[3137, 79, 107, 1, 43, "Subsection"],
 Cell[3247, 82, 692, 14, 31, "Input"],
 Cell[3942, 98, 214, 4, 31, "Input"]
-}, Closed]],
+}, Open  ]],
 Cell[CellGroupData[{
-Cell[4193, 107, 103, 1, 35, "Subsection"],
+Cell[4193, 107, 103, 1, 43, "Subsection"],
 Cell[4299, 110, 353, 7, 31, "Input"],
 Cell[4655, 119, 1072, 17, 31, "Input"],
-Cell[5730, 138, 498, 8, 31, "Input"],
-Cell[6231, 148, 308, 6, 52, "Input"]
-}, Closed]]
-}, Closed]],
 Cell[CellGroupData[{
-Cell[6588, 160, 118, 2, 49, "Section"],
-Cell[CellGroupData[{
-Cell[6731, 166, 100, 1, 43, "Subsection"],
-Cell[6834, 169, 2201, 70, 131, "Text"],
-Cell[9038, 241, 99, 1, 30, "Text"],
-Cell[9140, 244, 2559, 48, 52, "Input"],
-Cell[11702, 294, 106, 1, 30, "Text"],
-Cell[11811, 297, 2576, 62, 119, "Input"],
-Cell[14390, 361, 101, 1, 30, "Text"],
-Cell[14494, 364, 341, 6, 31, "Input"],
-Cell[14838, 372, 1079, 25, 72, "Input"],
-Cell[15920, 399, 492, 10, 31, "Input"],
-Cell[16415, 411, 748, 14, 31, "Input"]
+Cell[5752, 140, 498, 8, 31, "Input"],
+Cell[6253, 150, 2769, 48, 374, "Output"]
 }, Open  ]],
 Cell[CellGroupData[{
-Cell[17200, 430, 105, 1, 43, "Subsection"],
-Cell[17308, 433, 95, 1, 30, "Text"],
-Cell[17406, 436, 2044, 55, 54, "Input"],
-Cell[19453, 493, 147, 1, 30, "Text"],
-Cell[19603, 496, 666, 18, 52, "Input"],
-Cell[20272, 516, 98, 1, 30, "Text"],
-Cell[20373, 519, 339, 9, 31, "Input"],
-Cell[20715, 530, 1310, 34, 54, "Input"]
+Cell[9059, 203, 308, 6, 52, "Input"],
+Cell[9370, 211, 160, 2, 31, "Output"]
+}, Open  ]]
+}, Open  ]]
 }, Open  ]],
 Cell[CellGroupData[{
-Cell[22062, 569, 96, 1, 43, "Subsection"],
-Cell[22161, 572, 2003, 48, 272, "Input"],
-Cell[24167, 622, 1072, 18, 31, "Input"]
+Cell[9591, 220, 118, 2, 63, "Section"],
+Cell[CellGroupData[{
+Cell[9734, 226, 100, 1, 43, "Subsection"],
+Cell[9837, 229, 2201, 70, 131, "Text"],
+Cell[12041, 301, 99, 1, 30, "Text"],
+Cell[12143, 304, 2559, 48, 52, "Input"],
+Cell[14705, 354, 106, 1, 30, "Text"],
+Cell[14814, 357, 2576, 62, 119, "Input"],
+Cell[17393, 421, 101, 1, 30, "Text"],
+Cell[17497, 424, 341, 6, 31, "Input"],
+Cell[17841, 432, 1079, 25, 72, "Input"],
+Cell[18923, 459, 492, 10, 31, "Input"],
+Cell[19418, 471, 748, 14, 31, "Input"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[20203, 490, 105, 1, 43, "Subsection"],
+Cell[20311, 493, 95, 1, 30, "Text"],
+Cell[20409, 496, 2044, 55, 54, "Input"],
+Cell[22456, 553, 147, 1, 30, "Text"],
+Cell[22606, 556, 666, 18, 52, "Input"],
+Cell[23275, 576, 98, 1, 30, "Text"],
+Cell[23376, 579, 339, 9, 31, "Input"],
+Cell[23718, 590, 1310, 34, 54, "Input"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[25065, 629, 96, 1, 43, "Subsection"],
+Cell[25164, 632, 2003, 48, 272, "Input"],
+Cell[27170, 682, 1072, 18, 31, "Input"]
 }, Open  ]]
 }, Open  ]]
 }

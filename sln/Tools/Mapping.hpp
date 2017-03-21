@@ -1,5 +1,6 @@
 #pragma once
 #include <functional>
+#include "vector.hpp"
 #include "Node.hpp"
 
 // general mapping f : R^N —> R^M
@@ -15,6 +16,7 @@ using Mapping = std::function<Node<M>(Node<N> const &)>;
 	template <LocalIndex N>
 	using ScalarField = Mapping<N, 1>;
 
+	using ScalarField1D = ScalarField<1>;
 	using ScalarField2D = ScalarField<2>;
 	using ScalarField3D = ScalarField<3>;
 
@@ -23,3 +25,5 @@ using Mapping = std::function<Node<M>(Node<N> const &)>;
 
 	using Curve2D = Curve<2>;
 	using Curve3D = Curve<3>;
+
+using Operator = std::function<std::vector<double>(std::vector<double> const &)>;

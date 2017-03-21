@@ -87,7 +87,7 @@ std::array<T, N> midNode(std::array<T, N> const & u, std::array<T, N> const & v)
 // ×—product (3D)
 template <typename T>
 inline std::array<T, 3> crossProduct(std::array<T, 3> const & u, std::array<T, 3> const & v) {
-	return{
+	return {
 		u[1] * v[2] - u[2] * v[1],
 		u[2] * v[0] - u[0] * v[2],
 		u[0] * v[1] - u[1] * v[0]
@@ -97,7 +97,7 @@ inline std::array<T, 3> crossProduct(std::array<T, 3> const & u, std::array<T, 3
 // ×—product (2D)
 template <typename T>
 inline std::array<T, 3> crossProduct(std::array<T, 2> const & u, std::array<T, 2> const & v) {
-	return{ 0., 0, u[0] * v[1] - u[1] * v[0] };
+	return { 0., 0., u[0] * v[1] - u[1] * v[0] };
 }
 
 // hash for arrays

@@ -29,18 +29,12 @@ public:
 		throw std::invalid_argument("FE interpolant is not defined on this mesh");
 	}
 	std::vector<Index> getDOFsNumeration(AbstractMesh<2, 3> const & mesh, Index e) const final {
-		auto T = dynamic_cast<Triangulation const *>(&mesh);
-		if (T) return { e };
-		throw std::invalid_argument("FE interpolant is not defined on this mesh");
+		return { e };
 	}
 	std::vector<Node2D> getDOFsNodes(AbstractMesh<2, 3> const & mesh, Index e) const final {
-		auto T = dynamic_cast<Triangulation const *>(&mesh);
-		if (T) return { centroid(T->getElement(e)) };
-		throw std::invalid_argument("FE interpolant is not defined on this mesh");
+		return { centroid(mesh.getElement(e)) };
 	}
 	std::vector<LocalIndex> getBndryDOFsLocalIndicies(AbstractMesh<2, 3> const & mesh, LocalIndex b) const final {
-		auto T = dynamic_cast<Triangulation const *>(&mesh);
-		if (T) return { 0 };
-		throw std::invalid_argument("FE interpolant is not defined on this mesh");
+		return {};
 	}
 };

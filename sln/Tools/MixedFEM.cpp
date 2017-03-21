@@ -16,7 +16,7 @@ namespace FEM {
 
 		boost::tuple<
 			CSlCMatrix<double>, // diffusion + convection + reaction matrix
-			CSCMatrix<double>, CSCMatrix<double>, // divirgence matrices 
+			CSCMatrix<double>, CSCMatrix<double>, // divergence matrices 
 			std::vector<double> // rhs vector
 		>
 		assembleSystem(

@@ -50,7 +50,8 @@ namespace FEM {
 			Triangulation const &, // (2) discretized domain (mesh), and BCs to connect (1) and (2):
 			ScalarBoundaryCondition2D const &, // natural BC,
 			ScalarBoundaryCondition2D const &, // essential BC
-			TriangularScalarFiniteElement const &
+			TriangularScalarFiniteElement const &,
+			boost::optional<Index&> activeElementIndex = boost::none // index of the active element	
 		);
 
 	}

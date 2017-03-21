@@ -22,7 +22,8 @@ namespace FEM {
 			Triangulation const & Omega,
 			ScalarBoundaryCondition2D const & RobinBC,
 			ScalarBoundaryCondition2D const & DirichletBC,
-			TriangularScalarFiniteElement const & FE
+			TriangularScalarFiniteElement const & FE,
+			boost::optional<Index&> activeElementIndex
 		) {
 			// logger
 			auto& logger = SingletonLogger::instance();
@@ -42,6 +43,7 @@ namespace FEM {
 			// shapes of FE
 			auto masterShapes = FE.getShapesOf(master);
 			auto masterSGrads = FE.getSGradsOf(master);
+			auto l = masterShapes.size();
 			LocalIndex deg = ceil(3. * FE.deg());
 			logger.buf << "polynomial degree for Gaussian quadrature: " << deg;
 			logger.log();
@@ -66,9 +68,9 @@ namespace FEM {
 				for (auto& g : masterSGrads) g.saveImagesOf(qNodesTriangle);
 			logger.end();
 			// local matrices
-			SymmetricMatrix<double> localMassMatrix(masterShapes.size()),
-			                        localStiffnessMatrix(masterShapes.size());
-			std::vector<double>     localLoadVector(masterShapes.size());
+			SymmetricMatrix<double> localMassMatrix(l),
+			                        localStiffnessMatrix(l);
+			std::vector<double>     localLoadVector(l);
 			// for Dirichlet BCs
 			Index2Value<double> ind2val;
 			std::array<std::vector<LocalIndex>, 3> bndryDOFsLocalIndicies;
@@ -91,6 +93,24 @@ namespace FEM {
 			// jacobian–related, J := jacobian matrix of the mapping T
 			double detJ;
 			DenseMatrix<double> JInverseTranspose;
+
+			// integrands for local matrices
+			//std::vector<ScalarField2D> loadVectorIntegrand(l);
+			//std::vector<std::vector<ScalarField2D>> massMatrixIntegrand(l, loadVectorIntegrand), stiffnessMatrixIntegrand { massMatrixIntegrand };
+			//for (LocalIndex i = 0; i < l; ++i) {
+			//	for (LocalIndex j = i; j < l; ++j) {
+			//		massMatrixIntegrand[i][j] = [&, i, j](Node2D const & p) {
+			//			return PDE.reactionTerm(T(p)) * masterShapes[j](p) * masterShapes[i](p);
+			//		};
+			//		stiffnessMatrixIntegrand[i][j] = [&, i, j](Node2D const & p) {
+			//			return PDE.diffusionTerm(T(p)) * (JInverseTranspose * masterSGrads[j](p)) * (JInverseTranspose * masterSGrads[i](p));
+			//		};
+			//	}
+			//	loadVectorIntegrand[i] = [&, i](Node2D const & p) {
+			//		return PDE.forceTerm(T(p)) * masterShapes[i](p);
+			//	};
+			//}
+
 			// data structures for final linear system A.xi = b:
 			logger.beg("generate matrix pattern");
 				auto n = FE.numbOfDOFs(Omega);
@@ -102,7 +122,10 @@ namespace FEM {
 				logger.log();
 			logger.end();
 			logger.beg("assemble system matrix and rhs vector");
-				for (Index t = 0; t < Omega.numbOfElements(); ++t) {
+				// index of the active element
+				Index activeElementIndexScoped;
+				Index& t = activeElementIndex.value_or(activeElementIndexScoped);
+				for (t = 0; t < Omega.numbOfElements(); ++t) {
 					enodes = Omega.getElement(t);
 					mnodes = midNodes(enodes);
 					ribs = ribsOf(enodes);
@@ -115,8 +138,12 @@ namespace FEM {
 					};
 					JInverseTranspose /= detJ;
 					// compute local stiffness matrix
-					for (LocalIndex i = 0; i < masterShapes.size(); ++i) {
-						for (LocalIndex j = i; j < masterShapes.size(); ++j) {
+					for (LocalIndex i = 0; i < l; ++i) {
+						for (LocalIndex j = i; j < l; ++j) {
+							
+							//localStiffnessMatrix(i, j) = detJ * qRuleTriangle.computeQuadrature(stiffnessMatrixIntegrand[i][j], deg);
+							//localMassMatrix(i, j) = detJ * qRuleTriangle.computeQuadrature(massMatrixIntegrand[i][j], deg);
+							
 							localStiffnessMatrix(i, j) = detJ * qRuleTriangle.computeQuadrature([&](Node2D const & p) {
 								return PDE.diffusionTerm(T(p)) * (JInverseTranspose * masterSGrads[j](p)) * (JInverseTranspose * masterSGrads[i](p));
 							}, deg);
@@ -124,6 +151,9 @@ namespace FEM {
 								return PDE.reactionTerm(T(p)) * masterShapes[j](p) * masterShapes[i](p);
 							}, deg);
 						}
+						
+						//localLoadVector[i] = detJ * qRuleTriangle.computeQuadrature(loadVectorIntegrand[i], deg);
+						
 						localLoadVector[i] = detJ * qRuleTriangle.computeQuadrature([&](Node2D const & p) {
 							return PDE.forceTerm(T(p)) * masterShapes[i](p);
 						}, deg);
@@ -147,8 +177,8 @@ namespace FEM {
 								ind2val[DOFsNumn[j]] = DirichletBC(DOFsNodes[j]);
 						else logger.wrn("no BCs were prescribed; hom. Neumann was assumed");
 					// to global system
-					for (LocalIndex i = 0; i < masterShapes.size(); ++i) {
-						for (LocalIndex j = i; j < masterShapes.size(); ++j)
+					for (LocalIndex i = 0; i < l; ++i) {
+						for (LocalIndex j = i; j < l; ++j)
 							A(DOFsNumn[i], DOFsNumn[j]) += localMassMatrix(i, j) + localStiffnessMatrix(i, j);
 						b[DOFsNumn[i]] += localLoadVector[i];
 					}

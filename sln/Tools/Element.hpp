@@ -23,6 +23,16 @@ using Element = std::array<Node<D>, N>; // abstract element
 		inline double length(Segment2D const & s) {
 			return norm(s[1] - s[0]);
 		}
+	
+	template <LocalIndex N>
+	inline bool nodeInElement(Element<2, N> const & e, Node2D const & p) {
+		// for convex 2D elements
+		for (Index i = 0, j; i < N; ++i) {
+			j = (i + 1) % N;
+			if (crossProduct(e[i] - p, e[j] - p)[2] < 0.) return false;
+		}
+		return true;
+	}
 
 	// triangles
 
@@ -76,3 +86,11 @@ using Element = std::array<Node<D>, N>; // abstract element
 		inline LocalIndex nextIndex(LocalIndex i) {
 			return (i + 1) % 3;
 		}
+
+	// quadrilaterals
+
+	template <LocalIndex D>
+	using Quadrilateral = Element<D, 4>;
+
+		using Quadrilateral2D = Quadrilateral<2>;	
+		using Quadrilateral3D = Quadrilateral<3>;

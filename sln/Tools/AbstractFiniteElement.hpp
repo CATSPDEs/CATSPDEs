@@ -23,13 +23,15 @@ public:
 	// get shape funcs of an element
 	virtual std::vector<SmartMapping<D, M>>     getShapesOf(Element<D, N> const &) const = 0;
 	// get gradients of ″
-	virtual std::vector<SmartMapping<D, 2 * M>> getSGradsOf(Element<D, N> const &) const = 0;
+	virtual std::vector<SmartMapping<D, D * M>> getSGradsOf(Element<D, N> const &) const = 0;
 	// DOFs
 	virtual Index numbOfDOFs(AbstractMesh<D, N> const & mesh) const = 0;
 	virtual std::vector<Index>   getDOFsNumeration(AbstractMesh<D, N> const & mesh, Index e) const = 0;
 	virtual std::vector<Node<D>> getDOFsNodes     (AbstractMesh<D, N> const & mesh, Index e) const = 0;
 	virtual std::vector<LocalIndex> getBndryDOFsLocalIndicies(AbstractMesh<D, N> const & mesh, LocalIndex b) const = 0;
 };
+
+	using SegmentFiniteElement = AbstractFiniteElement<1, 2, 1>;
 
 	using TriangularScalarFiniteElement = AbstractFiniteElement<2, 3, 1>;
 	using TriangularVectorFiniteElement = AbstractFiniteElement<2, 3, 2>;

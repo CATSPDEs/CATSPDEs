@@ -9,7 +9,7 @@ namespace ProjectionSolvers {
 	// helpers
 	enum class StoppingCriterion { absolute, relative };
 
-	using Preconditioner = std::function<std::vector<double>(std::vector<double> const &)>;
+	using Preconditioner = Operator;
 
 	inline void logInitialResidual(double r_0, Index max = 1) {
 		auto& logger = SingletonLogger::instance();
@@ -41,7 +41,7 @@ namespace ProjectionSolvers {
 			boost::optional<std::vector<double>> const & x_0 = boost::none, // initial guess
 			double omega = 1., // relaxation parameter
 			Index n = 10000, // numb of iterations
-			double eps = 10e-17,
+			double eps = 1e-12,
 			StoppingCriterion stop = StoppingCriterion::absolute,
 			Index i_log = 0 // log residual reduction on every i_log iteration (0 for never)
 		) {
@@ -74,7 +74,7 @@ namespace ProjectionSolvers {
 			boost::optional<std::vector<double>> const & x_0 = boost::none, // initial guess
 			double omega = 1., // relaxation parameter
 			Index n = 10000, // numb of iterations
-			double eps = 10e-17,
+			double eps = 1e-12,
 			StoppingCriterion stop = StoppingCriterion::absolute,
 			Index i_log = 0 // log residual reduction on every i_log iteration (0 for never)
 		) {
@@ -108,7 +108,7 @@ namespace ProjectionSolvers {
 			boost::optional<std::vector<double>> const & x_0 = boost::none, // initial guess
 			double omega = 1., // relaxation parameter
 			Index n = 10000, // numb of iterations
-			double eps = 10e-17,
+			double eps = 1e-12,
 			StoppingCriterion stop = StoppingCriterion::absolute,
 			Index i_log = 0 // log residual reduction on every i_log iteration (0 for never)
 		) {
@@ -142,7 +142,7 @@ namespace ProjectionSolvers {
 			boost::optional<std::vector<double>> const & x_0 = boost::none, // initial guess
 			double omega = 1., // relaxation parameter
 			Index n = 10000, // numb of iterations
-			double eps = 10e-17,
+			double eps = 1e-12,
 			StoppingCriterion stop = StoppingCriterion::absolute,
 			Index i_log = 0 // log residual reduction on every i_log iteration (0 for never)
 		) {
@@ -179,7 +179,7 @@ namespace ProjectionSolvers {
 			std::vector<double> const & b,
 			boost::optional<std::vector<double>> const & x_0 = boost::none,
 			Index n = 0, // max numb of iters (0 for auto)
-			double eps = 10e-17,
+			double eps = 1e-12,
 			StoppingCriterion stop = StoppingCriterion::absolute,
 			Index i_log = 0, // log residual reduction on every i_log iteration (0 for never)
 			Index i_rec = 15 // recompute residual via b - A.x every i_rec iterations (0 for never)
@@ -220,7 +220,7 @@ namespace ProjectionSolvers {
 			std::vector<double> const & b,
 			boost::optional<std::vector<double>> const & x_0 = boost::none,
 			Index n = 0,
-			double eps = 10e-17,
+			double eps = 1e-12,
 			StoppingCriterion stop = StoppingCriterion::absolute,
 			Index i_log = 0,
 			Index i_rec = 15
@@ -263,7 +263,7 @@ namespace ProjectionSolvers {
 			std::vector<double> const & b,
 			boost::optional<std::vector<double>> const & x_0 = boost::none,
 			Index n = 0,
-			double eps = 10e-17,
+			double eps = 1e-12,
 			StoppingCriterion stop = StoppingCriterion::absolute,
 			Index i_log = 0,
 			Index i_rec = 15
@@ -304,9 +304,6 @@ namespace ProjectionSolvers {
 				omega = (A_x_s * s) / (A_x_s * A_x_s);
 				x += alpha * p + omega * s;
 				r = i_rec && i % i_rec == 0 ? b - A * x : s - omega * A_x_s;
-
-				if (i_rec && i % i_rec == 0) logger.log("rec!");
-
 				r_x_rbar_new = r * rbar; 
 				norm_r_new = norm(r);
 				if (i_log && i % i_log == 0) logResidualReduction(norm_r, norm_r_new, i, n);
@@ -331,7 +328,7 @@ namespace ProjectionSolvers {
 			std::vector<double> const & b,
 			boost::optional<std::vector<double>> const & x_0 = boost::none,
 			Index n = 0,
-			double eps = 10e-17,
+			double eps = 1e-12,
 			StoppingCriterion stop = StoppingCriterion::absolute,
 			Index i_log = 0,
 			Index i_rec = 15
