@@ -1,0 +1,18 @@
+1e+10
+1
+0
+1
+1
+0.3
+n
+
+1. set current density J_z
+2. choose finite element
+	(0) Lagrange P1
+	(1) Lagrange P2
+	(2) Crouzeix-Raviart P1
+3. numb of mesh levels (refinements)
+4. log every nth iteration of Krylov solver, n
+5. log every nth Picard iteration, n
+6. relaxation for Picard
+7. solve non-linear problem

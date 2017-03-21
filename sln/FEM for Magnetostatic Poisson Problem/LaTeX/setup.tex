@@ -1,0 +1,138 @@
+\usepackage[utf8]{inputenc}
+\usepackage[english,russian]{babel}
+\usepackage[left=2cm, right=1cm, top=1cm, bottom=1cm]{geometry}
+\usepackage[dvipsnames]{xcolor} % fancy colors
+\usepackage{
+	amsmath, amssymb, % math
+	mathtools, xparse, % for norm, normL
+	dutchcal, % lowercase mathcal font
+	pdflscape, % portrait landscape (for large tables)
+	bm, % bold for everything
+	physics % partial derivatives \pdv{Q}{t}
+}
+
+%
+% PICTURES
+%
+\usepackage{graphicx}
+% sub figures / grids of pictures
+% http://ctan.altspu.ru/macros/latex/contrib/caption/subcaption.pdf
+\usepackage{subcaption} 
+% http://tex.stackexchange.com/questions/49979/put-text-to-the-right-of-figures
+\usepackage[rightcaption]{sidecap}
+\sidecaptionvpos{figure}{c}
+%\usepackage{showframe} % only for demo
+\graphicspath{{img/}} % includegraphics path
+\newcommand{\svginput}[1]{\input{img/#1}} % pdf_tex path
+\newcommand{\svginputw}[2][\linewidth]{\def\svgwidth{#1}\input{img/#2}} % pdf_tex path
+\newcommand{\includegraphicsw}[2][\linewidth]{\includegraphics[width=#1]{#2}}
+
+%
+% THEOREMS
+%
+\usepackage{amsthm}
+\newtheorem{remark}{Замечание}
+\theoremstyle{definition}
+\newtheorem{definition}{Определение}
+
+%
+% BOXED EQNS
+%
+\usepackage{empheq}
+% http://mirror.hmc.edu/ctan/macros/latex/contrib/mathtools/empheq.pdf
+\newcommand*\widefbox[1]{\fbox{\hspace{1em}#1\hspace{1em}}}
+
+%
+% FONTS AND FORMATTING
+%
+% line interval
+\renewcommand{\baselinestretch}{1.5} 
+% font sizes for sectioning
+% http://tex.stackexchange.com/questions/134031/how-to-adjust-the-size-and-placement-of-chapter-heading-in-report-class
+\usepackage{titlesec}
+\titleformat{\chapter}[display]{\centering \Large}{\chaptertitlename \ \thechapter}{0pt}{\bfseries}
+\titlespacing*{\chapter}{0pt}{0pt}{15pt}
+\titleformat*{\section}{\large\bfseries}
+\titleformat*{\subsection}{\bfseries}
+\titleformat*{\subsubsection}{\bfseries}
+
+% in order to use subeqns within paragraphs: 
+% http://tex.stackexchange.com/questions/27053/too-much-space-between-full-paragraph-and-subequations-env
+%\usepackage{etoolbox}
+%\preto\subequations{\ifhmode\unskip\fi}
+
+%
+% LINKS AND REFERENCES
+%
+\usepackage{hyperref}
+\hypersetup{
+	colorlinks,
+	linkcolor={blue!60!black},
+	citecolor={blue!60!black},
+	urlcolor={blue!70!black}
+}
+%\newcommand{\catspdes}[1]{\href{https://github.com/CATSPDEs/CATSPDEs/tree/master/sln/#1}{\texttt{#1}}}
+\newcommand{\catspdesp}[1]{\href{https://github.com/CATSPDEs/CATSPDEs/tree/master/sln/#1}{\texttt{#1}}}
+\newcommand{\catspdest}[1]{\href{https://github.com/CATSPDEs/CATSPDEs/tree/master/sln/Tools/#1}{\texttt{#1}}}
+\newcommand{\catspdestn}[2]{\href{https://github.com/CATSPDEs/CATSPDEs/tree/master/sln/Tools/#1}{\texttt{#2}}}
+\newcommand{\catspdesm}[1]{\href{https://github.com/CATSPDEs/CATSPDEs/tree/master/sln/Tools/Mathematica}{\texttt{#1}}}
+
+%
+% TABLES
+%
+% table captions
+\usepackage{caption} 
+\captionsetup[table]{skip=15pt}
+% relative width for cols of table
+\usepackage{tabularx}
+% smaller fonts for tabularx + paddings
+\let\oldtabular\tabular
+\renewcommand{\tabular}[1][1.5]{\def\arraystretch{#1}\footnotesize\oldtabular}
+\let\oldtabularx\tabularx
+\renewcommand{\tabularx}{\def\arraystretch{1.5}\footnotesize\oldtabularx}
+% centering for individual cell
+\newcommand{\Zccell}[1]{\centering\arraybackslash #1}
+% centering for the whole col
+\newcolumntype{C}{>{\Zccell}X}
+\newcolumntype{L}{>{\raggedright\arraybackslash}X}
+\newcolumntype{R}{>{\raggedleft \arraybackslash}X}
+% multiple rows
+\usepackage{multirow}
+
+% highlight text w/ bg color
+\newcommand{\Zhlight}[1]{\colorbox{Aquamarine}{#1}}
+\newcommand{\Ztodo}[1]{\colorbox{Goldenrod}{#1}}
+
+% symbols we often use
+\newcommand{\catspdes}{\href{https://github.com/CATSPDEs/}{\texttt{CATS'\,PDEs}}}
+\newcommand{\OmegaField}{{\Omega_{\text{field}}}}
+\newcommand{\BMean}{{B_{\text{mean}}}}
+
+\newcommand{\uIn}{\vect u_{\text{in}}}
+\newcommand{\GammaIn}{\Gamma_{\text{in}}}
+\newcommand{\GammaOut}{\Gamma_{\text{out}}}
+\newcommand{\USpace}{\mathbb{\vect U}}
+\newcommand{\PSpace}{\mathbb P}
+\newcommand{\aForm}[2]{\mathbcal a(\vect #1, \vect #2)}
+\newcommand{\bForm}[2]{\mathbcal b(\vect #1, #2)}
+\newcommand{\lForm}[1]{\mathbcal l(\vect #1)}
+\newcommand{\LSpace}[1][\Omega]{\mathbb L_2\left({#1}\right)}
+\newcommand{\HSpace}[1][\Omega]{\mathbb H^1\left({#1}\right)}
+
+
+% math commands for convinience
+	% norm
+	\NewDocumentCommand{\normL}{ s O{} m }{%
+		\IfBooleanTF{#1}{\norm*{#3}}{\norm[#2]{#3}}_{L_2(\Omega)}%
+	}
+	% differentials
+	\newcommand*\diff{\mathop{}\!\mathrm{d}}
+	\newcommand*\Diff[1]{\mathop{}\!\mathrm{d^#1}}
+	% span{…}, area, length
+	\DeclareMathOperator{\spanop}{span}
+	\newcommand{\spn}[1]{\spanop \left\{ #1 \right\}}
+	\DeclareMathOperator{\area}{area \, of}
+	\DeclareMathOperator{\length}{length \, of}
+	\DeclareMathOperator{\sign}{sign}
+	% bold vectors
+	\newcommand{\vect}[1]{\boldsymbol{\mathbf{#1}}}

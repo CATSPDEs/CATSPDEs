@@ -1,0 +1,20 @@
+\documentclass[a4paper,14pt]{extarticle}
+
+% settings (restylings) and user-defined commands
+\input{setup}
+
+\begin{document}
+	\input{title}
+	% contents
+	\tableofcontents \thispagestyle{empty} % no page num. on table of contents
+	% figures and tables
+	\listoffigures   \thispagestyle{empty}
+	\listoftables    \thispagestyle{empty}
+	% geometry for the rest pages
+	\newgeometry{ 
+		left=2cm, right=1cm, top=1cm, bottom=1cm,
+		includefoot, heightrounded
+	}
+	\input{body}
+    \input{bibliography}
+\end{document} 
