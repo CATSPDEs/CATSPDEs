@@ -32,15 +32,16 @@ public:
 	// get numb of nodes
 	Index numbOfNodes() const { return _nodes.size(); }
 	// get numb of elements
-	Index numbOfElements() const { return _elements.size(); }
+	virtual Index numbOfElements() const { return _elements.size(); }
 	// get ith node
 	Node<D> getNode(Index i) const { return _nodes[i]; }
+	auto const & getNodes() const { return _nodes; }
 	// get nodes’ indicies of eth element
-	std::array<Index, N> getNodesIndicies(Index e) const {
+	virtual std::array<Index, N> getNodesIndicies(Index e) const {
 		return _elements[e];
 	}
 	// get eth element
-	Element<D, N> getElement(Index e) const {
+	virtual Element<D, N> getElement(Index e) const {
 		Element<D, N> el;
 		for (LocalIndex i = 0; i < N; ++i)
 			el[i] = _nodes[_elements[e][i]];

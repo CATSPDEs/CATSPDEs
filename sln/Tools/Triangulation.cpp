@@ -65,15 +65,15 @@ void Triangulation::export(std::ostream& to, Parameters const & params) const {
 
 Triangulation& Triangulation::refine(Index numbOfRefinements) {
 	/*
-	author:
-	Alexander Žilyakov, Jun 2016
-	edited:
-	Oct 2016
-	comments:
-	here we implement uniform refinement
-	works just like red green refinement, but
-	ALL triangles will be refined in red fashion
-	so we do not need stuff like redList, greenMap etc. here
+		author:
+		Alexander Žilyakov, Jun 2016
+		edited:
+		Oct 2016
+		comments:
+		here we implement uniform refinement
+		works just like red green refinement, but
+		ALL triangles will be refined in red fashion
+		so we do not need stuff like redList, greenMap etc. here
 	*/
 	Indicies redNeighborsIndicies;
 	Index i;
@@ -104,29 +104,177 @@ Triangulation& Triangulation::refine(Index numbOfRefinements) {
 					}
 					else _nodes.push_back(midNodes(getElement(i))[j]);
 				}
-				_elements[i] = redNodesIndicies;
-				SignedIndex dummy = numbOfElements();
-				(*_neighbors)[i] = { dummy, dummy + 1, dummy + 2 };
-				_elements.insert(_elements.end(), {
-					{ nodesIndicies[0], redNodesIndicies[2], redNodesIndicies[1] },
-					{ nodesIndicies[1], redNodesIndicies[0], redNodesIndicies[2] },
-					{ nodesIndicies[2], redNodesIndicies[1], redNodesIndicies[0] }
-				});
-				dummy = i;
-				(*_neighbors).insert((*_neighbors).end(), {
-					{ dummy, neighborsIndicies[1], neighborsIndicies[2] },
-					{ dummy, neighborsIndicies[2], neighborsIndicies[0] },
-					{ dummy, neighborsIndicies[0], neighborsIndicies[1] }
-				});
-				//j = _curvilinearEdges.size();
-				//for (Index newTriangle : { _triangles.size() - 2, _triangles.size() - 3, _triangles.size() - 1 })
-				//	if (_triangles[newTriangle].neighbors(1) < -1)
-				//		_triangles[newTriangle].neighbors(1) = _neighbor2edge(--j);
-				for (Index j : { numbOfElements() - 3, numbOfElements() - 2, numbOfElements() - 1 })
-					for (Index m : redNeighborsIndicies)
-						_makeNeighbors(j, m);
-				redNeighborsIndicies.clear();
+			_elements[i] = redNodesIndicies;
+			SignedIndex dummy = numbOfElements();
+			(*_neighbors)[i] = { dummy, dummy + 1, dummy + 2 };
+			_elements.insert(_elements.end(), {
+				{ nodesIndicies[0], redNodesIndicies[2], redNodesIndicies[1] },
+				{ nodesIndicies[1], redNodesIndicies[0], redNodesIndicies[2] },
+				{ nodesIndicies[2], redNodesIndicies[1], redNodesIndicies[0] }
+			});
+			dummy = i;
+			(*_neighbors).insert((*_neighbors).end(), {
+				{ dummy, neighborsIndicies[1], neighborsIndicies[2] },
+				{ dummy, neighborsIndicies[2], neighborsIndicies[0] },
+				{ dummy, neighborsIndicies[0], neighborsIndicies[1] }
+			});
+			//j = _curvilinearEdges.size();
+			//for (Index newTriangle : { _triangles.size() - 2, _triangles.size() - 3, _triangles.size() - 1 })
+			//	if (_triangles[newTriangle].neighbors(1) < -1)
+			//		_triangles[newTriangle].neighbors(1) = _neighbor2edge(--j);
+			for (Index j : { numbOfElements() - 3, numbOfElements() - 2, numbOfElements() - 1 })
+				for (Index m : redNeighborsIndicies)
+					_makeNeighbors(j, m);
+			redNeighborsIndicies.clear();
 		}
+	}
+	if (_ribs) enumerateRibs();
+	return *this;
+}
+
+Triangulation& Triangulation::refine(Indicies& redList) {
+	/*
+		author: 
+			Alexander Žilyakov, Jun 2016
+		edited:
+			Oct 2016
+		comments:
+			here we implement red–green refinement of our mesh
+			@redList is a vector of indicies in _triangles to be red–refined
+	*/
+	std::unordered_map<Index, LocalIndex> greenMap;
+	// hash table of indicies of triangles w/ hanging nodes
+	// we must refine them green later
+	// key is index in _triangles vector,
+	// value is numb of hanging nodes in (1, 2, or 3)
+	Indicies redNeighborsIndicies;
+	// n <= 6 unknown neighbors of three new red triangles
+	// that were added on previous iterations
+	Index i;
+	auto getRedNodeIndexFrom = [&](Index t) { // …from triangle _triangles[t]
+		// we will need this function in order to 
+		// organize red refinement if @redList contains neighbor triangles
+		// because we do not want to add same nodes to _nodes vector several times
+		LocalIndex m;
+		for (m = 0; m < 3; ++m)
+			if (getNeighborsIndicies(getNeighborsIndicies(t)[m])[1] != i &&
+				getNeighborsIndicies(getNeighborsIndicies(t)[m])[2] != i) break;
+		redNeighborsIndicies.push_back(getNeighborsIndicies(t)[nextIndex(m)]); // add red neighbors from
+		redNeighborsIndicies.push_back(getNeighborsIndicies(t)[nextIndex(nextIndex(m))]); // previous refinements
+		return getNodesIndicies(t)[m];
+	};
+	// RED PART
+	Indicies::iterator redListIter = redList.begin(),
+					   searchStartIter = prev(redList.end()), 
+					   searchIter;
+	while (redListIter != redList.end()) {
+		// well, since this iteration
+		// _elements[i] sholuld not ever be added to redList again
+		greenMap[i = *redListIter] = 3; 
+
+		std::cout << i << '\n';
+
+		// we will need ith nodes and neighbors later
+		auto nodesIndicies = getNodesIndicies(i);
+		auto neighborsIndicies = getNeighborsIndicies(i);
+		// let’s deal w/ red points
+		std::array<Index, 3> redNodesIndicies;
+		Index k = 0; // numb of red nodes
+		for (LocalIndex j : {0, 1, 2})
+			if (0 <= neighborsIndicies[j] && !_makeNeighbors(i, neighborsIndicies[j])) {
+				// if our triangle has a neighbor which has already been red-refined,
+				// then no need in creating a new node
+				// we just have to find out its index
+				redNodesIndicies[j] = getRedNodeIndexFrom(neighborsIndicies[j]);
+				++k; // how many nodes we do not need to create
+			}
+			else {
+				redNodesIndicies[j] = numbOfNodes();
+				if (neighborsIndicies[j] < -1) {
+					//m = _neighbor2edge(t[j]);
+					//_nodes.push_back(_curves[_curvilinearEdges[m].curveIndex()](_curvilinearEdges[m].thetaMiddle()));
+					//_curvilinearEdges.push_back(CurvilinearEdge(_curvilinearEdges[m].thetaMiddle(), _curvilinearEdges[m].thetaEnd(), _curvilinearEdges[m].curveIndex()));
+					//_curvilinearEdges[m].thetaEnd() = _curvilinearEdges[m].thetaMiddle();
+				}
+				else _nodes.push_back(midNodes(getElement(i))[j]);
+			}	
+		if (k > 1 && (searchIter = find(next(searchStartIter), redList.end(), i)) != redList.end()) 
+			// if k equals 2 or 3
+			// and we have also 3 red triangles yet to be added
+			redList.erase(searchIter);
+		// our ith triangle splits into 4 new ones
+		// central one will take place of the old one
+		_elements[i] = redNodesIndicies;
+		SignedIndex dummy = numbOfElements();
+		// and its neighbors are known (3 other triangles) and will be added soon
+		(*_neighbors)[i] = { dummy, dummy + 1, dummy + 2 };
+		// now we have to add 3 other triangles
+		// you have to draw them not to get confused w/ numeration
+		// or just TRUST ME I AM A DOCTOR
+		_elements.insert(_elements.end(), {
+			{ nodesIndicies[0], redNodesIndicies[2], redNodesIndicies[1] },
+			{ nodesIndicies[1], redNodesIndicies[0], redNodesIndicies[2] },
+			{ nodesIndicies[2], redNodesIndicies[1], redNodesIndicies[0] }
+		});
+		dummy = i;
+		(*_neighbors).insert((*_neighbors).end(), {
+			{ dummy, neighborsIndicies[1], neighborsIndicies[2] },
+			{ dummy, neighborsIndicies[2], neighborsIndicies[0] },
+			{ dummy, neighborsIndicies[0], neighborsIndicies[1] }
+		});
+
+		// fix curvilinear edges
+		//j = _curvilinearEdges.size();
+		//for (Index newTriangle : { _triangles.size() - 2, _triangles.size() - 3, _triangles.size() - 1 })
+		//	if (_triangles[newTriangle].neighbors(1) < -1)
+		//		_triangles[newTriangle].neighbors(1) = _neighbor2edge(--j);
+		
+		// we set neighbors of our new triangles to be neighbors of 
+		// our old (refined) triangle
+		// so there n <= 6 neighbors to be found
+		// if ith neighbors were red-refined previously 
+		for (Index j : { numbOfElements() - 3, numbOfElements() - 2, numbOfElements() - 1 })
+			for (Index m : redNeighborsIndicies)
+				_makeNeighbors(j, m);
+		redNeighborsIndicies.clear(); // we are done w/ neighbors
+		// if ith has no neighbors or its neighbors were refined earlier, we are gold 
+		// otherwise we have to deal w/ hanging nodes
+		for (LocalIndex j : {0, 1, 2})
+			if (neighborsIndicies[j] > -1 && ++greenMap[neighborsIndicies[j]] == 2) 
+					// if we have 2 (or 3 actually) hanging nodes,
+					// we will not refine _triangle[t[j]] green
+					redList.push_back(neighborsIndicies[j]); // we will refine it red instead!
+		// we do not want to search from the very begining
+		// because O(n^2) is too slow
+		// so we use this smart hack
+		if (redListIter++ == searchStartIter) searchStartIter = prev(redList.end());
+	}
+	// GREEN PART
+	for (auto const & keyValue : greenMap) {
+		if (keyValue.second > 1) continue; // we should do green refinement iff there’s only one hanging node
+		i = keyValue.first; // index of triangle to be green-refined
+		Index redTriangleIndex;
+		LocalIndex j;
+		for (j = 0; j < 3; ++j) {
+			redTriangleIndex = getNeighborsIndicies(i)[j];
+			if (0 <= redTriangleIndex && !_makeNeighbors(i, redTriangleIndex)) break; // so this is red triangle w/ a handing node
+		}
+		auto redNodeIndex = getRedNodeIndexFrom(redTriangleIndex); // so this is our hagning node
+		// we want to split our ith triangle into two triangles
+		// one of them we will add… 
+		_elements.push_back({ getNodesIndicies(i)[j], getNodesIndicies(i)[nextIndex(j)], redNodeIndex });
+		auto neighborIndex = getNeighborsIndicies(i)[nextIndex(nextIndex(j))];
+		(*_neighbors).push_back({ -1, (SignedIndex)i, neighborIndex });
+		// …(fix green neighbor)…
+		if (neighborIndex > -1)
+			_makeNeighbors(numbOfElements() - 1, neighborIndex);
+		// …and another one will take place of the old one
+		_elements[i] = { getNodesIndicies(i)[j], redNodeIndex, getNodesIndicies(i)[nextIndex(nextIndex(j))] };
+		(*_neighbors)[i] = { -1, getNeighborsIndicies(i)[nextIndex(j)], (SignedIndex)numbOfElements() - 1 };
+		// finally, lets fix neighbors
+		_makeNeighbors(i, redNeighborsIndicies.front());
+		_makeNeighbors(numbOfElements() - 1, redNeighborsIndicies.back());
+		redNeighborsIndicies.clear();
 	}
 	if (_ribs) enumerateRibs();
 	return *this;
@@ -134,22 +282,22 @@ Triangulation& Triangulation::refine(Index numbOfRefinements) {
 
 boost::optional<std::array<LocalIndex, 2>> Triangulation::getCommonRibLocalIndicies(Index t1, Index t2) const {
 	/*
-	author:
-	Alexander Žilyakov, Oct 2016
-	edited:
-	_
-	comments:
-	if triangles #t1 and #t2 are neighbors
-	we want to get local indicies of common rib:
-	____________
-	/2\0         2/
-	/   \   t2    /
-	/     \       /
-	/  t1   \     /
-	/         \   /
-	/0_________1\1/
+		author:
+		Alexander Žilyakov, Oct 2016
+		edited:
+		_
+		comments:
+		if triangles #t1 and #t2 are neighbors
+		we want to get local indicies of common rib:
+		____________
+		/2\0         2/
+		/   \   t2    /
+		/     \       /
+		/  t1   \     /
+		/         \   /
+		/0_________1\1/
 
-	for the stencil above, we get {0, 2}
+		for the stencil above, we get {0, 2}
 	*/
 	for (LocalIndex i = 0; i < 3; ++i)
 		if (getNeighborsIndicies(t1)[i] == t2)
@@ -161,27 +309,27 @@ boost::optional<std::array<LocalIndex, 2>> Triangulation::getCommonRibLocalIndic
 
 std::vector<std::array<LocalIndex, 2>> Triangulation::getCommonNodesLocalIndicies(Index t1, Index t2) const {
 	/*
-	author:
-	Alexander Žilyakov, Oct 2016
-	edited:
-	_
-	comments:
-	we want to get local indicies of common nodes triangle #t1 and #t2 share:
+		author:
+		Alexander Žilyakov, Oct 2016
+		edited:
+		_
+		comments:
+		we want to get local indicies of common nodes triangle #t1 and #t2 share:
 
-	/2\
-	/   \
-	/     \
-	/  t1   \
-	/         \
-	/0_________1\_____________
-	\0         2/
-	\         /
-	\  t2   /
-	\     /
-	\   /
-	\1/
+		/2\
+		/   \
+		/     \
+		/  t1   \
+		/         \
+		/0_________1\_____________
+		\0         2/
+		\         /
+		\  t2   /
+		\     /
+		\   /
+		\1/
 
-	for the stencil above, we get { {1, 0} }
+		for the stencil above, we get { {1, 0} }
 	*/
 	std::vector<std::array<LocalIndex, 2>> res;
 	for (LocalIndex i = 0; i < 3; ++i)

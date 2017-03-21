@@ -59,6 +59,7 @@ public:
 
 	Triangulation& refine(Index numbOfRefinements = 1) final;
 
+	Triangulation& refine(Indicies&); // red—green refinement
 	Triangulation& computeNeighbors(); // O(m^2), m := numb of triangles (because we need to construct _neighbors list manually)
 	Triangulation& enumerateRibs(); // O(m), m := numb of triangles
 	
