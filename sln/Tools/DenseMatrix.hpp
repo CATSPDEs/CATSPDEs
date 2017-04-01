@@ -30,6 +30,23 @@ public:
 	void multByTranspose(T const * by, T* result) const final;
 	// Gauss elimination w/ partial pivoting
 	std::vector<T> GaussElimination(std::vector<T> const &);
+
+	T det() const
+	{
+		if (_w == _h&&_w == 2)
+			return _get(0, 0)*_get(1, 1) - _get(0, 1)*_get(1, 0);
+		throw std::logic_error("not implemented");
+	}
+
+	DenseMatrix inv() const
+	{
+		if (_w == _h&&_w == 2)
+		{
+			DenseMatrix inv{ {_A[1][1], -_A[0][1] },{ -_A[1][0], _A[0][0]} };
+			return inv / det();
+		}
+		throw std::logic_error("not implemented");
+	}
 };
 
 // public methods

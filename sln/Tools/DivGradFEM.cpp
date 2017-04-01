@@ -23,6 +23,7 @@ namespace FEM {
 			ScalarBoundaryCondition2D const & RobinBC,
 			ScalarBoundaryCondition2D const & DirichletBC,
 			TriangularScalarFiniteElement const & FE,
+			TriangularScalarFiniteElement const & T_FE,
 			boost::optional<Index&> activeElementIndex
 		) {
 			// logger
@@ -39,7 +40,10 @@ namespace FEM {
 				[](double const & s) -> Node2D { return { .5 * (1. + s), 0. }; }
 			};
 			// shapes for transformation T
-			auto lagrangeMasterShapes = Triangle_P1_Lagrange::instance().getShapesOf(master);
+			auto T_masterShapes = T_FE.getShapesOf(master);
+			auto T_masterSGrads = T_FE.getSGradsOf(master);
+			auto T_l= T_masterShapes.size();
+				// T_FE.value_or(Triangle_P1_Lagrange::instance()).getShapesOf(master);
 			// shapes of FE
 			auto masterShapes = FE.getShapesOf(master);
 			auto masterSGrads = FE.getSGradsOf(master);
@@ -63,7 +67,7 @@ namespace FEM {
 					for (auto const & p : qNodesSegment) // and quadrature node (1D) on master segment,
 						qBoundaryNodesTriangle.emplace_back(r[i](p)); // compute corresponding quadrature node on master triangle (2D) using curves r
 				// so now we are ready to precompute images of q nodes
-				for (auto& s : lagrangeMasterShapes) s.saveImagesOf(qNodesTriangle).saveImagesOf(qBoundaryNodesTriangle);
+				for (auto& s : T_masterShapes) s.saveImagesOf(qNodesTriangle).saveImagesOf(qBoundaryNodesTriangle);
 				for (auto& s : masterShapes) s.saveImagesOf(qNodesTriangle).saveImagesOf(qBoundaryNodesTriangle);
 				for (auto& g : masterSGrads) g.saveImagesOf(qNodesTriangle);
 			logger.end();
@@ -79,38 +83,51 @@ namespace FEM {
 			Triangle2D enodes, mnodes;
 			// ribs of the current element
 			std::array<Segment2D, 3> ribs;
-			std::vector<Index> DOFsNumn;
-			std::vector<Node2D> DOFsNodes;
+			std::vector<Index> DOFsNumn;		  
+			std::vector<Node2D> DOFsNodes;		  
+
 			// mapping from master element to physical ″
-			VectorField2D T = [&](Node2D const & masterNode) {
-				Node2D physicalNode { { 0., 0. } };
-				for (LocalIndex i = 0; i < 3; ++i) {
-					physicalNode[0] += enodes[i][0] * lagrangeMasterShapes[i](masterNode);
-					physicalNode[1] += enodes[i][1] * lagrangeMasterShapes[i](masterNode);
+			auto T = [&](Node2D const & masterNode)->Node2D {
+				std::vector<double> sValues(T_l);
+				std::vector<double> X(T_l), Y(T_l);
+				for (LocalIndex i = 0; i < T_l; i++)
+				{
+					X[i] = DOFsNodes[i][0];
+					Y[i] = DOFsNodes[i][1];
 				}
-				return physicalNode;
+				std::transform(T_masterShapes.begin(), T_masterShapes.end(), sValues.begin(), [&](auto const & s) {
+					return s(p);
+				});
+				return{ X*sValues ,Y*sValues };
+				/*Node2D physicalNode { { 0., 0. } };
+				for (LocalIndex i = 0; i < T_masterShapes.size(); ++i) {
+					physicalNode[0] += enodes[i][0] * T_masterShapes[i](masterNode);
+					physicalNode[1] += enodes[i][1] * T_masterShapes[i](masterNode);
+				}
+				return physicalNode;*/
 			};
-			// jacobian–related, J := jacobian matrix of the mapping T
-			double detJ;
-			DenseMatrix<double> JInverseTranspose;
+			auto gradT = [&](Node2D const & p)->DenseMatrix<double> {
+				
+				std::vector<Node2D> gValues(T_l);
+				std::vector<double> X(T_l), Y(T_l);
+				for (LocalIndex i = 0; i < T_l; i++)
+				{
+					X[i] = DOFsNodes[i][0];
+					Y[i] = DOFsNodes[i][1];
+				}
 
-			// integrands for local matrices
-			//std::vector<ScalarField2D> loadVectorIntegrand(l);
-			//std::vector<std::vector<ScalarField2D>> massMatrixIntegrand(l, loadVectorIntegrand), stiffnessMatrixIntegrand { massMatrixIntegrand };
-			//for (LocalIndex i = 0; i < l; ++i) {
-			//	for (LocalIndex j = i; j < l; ++j) {
-			//		massMatrixIntegrand[i][j] = [&, i, j](Node2D const & p) {
-			//			return PDE.reactionTerm(T(p)) * masterShapes[j](p) * masterShapes[i](p);
-			//		};
-			//		stiffnessMatrixIntegrand[i][j] = [&, i, j](Node2D const & p) {
-			//			return PDE.diffusionTerm(T(p)) * (JInverseTranspose * masterSGrads[j](p)) * (JInverseTranspose * masterSGrads[i](p));
-			//		};
-			//	}
-			//	loadVectorIntegrand[i] = [&, i](Node2D const & p) {
-			//		return PDE.forceTerm(T(p)) * masterShapes[i](p);
-			//	};
-			//}
+				std::transform(T_masterSGrads.begin(), T_masterSGrads.end(), gValues.begin(), [&](auto const & g) {
+					return g(p);
+				});
 
+				return
+				{
+					{(X*gValues)[0],(X*gValues)[1] },
+					{ (Y*gValues)[0],(Y*gValues)[1] }
+				};
+
+
+			};
 			// data structures for final linear system A.xi = b:
 			logger.beg("generate matrix pattern");
 				auto n = FE.numbOfDOFs(Omega);
@@ -131,12 +148,16 @@ namespace FEM {
 					ribs = ribsOf(enodes);
 					DOFsNumn = FE.getDOFsNumeration(Omega, t);
 					DOFsNodes = FE.getDOFsNodes(Omega, t);
-					detJ = 2. * area(Omega.getElement(t));
+
+
+					/*detJ = 2. * area(Omega.getElement(t));
 					JInverseTranspose = {
 						{ enodes[2][1] - enodes[0][1], enodes[0][1] - enodes[1][1] },
 						{ enodes[0][0] - enodes[2][0], enodes[1][0] - enodes[0][0] }
-					};
-					JInverseTranspose /= detJ;
+					};*/
+					//JInverseTranspose /= detJ;
+
+
 					// compute local stiffness matrix
 					for (LocalIndex i = 0; i < l; ++i) {
 						for (LocalIndex j = i; j < l; ++j) {
@@ -144,18 +165,18 @@ namespace FEM {
 							//localStiffnessMatrix(i, j) = detJ * qRuleTriangle.computeQuadrature(stiffnessMatrixIntegrand[i][j], deg);
 							//localMassMatrix(i, j) = detJ * qRuleTriangle.computeQuadrature(massMatrixIntegrand[i][j], deg);
 							
-							localStiffnessMatrix(i, j) = detJ * qRuleTriangle.computeQuadrature([&](Node2D const & p) {
-								return PDE.diffusionTerm(T(p)) * (JInverseTranspose * masterSGrads[j](p)) * (JInverseTranspose * masterSGrads[i](p));
+							localStiffnessMatrix(i, j) = qRuleTriangle.computeQuadrature([&](Node2D const & p) {
+								return PDE.diffusionTerm(T(p)) * (gradT(p).inv().t() * masterSGrads[j](p)) * (gradT(p).inv().t() * masterSGrads[i](p)) * fabs(gradT(p).det());
 							}, deg);
-							localMassMatrix(i, j) = detJ * qRuleTriangle.computeQuadrature([&](Node2D const & p) {
-								return PDE.reactionTerm(T(p)) * masterShapes[j](p) * masterShapes[i](p);
+							localMassMatrix(i, j) =qRuleTriangle.computeQuadrature([&](Node2D const & p) {
+								return PDE.reactionTerm(T(p)) * masterShapes[j](p) * masterShapes[i](p)*fabs(gradT(p).det());
 							}, deg);
 						}
 						
 						//localLoadVector[i] = detJ * qRuleTriangle.computeQuadrature(loadVectorIntegrand[i], deg);
 						
-						localLoadVector[i] = detJ * qRuleTriangle.computeQuadrature([&](Node2D const & p) {
-							return PDE.forceTerm(T(p)) * masterShapes[i](p);
+						localLoadVector[i] = qRuleTriangle.computeQuadrature([&](Node2D const & p) {
+							return PDE.forceTerm(T(p)) * masterShapes[i](p)*fabs(gradT(p).det());
 						}, deg);
 					}
 					// assemble boundary data
