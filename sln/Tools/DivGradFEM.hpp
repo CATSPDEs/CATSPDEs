@@ -51,9 +51,8 @@ namespace FEM {
 			ScalarBoundaryCondition2D const &, // natural BC,
 			ScalarBoundaryCondition2D const &, // essential BC
 			TriangularScalarFiniteElement const &,
-			TriangularScalarFiniteElement const & T_FE,
+			boost::optional<TriangularScalarFiniteElement const &> T_FE = boost::none, // FE for (curvilinear) mapping
 			boost::optional<Index&> activeElementIndex = boost::none // index of the active element	
-			//boost::optional<TriangularScalarFiniteElement const &> T_FE = boost::none
 		);
 
 	}

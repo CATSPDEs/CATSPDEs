@@ -42,8 +42,9 @@ public:
 	{
 		if (_w == _h&&_w == 2)
 		{
-			DenseMatrix inv{ {_A[1][1], -_A[0][1] },{ -_A[1][0], _A[0][0]} };
-			return inv / det();
+			DenseMatrix inv { {_A[1][1], -_A[0][1] },{ -_A[1][0], _A[0][0]} };
+			inv /= det();
+			return inv;
 		}
 		throw std::logic_error("not implemented");
 	}

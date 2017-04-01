@@ -136,119 +136,119 @@ int main() {
 			logger.end();
 		logger.end();
 		vector<double> x; // soln vector
-		if (method == 0) {
-			logger.beg("setup multigrid data");
-			vector<string> smoothersNames{ "relaxed Jacobi", "forward SOR", "backward SOR", "SSOR" };
-			auto dummy = Smoothers::relaxedJacobi;
-			vector<decltype(dummy)> smoothers{
-				Smoothers::relaxedJacobi,
-				Smoothers::forwSOR,
-				Smoothers::backSOR,
-				Smoothers::SSOR
-			};
-			auto smoothersIndex = logger.opt("smoothing technique", smoothersNames);
-			Index nu;
-			logger.inp("numb of pre- and post-smoothing iterations", nu);
-			double omega;
-			logger.inp("relaxation parameter", omega);
-			Smoother<SymmetricCSlCMatrix<double>> smoother = [&](SymmetricCSlCMatrix<double>& A, std::vector<double> const & b, std::vector<double> const & x_0) {
-				return smoothers[smoothersIndex](A, b, x_0, omega, nu, 0., StoppingCriterion::absolute, 0);
-			};
-			auto gamma = logger.opt("set recursive calls type", { "V-cycle", "W-cycle" });
-			++gamma;
-			auto transfer = (TransferType)logger.opt("grid transfer type", { "canonical", "L2" });
-			Multigrid<SymmetricCSlCMatrix<double>> MG{
-				FE, Omega, numbOfMeshLevels,
-				[&](Triangulation const & Omega) {
-					return assembleSystem(PDE, Omega, RobinBC, DirichletBC, FE);
-				},
-				transfer
-			};
-			auto& A = MG.A();
-			auto& b = MG.b();
-			logger.end();
-			logger.beg("solve w/ MG");
-			x = shuffle(A.getOrder()); // import(x, oPath + "shuffled guesses/x_0.dat");
-			// initial residual
-			double r_0 = norm(b - A * x), r = r_0, r_new;
-			logInitialResidual(r_0, maxNumbOfIterations);
-			// MG as a stand-alone iteration
-			Index i;
-			for (i = 1; i <= maxNumbOfIterations; ++i) {
-				logger.mute = true;
-				x = MG(numbOfMeshLevels, b, x, smoother, gamma);
-				logger.mute = false;
-				r_new = norm(b - A * x);
-				if (i_log && i % i_log == 0) logResidualReduction(r, r_new, i, maxNumbOfIterations);
-				r = r_new;
-				if (stop == StoppingCriterion::absolute && r < eps) break;
-				else if (stop == StoppingCriterion::relative && r / r_0 < eps) break;
-			}
-			logFinalResidual(r_0, r_new, i > maxNumbOfIterations ? maxNumbOfIterations : i, maxNumbOfIterations);
-			if (i > maxNumbOfIterations) logger.wrn("MG failed");
-			logger.end();
-			if (transfer == TransferType::canonical && logger.yes("export prolongations and system matrices")) {
-				logger.beg("export");
-				for (Index i = 0; i <= numbOfMeshLevels; ++i)
-					static_cast<CSCMatrix<double>>(static_cast<CSlCMatrix<double>>(MG.A(i))).exportHarwellBoeing(oPath + "mg/A" + to_string(i) + ".rsa");
-				for (Index i = 0; i < numbOfMeshLevels; ++i)
-					MG.P_Hh(i).exportHarwellBoeing(oPath + "mg/P" + to_string(i) + ".rra");
-				logger.end();
-			}
-			// save stdin commands
-			logger.exp("mg.txt");
-		}
-		else if (method == 1) {
-			logger.beg("setup multigrid data");
-				using namespace Krylov;
-				using namespace Smoothers;
-				auto outerSolver = PCG;
-				vector<decltype(outerSolver)> KrylovSolvers { PCG, PBiCGStab };
-				auto KrylovSolversIndex = logger.opt("choose outer solver", { "CG", "BiCGStab" });
-				auto innerSolver = Smoothers::relaxedJacobi;
-				vector<decltype(innerSolver)> smoothers {
-					Smoothers::relaxedJacobi,
-					Smoothers::forwSOR,
-					Smoothers::backSOR,
-					Smoothers::SSOR
-				};
-				auto smoothersIndex = logger.opt("smoothing technique", { "relaxed Jacobi", "forward SOR", "backward SOR", "SSOR" });
-				Index nu;
-				logger.inp("numb of pre- and post-smoothing iterations", nu);
-				double omega;
-				logger.inp("relaxation parameter", omega);
-				Smoother<SymmetricCSlCMatrix<double>> smoother = [&](SymmetricCSlCMatrix<double>& A, std::vector<double> const & b, std::vector<double> const & x_0) {
-					return smoothers[smoothersIndex](A, b, x_0, omega, nu, 0., StoppingCriterion::absolute, 0);
-				};
-				auto gamma = logger.opt("set recursive calls type", { "V-cycle", "W-cycle" });
-				++gamma;
-				Index numbOfInnerIterations;
-				logger.inp("numb of iterations for inner solver", numbOfInnerIterations);
-				auto transfer = (TransferType)logger.opt("grid transfer type", { "canonical", "L2" });
-				Multigrid<SymmetricCSlCMatrix<double>> MG {
-					FE, Omega, numbOfMeshLevels,
-					[&](Triangulation const & Omega) {
-						return assembleSystem(PDE, Omega, RobinBC, DirichletBC, FE);
-					},
-					transfer
-				};
-				auto& A = MG.A();
-				auto& b = MG.b();
-			logger.end();
-			logger.beg("solve");
-				x = KrylovSolvers[KrylovSolversIndex]([&](vector<double> const & x) {
-					vector<double> y(A.getOrder());
-					logger.mute = true;
-					for (Index i = 0; i < numbOfInnerIterations; ++i)
-						y = MG(numbOfMeshLevels, x, y, smoother, gamma);
-					logger.mute = false;
-					return y;
-				}, A, b, shuffle(A.getOrder()), maxNumbOfIterations, eps, stop, i_log, 15);
-			logger.end();
-			// save stdin commands
-			logger.exp("pkrylov.txt");
-		}
-		else if (method == 2) {
+		//if (method == 0) {
+		//	logger.beg("setup multigrid data");
+		//	vector<string> smoothersNames{ "relaxed Jacobi", "forward SOR", "backward SOR", "SSOR" };
+		//	auto dummy = Smoothers::relaxedJacobi;
+		//	vector<decltype(dummy)> smoothers{
+		//		Smoothers::relaxedJacobi,
+		//		Smoothers::forwSOR,
+		//		Smoothers::backSOR,
+		//		Smoothers::SSOR
+		//	};
+		//	auto smoothersIndex = logger.opt("smoothing technique", smoothersNames);
+		//	Index nu;
+		//	logger.inp("numb of pre- and post-smoothing iterations", nu);
+		//	double omega;
+		//	logger.inp("relaxation parameter", omega);
+		//	Smoother<SymmetricCSlCMatrix<double>> smoother = [&](SymmetricCSlCMatrix<double>& A, std::vector<double> const & b, std::vector<double> const & x_0) {
+		//		return smoothers[smoothersIndex](A, b, x_0, omega, nu, 0., StoppingCriterion::absolute, 0);
+		//	};
+		//	auto gamma = logger.opt("set recursive calls type", { "V-cycle", "W-cycle" });
+		//	++gamma;
+		//	auto transfer = (TransferType)logger.opt("grid transfer type", { "canonical", "L2" });
+		//	Multigrid<SymmetricCSlCMatrix<double>> MG{
+		//		FE, Omega, numbOfMeshLevels,
+		//		[&](Triangulation const & Omega) {
+		//			return assembleSystem(PDE, Omega, RobinBC, DirichletBC, FE);
+		//		},
+		//		transfer
+		//	};
+		//	auto& A = MG.A();
+		//	auto& b = MG.b();
+		//	logger.end();
+		//	logger.beg("solve w/ MG");
+		//	x = shuffle(A.getOrder()); // import(x, oPath + "shuffled guesses/x_0.dat");
+		//	// initial residual
+		//	double r_0 = norm(b - A * x), r = r_0, r_new;
+		//	logInitialResidual(r_0, maxNumbOfIterations);
+		//	// MG as a stand-alone iteration
+		//	Index i;
+		//	for (i = 1; i <= maxNumbOfIterations; ++i) {
+		//		logger.mute = true;
+		//		x = MG(numbOfMeshLevels, b, x, smoother, gamma);
+		//		logger.mute = false;
+		//		r_new = norm(b - A * x);
+		//		if (i_log && i % i_log == 0) logResidualReduction(r, r_new, i, maxNumbOfIterations);
+		//		r = r_new;
+		//		if (stop == StoppingCriterion::absolute && r < eps) break;
+		//		else if (stop == StoppingCriterion::relative && r / r_0 < eps) break;
+		//	}
+		//	logFinalResidual(r_0, r_new, i > maxNumbOfIterations ? maxNumbOfIterations : i, maxNumbOfIterations);
+		//	if (i > maxNumbOfIterations) logger.wrn("MG failed");
+		//	logger.end();
+		//	if (transfer == TransferType::canonical && logger.yes("export prolongations and system matrices")) {
+		//		logger.beg("export");
+		//		for (Index i = 0; i <= numbOfMeshLevels; ++i)
+		//			static_cast<CSCMatrix<double>>(static_cast<CSlCMatrix<double>>(MG.A(i))).exportHarwellBoeing(oPath + "mg/A" + to_string(i) + ".rsa");
+		//		for (Index i = 0; i < numbOfMeshLevels; ++i)
+		//			MG.P_Hh(i).exportHarwellBoeing(oPath + "mg/P" + to_string(i) + ".rra");
+		//		logger.end();
+		//	}
+		//	// save stdin commands
+		//	logger.exp("mg.txt");
+		//}
+		//else if (method == 1) {
+		//	logger.beg("setup multigrid data");
+		//		using namespace Krylov;
+		//		using namespace Smoothers;
+		//		auto outerSolver = PCG;
+		//		vector<decltype(outerSolver)> KrylovSolvers { PCG, PBiCGStab };
+		//		auto KrylovSolversIndex = logger.opt("choose outer solver", { "CG", "BiCGStab" });
+		//		auto innerSolver = Smoothers::relaxedJacobi;
+		//		vector<decltype(innerSolver)> smoothers {
+		//			Smoothers::relaxedJacobi,
+		//			Smoothers::forwSOR,
+		//			Smoothers::backSOR,
+		//			Smoothers::SSOR
+		//		};
+		//		auto smoothersIndex = logger.opt("smoothing technique", { "relaxed Jacobi", "forward SOR", "backward SOR", "SSOR" });
+		//		Index nu;
+		//		logger.inp("numb of pre- and post-smoothing iterations", nu);
+		//		double omega;
+		//		logger.inp("relaxation parameter", omega);
+		//		Smoother<SymmetricCSlCMatrix<double>> smoother = [&](SymmetricCSlCMatrix<double>& A, std::vector<double> const & b, std::vector<double> const & x_0) {
+		//			return smoothers[smoothersIndex](A, b, x_0, omega, nu, 0., StoppingCriterion::absolute, 0);
+		//		};
+		//		auto gamma = logger.opt("set recursive calls type", { "V-cycle", "W-cycle" });
+		//		++gamma;
+		//		Index numbOfInnerIterations;
+		//		logger.inp("numb of iterations for inner solver", numbOfInnerIterations);
+		//		auto transfer = (TransferType)logger.opt("grid transfer type", { "canonical", "L2" });
+		//		Multigrid<SymmetricCSlCMatrix<double>> MG {
+		//			FE, Omega, numbOfMeshLevels,
+		//			[&](Triangulation const & Omega) {
+		//				return assembleSystem(PDE, Omega, RobinBC, DirichletBC, FE);
+		//			},
+		//			transfer
+		//		};
+		//		auto& A = MG.A();
+		//		auto& b = MG.b();
+		//	logger.end();
+		//	logger.beg("solve");
+		//		x = KrylovSolvers[KrylovSolversIndex]([&](vector<double> const & x) {
+		//			vector<double> y(A.getOrder());
+		//			logger.mute = true;
+		//			for (Index i = 0; i < numbOfInnerIterations; ++i)
+		//				y = MG(numbOfMeshLevels, x, y, smoother, gamma);
+		//			logger.mute = false;
+		//			return y;
+		//		}, A, b, shuffle(A.getOrder()), maxNumbOfIterations, eps, stop, i_log, 15);
+		//	logger.end();
+		//	// save stdin commands
+		//	logger.exp("pkrylov.txt");
+		//}
+		/*else*/ if (method == 2) {
 			using namespace Krylov;
 			auto dummy = CG;
 			vector<decltype(dummy)> KrylovSolvers { CG, BiCGStab };
@@ -258,7 +258,7 @@ int main() {
 			logger.end();
 			logger.beg("assemble system");
 				Index t = 0;
-				auto system = assembleSystem(PDE, Omega, RobinBC, DirichletBC, FE, t);
+				auto system = assembleSystem(PDE, Omega, RobinBC, DirichletBC, FE, boost::none, t);
 				logger.buf << "numb of elements = " << t;
 				logger.log();
 				auto& A = get<0>(system);
@@ -270,56 +270,56 @@ int main() {
 			// save stdin commands
 			logger.exp("krylov.txt");
 		}
-		else if (method == 3) {
-			logger.beg("setup solver data");
-			vector<string> smoothersNames{ "relaxed Jacobi", "forward SOR", "backward SOR", "SSOR" };
-			using namespace Smoothers;
-			auto dummy = relaxedJacobi;
-			vector<decltype(dummy)> smoothers{ relaxedJacobi, forwSOR, backSOR, SSOR };
-			auto smoothersIndex = logger.opt("choose smoother", smoothersNames);
-			double omega;
-			logger.inp("relaxation parameter", omega);
-			logger.end();
-			logger.beg("refine mesh");
-			Omega.refine(numbOfMeshLevels);
-			logger.end();
-			logger.beg("assemble system");
-			auto system = assembleSystem(PDE, Omega, RobinBC, DirichletBC, FE);
-			auto& A = get<0>(system);
-			auto& b = get<1>(system);
-			logger.end();
-			if (logger.opt("where to log", { "stdout", "save to file" })) {
-				logger.beg("smooth");
-					x = shuffle(A.getOrder());
-					vector<decltype(x)> residuals;
-					residuals.reserve(maxNumbOfIterations + 1);
-					residuals.emplace_back(A * x - b);
-					logger.mute = true;
+		//else if (method == 3) {
+		//	logger.beg("setup solver data");
+		//	vector<string> smoothersNames{ "relaxed Jacobi", "forward SOR", "backward SOR", "SSOR" };
+		//	using namespace Smoothers;
+		//	auto dummy = relaxedJacobi;
+		//	vector<decltype(dummy)> smoothers{ relaxedJacobi, forwSOR, backSOR, SSOR };
+		//	auto smoothersIndex = logger.opt("choose smoother", smoothersNames);
+		//	double omega;
+		//	logger.inp("relaxation parameter", omega);
+		//	logger.end();
+		//	logger.beg("refine mesh");
+		//	Omega.refine(numbOfMeshLevels);
+		//	logger.end();
+		//	logger.beg("assemble system");
+		//	auto system = assembleSystem(PDE, Omega, RobinBC, DirichletBC, FE);
+		//	auto& A = get<0>(system);
+		//	auto& b = get<1>(system);
+		//	logger.end();
+		//	if (logger.opt("where to log", { "stdout", "save to file" })) {
+		//		logger.beg("smooth");
+		//			x = shuffle(A.getOrder());
+		//			vector<decltype(x)> residuals;
+		//			residuals.reserve(maxNumbOfIterations + 1);
+		//			residuals.emplace_back(A * x - b);
+		//			logger.mute = true;
 
-					//std::ofstream output("Mathematica/postprocessing/mg/vcycle.dat"/*, std::ios_base::app*/);
-					//import(x, oPath + "shuffled guesses/x_0.dat");
-					//output << x << '\n';
+		//			//std::ofstream output("Mathematica/postprocessing/mg/vcycle.dat"/*, std::ios_base::app*/);
+		//			//import(x, oPath + "shuffled guesses/x_0.dat");
+		//			//output << x << '\n';
 
-					for (Index i = 1; i <= maxNumbOfIterations; ++i) {
-						x = smoothers[smoothersIndex](A, b, x, omega, 1, eps, stop, 0);
+		//			for (Index i = 1; i <= maxNumbOfIterations; ++i) {
+		//				x = smoothers[smoothersIndex](A, b, x, omega, 1, eps, stop, 0);
 
-						//output << x << '\n';
-						//logger.mute = false;
-						//logger.buf << norm(b - A * x) / norm(residuals.front());
-						//logger.log();
-						//logger.mute = true;
+		//				//output << x << '\n';
+		//				//logger.mute = false;
+		//				//logger.buf << norm(b - A * x) / norm(residuals.front());
+		//				//logger.log();
+		//				//logger.mute = true;
 
-						residuals.emplace_back(b - A * x);
-					}
-					logger.mute = false;
-				logger.end();
-				logger.beg("export residuals history");
-					export(residuals, oPath + "residuals history/" + smoothersNames[smoothersIndex] + ".dat");
-				logger.end();
-			}
-			else x = smoothers[smoothersIndex](A, b, shuffle(A.getOrder()), omega, maxNumbOfIterations, eps, stop, i_log);
-			logger.exp("smoothers.txt");
-		}
+		//				residuals.emplace_back(b - A * x);
+		//			}
+		//			logger.mute = false;
+		//		logger.end();
+		//		logger.beg("export residuals history");
+		//			export(residuals, oPath + "residuals history/" + smoothersNames[smoothersIndex] + ".dat");
+		//		logger.end();
+		//	}
+		//	else x = smoothers[smoothersIndex](A, b, shuffle(A.getOrder()), omega, maxNumbOfIterations, eps, stop, i_log);
+		//	logger.exp("smoothers.txt");
+		//}
 		logger.beg("export soln vector");
 			export(x, oPath + "x.dat");
 		logger.end();

@@ -263,7 +263,7 @@ int main() {
 						return 1. / mu_roof;
 					};
 					logger.beg("assemble system");
-						auto system = assembleSystem(PoissonEqn, Omega, RobinBC, DirichletBC, FE, activeElementIndex);
+						auto system = assembleSystem(PoissonEqn, Omega, RobinBC, DirichletBC, FE, boost::none, activeElementIndex);
 						auto& A = get<0>(system);
 						auto& b = get<1>(system);
 					logger.end();

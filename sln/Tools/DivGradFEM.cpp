@@ -23,7 +23,7 @@ namespace FEM {
 			ScalarBoundaryCondition2D const & RobinBC,
 			ScalarBoundaryCondition2D const & DirichletBC,
 			TriangularScalarFiniteElement const & FE,
-			TriangularScalarFiniteElement const & T_FE,
+			boost::optional<TriangularScalarFiniteElement const &> T_FE,
 			boost::optional<Index&> activeElementIndex
 		) {
 			// logger
@@ -40,9 +40,9 @@ namespace FEM {
 				[](double const & s) -> Node2D { return { .5 * (1. + s), 0. }; }
 			};
 			// shapes for transformation T
-			auto T_masterShapes = T_FE.getShapesOf(master);
-			auto T_masterSGrads = T_FE.getSGradsOf(master);
-			auto T_l= T_masterShapes.size();
+			auto T_masterShapes = T_FE.value_or(FE).getShapesOf(master);
+			auto T_masterSGrads = T_FE.value_or(FE).getSGradsOf(master);
+			auto T_l = T_masterShapes.size();
 				// T_FE.value_or(Triangle_P1_Lagrange::instance()).getShapesOf(master);
 			// shapes of FE
 			auto masterShapes = FE.getShapesOf(master);
@@ -87,7 +87,7 @@ namespace FEM {
 			std::vector<Node2D> DOFsNodes;		  
 
 			// mapping from master element to physical ″
-			auto T = [&](Node2D const & masterNode)->Node2D {
+			auto T = [&](Node2D const & p)->Node2D {
 				std::vector<double> sValues(T_l);
 				std::vector<double> X(T_l), Y(T_l);
 				for (LocalIndex i = 0; i < T_l; i++)
