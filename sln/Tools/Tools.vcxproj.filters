@@ -75,9 +75,6 @@
     <ClInclude Include="CurvilinearEdge.hpp">
       <Filter>Meshes\2D</Filter>
     </ClInclude>
-    <ClInclude Include="Curve.hpp">
-      <Filter>Meshes\2D</Filter>
-    </ClInclude>
     <ClInclude Include="DiffusionReactionEqn.hpp">
       <Filter>PDEs</Filter>
     </ClInclude>

@@ -1,0 +1,430 @@
+(* Content-type: application/vnd.wolfram.mathematica *)
+
+(*** Wolfram Notebook File ***)
+(* http://www.wolfram.com/nb *)
+
+(* CreatedBy='Mathematica 10.4' *)
+
+(*CacheID: 234*)
+(* Internal cache information:
+NotebookFileLineBreakTest
+NotebookFileLineBreakTest
+NotebookDataPosition[       158,          7]
+NotebookDataLength[     15105,        420]
+NotebookOptionsPosition[     14605,        398]
+NotebookOutlinePosition[     14952,        413]
+CellTagsIndexPosition[     14909,        410]
+WindowFrame->Normal*)
+
+(* Beginning of Notebook Content *)
+Notebook[{
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{"dir", "=", 
+   RowBox[{"NotebookDirectory", "[", "]"}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"SetDirectory", "@", "dir"}], ";"}]}], "Input",
+ CellChangeTimes->{{3.6925426383249607`*^9, 3.69254267538757*^9}, 
+   3.692726394906457*^9, {3.694707139713234*^9, 3.694707147153205*^9}, {
+   3.6947220754921827`*^9, 3.694722075912966*^9}}],
+
+Cell[BoxData[{
+ RowBox[{"NotebookEvaluate", "[", 
+  RowBox[{
+  "dir", "<>", "\"\<../../../Tools/Mathematica/triangulation.nb\>\""}], 
+  "]"}], "\[IndentingNewLine]", 
+ RowBox[{"NotebookEvaluate", "[", 
+  RowBox[{
+  "dir", "<>", "\"\<../../../Tools/Mathematica/FEinterpolants.nb\>\""}], 
+  "]"}]}], "Input"],
+
+Cell[CellGroupData[{
+
+Cell["Mesh", "Section",
+ CellChangeTimes->{{3.69468227484583*^9, 3.6946822753791695`*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"\[ScriptCapitalT]", "=", 
+   RowBox[{"import", "@", "\"\<mesh.ntr\>\""}]}], ";"}]], "Input",
+ CellChangeTimes->{{3.692542620290378*^9, 3.69254263653179*^9}, {
+   3.692542793537413*^9, 3.692542799609906*^9}, 3.6925454887292323`*^9, {
+   3.692608514420221*^9, 3.6926085158987026`*^9}, {3.694682378002254*^9, 
+   3.694682380143171*^9}, {3.6946840109820037`*^9, 3.6946840358213243`*^9}, {
+   3.694684133803075*^9, 3.694684139632781*^9}, 3.700211689668466*^9, 
+   3.7002162575283737`*^9}],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"highlight", "[", 
+  RowBox[{"\[ScriptCapitalT]", ",", 
+   RowBox[{"{", "}"}], ",", "0"}], "]"}]], "Input",
+ CellChangeTimes->{{3.6925428084918723`*^9, 3.692542813704838*^9}, {
+   3.6925440881105137`*^9, 3.69254409369921*^9}, {3.6925454943803787`*^9, 
+   3.6925454981062503`*^9}, {3.6926085810689716`*^9, 
+   3.6926085812185755`*^9}, {3.6946822493102756`*^9, 
+   3.6946822533917837`*^9}, {3.694699821198291*^9, 3.6946998250990047`*^9}, {
+   3.698416931810932*^9, 3.6984169400551167`*^9}, {3.700208859603945*^9, 
+   3.700208883300023*^9}, {3.7002089699136667`*^9, 3.7002089720137854`*^9}, 
+   3.700216270592803*^9}],
+
+Cell[BoxData[
+ GraphicsBox[
+  TagBox[
+   DynamicModuleBox[{Typeset`mesh = HoldComplete[
+     MeshRegion[CompressedData["
+1:eJyNkU0KwjAQRoM38SQ5gx5BcO0VejOz7EIkiy6CdBE0lEpL7RFUnInkoeJA
+KW9+vnyTLDe79XZhjFk9vuf/FfPe/BWzLf+MKPkoej2YfbkOPe0PkvfCHpws
+8tALyGt/L/MtWMN/uQ8Pnz38TPZ3H7lF/wQ9rQfhCG6wZ4Rei3qDfQ96L8I1
++CTshB2Y78H6gPoV9c5iDv6/5fX+sn9b+lWuMT+AO+jSXwCfcf86H1FXrtGv
+5+o7ZT34cag79AXkI/Yd5bwjWCN95uqCfRl6nkbAfoyx1KtuZX81QC9hL55D
+XbLuKzp5n4R+0X/7sernDkc9q30=
+      "], {
+       Polygon[CompressedData["
+1:eJwNwweSmgAAAEBzBgtVBRu9I1V6x4oodvOE+0C+kKfndmaF779/vr86nc6/
+n92fJEUzLMcLoiQrqrbSDdOynbXrkX5AhREdJ0yasXnBlRW/2Qq7WIz20uEo
+176SnNTmrF3CVdDqx6txK82itu4P+5k61Wv9btw297IPSFMQScMUiXAsynAY
+y4CiMOLFscBDijyRFFyW4JVGqKuppiKmgevmzNBRx55bzsK2MM9drj3CXQOB
+D5MB5JO9KASpCA6pfhJDdALG9CBLMSZDUwYocoQtsJwdViXKVUjJ/dpuxvx2
+tOH78Q4U4vFO6O2jkbgHI/HreMCl4+QgAX4NyT5ey/1TMlFOUKJ0z81UPRON
+2gsvsBZOLxrQBsSqhYPV1/U406/4UR+WN8QoZzcDqAvcrJHC/P24L6zH/G4N
+0idqp4unPXxVc+eFVk63eRPrZvleA3mLuTnRuoNPtvQ+WOb9B8NVQAk=
+        "]]}, 
+      Properties -> {{
+         1, {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 
+          19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 
+          36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 
+          53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 
+          70, 71, 72, 73, 74, 75, 76, 77, 78, 79, 80, 81, 82, 83, 84, 85, 86, 
+          87, 88, 89, 90, 91, 92, 93, 94, 95, 96, 97, 98, 99, 100, 101, 102, 
+          103, 104, 105, 106, 107, 108, 109, 110, 111, 112, 113, 114, 115, 
+          116, 117, 118, 119, 120, 121, 122, 123, 124, 125, 126, 127, 128, 
+          129, 130, 131, 132, 133, 134, 135, 136, 137, 138, 139, 140, 141, 
+          142, 143, 144, 145, 146, 147, 148, 149, 150, 151, 152, 153, 154, 
+          155, 156, 157, 158, 159, 160, 161, 162, 163, 164, 165, 166, 167, 
+          168, 169, 170, 171, 172, 173, 174, 175, 176, 177, 178, 179, 180, 
+          181, 182, 183, 184, 185, 186, 187, 188, 189, 190, 191, 192, 193, 
+          194, 195, 196, 197, 198, 199, 200, 201, 202, 203, 204, 205, 206, 
+          207, 208}} -> (MeshCellStyle -> {
+           GrayLevel[0], 
+           GrayLevel[0], 
+           GrayLevel[0], 
+           GrayLevel[0], 
+           GrayLevel[0], 
+           GrayLevel[0], 
+           GrayLevel[0], 
+           GrayLevel[0], 
+           GrayLevel[0], 
+           GrayLevel[0], 
+           GrayLevel[0], 
+           GrayLevel[0], 
+           GrayLevel[0], 
+           GrayLevel[0], 
+           GrayLevel[0], 
+           GrayLevel[0], 
+           GrayLevel[0], 
+           GrayLevel[0], 
+           GrayLevel[0], 
+           GrayLevel[0], 
+           GrayLevel[0], 
+           GrayLevel[0], 
+           GrayLevel[0], 
+           GrayLevel[0], 
+           GrayLevel[0], 
+           GrayLevel[0], 
+           GrayLevel[0], 
+           GrayLevel[0], 
+           GrayLevel[0], 
+           GrayLevel[0], 
+           GrayLevel[0], 
+           GrayLevel[0], 
+           GrayLevel[0], 
+           GrayLevel[0], 
+           GrayLevel[0], 
+           GrayLevel[0], 
+           GrayLevel[0], 
+           GrayLevel[0], 
+           GrayLevel[0], 
+           GrayLevel[0], 
+           GrayLevel[0], 
+           GrayLevel[0], 
+           GrayLevel[0], 
+           GrayLevel[0], 
+           GrayLevel[0], 
+           GrayLevel[0], 
+           GrayLevel[0], 
+           GrayLevel[0], 
+           GrayLevel[0], 
+           GrayLevel[0], 
+           GrayLevel[0], 
+           GrayLevel[0], 
+           GrayLevel[0], 
+           GrayLevel[0], 
+           GrayLevel[0], 
+           GrayLevel[0], 
+           GrayLevel[0], 
+           GrayLevel[0], 
+           GrayLevel[0], 
+           GrayLevel[0], 
+           GrayLevel[0], 
+           GrayLevel[0], 
+           GrayLevel[0], 
+           GrayLevel[0], 
+           GrayLevel[0], 
+           GrayLevel[0], 
+           GrayLevel[0], 
+           GrayLevel[0], 
+           GrayLevel[0], 
+           GrayLevel[0], 
+           GrayLevel[0], 
+           GrayLevel[0], 
+           GrayLevel[0], 
+           GrayLevel[0], 
+           GrayLevel[0], 
+           GrayLevel[0], 
+           GrayLevel[0], 
+           GrayLevel[0], 
+           GrayLevel[0], 
+           GrayLevel[0], 
+           GrayLevel[0], 
+           GrayLevel[0], 
+           GrayLevel[0], 
+           GrayLevel[0], 
+           GrayLevel[0], 
+           GrayLevel[0], 
+           GrayLevel[0], 
+           GrayLevel[0], 
+           GrayLevel[0], 
+           GrayLevel[0], 
+           GrayLevel[0], 
+           GrayLevel[0], 
+           GrayLevel[0], 
+           GrayLevel[0], 
+           GrayLevel[0], 
+           GrayLevel[0], 
+           GrayLevel[0], 
+           GrayLevel[0], 
+           GrayLevel[0], 
+           GrayLevel[0], 
+           GrayLevel[0], 
+           GrayLevel[0], 
+           GrayLevel[0], 
+           GrayLevel[0], 
+           GrayLevel[0], 
+           GrayLevel[0], 
+           GrayLevel[0], 
+           GrayLevel[0], 
+           GrayLevel[0], 
+           GrayLevel[0], 
+           GrayLevel[0], 
+           GrayLevel[0], 
+           GrayLevel[0], 
+           GrayLevel[0], 
+           GrayLevel[0], 
+           GrayLevel[0], 
+           GrayLevel[0], 
+           GrayLevel[0], 
+           GrayLevel[0], 
+           GrayLevel[0], 
+           GrayLevel[0], 
+           GrayLevel[0], 
+           GrayLevel[0], 
+           GrayLevel[0], 
+           GrayLevel[0], 
+           GrayLevel[0], 
+           GrayLevel[0], 
+           GrayLevel[0], 
+           GrayLevel[0], 
+           GrayLevel[0], 
+           GrayLevel[0], 
+           GrayLevel[0], 
+           GrayLevel[0], 
+           GrayLevel[0], 
+           GrayLevel[0], 
+           GrayLevel[0], 
+           GrayLevel[0], 
+           GrayLevel[0], 
+           GrayLevel[0], 
+           GrayLevel[0], 
+           GrayLevel[0], 
+           GrayLevel[0], 
+           GrayLevel[0], 
+           GrayLevel[0], 
+           GrayLevel[0], 
+           GrayLevel[0], 
+           GrayLevel[0], 
+           GrayLevel[0], 
+           GrayLevel[0], 
+           GrayLevel[0], 
+           GrayLevel[0], 
+           GrayLevel[0], 
+           GrayLevel[0], 
+           GrayLevel[0], 
+           GrayLevel[0], 
+           GrayLevel[0], 
+           GrayLevel[0], 
+           GrayLevel[0], 
+           GrayLevel[0], 
+           GrayLevel[0], 
+           GrayLevel[0], 
+           GrayLevel[0], 
+           GrayLevel[0], 
+           GrayLevel[0], 
+           GrayLevel[0], 
+           GrayLevel[0], 
+           GrayLevel[0], 
+           GrayLevel[0], 
+           GrayLevel[0], 
+           GrayLevel[0], 
+           GrayLevel[0], 
+           GrayLevel[0], 
+           GrayLevel[0], 
+           GrayLevel[0], 
+           GrayLevel[0], 
+           GrayLevel[0], 
+           GrayLevel[0], 
+           GrayLevel[0], 
+           GrayLevel[0], 
+           GrayLevel[0], 
+           GrayLevel[0], 
+           GrayLevel[0], 
+           GrayLevel[0], 
+           GrayLevel[0], 
+           GrayLevel[0], 
+           GrayLevel[0], 
+           GrayLevel[0], 
+           GrayLevel[0], 
+           GrayLevel[0], 
+           GrayLevel[0], 
+           GrayLevel[0], 
+           GrayLevel[0], 
+           GrayLevel[0], 
+           GrayLevel[0], 
+           GrayLevel[0], 
+           GrayLevel[0], 
+           GrayLevel[0], 
+           GrayLevel[0], 
+           GrayLevel[0], 
+           GrayLevel[0], 
+           GrayLevel[0], 
+           GrayLevel[0], 
+           GrayLevel[0], 
+           GrayLevel[0], 
+           GrayLevel[0], 
+           GrayLevel[0], 
+           GrayLevel[0], 
+           GrayLevel[0]}), {1, Default} -> (MeshCellStyle -> Automatic)}, 
+      Method -> {
+       "EliminateUnusedCoordinates" -> True, "DeleteDuplicateCoordinates" -> 
+        Automatic, "VertexAlias" -> Identity, "CheckOrientation" -> Automatic,
+         "CoplanarityTolerance" -> Automatic, "CheckIntersections" -> 
+        Automatic, "BoundaryNesting" -> Automatic, "SeparateBoundaries" -> 
+        False, "TJunction" -> Automatic, "PropagateMarkers" -> True, 
+        "ZeroTest" -> Automatic, "Hash" -> 3471993009904496502}, {
+      PlotRange -> All, PlotTheme -> "Lines"}]]}, 
+    TagBox[GraphicsComplexBox[CompressedData["
+1:eJyNkU0KwjAQRoM38SQ5gx5BcO0VejOz7EIkiy6CdBE0lEpL7RFUnInkoeJA
+KW9+vnyTLDe79XZhjFk9vuf/FfPe/BWzLf+MKPkoej2YfbkOPe0PkvfCHpws
+8tALyGt/L/MtWMN/uQ8Pnz38TPZ3H7lF/wQ9rQfhCG6wZ4Rei3qDfQ96L8I1
++CTshB2Y78H6gPoV9c5iDv6/5fX+sn9b+lWuMT+AO+jSXwCfcf86H1FXrtGv
+5+o7ZT34cag79AXkI/Yd5bwjWCN95uqCfRl6nkbAfoyx1KtuZX81QC9hL55D
+XbLuKzp5n4R+0X/7sernDkc9q30=
+      "], 
+      {Hue[0.6, 0.3, 0.95], EdgeForm[Hue[0.6, 0.3, 0.75]], 
+       LineBox[CompressedData["
+1:eJxNlOtSkzEURaOoYK+UtnIrlBYKhQIFRKyIiIjc74/gA8ir8khmT9aeyY81
+rDkJfMnZOXT+vjz/extCeI3o51xkHlqg2kJkEdqg2lKkA11QbTmyAj1QbTWy
+Bn1QbT2yAQNQbTOyBdug2jCyA7sw5Kx78Bl8p334Ar7jAXyFFncbwTdwDw7h
+O7gnR/AD2vTiGH6Ce3YC/r576PP9gi69O4Xf4B6fge/tnvs+f6BHr8/hApzJ
+JbhPzsh9vII+2fgc1+AMb8D9cKbul887IMtbuANnfg/OwW/A/X0A1ZT9I/h+
+fiM+t3Pzm3GuT6BaIaT85/FiSO+nhZdYm8PL5LyIV0J6J228ytoCXiDPDj4Z
+0nvo4jXWlvAiua3gU+Tew+usLeMl8lnDG+Tbx5usreJlctjA6+Q4wD+xto5X
+6PcWPk1e2/gMa5t4lb7u4LPksos3WBvi70N6a3uZl7i7ah9Cmo39zAvsUW08
+pDd/kHmRPapNkPko8yp3GfFNvdHDzMvsUe1jSG/vKPMKe1R7E9KMH2deI1vV
+TjhXDdcdPOfao//BmqnTzOtkrdoZ56rj+lueb+0ZC2mmzzNv0lvVLvlmE9ff
+8nw0+KbnWXnfcE/7u5Bm9DZz5TxN7Z6+zuD6Xc+p9jxyrllcez1/qv0HrAlF
+sg==
+        "]], 
+       {GrayLevel[0], LineBox[CompressedData["
+1:eJwVxVeWmgAAAEBXFwsgqGCj995BKYINRLGbI+wFctUcKcnHvOF/fv/6abda
+rT///J8gSYoiaIZhWZrjeUHgREmSZVFRVU1TdMMwTd2ybcexXM/zfZcIgjAk
+yCharUhqvY5jik6SNKWZLNtsGDbPi4LlttvdjuP3+/WaF1arw0EQj8eyFKWq
+CgJJjuPTSVbq+nxW1MslilQtDJtG08vyetWN2y3PDXOzqSrTut8fD8t+PpPE
+dori9XLc97uuXa9psszz0/Tz8UGKBCGCgmCSgIcsM0RoFkEZGgUFHhxxwmjM
+c2NIlqCJKE8wScRgTYVxRcOnqjIdmsYQ001sZugzxLGRueXMF7a1QH0PXbr+
+EvdcHAgDIIShoLuKuisQjnrxuhdD4LqfJv0URRJgkwGbIZoNinxQIMP8a7f9
+2o1H231vvO8eDqN2eWyX2ORYAVjVO50mnXPdOU/x+tKdXoCmwdvX6+w2mN2+
+H/fvx2J+f/YXz8HrNX93lu/+57P8Cy6WRaY=
+         "]]}}],
+     MouseAppearanceTag["LinkHand"]],
+    AllowKernelInitialization->False],
+   "MeshGraphics",
+   AutoDelete->True,
+   Editable->False,
+   Selectable->False],
+  DefaultBaseStyle->{
+   "Graphics", FrontEnd`GraphicsHighlightColor -> Hue[0.1, 1, 0.7]},
+  PlotRange->All]], "Output",
+ CellChangeTimes->{
+  3.694721918425942*^9, 3.694722090494751*^9, 3.694722779907183*^9, 
+   3.6947969403615203`*^9, 3.694797425279714*^9, 3.6947975450622654`*^9, 
+   3.695535612816327*^9, 3.6955598163046603`*^9, 3.695564149645526*^9, 
+   3.695566470676746*^9, 3.695574058720353*^9, 3.6955741175029507`*^9, 
+   3.6956503258827624`*^9, 3.695652375358136*^9, 3.69565619352789*^9, 
+   3.6956567857315454`*^9, 3.695659198108056*^9, 3.695660390697136*^9, 
+   3.695660641109889*^9, 3.695729051898242*^9, 3.6957293526411457`*^9, 
+   3.695730278747594*^9, 3.695730738422519*^9, 3.695730935348404*^9, 
+   3.6957310118287516`*^9, 3.6957318010936937`*^9, 3.69573218219853*^9, 
+   3.6957322615014625`*^9, 3.695732343204186*^9, 3.6957324440731554`*^9, 
+   3.695733027730075*^9, 3.6957331139806747`*^9, 3.6957332253007655`*^9, 
+   3.695733470565708*^9, 3.6957335753448644`*^9, 3.695733714452658*^9, 
+   3.695734147388605*^9, 3.6957342804858713`*^9, 3.695734507220109*^9, 
+   3.6957345799823256`*^9, 3.695734773643916*^9, 3.6957351847828646`*^9, 
+   3.6957356410499287`*^9, 3.695735719469081*^9, 3.6957360576156425`*^9, 
+   3.695736105074569*^9, 3.695736176065422*^9, 3.6957363266307793`*^9, 
+   3.695804604516692*^9, 3.695806733982366*^9, 3.695813299583197*^9, 
+   3.6958134544065423`*^9, 3.695887804564625*^9, 3.6958880217811737`*^9, 
+   3.695888711185619*^9, 3.695888793191484*^9, 3.6958888690338883`*^9, 
+   3.695888982421359*^9, 3.695889067624421*^9, 3.6967780488619566`*^9, 
+   3.6977763551058917`*^9, 3.697816610309556*^9, 3.6978225169960585`*^9, 
+   3.697826639346922*^9, {3.6984169283275433`*^9, 3.69841694163663*^9}, {
+   3.700208841029607*^9, 3.7002088696537232`*^9}, 3.7002089732831726`*^9, 
+   3.7002119493379574`*^9, 3.700213544081958*^9, 3.700215692068373*^9, 
+   3.700215762461255*^9, 3.7002161993448253`*^9, {3.700216261756277*^9, 
+   3.7002162714278517`*^9}}]
+}, Open  ]]
+}, Open  ]]
+},
+WindowSize->{775, 561},
+WindowMargins->{{287, Automatic}, {Automatic, 54}},
+FrontEndVersion->"10.4 for Microsoft Windows (64-bit) (February 25, 2016)",
+StyleDefinitions->"Default.nb"
+]
+(* End of Notebook Content *)
+
+(* Internal cache information *)
+(*CellTagsOutline
+CellTagsIndex->{}
+*)
+(*CellTagsIndex
+CellTagsIndex->{}
+*)
+(*NotebookFileOutline
+Notebook[{
+Cell[558, 20, 383, 8, 52, "Input"],
+Cell[944, 30, 306, 8, 52, "Input"],
+Cell[CellGroupData[{
+Cell[1275, 42, 90, 1, 63, "Section"],
+Cell[1368, 45, 518, 9, 31, "Input"],
+Cell[CellGroupData[{
+Cell[1911, 58, 637, 11, 31, "Input"],
+Cell[2551, 71, 12026, 323, 202, "Output"]
+}, Open  ]]
+}, Open  ]]
+}
+]
+*)
+
+(* End of internal cache information *)
+

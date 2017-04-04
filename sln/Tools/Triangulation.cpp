@@ -8,11 +8,17 @@ bool Triangulation::_makeNeighbors(Index t1, Index t2) {
 	if (u.size() > 2) // triangles share… more than 2 nodes?
 		throw std::logic_error("invalid mesh: check out tringles #" + std::to_string(t1) + " and #" + std::to_string(t2));
 	else if (u.size() == 2) {
-		(*_neighbors)[t1][excludeIndicies(u[0][0], u[1][0])] = t2;
-		(*_neighbors)[t2][excludeIndicies(u[0][1], u[1][1])] = t1;
+		_neighbors[t1][excludeIndicies(u[0][0], u[1][0])] = t2;
+		_neighbors[t2][excludeIndicies(u[0][1], u[1][1])] = t1;
 		return true; // we are gold
 	}
 	return false;
+}
+
+SignedIndex Triangulation::_neighbor2edge(SignedIndex i) const {
+	// convert element index to
+	// index in _edges vector
+	return - i - 2;
 }
 
 Triangulation& Triangulation::import(std::istream& from) {
@@ -26,23 +32,17 @@ Triangulation& Triangulation::import(std::istream& from) {
 		from >> _nodes >> _elements;
 	else if (meshType == "NTN") { // nodes, triangles, and neighbors
 		from >> _nodes >> _elements;
-		std::vector<std::array<SignedIndex, 3>> neighbors(t);
-		from >> neighbors;
-		_neighbors.emplace(neighbors);
+		_neighbors.resize(t);
+		from >> _neighbors;
 	}
 	else if (meshType == "NTR") { // nodes, triangles, and ribs
-		Index r;
-		decltype(_ribs->second) ribs(t);
-		from >> r >> _nodes >> _elements >> ribs;
-		_ribs.emplace(std::make_pair(r, ribs));
+		_ribs.second.resize(t);
+		from >> _ribs.first >> _nodes >> _elements >> _ribs.second;
 	}
 	else if (meshType == "NTNR") { // nodes, triangles, neighbors, and ribs
-		Index r;
-		std::vector<std::array<SignedIndex, 3>> neighbors(t);
-		decltype(_ribs->second) ribs(t);
-		from >> r >> _nodes >> _elements >> neighbors >> ribs;
-		_neighbors.emplace(neighbors);
-		_ribs.emplace(std::make_pair(r, ribs));
+		_neighbors.resize(t);
+		_ribs.second.resize(t);
+		from >> _ribs.first >> _nodes >> _elements >> _neighbors >> _ribs.second;
 	}
 	else throw std::invalid_argument("unknown mesh type");
 	return *this;
@@ -54,11 +54,11 @@ void Triangulation::export(std::ostream& to, Parameters const & params) const {
 	if (format == "NT") // nodes and triangles
 		to << "NT\n" << numbOfNodes() << ' ' << numbOfElements() << '\n' << _nodes << _elements;
 	else if (format == "NTN") // nodes, triangles, and neighbors
-		to << "NTN\n" << numbOfNodes() << ' ' << numbOfElements() << '\n' << _nodes << _elements << *_neighbors;
+		to << "NTN\n" << numbOfNodes() << ' ' << numbOfElements() << '\n' << _nodes << _elements << _neighbors;
 	else if (format == "NTNR") // nodes, triangles, neighbors, and ribs
-		to << "NTNR\n" << numbOfNodes() << ' ' << numbOfElements() << ' ' << numbOfRibs() << '\n' << _nodes << _elements << *_neighbors << (*_ribs).second;
+		to << "NTNR\n" << numbOfNodes() << ' ' << numbOfElements() << ' ' << numbOfRibs() << '\n' << _nodes << _elements << _neighbors << _ribs.second;
 	else if (format == "NTR") // nodes, triangles, and ribs
-		to << "NTR\n" << numbOfNodes() << ' ' << numbOfElements() << ' ' << numbOfRibs() << '\n' << _nodes << _elements << (*_ribs).second;
+		to << "NTR\n" << numbOfNodes() << ' ' << numbOfElements() << ' ' << numbOfRibs() << '\n' << _nodes << _elements << _ribs.second;
 	else
 		throw std::invalid_argument("unknown mesh format: try NT, NTN, NTNR, or NTR");
 }
@@ -96,39 +96,40 @@ Triangulation& Triangulation::refine(Index numbOfRefinements) {
 				if (0 <= neighborsIndicies[j] && neighborsIndicies[j] < i) redNodesIndicies[j] = getRedNodeIndexFrom(neighborsIndicies[j]);
 				else {
 					redNodesIndicies[j] = numbOfNodes();
-					if (neighborsIndicies[j] < -1) {
-						//m = _neighbor2edge(t[j]);
-						//_nodes.push_back(_curves[_curvilinearEdges[m].curveIndex()](_curvilinearEdges[m].thetaMiddle()));
-						//_curvilinearEdges.push_back(CurvilinearEdge(_curvilinearEdges[m].thetaMiddle(), _curvilinearEdges[m].thetaEnd(), _curvilinearEdges[m].curveIndex()));
-						//_curvilinearEdges[m].thetaEnd() = _curvilinearEdges[m].thetaMiddle();
+					_nodes.push_back(getRibNode(i, j, .5));
+					SignedIndex edgeIndex = _neighbor2edge(neighborsIndicies[j]);
+					if (edgeIndex > -1) {
+						_edges.push_back({ _edges[edgeIndex].thetaMiddle(), _edges[edgeIndex].thetaEnd(), _edges[edgeIndex].curveIndex() });
+						_edges[edgeIndex].thetaEnd() = _edges[edgeIndex].thetaMiddle();
 					}
-					else _nodes.push_back(midNodes(getElement(i))[j]);
 				}
 			_elements[i] = redNodesIndicies;
 			SignedIndex dummy = numbOfElements();
-			(*_neighbors)[i] = { dummy, dummy + 1, dummy + 2 };
+			_neighbors[i] = { dummy, dummy + 1, dummy + 2 };
 			_elements.insert(_elements.end(), {
 				{ nodesIndicies[0], redNodesIndicies[2], redNodesIndicies[1] },
 				{ nodesIndicies[1], redNodesIndicies[0], redNodesIndicies[2] },
 				{ nodesIndicies[2], redNodesIndicies[1], redNodesIndicies[0] }
 			});
 			dummy = i;
-			(*_neighbors).insert((*_neighbors).end(), {
+			_neighbors.insert(_neighbors.end(), {
 				{ dummy, neighborsIndicies[1], neighborsIndicies[2] },
 				{ dummy, neighborsIndicies[2], neighborsIndicies[0] },
 				{ dummy, neighborsIndicies[0], neighborsIndicies[1] }
 			});
-			//j = _curvilinearEdges.size();
-			//for (Index newTriangle : { _triangles.size() - 2, _triangles.size() - 3, _triangles.size() - 1 })
-			//	if (_triangles[newTriangle].neighbors(1) < -1)
-			//		_triangles[newTriangle].neighbors(1) = _neighbor2edge(--j);
+
+			Index j = _edges.size();
+			for (Index newTriangle : { _elements.size() - 2, _elements.size() - 3, _elements.size() - 1 })
+				if (_neighbors[newTriangle][1] < -1)
+					_neighbors[newTriangle][1] = _neighbor2edge(--j);
+
 			for (Index j : { numbOfElements() - 3, numbOfElements() - 2, numbOfElements() - 1 })
 				for (Index m : redNeighborsIndicies)
 					_makeNeighbors(j, m);
 			redNeighborsIndicies.clear();
 		}
 	}
-	if (_ribs) enumerateRibs();
+	if (_ribs.first) enumerateRibs();
 	return *this;
 }
 
@@ -171,9 +172,6 @@ Triangulation& Triangulation::refine(Indicies& redList) {
 		// well, since this iteration
 		// _elements[i] sholuld not ever be added to redList again
 		greenMap[i = *redListIter] = 3; 
-
-		std::cout << i << '\n';
-
 		// we will need ith nodes and neighbors later
 		auto nodesIndicies = getNodesIndicies(i);
 		auto neighborsIndicies = getNeighborsIndicies(i);
@@ -191,7 +189,7 @@ Triangulation& Triangulation::refine(Indicies& redList) {
 			else {
 				redNodesIndicies[j] = numbOfNodes();
 				if (neighborsIndicies[j] < -1) {
-					//m = _neighbor2edge(t[j]);
+					//Index m = _neighbor2edge(t[j]);
 					//_nodes.push_back(_curves[_curvilinearEdges[m].curveIndex()](_curvilinearEdges[m].thetaMiddle()));
 					//_curvilinearEdges.push_back(CurvilinearEdge(_curvilinearEdges[m].thetaMiddle(), _curvilinearEdges[m].thetaEnd(), _curvilinearEdges[m].curveIndex()));
 					//_curvilinearEdges[m].thetaEnd() = _curvilinearEdges[m].thetaMiddle();
@@ -207,7 +205,7 @@ Triangulation& Triangulation::refine(Indicies& redList) {
 		_elements[i] = redNodesIndicies;
 		SignedIndex dummy = numbOfElements();
 		// and its neighbors are known (3 other triangles) and will be added soon
-		(*_neighbors)[i] = { dummy, dummy + 1, dummy + 2 };
+		_neighbors[i] = { dummy, dummy + 1, dummy + 2 };
 		// now we have to add 3 other triangles
 		// you have to draw them not to get confused w/ numeration
 		// or just TRUST ME I AM A DOCTOR
@@ -217,7 +215,7 @@ Triangulation& Triangulation::refine(Indicies& redList) {
 			{ nodesIndicies[2], redNodesIndicies[1], redNodesIndicies[0] }
 		});
 		dummy = i;
-		(*_neighbors).insert((*_neighbors).end(), {
+		_neighbors.insert(_neighbors.end(), {
 			{ dummy, neighborsIndicies[1], neighborsIndicies[2] },
 			{ dummy, neighborsIndicies[2], neighborsIndicies[0] },
 			{ dummy, neighborsIndicies[0], neighborsIndicies[1] }
@@ -264,19 +262,19 @@ Triangulation& Triangulation::refine(Indicies& redList) {
 		// one of them we will add… 
 		_elements.push_back({ getNodesIndicies(i)[j], getNodesIndicies(i)[nextIndex(j)], redNodeIndex });
 		auto neighborIndex = getNeighborsIndicies(i)[nextIndex(nextIndex(j))];
-		(*_neighbors).push_back({ -1, (SignedIndex)i, neighborIndex });
+		_neighbors.push_back({ -1, (SignedIndex)i, neighborIndex });
 		// …(fix green neighbor)…
 		if (neighborIndex > -1)
 			_makeNeighbors(numbOfElements() - 1, neighborIndex);
 		// …and another one will take place of the old one
 		_elements[i] = { getNodesIndicies(i)[j], redNodeIndex, getNodesIndicies(i)[nextIndex(nextIndex(j))] };
-		(*_neighbors)[i] = { -1, getNeighborsIndicies(i)[nextIndex(j)], (SignedIndex)numbOfElements() - 1 };
+		_neighbors[i] = { -1, getNeighborsIndicies(i)[nextIndex(j)], (SignedIndex)numbOfElements() - 1 };
 		// finally, lets fix neighbors
 		_makeNeighbors(i, redNeighborsIndicies.front());
 		_makeNeighbors(numbOfElements() - 1, redNeighborsIndicies.back());
 		redNeighborsIndicies.clear();
 	}
-	if (_ribs) enumerateRibs();
+	if (_ribs.first) enumerateRibs();
 	return *this;
 }
 
@@ -339,7 +337,7 @@ std::vector<std::array<LocalIndex, 2>> Triangulation::getCommonNodesLocalIndicie
 }
 
 Triangulation& Triangulation::computeNeighbors() {
-	_neighbors.emplace(std::vector<std::array<SignedIndex, 3>>(numbOfElements(), { -1, -1, -1 }));
+	_neighbors = std::vector<std::array<SignedIndex, 3>>(numbOfElements(), { -1, -1, -1 });
 	for (Index i = 0; i < numbOfElements(); ++i)
 		for (Index j = i + 1; j < numbOfElements(); ++j)
 			_makeNeighbors(i, j);
@@ -362,7 +360,18 @@ Triangulation& Triangulation::enumerateRibs() {
 				numeration[i][j] = numeration[n][(*k)[0]];
 			}
 		}
-	std::pair<Index, std::vector<std::array<Index, 3>>> ribs { currentRibIndex, numeration };
-	_ribs.emplace(ribs);
+	_ribs = { currentRibIndex, numeration };
 	return *this;
+}
+
+Node2D Triangulation::getRibNode(Index e, LocalIndex r, double t) const {
+	SignedIndex edgeIndex = _neighbor2edge(getNeighborsIndicies(e)[r]);
+	if (edgeIndex < 0) {
+		auto
+			A  = getElement(e)[nextIndex(r)],
+			AB = getElement(e)[nextIndex(nextIndex(r))] - A;
+		return A + t * AB;
+	}
+	auto s = t * (_edges[edgeIndex].thetaEnd() - _edges[edgeIndex].thetaStart());
+	return _curves[_edges[edgeIndex].curveIndex()](_edges[edgeIndex].thetaStart() + s);
 }
