@@ -108,7 +108,11 @@ public:
 		auto T = dynamic_cast<Triangulation const *>(&mesh);
 		if (T) {
 			auto enodes = T->getElement(e);
-			auto mnodes = midNodes(enodes);
+			std::vector<Node2D> mnodes;
+			mnodes.reserve(3);
+			for (LocalIndex i : {0, 1, 2})
+				mnodes.emplace_back(T->getRibNode(e, i, .5));
+			
 			std::vector<Node2D> res;
 			res.reserve(6);
 			res.insert(res.end(), enodes.begin(), enodes.end());
