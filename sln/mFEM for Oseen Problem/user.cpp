@@ -13,6 +13,8 @@
 // Crouzeix–Raviart
 #include "Triangle_P1_CrouzeixRaviart.hpp"
 #include "Triangle_P0_Lagrange.hpp"
+// MINI
+// TODO . . .
 
 using namespace FEM;
 using namespace ProjectionSolvers;
@@ -23,7 +25,7 @@ using boost::get;
 auto shuffle(Index n) {
 	std::random_device rd;
 	std::mt19937 gen(rd());
-	std::uniform_real_distribution<> dis(-10., 10.);
+	std::uniform_real_distribution<> dis(-1., 1.);
 	vector<double> x(n);
 	for (auto& el : x) el = dis(gen);
 	return x;
@@ -56,7 +58,8 @@ int main() {
 				};
 				NeumannValue = [](Node2D const & p) -> Node2D {
 					return {
-						-4. * (-1. - (-3. + p[1]) * p[1] + p[0] * (2. + (-5. + p[1]) * p[1])),
+						// -4. * (-1. - (-3. + p[1]) * p[1] + p[0] * (2. + (-5. + p[1]) * p[1])),
+						13. / 3. + 4. * (-3. + p[1]) * p[1] - 4. * p[0] * (2. + (-5. + p[1]) * p[1]),
 						-8. * (-1 + p[1]) * p[1]
 					};
 				};
@@ -97,10 +100,12 @@ int main() {
 				[](Node2D const &) { return 0.; } // div free 
 			};
 			// BCs
-			VectorBoundaryCondition2D NeumannBC {
-				NeumannValue,
-				[](Node2D const & p) { return p[0] == 1.; }
-			}, DirichletBC { DirichletCondition };
+			VectorBoundaryCondition2D 
+				NeumannBC {
+					NeumannValue,
+					[](Node2D const & p) { return p[0] == 1.; }
+				}, 
+				DirichletBC { DirichletCondition };
 			logger.beg("import initial mesh");
 				Triangulation Omega;
 				Omega.import(iPath + "mesh.ntn");
@@ -111,8 +116,8 @@ int main() {
 			TriangularScalarFiniteElement
 				*velocityFE = &Triangle_P2_Lagrange::instance(),
 				*pressureFE = &Triangle_P1_Lagrange::instance();
+			// Crouzeix—Raviart family
 			if (FEPairIndex == 1) {
-				// Crouzeix—Raviart family
 				velocityFE = &Triangle_P1_CrouzeixRaviart::instance();
 				pressureFE = &Triangle_P0_Lagrange::instance();
 			};
@@ -127,10 +132,14 @@ int main() {
 			logger.inp("max numb of iterations", maxNumbOfIterations);
 			Index i_log;
 			logger.inp("log every nth iteration, n", i_log);
+			auto blockSymmetryType = (BlockSymmetryType)logger.opt("block symmetry type", { "symmetric (indefinite matrix)", "antisymmetric (positive definite matrix)" });		
 		logger.end();
+
+		// TODO: choose method
+
 		logger.beg("set inner solver data (BD-preconditioner)");
-			auto innerSolver = Smoothers::relaxedJacobi;
-			vector<decltype(innerSolver)> smoothers {
+			auto Jacobi = Smoothers::relaxedJacobi;
+			vector<decltype(Jacobi)> smoothers {
 				Smoothers::relaxedJacobi,
 				Smoothers::forwSOR,
 				Smoothers::backSOR,
@@ -151,42 +160,53 @@ int main() {
 			auto transfer = (TransferType)logger.opt("grid transfer type", { "canonical", "L2" });
 		logger.end();
 		logger.beg("build preconditioner");
-			Multigrid<CSlCMatrix<double>> MG {
-				*velocityFE, Omega, numbOfMeshLevels,
-				[&](Triangulation const & Omega) {
-					auto system = Mixed::assembleSystem(PDE, Omega, NeumannBC, DirichletBC, *velocityFE, *pressureFE);
-					return get<0>(system); // return Laplace block
-				},
-				transfer
-			};
-			DiffusionReactionEqn2D ReactionEqn {
-				[](Node2D const &) { return 0.; },
-				[](Node2D const &) { return 1.; },
-				[](Node2D const &) { return 0.; }
-			};
-			ScalarBoundaryCondition2D rBC { {
+			
+			//Omega.refine(numbOfMeshLevels);
+			
+			logger.beg("(1) MG for Laplace block");
+				Multigrid<CSlCMatrix<double>> MG {
+					*velocityFE, Omega, numbOfMeshLevels,
+					[&](Triangulation const & Omega) {
+						auto system = Mixed::assembleSystem(PDE, Omega, NeumannBC, DirichletBC, *velocityFE, *pressureFE);
+						return get<0>(system); // return Laplace block
+					},
+					transfer
+				};
+			logger.end();
+			logger.beg("(2) pressure mass matrix for Schur complement");
+				DiffusionReactionEqn2D ReactionEqn {
 					[](Node2D const &) { return 0.; },
+					[](Node2D const &) { return 1.; },
 					[](Node2D const &) { return 0.; }
-				},
-				[](Node2D const & p) { return true; }
-			}, dBC {
-				[](Node2D const &) { return 0.; }
-			};
-			auto pressureMassMatrix = get<0>(
-				DivGrad::assembleSystem(ReactionEqn, Omega, rBC, dBC, *pressureFE)
-			);
+				};
+				ScalarBoundaryCondition2D 
+					rBC { {
+							[](Node2D const &) { return 0.; },
+							[](Node2D const &) { return 0.; }
+						},
+						[](Node2D const & p) { return true; }
+					}, 
+					dBC { [](Node2D const &) { return 0.; } };
+				auto pressureMassMatrix = get<0>(
+					DivGrad::assembleSystem(ReactionEqn, Omega, rBC, dBC, *pressureFE)
+				);
+			logger.end();
 		logger.end();
 		logger.beg("assemble saddle point system");
 			auto system = Mixed::assembleSystem(PDE, Omega, NeumannBC, DirichletBC, *velocityFE, *pressureFE);
 			auto& A11 = get<0>(system), &A22 = A11;
 			auto& B1  = get<1>(system), &B2  = get<2>(system);
 			auto& b   = get<3>(system);
+			if (blockSymmetryType == BlockSymmetryType::antisymmetric)
+				for (Index i = 2 * A11.getOrder(); i < b.size(); ++i)
+					b[i] = -b[i];
 			SymmetricBlockMatrix<double> SaddlePointMatrix {
 				{ &A11, &A22, nullptr }, // diag
 				{ // lval
 					nullptr,
 					&B1, &B2
-				}
+				},
+				blockSymmetryType
 			};
 		logger.end();
 		logger.beg("solve");
@@ -207,6 +227,7 @@ int main() {
 				logger.mute = false;
 				// (2) Schur complement
 				y3 = pressureMassMatrix.diagSubst(x3);
+				if (blockSymmetryType == BlockSymmetryType::antisymmetric) y3 *= -1.;
 				// final vector
 				vector<double> y;
 				y.reserve(SaddlePointMatrix.getOrder());
@@ -215,10 +236,20 @@ int main() {
 				y.insert(y.end(), y3.begin(), y3.end());
 				return y;
 			};
+			
 			auto x = Krylov::PBiCGStab(
 				BlockDiagonalPreconditioner,
-				SaddlePointMatrix, b, shuffle(SaddlePointMatrix.getOrder()), maxNumbOfIterations, eps, stop, i_log
+				SaddlePointMatrix, b, 
+				/*shuffle(SaddlePointMatrix.getOrder())*/ boost::none,
+				maxNumbOfIterations, eps, stop, i_log
 			);
+
+			//auto x = Krylov::BiCGStab(
+			//	SaddlePointMatrix, b, 
+			//	/*shuffle(SaddlePointMatrix.getOrder())*/ boost::none, 
+			//	maxNumbOfIterations, eps, stop, i_log
+			//);
+
 			//CSCMatrix<double> SPM;
 			//SPM.importHarwellBoeing(oPath + "system/SPM.rua");
 			//DenseMatrix<double> SPMd{ SPM };
@@ -235,12 +266,14 @@ int main() {
 		logger.beg("export mesh");
 			Omega.export(oPath + "mesh.ntr", { { "format", "NTR" } });
 		logger.end();
-		logger.beg("export blocks of matrix and rhs vector");
-			static_cast<CSCMatrix<double>>(A11).exportHarwellBoeing(oPath + "system/A11.rua");
-			B1.exportHarwellBoeing(oPath + "system/B1.rra");
-			B2.exportHarwellBoeing(oPath + "system/B2.rra");
-			export(b, oPath + "system/b.dat");
-		logger.end();
+		if (logger.yes("export matrix blocks")) {
+			logger.beg("export blocks of matrix and rhs vector");
+				static_cast<CSCMatrix<double>>(A11).exportHarwellBoeing(oPath + "system/A11.rua");
+				B1.exportHarwellBoeing(oPath + "system/B1.rra");
+				B2.exportHarwellBoeing(oPath + "system/B2.rra");
+				export(b, oPath + "system/b.dat");
+			logger.end();
+		}
 		logger.exp("stdin.txt");
 	}
 	catch (std::exception const & e) {

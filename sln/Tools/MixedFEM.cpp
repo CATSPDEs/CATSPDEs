@@ -141,6 +141,8 @@ namespace FEM {
 					           << "numb of nnz = " << B1.nnz();
 					logger.log();
 				logger.end();
+				logger.buf << "overall size = " << 2 * n + m;
+				logger.log();
 			logger.end();
 			// assemble
 			logger.beg("assemble system matrix and rhs vector");

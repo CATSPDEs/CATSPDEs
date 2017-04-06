@@ -10,7 +10,7 @@ enum class BlockSymmetryType { symmetric, antisymmetric };
 template <typename T>
 class SymmetricBlockMatrix 
 	: public AbstractMultipliableMatrix<T> { // aggregation
-	short _bsign; // + for symmetric, – for antisymmetric
+	T _bsign; // + for symmetric, – for antisymmetric
 	std::vector<Index> _blockStartIndicies;
 	// the first element of (i, j)–block has row index _blockStartIndicies[i] and col index _blockStartIndicies[j]
 	std::vector<AbstractMultipliableMatrix<T>*>          _diagBlocksPtr; // pointers to diag symmetric blocks
@@ -27,7 +27,7 @@ public:
 			std::initializer_list<AbstractTransposeMultipliableMatrix<T>*> const & lvalIniList,
 			BlockSymmetryType stype = BlockSymmetryType::symmetric
 		) 
-		: _bsign(stype == BlockSymmetryType::symmetric ? 1 : -1)
+		: _bsign(stype == BlockSymmetryType::symmetric ? 1. : -1.)
 		, _blockStartIndicies(diagIniList.size())
 		, _diagBlocksPtr(diagIniList)
 		, _lvalBlocksPtr(lvalIniList) 
@@ -59,8 +59,13 @@ public:
 				_diagBlocksPtr[bj]->mult(by + _blockStartIndicies[bj], result + _blockStartIndicies[bj]);
 			for (Index bi = bj + 1; bi < n; ++bi, ++k)
 				if (_lvalBlocksPtr[k]) {
-					_lvalBlocksPtr[k]->mult           (by + _blockStartIndicies[bj], result + _blockStartIndicies[bi]);
-
+					// (1) simple
+					// _lvalBlocksPtr[k]->mult           (by + _blockStartIndicies[bj], result + _blockStartIndicies[bi]);
+					// _lvalBlocksPtr[k]->multByTranspose(by + _blockStartIndicies[bi], result + _blockStartIndicies[bj]);
+					// (2) not so simple (maybe we need to refactor this)
+					auto u = _bsign * ( (*_lvalBlocksPtr[k]) * std::vector<T>(by + _blockStartIndicies[bj], by + _blockStartIndicies[bj] + _lvalBlocksPtr[k]->numbOfCols()) );
+					auto v = result + _blockStartIndicies[bi];
+					for (Index i = 0; i < u.size(); ++i) v[i] += u[i];
 					_lvalBlocksPtr[k]->multByTranspose(by + _blockStartIndicies[bi], result + _blockStartIndicies[bj]);
 				}
 		}
