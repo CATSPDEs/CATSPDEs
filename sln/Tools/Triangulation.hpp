@@ -75,6 +75,15 @@ public:
 	Triangulation& enumerateRibs(); // O(m), m := numb of triangles
 
 	Node2D getRibNode(Index, LocalIndex, double) const;
+
+	Triangulation& deleteCurvilinearEdges() {
+		_curves.clear();
+		_edges.clear();
+		for (auto& el : _neighbors)
+			for (LocalIndex i : {0, 1, 2})
+				if (el[i] < 0) el[i] = -1;
+		return *this;
+	}
 	
 	/* 
 	(I) model domains constructors

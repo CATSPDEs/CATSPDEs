@@ -84,7 +84,8 @@ namespace FEM {
 			// ribs of the current element
 			std::array<Segment2D, 3> ribs;
 			std::vector<Index> DOFsNumn;		  
-			std::vector<Node2D> DOFsNodes;		  
+			std::vector<Node2D> DOFsNodes;	
+			std::vector<Node2D> T_DOFsNodes;
 
 			// mapping from master element to physical ″
 			auto T = [&](Node2D const & p)->Node2D {
@@ -92,8 +93,8 @@ namespace FEM {
 				std::vector<double> X(T_l), Y(T_l);
 				for (LocalIndex i = 0; i < T_l; i++)
 				{
-					X[i] = DOFsNodes[i][0];
-					Y[i] = DOFsNodes[i][1];
+					X[i] = T_DOFsNodes[i][0];
+					Y[i] = T_DOFsNodes[i][1];
 				}
 				std::transform(T_masterShapes.begin(), T_masterShapes.end(), sValues.begin(), [&](auto const & s) {
 					return s(p);
@@ -112,8 +113,8 @@ namespace FEM {
 				std::vector<double> X(T_l), Y(T_l);
 				for (LocalIndex i = 0; i < T_l; i++)
 				{
-					X[i] = DOFsNodes[i][0];
-					Y[i] = DOFsNodes[i][1];
+					X[i] = T_DOFsNodes[i][0];
+					Y[i] = T_DOFsNodes[i][1];
 				}
 
 				std::transform(T_masterSGrads.begin(), T_masterSGrads.end(), gValues.begin(), [&](auto const & g) {
@@ -148,7 +149,7 @@ namespace FEM {
 					ribs = ribsOf(enodes);
 					DOFsNumn = FE.getDOFsNumeration(Omega, t);
 					DOFsNodes = FE.getDOFsNodes(Omega, t);
-
+					T_DOFsNodes= T_FE.value_or(FE).getDOFsNodes(Omega, t);
 
 					/*detJ = 2. * area(Omega.getElement(t));
 					JInverseTranspose = {
