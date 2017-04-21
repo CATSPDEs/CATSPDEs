@@ -1,41 +1,67 @@
-0
-0
 1
-1e-10
+2
+0
+2
+0
+5
+1e-12
 1
 1000
-1
-3
-1
+0
 1
 1
+2
 1
 0
+1
+0
+y
 
-1. choose problem
+1. analytic soln
+	(0) linear velocity, const pressure
+	(1) quadratic velocity, const pressure
+	(2) linear velocity, sin pressure
+	(3) quadratic velocity, sin pressure
+	(4) cubic velocity, quadratic pressure
+	(5) non-polynomial velocity and pressure
+2. choose BCs type
+	(0) only no-slip
+	(1) only natural
+	(2) mixed
+3. choose problem
 	(0) Stokes problem
 	(1) Oseen problem
-2. choose FE pair
+4. choose FE pair
 	(0) Taylor-Hood
 	(1) Crouzeix-Raviart
-3. numb of mesh levels (refinements)
-4. set eps for solver
-5. stopping criterion
+	(2) MINI
+5. choose mesh
+	(0) rct_uniform.ntn
+	(1) crs_uniform.ntn
+	(2) arb_uniform.ntn
+	(3) non_uniform.ntn
+6. numb of mesh levels (refinements)
+7. set eps for solver
+8. stopping criterion
 	(0) absolute
 	(1) relative
-6. max numb of iterations
-7. log every nth iteration, n
-8. smoothing technique
+9. max numb of iterations
+10. log every nth iteration, n
+11. block symmetry type
+	(0) symmetric (indefinite matrix)
+	(1) antisymmetric (positive definite matrix)
+12. smoothing technique
 	(0) relaxed Jacobi
 	(1) forward SOR
 	(2) backward SOR
 	(3) SSOR
-9. numb of pre- and post-smoothing iterations
-10. relaxation parameter
-11. set recursive calls type
+13. numb of pre- and post-smoothing iterations
+14. relaxation parameter
+15. set recursive calls type
 	(0) V-cycle
 	(1) W-cycle
-12. numb of iterations for inner solver
-13. grid transfer type
+16. numb of iterations for inner solver
+17. grid transfer type
 	(0) canonical
 	(1) L2
+18. export matrix blocks

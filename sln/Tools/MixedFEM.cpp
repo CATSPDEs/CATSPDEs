@@ -166,7 +166,7 @@ namespace FEM {
 							localStiffnessMatrix(i, j) = PDE.inverseReynoldsNumber() * detJ * qRuleTriangle.computeQuadrature([&](Node2D const & p) {
 								return (JInverseTranspose * velocityMasterSGrads[j](p)) * (JInverseTranspose * velocityMasterSGrads[i](p));
 							}, deg);
-					// compute local Convection matrix
+					// compute local convection matrix
 					for (LocalIndex i = 0; i < velocityMasterShapes.size(); ++i)
 						for (LocalIndex j = 0; j < velocityMasterShapes.size(); ++j) 
 							localConvectionMatrix(i, j) = detJ * qRuleTriangle.computeQuadrature([&](Node2D const & p) {
@@ -232,13 +232,15 @@ namespace FEM {
 					}
 				}
 			logger.end();
-			logger.beg("enforce no-slip BCs");
-				auto A22 = A11;
-				A11.enforceDirichletBCs(ind2val[0], f.data());
-				A22.enforceDirichletBCs(ind2val[1], f.data() + n);
-				B1.enforceDirichletBCs(ind2val[0], f.data() + 2 * n);
-				B2.enforceDirichletBCs(ind2val[1], f.data() + 2 * n);
-			logger.end();
+			if (ind2val[0].size()) {
+				logger.beg("enforce no-slip BCs");
+					auto A22 = A11;
+					A11.enforceDirichletBCs(ind2val[0], f.data());
+					A22.enforceDirichletBCs(ind2val[1], f.data() + n);
+					B1.enforceDirichletBCs(ind2val[0], f.data() + 2 * n);
+					B2.enforceDirichletBCs(ind2val[1], f.data() + 2 * n);
+				logger.end();
+			}
 			return { A11, B1, B2, f };
 		}
 

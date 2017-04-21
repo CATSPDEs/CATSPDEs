@@ -179,6 +179,7 @@
     <ClInclude Include="Triangle_P1_CrouzeixRaviart.hpp" />
     <ClInclude Include="Triangle_P1_Lagrange.hpp" />
     <ClInclude Include="Triangle_P2_Lagrange.hpp" />
+    <ClInclude Include="Triangle_Pt3_LagrangeBubble.hpp" />
     <ClInclude Include="Triangulation.hpp" />
     <ClInclude Include="vector.hpp" />
   </ItemGroup>

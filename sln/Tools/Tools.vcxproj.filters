@@ -246,6 +246,9 @@
     <ClInclude Include="Segment_P1_Lagrange.hpp">
       <Filter>Finite Elements\Lagrange Family</Filter>
     </ClInclude>
+    <ClInclude Include="Triangle_Pt3_LagrangeBubble.hpp">
+      <Filter>Finite Elements\Exotic FEs</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="SingletonLogger.cpp">

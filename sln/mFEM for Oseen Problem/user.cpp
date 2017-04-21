@@ -14,7 +14,8 @@
 #include "Triangle_P1_CrouzeixRaviart.hpp"
 #include "Triangle_P0_Lagrange.hpp"
 // MINI
-// TODO . . .
+#include "Triangle_Pt3_LagrangeBubble.hpp"
+#include "Triangle_P1_Lagrange.hpp"
 
 using namespace FEM;
 using namespace ProjectionSolvers;
@@ -37,81 +38,140 @@ int main() {
 	auto& logger = SingletonLogger::instance();
 	try {
 		logger.beg("set up problem");
-			double reaction, diffusion;
-			VectorField2D convection, force, NeumannValue, DirichletCondition;
+			auto solnIndex = logger.opt("analytic soln", {
+				"linear velocity, const pressure",
+				// p = 0
+				// u = { y, -x }
+				"quadratic velocity, const pressure",
+				// p = 0
+				// u = { -y^2, 2 x y }
+				"linear velocity, sin pressure",
+				// p = Sin[Pi (x + y)]
+				// u = { y, -x }
+				"quadratic velocity, sin pressure",
+				// p = Sin[Pi (x + y)]
+				// u = { -y^2, 2 x y }
+				"cubic velocity, quadratic pressure",
+				// p = 1/12. + x (1 - x - y)
+				// u = { -4 (2 y - 1) (1 - x) x, 4 (2 x - 1) (1 - y) y }
+				"non-polynomial velocity and pressure"
+				// p = Cos[p[0] p[1]] - mu
+				// u = {-p[0] Sin[p[0] p[1]], p[1] Sin[p[0] p[1]]}
+			});
+			// BCs			
+			auto BCsIndex = logger.opt("choose BCs type", { "only no-slip", "only natural", "mixed" });
+			Predicate2D naturalBCPredicate;
+			switch (BCsIndex) {
+				case 0:
+					naturalBCPredicate = [](Node2D const &) { return false; };
+					break;
+				case 1:
+					naturalBCPredicate = [](Node2D const &) { return true; };
+					break;
+				case 2:
+					naturalBCPredicate = [](Node2D const & p) { return p[0] == 1.; };
+					break;
+			}
 			auto problemIndex = logger.opt("choose problem", {
 				"Stokes problem",
 				"Oseen problem"
 			});
+			double reaction, diffusion;
+			VectorField2D convection, force, NeumannValue, DirichletCondition;
 			if (problemIndex == 0) {
-				// Stokes, analytic soln:
-				// p = 4 y (1 - x) (1 - y)
-				// u = { -4 (2 y - 1) (1 - x) x, 4 (2 x - 1) (1 - y) y }
+				// Stokes
 				reaction = 0.; // zero mass term
 				diffusion = 1.; // Laplace term
 				convection = [](Node2D const &) -> Node2D { return { 0., 0. }; }; // zero wind field
-				force = [](Node2D const & p) -> Node2D { 
-					return { 
-						 4. * (2. + (p[1] - 5.) * p[1]), 
-						-4. - 8. * p[1] + 4. * p[0] * (3. + 2. * p[1])
-					};
-				};
-				NeumannValue = [](Node2D const & p) -> Node2D {
-					return {
-						// -4. * (-1. - (-3. + p[1]) * p[1] + p[0] * (2. + (-5. + p[1]) * p[1])),
-						13. / 3. + 4. * (-3. + p[1]) * p[1] - 4. * p[0] * (2. + (-5. + p[1]) * p[1]),
-						-8. * (-1 + p[1]) * p[1]
-					};
-				};
-				DirichletCondition = [](Node2D const & p) -> Node2D {
-					return {
-						-4. * (1. - p[0]) * p[0] * (-1. + 2. * p[1]), 
-						 4. * (-1. + 2. * p[0]) * (1. - p[1]) * p[1]
-					};
-				};
+				switch (solnIndex) {
+					case 0: // linear velocity, const pressure
+						force = [](Node2D const & p) -> Node2D { return { 0., 0. }; };
+						NeumannValue = [](Node2D const & p) -> Node2D {
+							if (p[0] == 1.) return { 0., -1. };
+							if (p[0] == 0.) return { 0., 1. };
+							if (p[1] == 1.) return { 1., 0. };
+							if (p[1] == 0.) return { -1., 0. };
+						};
+						DirichletCondition = [](Node2D const & p) -> Node2D { return { p[1], -p[0] }; };
+						break;
+					case 1: // quadratic velocity, const pressure
+						force = [](Node2D const & p) -> Node2D { return { 2., 0. }; };
+						NeumannValue = [](Node2D const & p) -> Node2D {
+							if (p[0] == 1.) return { -2., 2. * p[1] };
+						};
+						DirichletCondition = [](Node2D const & p) -> Node2D { return { -p[0] * p[0], 2 * p[0] * p[1] }; };
+						break;
+					case 2: // linear velocity, sin pressure
+						force = [](Node2D const & p) -> Node2D { return { PI * cos(PI * (p[0] + p[1])), PI * cos(PI * (p[0] + p[1])) }; };
+						// TODO: add Neumann
+						DirichletCondition = [](Node2D const & p) -> Node2D { return { p[1], -p[0] }; };
+						break;
+					case 3: // quadratic velocity, sin pressure
+						force = [](Node2D const & p) -> Node2D { return { 2 + PI * cos(PI * (p[0] + p[1])), PI * cos(PI * (p[0] + p[1])) }; };
+						// TODO: add Neumann
+						DirichletCondition = [](Node2D const & p) -> Node2D { return { -p[0] * p[0], 2 * p[0] * p[1] }; };
+						break;
+					case 4: // cubic velocity, quadratic pressure
+						force = [](Node2D const & p) -> Node2D { return { 9 - 2 * p[0] - 17 * p[1], -8 + 15 * p[0] }; };
+						NeumannValue = [](Node2D const & p) -> Node2D {
+							if (p[0] == 1.) return { -49 / 12. + 9 * p[1], -8 * (-1 + p[1]) * p[1] };
+							if (p[0] == 0.) return { -47 / 12. + 8 * p[1],  8 * (-1 + p[1]) * p[1] };
+							if (p[1] == 1.) return { 8 * (-1 + p[0]) * p[0], 47 / 12. + (-8 + p[0]) * p[0] };
+							if (p[1] == 0.) return { -8 * (-1 + p[0]) * p[0], 49 / 12. - p[0] * (7 + p[0]) };
+						};
+						DirichletCondition = [](Node2D const & p) -> Node2D { return { -4. * (1. - p[0]) * p[0] * (-1. + 2. * p[1]), 4. * (-1. + 2. * p[0]) * (1. - p[1]) * p[1] }; };
+						break;
+					case 5: // non-polynomial velocity and pressure
+						force = [](Node2D const & p) -> Node2D { 
+							return { 
+								2 * cos(p[0] * p[1]) * p[1] - (pow(p[0], 3) + p[1] + p[0] * p[1] * p[1]) * sin(p[0] * p[1]), 
+								-2 * cos(p[0] * p[1]) * p[0] + (-p[0] + p[0] * p[0] * p[1] + pow(p[1], 3)) * sin(p[0] * p[1]) 
+							}; 
+						};
+						NeumannValue = [](Node2D const & p) -> Node2D {
+							auto mu = .94608307036718301;
+							if (p[0] == 1.) return	{ -cos(p[1]) * (1 + p[1]) - sin(p[1]) + mu, cos(p[1]) * p[1] * p[1] };
+							if (p[0] == 0.) return	{ 1 - mu, -p[1] * p[1] };
+							if (p[1] == 1.) return	{ -cos(p[0]) * p[0] * p[0], cos(p[0]) * (-1 + p[0]) + sin(p[0]) + mu };
+							if (p[1] == 0.) return	{ p[0] * p[0], 1 - mu };
+						};
+						DirichletCondition = [](Node2D const & p) -> Node2D { return { -p[0] * sin(p[0] * p[1]), p[1] * sin(p[0] * p[1]) }; };
+						break;
+				}
 			}			
 			else if (problemIndex == 1) {
 				// Oseen problem (same analytics as in Stokes)
-				reaction = 1.; // mass term
-				diffusion = .1; // Laplace term (inverse Reynolds number)
-				convection = [](Node2D const & p) -> Node2D { return { p[0], -p[1] }; }; // wind field
-				force = [&](Node2D const & p) -> Node2D {
-					return {
-						 4 * (-2 * p[0] * (-1 + p[1]) + pow(p[0],2)*(-3 + 4 * p[1]) + p[1] * (-1 + p[1] - 4 * diffusion) + 2 * diffusion),
-						-4 * (-1 + p[1] * (2 + p[1]) + p[0] * (1 - 4 * p[1] - 4 * diffusion) + 2 * diffusion)
-					};
-				};
-				NeumannValue = [&](Node2D const & p) -> Node2D {
-					return { 
-						-4 * (-1 + p[0]) * (-1 + p[1]) * p[1] + 4 * (-1 + 2 * p[0]) * (-1 + 2 * p[1]) * diffusion, 
-						-8 * (-1 + p[1]) * p[1] * diffusion 
-					};
-				};
-				DirichletCondition = [](Node2D const & p) -> Node2D {
-					return {
-						-4. * (1. - p[0]) * p[0] * (-1. + 2. * p[1]),
-						 4. * (-1. + 2. * p[0]) * (1. - p[1]) * p[1]
-					};
-				};
+				//reaction = 1.; // mass term
+				//diffusion = .1; // Laplace term (inverse Reynolds number)
+				//convection = [](Node2D const & p) -> Node2D { return { p[0], -p[1] }; }; // wind field
+				//force = [&](Node2D const & p) -> Node2D {
+				//	return {
+				//		 4 * (-2 * p[0] * (-1 + p[1]) + pow(p[0],2)*(-3 + 4 * p[1]) + p[1] * (-1 + p[1] - 4 * diffusion) + 2 * diffusion),
+				//		-4 * (-1 + p[1] * (2 + p[1]) + p[0] * (1 - 4 * p[1] - 4 * diffusion) + 2 * diffusion)
+				//	};
+				//};
+				//NeumannValue = [&](Node2D const & p) -> Node2D {
+				//	return { 
+				//		-4 * (-1 + p[0]) * (-1 + p[1]) * p[1] + 4 * (-1 + 2 * p[0]) * (-1 + 2 * p[1]) * diffusion, 
+				//		-8 * (-1 + p[1]) * p[1] * diffusion 
+				//	};
+				//};
+				//DirichletCondition = [](Node2D const & p) -> Node2D {
+				//	return {
+				//		-4. * (1. - p[0]) * p[0] * (-1. + 2. * p[1]),
+				//		 4. * (-1. + 2. * p[0]) * (1. - p[1]) * p[1]
+				//	};
+				//};
 			}
 			// PDE
 			OseenProblem2D PDE { 
 				reaction, convection, diffusion, force, 
 				[](Node2D const &) { return 0.; } // div free 
 			};
-			// BCs
 			VectorBoundaryCondition2D 
-				NeumannBC {
-					NeumannValue,
-					[](Node2D const & p) { return p[0] == 1.; }
-				}, 
-				DirichletBC { DirichletCondition };
-			logger.beg("import initial mesh");
-				Triangulation Omega;
-				Omega.import(iPath + "mesh.ntn");
-				Omega.enumerateRibs();
-			logger.end();
-			auto FEPairIndex = logger.opt("choose FE pair", { "Taylor-Hood", "Crouzeix-Raviart" });
+				NeumannBC	{ NeumannValue, naturalBCPredicate }, 
+				DirichletBC	{ DirichletCondition };
+			auto FEPairIndex = logger.opt("choose FE pair", { "Taylor-Hood", "Crouzeix-Raviart", "MINI" });
 			// Taylor—Hood family
 			TriangularScalarFiniteElement
 				*velocityFE = &Triangle_P2_Lagrange::instance(),
@@ -121,6 +181,18 @@ int main() {
 				velocityFE = &Triangle_P1_CrouzeixRaviart::instance();
 				pressureFE = &Triangle_P0_Lagrange::instance();
 			};
+			// MINI element
+			if (FEPairIndex == 2) {
+				velocityFE = &Triangle_Pt3_LagrangeBubble::instance();
+				pressureFE = &Triangle_P1_Lagrange::instance();
+			};
+			vector<string> meshes { "rct_uniform.ntn", "crs_uniform.ntn", "arb_uniform.ntn", "non_uniform.ntn" };
+			auto meshesIndex = logger.opt("choose mesh", meshes);
+			logger.beg("import initial mesh");
+				Triangulation Omega;
+				Omega.import(iPath + meshes[meshesIndex]);
+				Omega.enumerateRibs();
+			logger.end();
 			Index numbOfMeshLevels;
 			logger.inp("numb of mesh levels (refinements)", numbOfMeshLevels);
 		logger.end();
@@ -240,7 +312,8 @@ int main() {
 			auto x = Krylov::PBiCGStab(
 				BlockDiagonalPreconditioner,
 				SaddlePointMatrix, b, 
-				/*shuffle(SaddlePointMatrix.getOrder())*/ boost::none,
+				shuffle(SaddlePointMatrix.getOrder()),
+				//boost::none,
 				maxNumbOfIterations, eps, stop, i_log
 			);
 
