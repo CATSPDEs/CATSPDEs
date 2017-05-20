@@ -1,8 +1,8 @@
 ﻿#pragma once
-#include <boost/optional.hpp>
+#include "boost/optional.hpp"
+#include "Mapping.hpp"
 #include "AbstractMesh.hpp"
-//#include "Curve.hpp"
-//#include "CurvilinearEdge.hpp"
+#include "CurvilinearEdge.hpp"
 
 /*
 	Alexander Žilyakov, Aug 2016
@@ -18,33 +18,45 @@ class Triangulation
 	// * loop over elements (i.e. triangles) [stiffnes / mass matrix and load vector assembly]
 	// * determine boundary edges [assembly of Robin BCs]
 	// * refine mesh w/o reconstruction [we call it adaptive FEM and it is neat!] 	
-	boost::optional<std::vector<std::array<SignedIndex, 3>>> _neighbors;
-	boost::optional<std::pair<Index, std::vector<std::array<Index, 3>>>> _ribs;
+	std::vector<std::array<SignedIndex, 3>> _neighbors;
+	std::pair<Index, std::vector<std::array<Index, 3>>> _ribs;
 	// for curvilinear refinement: 
-	//vector<Curve> _curves; // curves that make the boundary
-	//vector<CurvilinearEdge> _curvilinearEdges;
+	std::vector<Curve2D> _curves; // curves that make the boundary
+	std::vector<CurvilinearEdge> _edges;
 	// we will loop over our elements (i.e. over _triangles vector) to assemble stiffness matrix
 	// no need to loop over boundary edges to assemble Robin BCs
 	// because we can easily determine bndry while looping over elements (look at Triangle data structure!) 
 	// in order to construct portrait of CRS(-like)-matrix, we also need to store neighbors of ith node 
 	bool _makeNeighbors(Index, Index); // make 2 triangles neighbors
-	//SignedIndex _neighbor2edge(SignedIndex); // mapping between indicies
+	SignedIndex _neighbor2edge(SignedIndex) const; // mapping between indicies
 public:
+	Triangulation(
+		std::vector<Node2D> const & nodes,
+		std::vector<std::array<Index, 3>> const & elements,
+		std::vector<std::array<SignedIndex, 3>> const & neighbors,
+		std::vector<Curve2D> const & curves,
+		std::vector<CurvilinearEdge> const & edges
+	) 
+		: AbstractMesh(nodes, elements)
+		, _neighbors(neighbors)
+		, _curves(curves)
+		, _edges(edges)
+	{}
 	// get numb of ribs 
 	Index numbOfRibs() const {
-		return (*_ribs).first;
+		return _ribs.first;
 	}
 	// get indicies of ribs of tth triangle
 	std::array<Index, 3> getRibsIndicies(Index t) const {
-		return (*_ribs).second[t];
+		return _ribs.second[t];
 	}
 	// get ribs numeration
 	std::vector<std::array<Index, 3>> getRibsNumeration() const {
-		return (*_ribs).second;
+		return _ribs.second;
 	}
 	// get indicies of neighbors of tth triangle
 	std::array<SignedIndex, 3> getNeighborsIndicies(Index t) const {
-		return (*_neighbors)[t];
+		return _neighbors[t];
 	}
 	// get local rib indicies (if triangles are adjacent)
 	boost::optional<std::array<LocalIndex, 2>> Triangulation::getCommonRibLocalIndicies(Index t1, Index t2) const;
@@ -56,12 +68,13 @@ public:
 	// in order to work w/ strings, not streams
 	using AbstractMesh::import;
 	using AbstractMesh::export;
-
 	Triangulation& refine(Index numbOfRefinements = 1) final;
 
 	Triangulation& refine(Indicies&); // red—green refinement
 	Triangulation& computeNeighbors(); // O(m^2), m := numb of triangles (because we need to construct _neighbors list manually)
 	Triangulation& enumerateRibs(); // O(m), m := numb of triangles
+
+	Node2D getRibNode(Index, LocalIndex, double) const;
 	
 	/* 
 	(I) model domains constructors
