@@ -21,9 +21,9 @@ protected:
 	// (i.e. T-matrix or connectivity matrix)
 public:
 	AbstractMesh() {}
-	//AbstractMesh(std::vector<Node<D>> const & nodes, std::vector<IndiciesOfElement<N>> const & indiciesOfElements)
-	//	: _nodes(nodes), _elements(indiciesOfElement)
-	//{}
+	AbstractMesh(std::vector<Node<D>> const & nodes, std::vector<std::array<Index, N>> const & elements)
+		: _nodes(nodes), _elements(elements)
+	{}
 	virtual ~AbstractMesh() {}
 	// pure virtual member funcs
 	virtual AbstractMesh& refine(Index numbOfRefinements = 1) = 0;

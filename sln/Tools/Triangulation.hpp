@@ -30,6 +30,7 @@ class Triangulation
 	bool _makeNeighbors(Index, Index); // make 2 triangles neighbors
 	SignedIndex _neighbor2edge(SignedIndex) const; // mapping between indicies
 public:
+	Triangulation() {}
 	Triangulation(
 		std::vector<Node2D> const & nodes,
 		std::vector<std::array<Index, 3>> const & elements,

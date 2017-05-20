@@ -54,9 +54,11 @@ int main() {
 				"cubic velocity, quadratic pressure",
 				// p = 1/12. + x (1 - x - y)
 				// u = { -4 (2 y - 1) (1 - x) x, 4 (2 x - 1) (1 - y) y }
-				"non-polynomial velocity and pressure"
+				"non-polynomial velocity and pressure",
 				// p = Cos[p[0] p[1]] - mu
 				// u = {-p[0] Sin[p[0] p[1]], p[1] Sin[p[0] p[1]]}
+				"lid-driven cavity"
+				// no analytics
 			});
 			// BCs			
 			auto BCsIndex = logger.opt("choose BCs type", { "only no-slip", "only natural", "mixed" });
@@ -136,6 +138,25 @@ int main() {
 							if (p[1] == 0.) return	{ p[0] * p[0], 1 - mu };
 						};
 						DirichletCondition = [](Node2D const & p) -> Node2D { return { -p[0] * sin(p[0] * p[1]), p[1] * sin(p[0] * p[1]) }; };
+						break;
+					case 6: // lid-driven cavity
+						// benchmark example from Volker’s “Finite Element Methods for Incompressible Flow Problems,” p. 753
+						naturalBCPredicate = [](Node2D const &) { return false; };
+						if (BCsIndex) {
+							logger.wrn("no-slip BCs will be enforced ");
+							BCsIndex = 0;
+						}
+						force = NeumannValue = [](Node2D const & p) -> Node2D { return { 0., 0. }; };
+						auto u1 = [](double x) {
+							auto x1 = .1;
+							if (x <= x1) return 1. - .25 * (1. - cos(PI * (x1 - x) / x1));
+							if (x >= 1. - x1) return 1. - .25 * (1. - cos(PI * (x - (1 - x1)) / x1));
+							return 1.;
+						};
+						DirichletCondition = [=](Node2D const & p) -> Node2D {
+							if (p[1] == 1.) return { u1(p[0]), 0. };
+							return { 0., 0. }; 
+						};
 						break;
 				}
 			}			
@@ -312,8 +333,8 @@ int main() {
 			auto x = Krylov::PBiCGStab(
 				BlockDiagonalPreconditioner,
 				SaddlePointMatrix, b, 
-				shuffle(SaddlePointMatrix.getOrder()),
-				//boost::none,
+				//shuffle(SaddlePointMatrix.getOrder()),
+				boost::none,
 				maxNumbOfIterations, eps, stop, i_log
 			);
 

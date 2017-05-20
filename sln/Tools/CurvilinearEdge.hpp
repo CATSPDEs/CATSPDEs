@@ -10,6 +10,9 @@ public:
 		, _curveIndex(curveIndex) {
 	}
 	double thetaMiddle() { return (_thetaStart + _thetaEnd) / 2; }
+	double thetaStart() const { return _thetaStart; }
+	double thetaEnd()   const { return _thetaEnd; }
+	size_t curveIndex() const { return _curveIndex; }
 	double& thetaStart() { return _thetaStart; }
 	double& thetaEnd() { return _thetaEnd; }
 	size_t& curveIndex() { return _curveIndex; }

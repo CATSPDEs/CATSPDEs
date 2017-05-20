@@ -1,9 +1,9 @@
+6
+2
+0
 1
 2
-0
-2
-0
-5
+1
 1e-12
 1
 1000
@@ -24,6 +24,7 @@ y
 	(3) quadratic velocity, sin pressure
 	(4) cubic velocity, quadratic pressure
 	(5) non-polynomial velocity and pressure
+	(6) lid-driven cavity
 2. choose BCs type
 	(0) only no-slip
 	(1) only natural
