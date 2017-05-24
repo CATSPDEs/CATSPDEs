@@ -44,19 +44,39 @@ inline auto createDOFsConnectivityList(
 	return createDOFsConnectivityList(mesh, FE, FE, pred);
 }
 
-#include "Triangulation.hpp"
+//#include "Triangulation.hpp"
+//inline auto createDOFsConnectivityList(
+//	Triangulation const & cMesh,
+//	Triangulation const & fMesh,
+//	TriangularScalarFiniteElement const & FE
+//) {
+//	DOFsConnectivityList list(FE.numbOfDOFs(fMesh));
+//	for (Index ci = 0; ci < cMesh.numbOfElements(); ++ci) { // ci for “coarse index”
+//		auto rows = FE.getDOFsNumeration(cMesh, ci);
+//		for (Index j : FE.getDOFsNumeration(fMesh, ci))
+//			for (Index i : rows)
+//				list[j].insert(i);
+//		for (Index fi : fMesh.getNeighborsIndicies(ci)) // fi for “fine index”
+//			for (Index j : FE.getDOFsNumeration(fMesh, fi))
+//				for (Index i : rows)
+//					list[j].insert(i);
+//	}
+//	return list;
+//}
+
+template <LocalIndex D, LocalIndex N, LocalIndex M>
 inline auto createDOFsConnectivityList(
-	Triangulation const & cMesh,
-	Triangulation const & fMesh,
-	TriangularScalarFiniteElement const & FE
-) {
+	AbstractMesh<D, N> const & cMesh,
+	AbstractMesh<D, N> const & fMesh,
+	AbstractFiniteElement<D, N, M> const & FE
+	) {
 	DOFsConnectivityList list(FE.numbOfDOFs(fMesh));
 	for (Index ci = 0; ci < cMesh.numbOfElements(); ++ci) { // ci for “coarse index”
 		auto rows = FE.getDOFsNumeration(cMesh, ci);
 		for (Index j : FE.getDOFsNumeration(fMesh, ci))
 			for (Index i : rows)
 				list[j].insert(i);
-		for (Index fi : fMesh.getNeighborsIndicies(ci)) // fi for “fine index”
+		for (Index fi : fMesh.getFineNeighborsIndicies(ci)) // fi for “fine index”
 			for (Index j : FE.getDOFsNumeration(fMesh, fi))
 				for (Index i : rows)
 					list[j].insert(i);

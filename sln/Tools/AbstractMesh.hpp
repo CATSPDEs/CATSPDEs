@@ -47,6 +47,10 @@ public:
 			el[i] = _nodes[_elements[e][i]];
 		return el;
 	}
+	// get indicies of new elements (added after refinement) 
+	// contained in COARSE element e or
+	virtual std::vector<Index> getFineNeighborsIndicies(Index e) const = 0;
+	// i/o
 	AbstractMesh& import(std::string const & fromStr) {
 		std::ifstream from(fromStr);
 		return import(from);

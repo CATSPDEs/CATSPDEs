@@ -3,6 +3,8 @@
 #include "AbstractMesh.hpp"
 // in order to store computed images of quadrature nodes
 #include "SmartMapping.hpp"
+// for prolongation matrix
+#include "AbstractMatrix.hpp"
 
 // D := dimension of mesh (nodes) 
 // N := numb of nodes in an element
@@ -29,6 +31,27 @@ public:
 	virtual std::vector<Index>   getDOFsNumeration(AbstractMesh<D, N> const & mesh, Index e) const = 0;
 	virtual std::vector<Node<D>> getDOFsNodes     (AbstractMesh<D, N> const & mesh, Index e) const = 0;
 	virtual std::vector<LocalIndex> getBndryDOFsLocalIndicies(AbstractMesh<D, N> const & mesh, LocalIndex b) const = 0;
+	// default implementation of constructing prolongation matrix
+	// from coarse mesh to fine mesh
+	// suitable e.g. for Lagrange elements
+	virtual void prolongate(AbstractMatrix<double>& P, AbstractMesh<D, N> const & cMesh, AbstractMesh<D, N> const & fMesh) const {
+		for (Index ci = 0; ci < cMesh.numbOfElements(); ++ci) {
+			auto shapes = getShapesOf(cMesh.getElement(ci));
+			auto nodes = getDOFsNodes(fMesh, ci);
+			auto rows = getDOFsNumeration(cMesh, ci),
+			     cols = getDOFsNumeration(fMesh, ci);
+			for (LocalIndex j = 0; j < cols.size(); ++j)
+				for (LocalIndex i = 0; i < rows.size(); ++i)
+					P(rows[i], cols[j]) = shapes[i](nodes[j]);
+			for (Index fi : fMesh.getFineNeighborsIndicies(ci)) {
+				cols = getDOFsNumeration(fMesh, fi);
+				nodes = getDOFsNodes(fMesh, fi);
+				for (LocalIndex j = 0; j < cols.size(); ++j)
+					for (LocalIndex i = 0; i < rows.size(); ++i)
+						P(rows[i], cols[j]) = shapes[i](nodes[j]);
+			}
+		}
+	}
 };
 
 	using SegmentFiniteElement = AbstractFiniteElement<1, 2, 1>;

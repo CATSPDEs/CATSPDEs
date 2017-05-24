@@ -27,6 +27,7 @@ class Triangulation
 	// no need to loop over boundary edges to assemble Robin BCs
 	// because we can easily determine bndry while looping over elements (look at Triangle data structure!) 
 	// in order to construct portrait of CRS(-like)-matrix, we also need to store neighbors of ith node 
+	std::vector<std::vector<Index>> _fineNeighborsIndicies;
 	bool _makeNeighbors(Index, Index); // make 2 triangles neighbors
 	SignedIndex _neighbor2edge(SignedIndex) const; // mapping between indicies
 public:
@@ -64,6 +65,9 @@ public:
 	// get vector of local indicies of nodes triangles t1 and t2 share
 	std::vector<std::array<LocalIndex, 2>> Triangulation::getCommonNodesLocalIndicies(Index t1, Index t2) const;
 	// virtual methods to be implemented
+	std::vector<Index> getFineNeighborsIndicies(Index e) const final {
+		return _fineNeighborsIndicies[e];
+	}
 	Triangulation& import(std::istream& from = std::cin) final;
 	void export(std::ostream& to = std::cout, Parameters const & params = {}) const final;
 	// in order to work w/ strings, not streams

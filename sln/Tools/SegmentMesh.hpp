@@ -15,6 +15,7 @@ public:
 	Segment1D getElement(Index e) const final { return { _nodes[e], _nodes[e + 1] }; }
 	// pure virtual
 	SegmentMesh& refine(Index numbOfRefinements = 1) final;
+	std::vector<Index> getFineNeighborsIndicies(Index e) const final;
 	SegmentMesh& import(std::istream & from = std::cin) final;
 	void export(std::ostream & to = std::cout, Parameters const & param = {}) const final;
 	// in order to work w/ strings, not streams

@@ -88,6 +88,7 @@ Triangulation& Triangulation::refine(Index numbOfRefinements) {
 	};
 	for (Index k = 0; k < numbOfRefinements; ++k) {
 		Index n = numbOfElements();
+		_fineNeighborsIndicies.resize(n);
 		for (i = 0; i < n; ++i) {
 			auto nodesIndicies = getNodesIndicies(i);
 			auto neighborsIndicies = getNeighborsIndicies(i);
@@ -104,6 +105,7 @@ Triangulation& Triangulation::refine(Index numbOfRefinements) {
 					}
 				}
 			_elements[i] = redNodesIndicies;
+			_fineNeighborsIndicies[i] = { numbOfElements(), numbOfElements() + 1, numbOfElements() + 2 };
 			SignedIndex dummy = numbOfElements();
 			_neighbors[i] = { dummy, dummy + 1, dummy + 2 };
 			_elements.insert(_elements.end(), {
@@ -117,7 +119,6 @@ Triangulation& Triangulation::refine(Index numbOfRefinements) {
 				{ dummy, neighborsIndicies[2], neighborsIndicies[0] },
 				{ dummy, neighborsIndicies[0], neighborsIndicies[1] }
 			});
-
 			Index j = _edges.size();
 			for (Index newTriangle : { _elements.size() - 2, _elements.size() - 3, _elements.size() - 1 })
 				if (_neighbors[newTriangle][1] < -1)
@@ -168,6 +169,9 @@ Triangulation& Triangulation::refine(Indicies& redList) {
 	Indicies::iterator redListIter = redList.begin(),
 					   searchStartIter = prev(redList.end()), 
 					   searchIter;
+
+	// start with empty vector of fine neighbors
+	_fineNeighborsIndicies = std::vector<std::vector<Index>>(numbOfElements());
 	while (redListIter != redList.end()) {
 		// well, since this iteration
 		// _elements[i] sholuld not ever be added to redList again
@@ -203,6 +207,7 @@ Triangulation& Triangulation::refine(Indicies& redList) {
 		// our ith triangle splits into 4 new ones
 		// central one will take place of the old one
 		_elements[i] = redNodesIndicies;
+		_fineNeighborsIndicies[i] = { numbOfElements(), numbOfElements() + 1, numbOfElements() + 2 };
 		SignedIndex dummy = numbOfElements();
 		// and its neighbors are known (3 other triangles) and will be added soon
 		_neighbors[i] = { dummy, dummy + 1, dummy + 2 };
@@ -251,7 +256,7 @@ Triangulation& Triangulation::refine(Indicies& redList) {
 	for (auto const & keyValue : greenMap) {
 		if (keyValue.second > 1) continue; // we should do green refinement iff there’s only one hanging node
 		i = keyValue.first; // index of triangle to be green-refined
-		Index redTriangleIndex;
+		SignedIndex redTriangleIndex;
 		LocalIndex j;
 		for (j = 0; j < 3; ++j) {
 			redTriangleIndex = getNeighborsIndicies(i)[j];
@@ -267,6 +272,7 @@ Triangulation& Triangulation::refine(Indicies& redList) {
 		if (neighborIndex > -1)
 			_makeNeighbors(numbOfElements() - 1, neighborIndex);
 		// …and another one will take place of the old one
+		_fineNeighborsIndicies[i] = { numbOfElements() - 1 };
 		_elements[i] = { getNodesIndicies(i)[j], redNodeIndex, getNodesIndicies(i)[nextIndex(nextIndex(j))] };
 		_neighbors[i] = { -1, getNeighborsIndicies(i)[nextIndex(j)], (SignedIndex)numbOfElements() - 1 };
 		// finally, lets fix neighbors
