@@ -1,19 +1,26 @@
 #pragma once
 #include <algorithm> // for_each
+#include <functional>
 #include "AbstractTransposeMultipliableMatrix.hpp"
+// LU
+#include "AbstractPreconditioner.hpp"
+#include "DenseDecompositionStrategy.hpp"
 
 template <typename T>
-class DenseMatrix :
-	public AbstractTransposeMultipliableMatrix<T> {
+class DenseMatrix 
+	: public AbstractTransposeMultipliableMatrix<T> 
+	, public AbstractPreconditioner<T> {
 	std::vector<std::vector<T>> _A;
 	// to be implemented
 	T& _set(Index i, Index j) final { return _A[i][j]; }
 	T  _get(Index i, Index j) const final { return _A[i][j]; };
 public:
+	std::function<void(std::vector<std::vector<T>>&)> decompositionStrategy;
 	// create h × w zero matrix
 	DenseMatrix(Index h, Index w)
 		: AbstractMatrix<T>(h, w)
 		, _A(h, std::vector<T>(w, 0.))
+		, decompositionStrategy(DenseDecompositionStrategy::IKJ<T>)
 	{}
 	explicit DenseMatrix(Index n = 1) : DenseMatrix(n, n) {}
 	// create matrix from ini lists, e.g. from { {11, 12}, {21, 22} }
@@ -30,13 +37,22 @@ public:
 	void multByTranspose(T const * by, T* result) const final;
 	// Gauss elimination w/ partial pivoting
 	std::vector<T> GaussElimination(std::vector<T> const &);
+	// preconditioner virtuals
+	std::vector<T> forwSubst(std::vector<T> const & x, double w = 1.) const final;
+	std::vector<T> backSubst(std::vector<T> const &, double w = 1.) const final;
+	std::vector<T> diagSubst(std::vector<T> const &) const final;
+	std::vector<T> multDiag(std::vector<T> const &) const final;
+	virtual DenseMatrix& decompose() {
+		decompositionStrategy(_A);
+		return *this;
+	}
 };
 
 // public methods
 
 template <typename T>
 DenseMatrix<T>::DenseMatrix(std::initializer_list<std::initializer_list<T>> const & iniList)
-	: AbstractMatrix<T>(iniList.size(), (*iniList.begin()).size()) {
+	: AbstractMatrix<T>(iniList.size(), (*iniList.begin()).size()), decompositionStrategy(DenseDecompositionStrategy::IKJ<T>) {
 	for (auto const & row : iniList) {
 		if (row.size() != _w) throw std::invalid_argument("ini list does not represent a matrix");
 		_A.emplace_back(row);
@@ -97,4 +113,44 @@ std::vector<T> DenseMatrix<T>::GaussElimination(std::vector<T> const & bConst) {
 		x[i] = (b[i] - sum) / _A[i][i];
 	}
 	return x;
+}
+
+// find y := [ L + wD ]^-1 . x
+// if w == 0, then find y := [ L + I ]^-1 . x
+template <typename T>
+std::vector<T> DenseMatrix<T>::forwSubst(std::vector<T> const & x, double w = 1.) const {
+	std::vector<T> y { x };
+	for (Index i = 0; i < getOrder(); ++i) {
+		for (Index j = 0; j < i; ++j)
+			y[i] -= _A[i][j] * y[j];
+		if (w) y[i] /= w * _A[i][i];
+	}
+	return y;
+}
+
+template <typename T>
+std::vector<T> DenseMatrix<T>::backSubst(std::vector<T> const & x, double w = 1.) const {
+	std::vector<T> y { x };
+	for (SignedIndex i = getOrder() - 1; i >= 0; --i) {
+		for (Index j = i + 1; j < getOrder(); ++j)
+			y[i] -= _A[i][j] * y[j];
+		if (w) y[i] /= w * _A[i][i];
+	}
+	return y;
+}
+
+template <typename T>
+std::vector<T> DenseMatrix<T>::diagSubst(std::vector<T> const & x) const {
+	std::vector<T> y(getOrder());
+	for (Index i = 0; i < getOrder(); ++i)
+		y[i] = x[i] / _A[i][i];
+	return y;
+}
+
+template <typename T>
+std::vector<T> DenseMatrix<T>::multDiag(std::vector<T> const & x) const {
+	std::vector<T> y(getOrder());
+	for (Index i = 0; i < getOrder(); ++i)
+		y[i] = x[i] * _A[i][i];
+	return y;
 }

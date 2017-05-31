@@ -61,6 +61,12 @@
     <Filter Include="Meshes\1D">
       <UniqueIdentifier>{75bb3f1f-d88c-4d81-8d87-24bbc4390990}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Matrices\Implementations\Dense">
+      <UniqueIdentifier>{bb74ab8c-8d6e-4d1c-a2a0-c46e84f16416}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Matrices\Implementations\Sparse">
+      <UniqueIdentifier>{02304811-3522-49f3-b075-77a6e3693a1b}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AbstractSparseMatrix.hpp">
@@ -108,9 +114,6 @@
     <ClInclude Include="AbstractMatrix.hpp">
       <Filter>Matrices</Filter>
     </ClInclude>
-    <ClInclude Include="CSCMatrix.hpp">
-      <Filter>Matrices\Implementations</Filter>
-    </ClInclude>
     <ClInclude Include="rlutil.h">
       <Filter>Utilities\Logger</Filter>
     </ClInclude>
@@ -125,9 +128,6 @@
     </ClInclude>
     <ClInclude Include="Parameters.hpp">
       <Filter>Common</Filter>
-    </ClInclude>
-    <ClInclude Include="SymmetricCSlCMatrix.hpp">
-      <Filter>Matrices\Implementations</Filter>
     </ClInclude>
     <ClInclude Include="BandMatrix.hpp">
       <Filter>Matrices\Implementations\To Refactor</Filter>
@@ -149,12 +149,6 @@
     </ClInclude>
     <ClInclude Include="OseenProblem.hpp">
       <Filter>PDEs</Filter>
-    </ClInclude>
-    <ClInclude Include="DenseMatrix.hpp">
-      <Filter>Matrices\Implementations</Filter>
-    </ClInclude>
-    <ClInclude Include="SymmetricMatrix.hpp">
-      <Filter>Matrices\Implementations</Filter>
     </ClInclude>
     <ClInclude Include="CSRMatrix.hpp">
       <Filter>Matrices\Implementations\To Refactor</Filter>
@@ -207,9 +201,6 @@
     <ClInclude Include="MasterSegmentQuadratureRule.hpp">
       <Filter>Quadrature Rules</Filter>
     </ClInclude>
-    <ClInclude Include="CSlCMatrix.hpp">
-      <Filter>Matrices\Implementations</Filter>
-    </ClInclude>
     <ClInclude Include="Triangle_P1_CrouzeixRaviart.hpp">
       <Filter>Finite Elements\Exotic FEs</Filter>
     </ClInclude>
@@ -225,12 +216,6 @@
     <ClInclude Include="AbstractPreconditioner.hpp">
       <Filter>Matrices</Filter>
     </ClInclude>
-    <ClInclude Include="BlockMatrix.hpp">
-      <Filter>Matrices\Implementations</Filter>
-    </ClInclude>
-    <ClInclude Include="SymmetricBlockMatrix.hpp">
-      <Filter>Matrices\Implementations</Filter>
-    </ClInclude>
     <ClInclude Include="NonlinearSolvers.hpp">
       <Filter>Solvers\Nonlinear &amp; SLAE Solvers</Filter>
     </ClInclude>
@@ -245,6 +230,30 @@
     </ClInclude>
     <ClInclude Include="Triangle_Pt3_LagrangeBubble.hpp">
       <Filter>Finite Elements\Exotic FEs</Filter>
+    </ClInclude>
+    <ClInclude Include="BlockMatrix.hpp">
+      <Filter>Matrices\Implementations\Sparse</Filter>
+    </ClInclude>
+    <ClInclude Include="CSCMatrix.hpp">
+      <Filter>Matrices\Implementations\Sparse</Filter>
+    </ClInclude>
+    <ClInclude Include="CSlCMatrix.hpp">
+      <Filter>Matrices\Implementations\Sparse</Filter>
+    </ClInclude>
+    <ClInclude Include="SymmetricBlockMatrix.hpp">
+      <Filter>Matrices\Implementations\Sparse</Filter>
+    </ClInclude>
+    <ClInclude Include="SymmetricCSlCMatrix.hpp">
+      <Filter>Matrices\Implementations\Sparse</Filter>
+    </ClInclude>
+    <ClInclude Include="DenseMatrix.hpp">
+      <Filter>Matrices\Implementations\Dense</Filter>
+    </ClInclude>
+    <ClInclude Include="SymmetricMatrix.hpp">
+      <Filter>Matrices\Implementations\Dense</Filter>
+    </ClInclude>
+    <ClInclude Include="DenseDecompositionStrategy.hpp">
+      <Filter>Matrices\Implementations\Dense</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

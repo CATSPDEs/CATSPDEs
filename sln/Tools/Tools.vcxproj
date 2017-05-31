@@ -131,6 +131,7 @@
     <ClInclude Include="CSlCMatrix.hpp" />
     <ClInclude Include="CSlRMatrix.hpp" />
     <ClInclude Include="CurvilinearEdge.hpp" />
+    <ClInclude Include="DenseDecompositionStrategy.hpp" />
     <ClInclude Include="DenseMatrix.hpp" />
     <ClInclude Include="DivGradFEM.hpp" />
     <ClInclude Include="Element.hpp" />

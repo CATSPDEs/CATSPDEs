@@ -244,7 +244,7 @@ std::vector<T> SymmetricCSlCMatrix<T>::forwSubst(std::vector<T> const & x, doubl
 	std::vector<T> y { x };
 	Index i, j, k;
 	for (j = 0; j < getOrder(); ++j) {
-		y[j] /= (w * _diag[j]);
+		if (w) y[j] /= (w * _diag[j]);
 		for (k = _colptr[j]; k < _colptr[j + 1]; ++k) {
 			i = _rowind[k];
 			auto& l_ij = _lval[k];
@@ -266,7 +266,7 @@ std::vector<T> SymmetricCSlCMatrix<T>::backSubst(std::vector<T> const & x, doubl
 			auto& u_ij = _lval[k]; // = l_ji
 			y[i] -= u_ij * y[j];
 		}
-		y[i] /= (w * _diag[i]);
+		if (w) y[i] /= (w * _diag[i]);
 	}
 	return y;
 }

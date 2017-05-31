@@ -34,6 +34,7 @@ public:
 	std::vector<T> backSubst(std::vector<T> const &, double w = 1.) const final;
 	std::vector<T> diagSubst(std::vector<T> const & x) const final;
 	std::vector<T> multDiag(std::vector<T> const & x) const final;
+	CSlCMatrix<T>& decompose() final;
 	// explicit conversion to non-symmetric format http://en.cppreference.com/w/cpp/language/cast_operator
 	explicit operator CSCMatrix<T>() const {
 		auto n = getOrder();
@@ -197,10 +198,10 @@ CSlCMatrix<T>& CSlCMatrix<T>::enforceDirichletBCs(Index2Value<T> const & ind2val
 // find y := [ L + wD ]^-1 . x
 template <typename T>
 std::vector<T> CSlCMatrix<T>::forwSubst(std::vector<T> const & x, double w = 1.) const {
-	std::vector<T> y{ x };
+	std::vector<T> y { x };
 	Index i, j, k;
 	for (j = 0; j < getOrder(); ++j) {
-		y[j] /= (w * _diag[j]);
+		if (w) y[j] /= (w * _diag[j]);
 		for (k = _colptr[j]; k < _colptr[j + 1]; ++k) {
 			i = _rowind[k];
 			auto& l_ij = _lval[k];
@@ -213,7 +214,7 @@ std::vector<T> CSlCMatrix<T>::forwSubst(std::vector<T> const & x, double w = 1.)
 // find y := [ U + wD ]^-1 . x
 template <typename T>
 std::vector<T> CSlCMatrix<T>::backSubst(std::vector<T> const & x, double w = 1.) const {
-	std::vector<T> y{ x };
+	std::vector<T> y { x };
 	SignedIndex i;
 	Index j, k;
 	for (i = getOrder() - 1; i >= 0; --i) {
@@ -222,7 +223,7 @@ std::vector<T> CSlCMatrix<T>::backSubst(std::vector<T> const & x, double w = 1.)
 			auto& u_ij = _uval[k]; // = l_ji
 			y[i] -= u_ij * y[j];
 		}
-		y[i] /= (w * _diag[i]);
+		if (w) y[i] /= (w * _diag[i]);
 	}
 	return y;
 }
@@ -241,4 +242,28 @@ std::vector<T> CSlCMatrix<T>::multDiag(std::vector<T> const & x) const {
 	for (Index i = 0; i < getOrder(); ++i)
 		y[i] = x[i] * _diag[i];
 	return y;
+}
+
+// ILU(0) Crout decomposition from Saad, p. 333
+// A ~ (L + I) . D . (I + U) 
+template <typename T>
+CSlCMatrix<T>& CSlCMatrix<T>::decompose() {
+	Index n = getOrder();
+	for (Index k = 0; k < n; ++k) {
+		//for (Index i = 0; i < k; ++i) {
+		//	_diag[k] -= _diag[i] * A[k][i] * A[i][k];
+		//	
+		//	if (A[k][i]) for (Index j = k + 1; j < n; ++j) 
+		//		A[k][j] -= A[i][i] * A[k][i] * A[i][j];
+		//	
+		//	if (A[i][k]) for (Index j = k + 1; j < n; ++j) 
+		//		A[j][k] -= A[i][i] * A[i][k] * A[j][i];
+
+		//}
+		//for (Index i = k + 1; i < n; ++i) {
+		//	A[i][k] /= A[k][k];
+		//	A[k][i] /= A[k][k];
+		//}
+	}
+	return *this;
 }

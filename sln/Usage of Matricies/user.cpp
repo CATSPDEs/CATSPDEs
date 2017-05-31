@@ -172,50 +172,72 @@ int main() {
 		}
 		else if (testNum == 4) {
 			logger.beg("DenseMatrix test");
-				logger.beg("create empty matrix");
-					Index rows, cols;
-					logger.inp("numb of rows", rows)
-					      .inp("numb of cols", cols);
-					DenseMatrix<double> A(rows, cols);
-					logger.buf << "created matrix:\n";
-					A.export(logger.buf);
-					logger.log();
-				logger.end();
-				logger.beg("create matrix from ini-list");
-					DenseMatrix<double> B {
-						{ 1., 2., 7. },
-						{ 4., 8., 3. },
-						{ 5., 6., 2. },
-						{ 3., 2., 1. }
-					};
-					logger.buf << "created matrix:\n";
-					B.export(logger.buf);
-					logger.log();
-					logger.beg("mult() / multByTranspose() test");
-						vector<double> u { 1., 2., 3. }, v { 1., 2., 3., 4. };
-						logger.buf << "u       = " << u << '\n'
-						           << "v       = " << v << '\n'
-						           << "B * u   = " << B * u << '\n'
-							       << "B^T * v = " << B.t() * v;
+				{
+					logger.beg("create empty matrix");
+						Index rows, cols;
+						logger.inp("numb of rows", rows)
+							  .inp("numb of cols", cols);
+						DenseMatrix<double> A(rows, cols);
+						logger.buf << "created matrix:\n";
+						A.export(logger.buf);
 						logger.log();
 					logger.end();
-					logger.log("set matrix = 3.");
-					B = 3.;
-					logger.buf << "modified matrix:\n";
-					B.export(logger.buf);
-					logger.log();
-					logger.beg("Gauss elimination w/ partial pivoting");
-						B = {
-							{ 1.,  4.,  5. },
-							{ 7.,  6.,  3. },
-							{ 10., 3.5, 1. }
+					logger.beg("create matrix from ini-list");
+						DenseMatrix<double> B {
+							{ 1., 2., 7. },
+							{ 4., 8., 3. },
+							{ 5., 6., 2. },
+							{ 3., 2., 1. }
 						};
-						vector<double> x { 1., 5., 2.3 }, b = B * x;
-						logger.buf << "B = \n";
+						logger.buf << "created matrix:\n";
 						B.export(logger.buf);
-						logger.buf << "b = " << b << '\n'
-						           << "x = " << B.GaussElimination(b);
 						logger.log();
+						logger.beg("mult() / multByTranspose() test");
+							vector<double> u { 1., 2., 3. }, v { 1., 2., 3., 4. };
+							logger.buf << "u       = " << u << '\n'
+									   << "v       = " << v << '\n'
+									   << "B * u   = " << B * u << '\n'
+									   << "B^T * v = " << B.t() * v;
+							logger.log();
+						logger.end();
+						logger.log("set matrix = 3.");
+						B = 3.;
+						logger.buf << "modified matrix:\n";
+						B.export(logger.buf);
+						logger.log();
+						logger.beg("Gauss elimination w/ partial pivoting");
+							B = {
+								{ 1.,  4.,  5. },
+								{ 7.,  6.,  3. },
+								{ 10., 3.5, 1. }
+							};
+							vector<double> x { 1., 5., 2.3 }, b = B * x;
+							logger.buf << "B = \n";
+							B.export(logger.buf);
+							logger.buf << "b = " << b << '\n'
+									   << "x = " << B.GaussElimination(b);
+							logger.log();
+						logger.end();
+					}
+					logger.beg("LU decomposition");
+						// example from https://people.cs.kuleuven.be/~karl.meerbergen/didactiek/h03g1a/ilu.pdf, p. 18
+						DenseMatrix<double> A {
+							{	3,	0,	-1,	-1,	0,	-1	},
+							{	0,	2,	0,	-1,	0,	0	},
+							{	-1,	0,	3,	0,	-1,	0	},
+							{	-1,	-1,	0,	2,	0,	-1	},
+							{	0,	0,	-1,	0,	3,	-1	},
+							{	-1,	0,	0,	-1,	-1,	4	}
+						};
+						auto b = A * std::vector<double>(6, 1.);
+						logger.beg("IKJ decomposition");
+							A.decompositionStrategy = DenseDecompositionStrategy::Crout_L_plus_I_times_D_times_I_plus_U<double>;
+							A.decompose().export(logger.buf);
+							logger.buf << "\nsoln: " << A.backSubst(A.forwSubst(b, 0.));
+							logger.buf << "\nsoln: " << A.backSubst(A.forwSubst(b));
+							logger.buf << "\nsoln: " << A.backSubst(A.diagSubst(A.forwSubst(b, 0.)), 0.);
+							logger.log();
+						logger.end();
 					logger.end();
 				logger.end();
 			logger.end();
