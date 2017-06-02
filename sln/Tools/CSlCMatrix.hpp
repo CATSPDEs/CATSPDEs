@@ -244,26 +244,76 @@ std::vector<T> CSlCMatrix<T>::multDiag(std::vector<T> const & x) const {
 	return y;
 }
 
-// ILU(0) Crout decomposition from Saad, p. 333
+// ILDU(0) Crout decomposition from Saad, p. 333
 // A ~ (L + I) . D . (I + U) 
 template <typename T>
 CSlCMatrix<T>& CSlCMatrix<T>::decompose() {
 	Index n = getOrder();
+	auto colptr_first = _colptr;
+	std::vector<std::list<Index>> nnz_rows_of_col(n);
+	std::vector<T> kth_col(n), kth_row(n);
 	for (Index k = 0; k < n; ++k) {
-		//for (Index i = 0; i < k; ++i) {
-		//	_diag[k] -= _diag[i] * A[k][i] * A[i][k];
-		//	
-		//	if (A[k][i]) for (Index j = k + 1; j < n; ++j) 
-		//		A[k][j] -= A[i][i] * A[k][i] * A[i][j];
-		//	
-		//	if (A[i][k]) for (Index j = k + 1; j < n; ++j) 
-		//		A[j][k] -= A[i][i] * A[i][k] * A[j][i];
-
-		//}
-		//for (Index i = k + 1; i < n; ++i) {
-		//	A[i][k] /= A[k][k];
-		//	A[k][i] /= A[k][k];
-		//}
+		// copy column and row to be updated on kth step
+		for (Index m = _colptr[k]; m < _colptr[k + 1]; ++m) {
+			Index i = _rowind[m];
+			kth_col[i] = _lval[m];
+			kth_row[i] = _uval[m];
+		}
+		// loop over only those cols which get multiplied by a nnz row
+		for (Index j : nnz_rows_of_col[k]) {
+			auto u_jk = _get(j, k), l_kj = _get(k, j);
+			_diag[k] -= _diag[j] * l_kj * u_jk;
+			while (_rowind[colptr_first[j]] <= k) ++colptr_first[j];
+			for (Index m = colptr_first[j]; m < _colptr[j + 1]; ++m) {
+				Index i = _rowind[m]; auto l_ij = _lval[m], u_ji = _uval[m];
+				kth_col[i] -= _diag[j] * u_jk * l_ij;
+				kth_row[i] -= _diag[j] * l_kj * u_ji;
+			}
+		}
+		// update nnz_rows_of_col lists, kth column, and kth row of the matrix
+		for (Index m = _colptr[k]; m < _colptr[k + 1]; ++m) {
+			Index i = _rowind[m];
+			nnz_rows_of_col[i].push_back(k);
+			_lval[m] = kth_col[i] / _diag[k];
+			_uval[m] = kth_row[i] / _diag[k];
+		}
 	}
+	//Index n = getOrder();
+	//auto colptr_first = _colptr;
+	//std::list<Index> nnz_rows;
+	//std::vector<T> kth_col(n), kth_row(n);
+	//for (Index k = 0; k < n; ++k) {
+	//	// copy column and row to be updated on kth step
+	//	for (Index m = colptr[k]; m < _colptr[k + 1]; ++m) {
+	//		Index i = _rowind[m];
+	//		kth_col[i] = _lval[m];
+	//		kth_row[i] = _uval[m];
+	//	}
+	//	// loop over only those cols which get multiplied by a nnz row
+	//	for (Index j : nnz_rows) { 
+	//		auto u_jk = _get(j, k), l_kj = _get(k, j);
+	//		_diag[k] -= _diag[j] * l_kj * u_jk;
+	//		for (m = colptr_first[j]; m < _colptr[j + 1]; ++m) {
+	//			Index i = _rowind[m];
+	//			auto& l_ij = _lval[m];
+	//			auto& u_ji = _uval[m];
+	//			kth_col[i] -= _diag[j] * u_jk * l_ij;
+	//			kth_row[i] -= _diag[j] * l_kj * u_ji;
+	//		}
+	//	}
+	//	// update column and row of the matrix
+	//	for (Index m = colptr[k]; m < _colptr[k + 1]; ++m) {
+	//		Index i = _rowind[m];
+	//		_lval[m] = kth_col[i] / _diag[k];
+	//		_uval[m] = kth_row[i] / _diag[k];
+	//	}
+	//	// update nnz_rows and colptr_first for iteration k + 1
+	//	nnz_rows.clear();
+	//	for (Index j = 0; j <= k; ++j) 
+	//		if (_rowind[colptr_first[j]] == k + 1) {
+	//			++colptr_first[j];
+	//			nnz_rows.insert(j);
+	//		}
+	//}
 	return *this;
 }

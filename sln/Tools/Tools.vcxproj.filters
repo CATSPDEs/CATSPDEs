@@ -96,9 +96,6 @@
     <ClInclude Include="InitialConditions.hpp">
       <Filter>PDEs</Filter>
     </ClInclude>
-    <ClInclude Include="IDecomposable.hpp">
-      <Filter>Matrices</Filter>
-    </ClInclude>
     <ClInclude Include="Triangulation.hpp">
       <Filter>Meshes\2D</Filter>
     </ClInclude>

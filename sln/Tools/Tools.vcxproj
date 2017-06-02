@@ -140,7 +140,6 @@
     <ClInclude Include="AbstractHarwellBoeingMatrix.hpp" />
     <ClInclude Include="HarwellBoeingHeader.hpp" />
     <ClInclude Include="HyperbolicPDE.hpp" />
-    <ClInclude Include="IDecomposable.hpp" />
     <ClInclude Include="AbstractMultipliableMatrix.hpp" />
     <ClInclude Include="Index.hpp" />
     <ClInclude Include="InitialConditions.hpp" />

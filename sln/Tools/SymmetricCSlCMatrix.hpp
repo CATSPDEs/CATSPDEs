@@ -70,6 +70,7 @@ public:
 	std::vector<T> backSubst(std::vector<T> const &, double w = 1.) const final;
 	std::vector<T> diagSubst(std::vector<T> const &) const final;
 	std::vector<T> multDiag(std::vector<T> const &) const final;
+	SymmetricCSlCMatrix<T>& decompose() final;
 	// explicit conversion to non-symmetric format http://en.cppreference.com/w/cpp/language/cast_operator
 	explicit operator CSlCMatrix<T>() const {
 		return { _colptr, _rowind, _lval, _lval, _diag };
@@ -285,4 +286,38 @@ std::vector<T> SymmetricCSlCMatrix<T>::multDiag(std::vector<T> const & x) const 
 	for (Index i = 0; i < getOrder(); ++i)
 		y[i] = x[i] * _diag[i];
 	return y;
+}
+
+// ILDL^T(0) Crout decomposition from Saad, p. 333
+// A ~ (L + I) . D . (I + L^T) 
+template <typename T>
+SymmetricCSlCMatrix<T>& SymmetricCSlCMatrix<T>::decompose() {
+	Index n = getOrder();
+	auto colptr_first = _colptr;
+	std::vector<std::list<Index>> nnz_rows_of_col(n);
+	std::vector<T> kth_col(n);
+	for (Index k = 0; k < n; ++k) {
+		// copy column and row to be updated on kth step
+		for (Index m = _colptr[k]; m < _colptr[k + 1]; ++m) {
+			Index i = _rowind[m];
+			kth_col[i] = _lval[m];
+		}
+		// loop over only those cols which get multiplied by a nnz row
+		for (Index j : nnz_rows_of_col[k]) {
+			auto l_kj = _get(k, j);
+			_diag[k] -= _diag[j] * l_kj * l_kj;
+			while (_rowind[colptr_first[j]] <= k) ++colptr_first[j];
+			for (Index m = colptr_first[j]; m < _colptr[j + 1]; ++m) {
+				Index i = _rowind[m]; auto l_ij = _lval[m];
+				kth_col[i] -= _diag[j] * l_kj * l_ij;
+			}
+		}
+		// update nnz_rows_of_col lists, kth column, and kth row of the matrix
+		for (Index m = _colptr[k]; m < _colptr[k + 1]; ++m) {
+			Index i = _rowind[m];
+			nnz_rows_of_col[i].push_back(k);
+			_lval[m] = kth_col[i] / _diag[k];
+		}
+	}
+	return *this;
 }

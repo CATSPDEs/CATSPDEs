@@ -230,12 +230,43 @@ int main() {
 							{	-1,	0,	0,	-1,	-1,	4	}
 						};
 						auto b = A * std::vector<double>(6, 1.);
-						logger.beg("IKJ decomposition");
+						logger.beg("IKJ / Crout decomposition");
 							A.decompositionStrategy = DenseDecompositionStrategy::Crout_L_plus_I_times_D_times_I_plus_U<double>;
 							A.decompose().export(logger.buf);
 							logger.buf << "\nsoln: " << A.backSubst(A.forwSubst(b, 0.));
 							logger.buf << "\nsoln: " << A.backSubst(A.forwSubst(b));
 							logger.buf << "\nsoln: " << A.backSubst(A.diagSubst(A.forwSubst(b, 0.)), 0.);
+							logger.log();
+						logger.end();
+						logger.beg("Crout for CSlC");
+							CSlCMatrix<double> B {
+								{ 0, 3, 4, 7, 9, 10, 10 },
+								{ 2, 3, 5, 3, 3, 4, 5, 4, 5, 5 },
+								{ -1, -1, -1, -1, 0, -1, 0, 0, -1, -1},
+								{ -1, -1, -1, -1, 0, -1, 0, 0, -1, -1 },
+								{ 3, 2, 3, 2, 3, 4 }
+							};
+							B.export(logger.buf);
+							logger.log();
+							B.decompose().export(logger.buf);
+							logger.buf << "\nsoln: " << B.backSubst(B.forwSubst(b, 0.));
+							logger.buf << "\nsoln: " << B.backSubst(B.forwSubst(b));
+							logger.buf << "\nsoln: " << B.backSubst(B.diagSubst(B.forwSubst(b, 0.)), 0.);
+							logger.log();
+						logger.end();
+						logger.beg("Crout for SymmetricCSlC");
+							SymmetricCSlCMatrix<double> S {
+								{ 0, 3, 4, 7, 9, 10, 10 },
+								{ 2, 3, 5, 3, 3, 4, 5, 4, 5, 5 },
+								{ -1, -1, -1, -1, 0, -1, 0, 0, -1, -1},
+								{ 3, 2, 3, 2, 3, 4 }
+							};
+							S.export(logger.buf);
+							logger.log();
+							S.decompose().export(logger.buf);
+							logger.buf << "\nsoln: " << S.backSubst(S.forwSubst(b, 0.));
+							logger.buf << "\nsoln: " << S.backSubst(S.forwSubst(b));
+							logger.buf << "\nsoln: " << S.backSubst(S.diagSubst(S.forwSubst(b, 0.)), 0.);
 							logger.log();
 						logger.end();
 					logger.end();
