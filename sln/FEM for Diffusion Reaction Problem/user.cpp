@@ -100,7 +100,7 @@ int main() {
 			}, DirichletBC { DirichletCondition, strongBCsPredicate };
 			// mesh
 			Index initialRefCount;
-			vector<string> meshType { "uniform.ntn", "nonuniform.ntn" };
+			vector<string> meshType { "rct_uniform.ntn", "crs_uniform.ntn", "arb_uniform.ntn", "non_uniform.ntn" };
 			auto meshTypeIndex = logger.opt("mesh type", meshType);
 			logger.inp("refine initial mesh n times, n", initialRefCount);
 			logger.beg("import initial mesh");
@@ -123,7 +123,8 @@ int main() {
 				"Multigrig",
 				"Krylov solver w/ MG as an inner iteration",
 				"Krylov method as stand-alone solver",
-				"Smoother"
+				"Smoother",
+				"Krylov method w/ ILDL^T(0) preconditioner"
 			});
 			logger.beg("set iterative solver data");
 				Index maxNumbOfIterations;
@@ -320,20 +321,40 @@ int main() {
 			else x = smoothers[smoothersIndex](A, b, shuffle(A.getOrder()), omega, maxNumbOfIterations, eps, stop, i_log);
 			logger.exp("smoothers.txt");
 		}
+		else if (method == 4) {
+			using namespace Krylov;
+			auto dummy = PCG;
+			vector<decltype(dummy)> KrylovSolvers { PCG, PBiCGStab };
+			auto KrylovSolversIndex = logger.opt("choose solver", { "PCG", "PBiCGStab" });
+			logger.beg("refine mesh");
+				Omega.refine(numbOfMeshLevels);
+			logger.end();
+			logger.beg("assemble system");
+				Index t = 0;
+				auto system = assembleSystem(PDE, Omega, RobinBC, DirichletBC, FE, t);
+				logger.buf << "numb of elements = " << t;
+				logger.log();
+				auto& A = get<0>(system);
+				auto& b = get<1>(system);
+			logger.end();
+			logger.beg("compute ILDL^T(0) factorization");
+				auto LDLT = A;
+				LDLT.decompose();
+			logger.end();
+			logger.beg("solve");
+				x = KrylovSolvers[KrylovSolversIndex]([&](vector<double> const & x) {
+					return LDLT.backSubst(LDLT.diagSubst(LDLT.forwSubst(x, 0.)), 0.);
+				}, A, b, shuffle(A.getOrder()), maxNumbOfIterations, eps, stop, i_log, 15);
+			logger.end();
+			// save stdin commands
+			logger.exp("lukrylov.txt");
+		}
 		logger.beg("export soln vector");
 			export(x, oPath + "x.dat");
 		logger.end();
 		logger.beg("export mesh");
 			Omega.export(oPath + "mesh.ntr", { {"format", "NTR"} });
 		logger.end();
-
-		logger.beg("interpolant test");
-			TriangularScalarFEInterpolant interp { x, FE, Omega };
-			logger.buf << interp(centroid(Omega.getElement(2)), 2) << '\n' 
-			           << interp.grad(centroid(Omega.getElement(10)), 10);
-			logger.log();
-		logger.end();
-
 	}
 	catch (std::exception const & e) {
 		logger.err(e.what());

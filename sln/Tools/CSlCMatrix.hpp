@@ -263,7 +263,7 @@ CSlCMatrix<T>& CSlCMatrix<T>::decompose() {
 		for (Index j : nnz_rows_of_col[k]) {
 			auto u_jk = _get(j, k), l_kj = _get(k, j);
 			_diag[k] -= _diag[j] * l_kj * u_jk;
-			while (_rowind[colptr_first[j]] <= k) ++colptr_first[j];
+			while (colptr_first[j] < _colptr[j + 1] && _rowind[colptr_first[j]] <= k) ++colptr_first[j];
 			for (Index m = colptr_first[j]; m < _colptr[j + 1]; ++m) {
 				Index i = _rowind[m]; auto l_ij = _lval[m], u_ji = _uval[m];
 				kth_col[i] -= _diag[j] * u_jk * l_ij;

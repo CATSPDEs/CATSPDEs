@@ -52,5 +52,8 @@
     <Text Include="pkrylov.txt">
       <Filter>stdin</Filter>
     </Text>
+    <Text Include="lukrylov.txt">
+      <Filter>stdin</Filter>
+    </Text>
   </ItemGroup>
 </Project>

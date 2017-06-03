@@ -134,6 +134,7 @@
   </ItemGroup>
   <ItemGroup>
     <Text Include="krylov.txt" />
+    <Text Include="lukrylov.txt" />
     <Text Include="pkrylov.txt" />
     <Text Include="smoothers.txt" />
     <Text Include="mg.txt" />

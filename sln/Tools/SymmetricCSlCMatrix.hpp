@@ -306,7 +306,7 @@ SymmetricCSlCMatrix<T>& SymmetricCSlCMatrix<T>::decompose() {
 		for (Index j : nnz_rows_of_col[k]) {
 			auto l_kj = _get(k, j);
 			_diag[k] -= _diag[j] * l_kj * l_kj;
-			while (_rowind[colptr_first[j]] <= k) ++colptr_first[j];
+			while (colptr_first[j] < _colptr[j + 1] && _rowind[colptr_first[j]] <= k) ++colptr_first[j];
 			for (Index m = colptr_first[j]; m < _colptr[j + 1]; ++m) {
 				Index i = _rowind[m]; auto l_ij = _lval[m];
 				kth_col[i] -= _diag[j] * l_kj * l_ij;
