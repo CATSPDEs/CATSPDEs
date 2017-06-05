@@ -53,6 +53,9 @@ public:
 	void                exportHarwellBoeing(std::string const &, Parameters const & params = {}) const final;
 	CSCMatrix& generatePatternFrom(DOFsConnectivityList const &) final;
 	CSCMatrix& enforceDirichletBCs(Index2Value<T> const &, T*) final;
+	CSCMatrix& modifyColumn(Index j, std::function<void(T&)> const & f) {
+		for (Index i = _colptr[j]; i < _colptr[j + 1]; ++i) f(_values[i]);
+	}
 };
 
 // implementation

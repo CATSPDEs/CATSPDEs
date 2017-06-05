@@ -40,6 +40,7 @@ public:
 		std::vector<CurvilinearEdge> const & edges
 	) 
 		: AbstractMesh(nodes, elements)
+		, _fineNeighborsIndicies(elements.size())
 		, _neighbors(neighbors)
 		, _curves(curves)
 		, _edges(edges)

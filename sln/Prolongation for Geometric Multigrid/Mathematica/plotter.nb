@@ -10,20 +10,26 @@
 NotebookFileLineBreakTest
 NotebookFileLineBreakTest
 NotebookDataPosition[       158,          7]
-NotebookDataLength[     18151,        461]
-NotebookOptionsPosition[     17569,        437]
-NotebookOutlinePosition[     17916,        452]
-CellTagsIndexPosition[     17873,        449]
+NotebookDataLength[     21326,        561]
+NotebookOptionsPosition[     19964,        515]
+NotebookOutlinePosition[     20311,        530]
+CellTagsIndexPosition[     20268,        527]
 WindowFrame->Normal*)
 
 (* Beginning of Notebook Content *)
 Notebook[{
-Cell[BoxData[
+Cell[BoxData[{
  RowBox[{"NotebookEvaluate", "[", 
   RowBox[{
    RowBox[{"NotebookDirectory", "[", "]"}], "<>", 
-   "\"\<../../Tools/Mathematica/triangulation.nb\>\""}], "]"}]], "Input",
- CellChangeTimes->{{3.7044781501781597`*^9, 3.7044781514040146`*^9}}],
+   "\"\<../../Tools/Mathematica/triangulation.nb\>\""}], 
+  "]"}], "\[IndentingNewLine]", 
+ RowBox[{"NotebookEvaluate", "[", 
+  RowBox[{
+   RowBox[{"NotebookDirectory", "[", "]"}], "<>", 
+   "\"\<../../Tools/Mathematica/FEinterpolants.nb\>\""}], "]"}]}], "Input",
+ CellChangeTimes->{{3.7044781501781597`*^9, 3.7044781514040146`*^9}, {
+  3.70558874112025*^9, 3.7055887610225925`*^9}}],
 
 Cell[BoxData[
  RowBox[{
@@ -31,412 +37,484 @@ Cell[BoxData[
    RowBox[{"NotebookDirectory", "[", "]"}]}], ";"}]], "Input",
  CellChangeTimes->{{3.7044782120585885`*^9, 3.7044782317795954`*^9}}],
 
+Cell[CellGroupData[{
+
+Cell["Import Coarse DOFs", "Section",
+ CellChangeTimes->{{3.7055887814959493`*^9, 3.7055887932576075`*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"FE", "=", "\[CapitalDelta]Pt3LB"}], ";"}]], "Input",
+ CellChangeTimes->{{3.7055888341645613`*^9, 3.7055888439069767`*^9}, {
+   3.7055893589608727`*^9, 3.7055893760993686`*^9}, 3.7055894167815933`*^9, {
+   3.7055906450697837`*^9, 3.7055906462179165`*^9}, {3.7055911403587084`*^9, 
+   3.7055911431052327`*^9}, {3.705592561643198*^9, 3.7055925630003505`*^9}, {
+   3.7055949698723383`*^9, 3.7055949700395155`*^9}, 3.7056644932880836`*^9, {
+   3.705664588907991*^9, 3.705664591706962*^9}, {3.7056711994214067`*^9, 
+   3.7056712022408457`*^9}, {3.705671274213913*^9, 3.7056712746272345`*^9}, {
+   3.7056713273942595`*^9, 3.7056713279367294`*^9}, {3.7056748965064197`*^9, 
+   3.7056748982390165`*^9}, {3.705675982114411*^9, 3.7056759823105707`*^9}, {
+   3.7056763199599595`*^9, 3.7056763218855376`*^9}}],
+
 Cell[BoxData[{
  RowBox[{
   RowBox[{"mesh0", "=", 
-   RowBox[{"import", "@", "\"\<crs_uniform.ntn\>\""}]}], 
+   RowBox[{"import", "@", "\"\<mesh0.ntr\>\""}]}], 
   ";"}], "\[IndentingNewLine]", 
+ RowBox[{"highlight", "[", 
+  RowBox[{"mesh0", ",", 
+   RowBox[{"{", "\"\<nodesNumn\>\"", "}"}], ",", "0"}], "]"}]}], "Input",
+ CellChangeTimes->{{3.705589004766984*^9, 3.705589007608167*^9}, {
+   3.705589170177103*^9, 3.7055891740910215`*^9}, {3.705591300770239*^9, 
+   3.705591307360093*^9}, 3.7055959946498613`*^9, {3.705654727578642*^9, 
+   3.7056547300623283`*^9}}],
+
+Cell[BoxData[
  RowBox[{
-  RowBox[{"mesh1", "=", 
-   RowBox[{"import", "@", "\"\<mesh1.ntr\>\""}]}], ";"}]}], "Input",
- CellChangeTimes->{{3.704478171950452*^9, 3.704478195119554*^9}, 
-   3.704478515669428*^9, {3.704479826937008*^9, 3.704479846130548*^9}}],
+  RowBox[{"\[Xi]0", "=", 
+   RowBox[{
+    RowBox[{"Import", "@", "\"\<x.dat\>\""}], "//", "First"}]}], 
+  ";"}]], "Input",
+ CellChangeTimes->{{3.7055888510684566`*^9, 3.705588872843672*^9}, {
+   3.705588935747596*^9, 3.705588945753587*^9}, 3.7055925455486836`*^9}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"P\[Xi]0", "=", 
+   RowBox[{"\[ScriptCapitalP]", "[", 
+    RowBox[{"\[Xi]0", ",", "FE", ",", "mesh0"}], "]"}]}], ";"}]], "Input",
+ CellChangeTimes->{{3.705589183983531*^9, 3.7055892117317533`*^9}, {
+  3.7055925501371765`*^9, 3.705592552968373*^9}}],
+
+Cell[BoxData[
+ RowBox[{"p0", "=", 
+  RowBox[{"plot\[ScriptCapitalP]\[Xi]", "[", 
+   RowBox[{"P\[Xi]0", ",", "mesh0", ",", 
+    RowBox[{"{", 
+     RowBox[{
+      RowBox[{
+       RowBox[{"ColorData", "[", 
+        RowBox[{"97", ",", "\"\<ColorList\>\""}], "]"}], "[", 
+       RowBox[{"[", "1", "]"}], "]"}], ",", 
+      RowBox[{"Opacity", "@", "1"}]}], "}"}]}], "]"}]}]], "Input",
+ CellChangeTimes->{{3.7055892148853083`*^9, 3.7055892350207376`*^9}, 
+   3.7055925570037727`*^9, {3.705594031168001*^9, 3.705594031797551*^9}, {
+   3.705604237241542*^9, 3.7056042465365605`*^9}, {3.705656182931466*^9, 
+   3.705656189398622*^9}, {3.7056708256659994`*^9, 3.705670826119402*^9}}]
+}, Closed]],
 
 Cell[CellGroupData[{
 
-Cell[BoxData[
- RowBox[{"highlight", "[", 
-  RowBox[{"mesh1", ",", 
-   RowBox[{"{", "\"\<nodesNumn\>\"", "}"}], ",", "0"}], "]"}]], "Input",
+Cell["Prolongate", "Section",
+ CellChangeTimes->{{3.7055888091892204`*^9, 3.705588810067113*^9}, {
+  3.705592608578455*^9, 3.70559261106688*^9}}],
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{"mesh1", "=", 
+   RowBox[{"import", "@", "\"\<mesh1.ntr\>\""}]}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"mesh2", "=", 
+   RowBox[{"import", "@", "\"\<mesh2.ntr\>\""}]}], ";"}]}], "Input",
+ CellChangeTimes->{{3.704478171950452*^9, 3.704478195119554*^9}, 
+   3.704478515669428*^9, {3.704479826937008*^9, 3.704479846130548*^9}, {
+   3.7055926142034225`*^9, 3.705592628999758*^9}}],
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{"P0", "=", 
+   RowBox[{
+    RowBox[{"Import", "@", "\"\<P0.rua\>\""}], "//", "Transpose"}]}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"P1", "=", 
+   RowBox[{
+    RowBox[{"Import", "@", "\"\<P1.rua\>\""}], "//", "Transpose"}]}], 
+  ";"}]}], "Input",
+ CellChangeTimes->{{3.7055927292128057`*^9, 3.7055927690711255`*^9}}],
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{
+   RowBox[{
+    RowBox[{"highlight", "[", 
+     RowBox[{"#", ",", 
+      RowBox[{"{", "}"}], ",", "0"}], "]"}], "&"}], "/@", 
+   RowBox[{"{", 
+    RowBox[{"mesh0", ",", "mesh1", ",", "mesh2"}], "}"}]}], "//", 
+  "GraphicsRow"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{
+    RowBox[{"MatrixPlot", "[", 
+     RowBox[{"#", ",", 
+      RowBox[{"Mesh", "\[Rule]", "None"}], ",", 
+      RowBox[{"MaxPlotPoints", "\[Rule]", "Infinity"}]}], "]"}], "&"}], "/@", 
+   RowBox[{"{", 
+    RowBox[{"P0", ",", "P1"}], "}"}]}], "//", "GraphicsRow"}]}], "Input",
  CellChangeTimes->{{3.70447851804502*^9, 3.704478536040696*^9}, {
   3.70447862517334*^9, 3.7044786359006724`*^9}, {3.704479855372964*^9, 
   3.7044798736748676`*^9}, {3.704479938082513*^9, 3.704479961211563*^9}, {
-  3.70448043164893*^9, 3.704480432388344*^9}}],
+  3.70448043164893*^9, 3.704480432388344*^9}, {3.705592640223911*^9, 
+  3.7055926772260456`*^9}, {3.7055927767096305`*^9, 3.705592820236847*^9}, {
+  3.705593057698429*^9, 3.7055930636613407`*^9}, {3.705596047991621*^9, 
+  3.7055960722287645`*^9}}],
 
-Cell[BoxData[
- GraphicsBox[
-  TagBox[
-   DynamicModuleBox[{Typeset`mesh = HoldComplete[
-     MeshRegion[{{0., 0.}, {0., 1.}, {1., 0.}, {1., 1.}, {0.5, 0.5}, {0., 
-      0.5}, {0.5, 0.}, {1., 0.5}, {0.5, 1.}, {0.75, 0.75}, {0.75, 0.5}, {1., 
-      0.75}, {0.25, 1.}, {0.25, 0.75}, {0.5, 0.75}, {0.75, 1.}}, {
-       Polygon[{{10, 11, 12}, {6, 1, 5}, {13, 14, 15}, {6, 14, 2}, {5, 1, 
-        7}, {7, 3, 5}, {3, 11, 5}, {16, 15, 10}, {8, 12, 11}, {4, 10, 12}, {5,
-         11, 10}, {5, 15, 14}, {9, 13, 15}, {2, 14, 13}, {5, 10, 15}, {4, 16, 
-        10}, {9, 15, 16}, {3, 8, 11}, {6, 5, 14}}]}, 
-      Properties -> {{
-         0, {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16}} -> (
-         MeshCellStyle -> {
-           RGBColor[1, 0, 0], 
-           RGBColor[1, 0, 0], 
-           RGBColor[1, 0, 0], 
-           RGBColor[1, 0, 0], 
-           RGBColor[1, 0, 0], 
-           RGBColor[1, 0, 0], 
-           RGBColor[1, 0, 0], 
-           RGBColor[1, 0, 0], 
-           RGBColor[1, 0, 0], 
-           RGBColor[1, 0, 0], 
-           RGBColor[1, 0, 0], 
-           RGBColor[1, 0, 0], 
-           RGBColor[1, 0, 0], 
-           RGBColor[1, 0, 0], 
-           RGBColor[1, 0, 0], 
-           RGBColor[1, 0, 0]}), {0, Default} -> (MeshCellStyle -> 
-         Automatic), {
-         1, {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 
-          19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 
-          34}} -> (MeshCellStyle -> {
-           GrayLevel[0], 
-           GrayLevel[0], 
-           GrayLevel[0], 
-           GrayLevel[0], 
-           GrayLevel[0], 
-           GrayLevel[0], 
-           GrayLevel[0], 
-           GrayLevel[0], 
-           GrayLevel[0], 
-           GrayLevel[0], 
-           GrayLevel[0], 
-           GrayLevel[0], 
-           GrayLevel[0], 
-           GrayLevel[0], 
-           GrayLevel[0], 
-           GrayLevel[0], 
-           GrayLevel[0], 
-           GrayLevel[0], 
-           GrayLevel[0], 
-           GrayLevel[0], 
-           GrayLevel[0], 
-           GrayLevel[0], 
-           GrayLevel[0], 
-           GrayLevel[0], 
-           GrayLevel[0], 
-           GrayLevel[0], 
-           GrayLevel[0], 
-           GrayLevel[0], 
-           GrayLevel[0], 
-           GrayLevel[0], 
-           GrayLevel[0], 
-           GrayLevel[0], 
-           GrayLevel[0], 
-           GrayLevel[0]}), {1, Default} -> (MeshCellStyle -> Automatic), {
-         0, {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16}} -> (
-         MeshCellLabel -> {
-           Style[0, 
-            RGBColor[1, 0, 0]], 
-           Style[1, 
-            RGBColor[1, 0, 0]], 
-           Style[2, 
-            RGBColor[1, 0, 0]], 
-           Style[3, 
-            RGBColor[1, 0, 0]], 
-           Style[4, 
-            RGBColor[1, 0, 0]], 
-           Style[5, 
-            RGBColor[1, 0, 0]], 
-           Style[6, 
-            RGBColor[1, 0, 0]], 
-           Style[7, 
-            RGBColor[1, 0, 0]], 
-           Style[8, 
-            RGBColor[1, 0, 0]], 
-           Style[9, 
-            RGBColor[1, 0, 0]], 
-           Style[10, 
-            RGBColor[1, 0, 0]], 
-           Style[11, 
-            RGBColor[1, 0, 0]], 
-           Style[12, 
-            RGBColor[1, 0, 0]], 
-           Style[13, 
-            RGBColor[1, 0, 0]], 
-           Style[14, 
-            RGBColor[1, 0, 0]], 
-           Style[15, 
-            RGBColor[1, 0, 0]]}), {0, Default} -> (MeshCellLabel -> 
-         Automatic)}, 
-      Method -> {
-       "EliminateUnusedCoordinates" -> True, "DeleteDuplicateCoordinates" -> 
-        Automatic, "VertexAlias" -> Identity, "CheckOrientation" -> Automatic,
-         "CoplanarityTolerance" -> Automatic, "CheckIntersections" -> 
-        Automatic, "BoundaryNesting" -> Automatic, "SeparateBoundaries" -> 
-        False, "TJunction" -> Automatic, "PropagateMarkers" -> True, 
-        "ZeroTest" -> Automatic, "Hash" -> 1251510391038503198}, {
-      PlotRange -> All, PlotTheme -> "Lines"}]]}, 
-    TagBox[
-     GraphicsComplexBox[{{0., 0.}, {0., 1.}, {1., 0.}, {1., 1.}, {0.5, 0.5}, {
-      0., 0.5}, {0.5, 0.}, {1., 0.5}, {0.5, 1.}, {0.75, 0.75}, {0.75, 0.5}, {
-      1., 0.75}, {0.25, 1.}, {0.25, 0.75}, {0.5, 0.75}, {0.75, 1.}}, 
-      {Hue[0.6, 0.3, 0.95], EdgeForm[Hue[0.6, 0.3, 0.75]], 
-       LineBox[{{10, 11}, {11, 12}, {12, 10}, {6, 1}, {1, 5}, {5, 6}, {13, 
-        14}, {14, 15}, {15, 13}, {6, 14}, {14, 2}, {2, 6}, {1, 7}, {7, 5}, {7,
-         3}, {3, 5}, {3, 11}, {11, 5}, {16, 15}, {15, 10}, {10, 16}, {8, 
-        12}, {11, 8}, {4, 10}, {12, 4}, {10, 5}, {5, 15}, {14, 5}, {9, 13}, {
-        15, 9}, {13, 2}, {4, 16}, {16, 9}, {3, 8}}], 
-       {GrayLevel[0], 
-        LineBox[{{10, 11}, {11, 12}, {12, 10}, {6, 1}, {1, 5}, {5, 6}, {13, 
-         14}, {14, 15}, {15, 13}, {6, 14}, {14, 2}, {2, 6}, {1, 7}, {7, 5}, {
-         7, 3}, {3, 5}, {3, 11}, {11, 5}, {16, 15}, {15, 10}, {10, 16}, {8, 
-         12}, {11, 8}, {4, 10}, {12, 4}, {10, 5}, {5, 15}, {14, 5}, {9, 13}, {
-         15, 9}, {13, 2}, {4, 16}, {16, 9}, {3, 8}}]}, {{
-         {RGBColor[1, 0, 0], PointBox[{{1}}]}, InsetBox[
-          StyleBox["0",
-           StripOnInput->False,
-           LineColor->RGBColor[1, 0, 0],
-           FrontFaceColor->RGBColor[1, 0, 0],
-           BackFaceColor->RGBColor[1, 0, 0],
-           GraphicsColor->RGBColor[1, 0, 0],
-           FontColor->RGBColor[1, 0, 0]], Offset[{2, 2}, {0., 0.}], 
-          ImageScaled[{0, 0}],
-          BaseStyle->"Graphics"]}, {
-         {RGBColor[1, 0, 0], PointBox[{{2}}]}, InsetBox[
-          StyleBox["1",
-           StripOnInput->False,
-           LineColor->RGBColor[1, 0, 0],
-           FrontFaceColor->RGBColor[1, 0, 0],
-           BackFaceColor->RGBColor[1, 0, 0],
-           GraphicsColor->RGBColor[1, 0, 0],
-           FontColor->RGBColor[1, 0, 0]], Offset[{2, 2}, {0., 1.}], 
-          ImageScaled[{0, 0}],
-          BaseStyle->"Graphics"]}, {
-         {RGBColor[1, 0, 0], PointBox[{{3}}]}, InsetBox[
-          StyleBox["2",
-           StripOnInput->False,
-           LineColor->RGBColor[1, 0, 0],
-           FrontFaceColor->RGBColor[1, 0, 0],
-           BackFaceColor->RGBColor[1, 0, 0],
-           GraphicsColor->RGBColor[1, 0, 0],
-           FontColor->RGBColor[1, 0, 0]], Offset[{2, 2}, {1., 0.}], 
-          ImageScaled[{0, 0}],
-          BaseStyle->"Graphics"]}, {
-         {RGBColor[1, 0, 0], PointBox[{{4}}]}, InsetBox[
-          StyleBox["3",
-           StripOnInput->False,
-           LineColor->RGBColor[1, 0, 0],
-           FrontFaceColor->RGBColor[1, 0, 0],
-           BackFaceColor->RGBColor[1, 0, 0],
-           GraphicsColor->RGBColor[1, 0, 0],
-           FontColor->RGBColor[1, 0, 0]], Offset[{2, 2}, {1., 1.}], 
-          ImageScaled[{0, 0}],
-          BaseStyle->"Graphics"]}, {
-         {RGBColor[1, 0, 0], PointBox[{{5}}]}, InsetBox[
-          StyleBox["4",
-           StripOnInput->False,
-           LineColor->RGBColor[1, 0, 0],
-           FrontFaceColor->RGBColor[1, 0, 0],
-           BackFaceColor->RGBColor[1, 0, 0],
-           GraphicsColor->RGBColor[1, 0, 0],
-           FontColor->RGBColor[1, 0, 0]], Offset[{2, 2}, {0.5, 0.5}], 
-          ImageScaled[{0, 0}],
-          BaseStyle->"Graphics"]}, {
-         {RGBColor[1, 0, 0], PointBox[{{6}}]}, InsetBox[
-          StyleBox["5",
-           StripOnInput->False,
-           LineColor->RGBColor[1, 0, 0],
-           FrontFaceColor->RGBColor[1, 0, 0],
-           BackFaceColor->RGBColor[1, 0, 0],
-           GraphicsColor->RGBColor[1, 0, 0],
-           FontColor->RGBColor[1, 0, 0]], Offset[{2, 2}, {0., 0.5}], 
-          ImageScaled[{0, 0}],
-          BaseStyle->"Graphics"]}, {
-         {RGBColor[1, 0, 0], PointBox[{{7}}]}, InsetBox[
-          StyleBox["6",
-           StripOnInput->False,
-           LineColor->RGBColor[1, 0, 0],
-           FrontFaceColor->RGBColor[1, 0, 0],
-           BackFaceColor->RGBColor[1, 0, 0],
-           GraphicsColor->RGBColor[1, 0, 0],
-           FontColor->RGBColor[1, 0, 0]], Offset[{2, 2}, {0.5, 0.}], 
-          ImageScaled[{0, 0}],
-          BaseStyle->"Graphics"]}, {
-         {RGBColor[1, 0, 0], PointBox[{{8}}]}, InsetBox[
-          StyleBox["7",
-           StripOnInput->False,
-           LineColor->RGBColor[1, 0, 0],
-           FrontFaceColor->RGBColor[1, 0, 0],
-           BackFaceColor->RGBColor[1, 0, 0],
-           GraphicsColor->RGBColor[1, 0, 0],
-           FontColor->RGBColor[1, 0, 0]], Offset[{2, 2}, {1., 0.5}], 
-          ImageScaled[{0, 0}],
-          BaseStyle->"Graphics"]}, {
-         {RGBColor[1, 0, 0], PointBox[{{9}}]}, InsetBox[
-          StyleBox["8",
-           StripOnInput->False,
-           LineColor->RGBColor[1, 0, 0],
-           FrontFaceColor->RGBColor[1, 0, 0],
-           BackFaceColor->RGBColor[1, 0, 0],
-           GraphicsColor->RGBColor[1, 0, 0],
-           FontColor->RGBColor[1, 0, 0]], Offset[{2, 2}, {0.5, 1.}], 
-          ImageScaled[{0, 0}],
-          BaseStyle->"Graphics"]}, {
-         {RGBColor[1, 0, 0], PointBox[{{10}}]}, InsetBox[
-          StyleBox["9",
-           StripOnInput->False,
-           LineColor->RGBColor[1, 0, 0],
-           FrontFaceColor->RGBColor[1, 0, 0],
-           BackFaceColor->RGBColor[1, 0, 0],
-           GraphicsColor->RGBColor[1, 0, 0],
-           FontColor->RGBColor[1, 0, 0]], Offset[{2, 2}, {0.75, 0.75}], 
-          ImageScaled[{0, 0}],
-          BaseStyle->"Graphics"]}, {
-         {RGBColor[1, 0, 0], PointBox[{{11}}]}, InsetBox[
-          StyleBox["10",
-           StripOnInput->False,
-           LineColor->RGBColor[1, 0, 0],
-           FrontFaceColor->RGBColor[1, 0, 0],
-           BackFaceColor->RGBColor[1, 0, 0],
-           GraphicsColor->RGBColor[1, 0, 0],
-           FontColor->RGBColor[1, 0, 0]], Offset[{2, 2}, {0.75, 0.5}], 
-          ImageScaled[{0, 0}],
-          BaseStyle->"Graphics"]}, {
-         {RGBColor[1, 0, 0], PointBox[{{12}}]}, InsetBox[
-          StyleBox["11",
-           StripOnInput->False,
-           LineColor->RGBColor[1, 0, 0],
-           FrontFaceColor->RGBColor[1, 0, 0],
-           BackFaceColor->RGBColor[1, 0, 0],
-           GraphicsColor->RGBColor[1, 0, 0],
-           FontColor->RGBColor[1, 0, 0]], Offset[{2, 2}, {1., 0.75}], 
-          ImageScaled[{0, 0}],
-          BaseStyle->"Graphics"]}, {
-         {RGBColor[1, 0, 0], PointBox[{{13}}]}, InsetBox[
-          StyleBox["12",
-           StripOnInput->False,
-           LineColor->RGBColor[1, 0, 0],
-           FrontFaceColor->RGBColor[1, 0, 0],
-           BackFaceColor->RGBColor[1, 0, 0],
-           GraphicsColor->RGBColor[1, 0, 0],
-           FontColor->RGBColor[1, 0, 0]], Offset[{2, 2}, {0.25, 1.}], 
-          ImageScaled[{0, 0}],
-          BaseStyle->"Graphics"]}, {
-         {RGBColor[1, 0, 0], PointBox[{{14}}]}, InsetBox[
-          StyleBox["13",
-           StripOnInput->False,
-           LineColor->RGBColor[1, 0, 0],
-           FrontFaceColor->RGBColor[1, 0, 0],
-           BackFaceColor->RGBColor[1, 0, 0],
-           GraphicsColor->RGBColor[1, 0, 0],
-           FontColor->RGBColor[1, 0, 0]], Offset[{2, 2}, {0.25, 0.75}], 
-          ImageScaled[{0, 0}],
-          BaseStyle->"Graphics"]}, {
-         {RGBColor[1, 0, 0], PointBox[{{15}}]}, InsetBox[
-          StyleBox["14",
-           StripOnInput->False,
-           LineColor->RGBColor[1, 0, 0],
-           FrontFaceColor->RGBColor[1, 0, 0],
-           BackFaceColor->RGBColor[1, 0, 0],
-           GraphicsColor->RGBColor[1, 0, 0],
-           FontColor->RGBColor[1, 0, 0]], Offset[{2, 2}, {0.5, 0.75}], 
-          ImageScaled[{0, 0}],
-          BaseStyle->"Graphics"]}, {
-         {RGBColor[1, 0, 0], PointBox[{{16}}]}, InsetBox[
-          StyleBox["15",
-           StripOnInput->False,
-           LineColor->RGBColor[1, 0, 0],
-           FrontFaceColor->RGBColor[1, 0, 0],
-           BackFaceColor->RGBColor[1, 0, 0],
-           GraphicsColor->RGBColor[1, 0, 0],
-           FontColor->RGBColor[1, 0, 0]], Offset[{2, 2}, {0.75, 1.}], 
-          ImageScaled[{0, 0}],
-          BaseStyle->"Graphics"]}}}],
-     MouseAppearanceTag["LinkHand"]],
-    AllowKernelInitialization->False],
-   "MeshGraphics",
-   AutoDelete->True,
-   Editable->False,
-   Selectable->False],
-  DefaultBaseStyle->{
-   "Graphics", FrontEnd`GraphicsHighlightColor -> Hue[0.1, 1, 0.7]},
-  PlotRange->All]], "Output",
- CellChangeTimes->{{3.704478535851035*^9, 3.704478542123871*^9}, {
-   3.7044786144272375`*^9, 3.704478637207815*^9}, {3.7044798566962852`*^9, 
-   3.7044798743816223`*^9}, {3.70447994375552*^9, 3.704479962331404*^9}, 
-   3.704480433065958*^9}]
-}, Open  ]],
-
-Cell[BoxData[
+Cell[BoxData[{
  RowBox[{
-  RowBox[{"P0", "=", 
-   RowBox[{"Import", "@", "\"\<P0.rua\>\""}]}], ";"}]], "Input",
- CellChangeTimes->{{3.704479993176749*^9, 3.7044800180113306`*^9}}],
+  RowBox[{"\[Xi]1", "=", 
+   RowBox[{"P0", ".", "\[Xi]0"}]}], ";"}], "\n", 
+ RowBox[{
+  RowBox[{"P\[Xi]1", "=", 
+   RowBox[{"\[ScriptCapitalP]", "[", 
+    RowBox[{"\[Xi]1", ",", "FE", ",", "mesh1"}], "]"}]}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"p1", "=", 
+   RowBox[{"plot\[ScriptCapitalP]\[Xi]", "[", 
+    RowBox[{"P\[Xi]1", ",", "mesh1", ",", 
+     RowBox[{"{", 
+      RowBox[{
+       RowBox[{
+        RowBox[{"ColorData", "[", 
+         RowBox[{"97", ",", "\"\<ColorList\>\""}], "]"}], "[", 
+        RowBox[{"[", "2", "]"}], "]"}], ",", 
+       RowBox[{"Opacity", "@", "1"}]}], "}"}]}], "]"}]}], ";"}]}], "Input",
+ CellChangeTimes->{{3.7055936795777225`*^9, 3.705593704226323*^9}, 
+   3.7055937719163103`*^9, {3.70559394313857*^9, 3.7055939671842146`*^9}, {
+   3.705595489272519*^9, 3.7055954924087996`*^9}, {3.7055963150692444`*^9, 
+   3.7055963202586803`*^9}, {3.705656200538267*^9, 3.705656209423856*^9}, {
+   3.7056714948798294`*^9, 3.7056714953059835`*^9}}],
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{"\[Xi]2", "=", 
+   RowBox[{"P1", ".", "\[Xi]1"}]}], ";"}], "\n", 
+ RowBox[{
+  RowBox[{"P\[Xi]2", "=", 
+   RowBox[{"\[ScriptCapitalP]", "[", 
+    RowBox[{"\[Xi]2", ",", "FE", ",", "mesh2"}], "]"}]}], ";"}], "\n", 
+ RowBox[{
+  RowBox[{"p2", "=", 
+   RowBox[{"plot\[ScriptCapitalP]\[Xi]", "[", 
+    RowBox[{"P\[Xi]2", ",", "mesh2", ",", 
+     RowBox[{"{", 
+      RowBox[{
+       RowBox[{
+        RowBox[{"ColorData", "[", 
+         RowBox[{"97", ",", "\"\<ColorList\>\""}], "]"}], "[", 
+        RowBox[{"[", "3", "]"}], "]"}], ",", 
+       RowBox[{"Opacity", "@", "1"}]}], "}"}]}], "]"}]}], ";"}]}], "Input",
+ CellChangeTimes->{{3.7055937822127495`*^9, 3.7055937941769114`*^9}, 
+   3.7055939379687424`*^9, {3.7055939888494577`*^9, 3.705594018410159*^9}, {
+   3.705607168360407*^9, 3.705607175259089*^9}, {3.705656214695427*^9, 
+   3.7056562191233377`*^9}, {3.7056714997594843`*^9, 3.705671500302988*^9}}],
+
+Cell[BoxData[
+ RowBox[{"GraphicsRow", "[", 
+  RowBox[{
+   RowBox[{"{", 
+    RowBox[{"p0", ",", "p1", ",", "p2"}], "}"}], ",", 
+   RowBox[{"ImageSize", "\[Rule]", "Full"}]}], "]"}]], "Input",
+ CellChangeTimes->{{3.705593870106017*^9, 3.705593900432051*^9}, {
+   3.705594058871639*^9, 3.7055940727576046`*^9}, {3.705594103934493*^9, 
+   3.7055941661938963`*^9}, {3.70567161669115*^9, 3.70567162882078*^9}, 
+   3.705674930547364*^9}],
+
+Cell[BoxData[""], "Input",
+ CellChangeTimes->{{3.7056736357366095`*^9, 3.7056736361574373`*^9}, 
+   3.7056737663510995`*^9}]
+}, Closed]],
 
 Cell[CellGroupData[{
 
-Cell[BoxData[
- RowBox[{"MatrixPlot", "[", 
-  RowBox[{
-   RowBox[{"Transpose", "@", "P0"}], ",", 
-   RowBox[{"Mesh", "\[Rule]", "All"}]}], "]"}]], "Input",
- CellChangeTimes->{{3.7044800221551867`*^9, 3.704480029291361*^9}, {
-  3.704480195161733*^9, 3.7044801971482654`*^9}, {3.7044802461608806`*^9, 
-  3.7044802586327734`*^9}}],
+Cell["Stack of Mesh Hierarchy", "Section",
+ CellChangeTimes->{{3.7056512428226223`*^9, 3.705651250941434*^9}}],
 
 Cell[BoxData[
- GraphicsBox[{RasterBox[CompressedData["
-1:eJxTTMoPSmVmYGAQAGJOIAaxIeCDPaV030tOb5uEN/ZxLrcNS6c/tW8NDmyS
-FzxHsbkj1V5SzaeWewYqPIeKewbKnUPd/IFyz2ArHwZbOA81+mGVyDr3h7eg
-fBgYeHeNun9o0KPuH3X/qPtH3T9YaAB0/XJR
-    "], {{0, 0}, {9, 16}}, {0, 1}], {
-    {GrayLevel[
-      NCache[-1 + GoldenRatio, 0.6180339887498949]], 
-     StyleBox[
-      LineBox[{{{0, 16}, {9, 16}}, {{0, 15}, {9, 15}}, {{0, 14}, {9, 14}}, {{
-       0, 13}, {9, 13}}, {{0, 12}, {9, 12}}, {{0, 11}, {9, 11}}, {{0, 10}, {9,
-        10}}, {{0, 9}, {9, 9}}, {{0, 8}, {9, 8}}, {{0, 7}, {9, 7}}, {{0, 6}, {
-       9, 6}}, {{0, 5}, {9, 5}}, {{0, 4}, {9, 4}}, {{0, 3}, {9, 3}}, {{0, 
-       2}, {9, 2}}, {{0, 1}, {9, 1}}, {{0, 0}, {9, 0}}}],
-      Antialiasing->False]}, 
-    {GrayLevel[
-      NCache[-1 + GoldenRatio, 0.6180339887498949]], 
-     StyleBox[
-      LineBox[{{{0, 0}, {0, 16}}, {{1, 0}, {1, 16}}, {{2, 0}, {2, 16}}, {{3, 
-       0}, {3, 16}}, {{4, 0}, {4, 16}}, {{5, 0}, {5, 16}}, {{6, 0}, {6, 
-       16}}, {{7, 0}, {7, 16}}, {{8, 0}, {8, 16}}, {{9, 0}, {9, 16}}}],
-      Antialiasing->False]}}},
-  Frame->True,
-  FrameLabel->{None, None},
-  FrameTicks->{{{{15.5, 
-       FormBox["1", TraditionalForm]}, {11.5, 
-       FormBox["5", TraditionalForm]}, {6.5, 
-       FormBox["10", TraditionalForm]}, {0.5, 
-       FormBox["16", TraditionalForm]}}, {{15.5, 
-       FormBox["1", TraditionalForm]}, {11.5, 
-       FormBox["5", TraditionalForm]}, {6.5, 
-       FormBox["10", TraditionalForm]}, {0.5, 
-       FormBox["16", TraditionalForm]}}}, {{{0.5, 
-       FormBox["1", TraditionalForm]}, {1.5, 
-       FormBox["2", TraditionalForm]}, {2.5, 
-       FormBox["3", TraditionalForm]}, {3.5, 
-       FormBox["4", TraditionalForm]}, {4.5, 
-       FormBox["5", TraditionalForm]}, {5.5, 
-       FormBox["6", TraditionalForm]}, {6.5, 
-       FormBox["7", TraditionalForm]}, {7.5, 
-       FormBox["8", TraditionalForm]}, {8.5, 
-       FormBox["9", TraditionalForm]}}, {{0.5, 
-       FormBox["1", TraditionalForm]}, {1.5, 
-       FormBox["2", TraditionalForm]}, {2.5, 
-       FormBox["3", TraditionalForm]}, {3.5, 
-       FormBox["4", TraditionalForm]}, {4.5, 
-       FormBox["5", TraditionalForm]}, {5.5, 
-       FormBox["6", TraditionalForm]}, {6.5, 
-       FormBox["7", TraditionalForm]}, {7.5, 
-       FormBox["8", TraditionalForm]}, {8.5, 
-       FormBox["9", TraditionalForm]}}}},
-  GridLinesStyle->Directive[
-    GrayLevel[0.5, 0.4]],
-  Method->{
-   "AxisPadding" -> Scaled[0.02], "DefaultBoundaryStyle" -> Automatic, 
-    "DefaultPlotStyle" -> Automatic, "DomainPadding" -> Scaled[0.02], 
-    "RangePadding" -> Scaled[0.05]}]], "Output",
+ RowBox[{
+  RowBox[{
+   RowBox[{"getRibs", "[", "mesh_", "]"}], ":=", 
+   RowBox[{"DeleteDuplicates", "@", 
+    RowBox[{"Flatten", "[", 
+     RowBox[{
+      RowBox[{"Table", "[", 
+       RowBox[{
+        RowBox[{
+         RowBox[{"{", "\[IndentingNewLine]", 
+          RowBox[{
+           RowBox[{"Sort", "@", 
+            RowBox[{"{", 
+             RowBox[{
+              RowBox[{
+               RowBox[{"mesh", "[", "\"\<triangles\>\"", "]"}], "[", 
+               RowBox[{"[", 
+                RowBox[{"t", ",", "1"}], "]"}], "]"}], ",", 
+              RowBox[{
+               RowBox[{"mesh", "[", "\"\<triangles\>\"", "]"}], "[", 
+               RowBox[{"[", 
+                RowBox[{"t", ",", "2"}], "]"}], "]"}]}], "}"}]}], ",", 
+           "\[IndentingNewLine]", 
+           RowBox[{"Sort", "@", 
+            RowBox[{"{", 
+             RowBox[{
+              RowBox[{
+               RowBox[{"mesh", "[", "\"\<triangles\>\"", "]"}], "[", 
+               RowBox[{"[", 
+                RowBox[{"t", ",", "2"}], "]"}], "]"}], ",", 
+              RowBox[{
+               RowBox[{"mesh", "[", "\"\<triangles\>\"", "]"}], "[", 
+               RowBox[{"[", 
+                RowBox[{"t", ",", "3"}], "]"}], "]"}]}], "}"}]}], ",", 
+           "\[IndentingNewLine]", 
+           RowBox[{"Sort", "@", 
+            RowBox[{"{", 
+             RowBox[{
+              RowBox[{
+               RowBox[{"mesh", "[", "\"\<triangles\>\"", "]"}], "[", 
+               RowBox[{"[", 
+                RowBox[{"t", ",", "3"}], "]"}], "]"}], ",", 
+              RowBox[{
+               RowBox[{"mesh", "[", "\"\<triangles\>\"", "]"}], "[", 
+               RowBox[{"[", 
+                RowBox[{"t", ",", "1"}], "]"}], "]"}]}], "}"}]}]}], 
+          "\[IndentingNewLine]", "}"}], "+", "1"}], ",", 
+        RowBox[{"{", 
+         RowBox[{"t", ",", 
+          RowBox[{"numbOf\[CapitalDelta]", "@", "mesh"}]}], "}"}]}], "]"}], 
+      ",", "1"}], "]"}]}]}], ";"}]], "Input",
+ CellChangeTimes->{{3.7056535337287188`*^9, 3.705653757934886*^9}, {
+  3.7056537903107605`*^9, 3.7056538155559254`*^9}, {3.7056538810098205`*^9, 
+  3.705653881501047*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"add3rdNode", "[", 
+   RowBox[{"nodes_", ",", "z_"}], "]"}], ":=", 
+  RowBox[{"Table", "[", 
+   RowBox[{
+    RowBox[{"Append", "[", 
+     RowBox[{
+      RowBox[{"nodes", "[", 
+       RowBox[{"[", "i", "]"}], "]"}], ",", "z"}], "]"}], ",", 
+    RowBox[{"{", 
+     RowBox[{"i", ",", 
+      RowBox[{"Length", "@", "nodes"}]}], "}"}]}], "]"}]}]], "Input",
+ CellChangeTimes->{{3.7056514273802032`*^9, 3.7056515081092253`*^9}}],
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{"m0", "=", 
+   RowBox[{"MeshRegion", "[", 
+    RowBox[{
+     RowBox[{"add3rdNode", "[", 
+      RowBox[{
+       RowBox[{"mesh0", "[", "\"\<nodes\>\"", "]"}], ",", ".8"}], "]"}], ",", 
+     RowBox[{"Append", "[", 
+      RowBox[{
+       RowBox[{"Line", "/@", 
+        RowBox[{"getRibs", "@", "mesh0"}]}], ",", 
+       RowBox[{"Polygon", "[", 
+        RowBox[{"{", 
+         RowBox[{"1", ",", "9", ",", "12", ",", "4"}], "}"}], "]"}]}], "]"}], 
+     ",", "\[IndentingNewLine]", 
+     RowBox[{"PlotTheme", "\[Rule]", "\"\<SphereAndTube\>\""}], ",", 
+     "\[IndentingNewLine]", 
+     RowBox[{"MeshCellHighlight", "\[Rule]", 
+      RowBox[{"{", "\[IndentingNewLine]", 
+       RowBox[{
+        RowBox[{
+         RowBox[{"{", 
+          RowBox[{"0", ",", "All"}], "}"}], "\[Rule]", 
+         RowBox[{
+          RowBox[{"ColorData", "[", 
+           RowBox[{"97", ",", "\"\<ColorList\>\""}], "]"}], "[", 
+          RowBox[{"[", "1", "]"}], "]"}]}], ",", "\[IndentingNewLine]", 
+        RowBox[{
+         RowBox[{"{", 
+          RowBox[{"1", ",", "All"}], "}"}], "\[Rule]", 
+         RowBox[{
+          RowBox[{"ColorData", "[", 
+           RowBox[{"97", ",", "\"\<ColorList\>\""}], "]"}], "[", 
+          RowBox[{"[", "1", "]"}], "]"}]}], ",", "\[IndentingNewLine]", 
+        RowBox[{
+         RowBox[{"{", 
+          RowBox[{"2", ",", "All"}], "}"}], "\[Rule]", 
+         RowBox[{"Opacity", "[", 
+          RowBox[{".6", ",", 
+           RowBox[{
+            RowBox[{"ColorData", "[", 
+             RowBox[{"97", ",", "\"\<ColorList\>\""}], "]"}], "[", 
+            RowBox[{"[", "1", "]"}], "]"}]}], "]"}]}]}], 
+       "\[IndentingNewLine]", "}"}]}]}], "\[IndentingNewLine]", "]"}]}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"m1", "=", 
+   RowBox[{"MeshRegion", "[", 
+    RowBox[{
+     RowBox[{"add3rdNode", "[", 
+      RowBox[{
+       RowBox[{"mesh1", "[", "\"\<nodes\>\"", "]"}], ",", ".4"}], "]"}], ",", 
+     RowBox[{"Append", "[", 
+      RowBox[{
+       RowBox[{"Line", "/@", 
+        RowBox[{"getRibs", "@", "mesh1"}]}], ",", 
+       RowBox[{"Polygon", "[", 
+        RowBox[{"{", 
+         RowBox[{"1", ",", "9", ",", "12", ",", "4"}], "}"}], "]"}]}], "]"}], 
+     ",", "\[IndentingNewLine]", 
+     RowBox[{"PlotTheme", "\[Rule]", "\"\<SphereAndTube\>\""}], ",", 
+     "\[IndentingNewLine]", 
+     RowBox[{"MeshCellHighlight", "\[Rule]", 
+      RowBox[{"{", "\[IndentingNewLine]", 
+       RowBox[{
+        RowBox[{
+         RowBox[{"{", 
+          RowBox[{"0", ",", "All"}], "}"}], "\[Rule]", 
+         RowBox[{
+          RowBox[{"ColorData", "[", 
+           RowBox[{"97", ",", "\"\<ColorList\>\""}], "]"}], "[", 
+          RowBox[{"[", "2", "]"}], "]"}]}], ",", "\[IndentingNewLine]", 
+        RowBox[{
+         RowBox[{"{", 
+          RowBox[{"1", ",", "All"}], "}"}], "\[Rule]", 
+         RowBox[{
+          RowBox[{"ColorData", "[", 
+           RowBox[{"97", ",", "\"\<ColorList\>\""}], "]"}], "[", 
+          RowBox[{"[", "2", "]"}], "]"}]}], ",", "\[IndentingNewLine]", 
+        RowBox[{
+         RowBox[{"{", 
+          RowBox[{"2", ",", "All"}], "}"}], "\[Rule]", 
+         RowBox[{"Opacity", "[", 
+          RowBox[{".8", ",", 
+           RowBox[{
+            RowBox[{"ColorData", "[", 
+             RowBox[{"97", ",", "\"\<ColorList\>\""}], "]"}], "[", 
+            RowBox[{"[", "2", "]"}], "]"}]}], "]"}]}]}], 
+       "\[IndentingNewLine]", "}"}]}]}], "\[IndentingNewLine]", "]"}]}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"m2", "=", 
+   RowBox[{"MeshRegion", "[", 
+    RowBox[{
+     RowBox[{"add3rdNode", "[", 
+      RowBox[{
+       RowBox[{"mesh2", "[", "\"\<nodes\>\"", "]"}], ",", "0"}], "]"}], ",", 
+     RowBox[{"Append", "[", 
+      RowBox[{
+       RowBox[{"Line", "/@", 
+        RowBox[{"getRibs", "@", "mesh2"}]}], ",", 
+       RowBox[{"Polygon", "[", 
+        RowBox[{"{", 
+         RowBox[{"1", ",", "9", ",", "12", ",", "4"}], "}"}], "]"}]}], "]"}], 
+     ",", "\[IndentingNewLine]", 
+     RowBox[{"PlotTheme", "\[Rule]", "\"\<SphereAndTube\>\""}], ",", 
+     "\[IndentingNewLine]", 
+     RowBox[{"MeshCellHighlight", "\[Rule]", 
+      RowBox[{"{", "\[IndentingNewLine]", 
+       RowBox[{
+        RowBox[{
+         RowBox[{"{", 
+          RowBox[{"0", ",", "All"}], "}"}], "\[Rule]", 
+         RowBox[{
+          RowBox[{"ColorData", "[", 
+           RowBox[{"97", ",", "\"\<ColorList\>\""}], "]"}], "[", 
+          RowBox[{"[", "3", "]"}], "]"}]}], ",", "\[IndentingNewLine]", 
+        RowBox[{
+         RowBox[{"{", 
+          RowBox[{"1", ",", "All"}], "}"}], "\[Rule]", 
+         RowBox[{
+          RowBox[{"ColorData", "[", 
+           RowBox[{"97", ",", "\"\<ColorList\>\""}], "]"}], "[", 
+          RowBox[{"[", "3", "]"}], "]"}]}], ",", "\[IndentingNewLine]", 
+        RowBox[{
+         RowBox[{"{", 
+          RowBox[{"2", ",", "All"}], "}"}], "\[Rule]", 
+         RowBox[{"Opacity", "[", 
+          RowBox[{"1", ",", 
+           RowBox[{
+            RowBox[{"ColorData", "[", 
+             RowBox[{"97", ",", "\"\<ColorList\>\""}], "]"}], "[", 
+            RowBox[{"[", "3", "]"}], "]"}]}], "]"}]}]}], 
+       "\[IndentingNewLine]", "}"}]}]}], "\[IndentingNewLine]", "]"}]}], 
+  ";"}]}], "Input",
  CellChangeTimes->{
-  3.704480030420209*^9, 3.7044800828378673`*^9, {3.7044801868973737`*^9, 
-   3.7044801977409267`*^9}, 3.7044802593952646`*^9, {3.7044803785291634`*^9, 
-   3.704480404850546*^9}}]
+  3.7056512553842278`*^9, {3.7056513378339243`*^9, 3.7056513862637386`*^9}, {
+   3.705651535336234*^9, 3.705651586028742*^9}, {3.7056516615464373`*^9, 
+   3.705651717063352*^9}, {3.705651826124892*^9, 3.7056518328312273`*^9}, {
+   3.705651940427828*^9, 3.705651947700117*^9}, {3.7056519893246264`*^9, 
+   3.705651990732164*^9}, {3.7056520248091*^9, 3.705652029619268*^9}, {
+   3.705652063275673*^9, 3.7056520695119357`*^9}, {3.7056521474926453`*^9, 
+   3.705652183889552*^9}, {3.705652217509898*^9, 3.7056522462301464`*^9}, {
+   3.705652282215161*^9, 3.7056524362855563`*^9}, {3.7056525563607154`*^9, 
+   3.7056525669378386`*^9}, {3.705652824015671*^9, 3.7056528859238324`*^9}, {
+   3.7056529345620785`*^9, 3.7056530136554112`*^9}, {3.705653199670464*^9, 
+   3.7056532055644417`*^9}, {3.70565324224409*^9, 3.705653262457391*^9}, {
+   3.7056533675569353`*^9, 3.705653392988659*^9}, 3.705653843816249*^9, {
+   3.7056538957019196`*^9, 3.70565393393705*^9}, {3.7056540309989705`*^9, 
+   3.705654107486714*^9}, {3.7056541397018237`*^9, 3.7056541816097126`*^9}, {
+   3.705654260519416*^9, 3.705654355240821*^9}, {3.705654387026769*^9, 
+   3.7056543998604717`*^9}, {3.705654576816273*^9, 3.705654640846939*^9}, {
+   3.705654701038729*^9, 3.705654883710682*^9}, {3.705655050905347*^9, 
+   3.705655179568057*^9}, {3.7056556909522605`*^9, 3.705655781100994*^9}}],
+
+Cell[BoxData[
+ RowBox[{"Show", "[", 
+  RowBox[{"m2", ",", "m1", ",", "m0", ",", 
+   RowBox[{"AspectRatio", "->", "Automatic"}]}], "]"}]], "Input",
+ CellChangeTimes->{{3.7056516189365063`*^9, 3.7056516308897085`*^9}, {
+  3.705651683436674*^9, 3.7056516897563357`*^9}, {3.7056517423848925`*^9, 
+  3.7056517488387704`*^9}, {3.7056520079159*^9, 3.7056520131900997`*^9}}],
+
+Cell[BoxData[
+ RowBox[{"Show", "[", 
+  RowBox[{"%39", ",", 
+   RowBox[{"ImageSize", "\[Rule]", "600"}]}], "]"}]], "Input",
+ CellChangeTimes->{{3.7056741574693036`*^9, 3.7056741593772483`*^9}},
+ NumberMarks->False]
+}, Closed]],
+
+Cell[CellGroupData[{
+
+Cell["Export Imgs", "Section",
+ CellChangeTimes->{{3.705674018982374*^9, 3.7056740255339594`*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{
+  "pth", "=", 
+   "\"\<D:\\\\Documents\\\\GitHubVisualStudio\\\\CATSPDEs project\\\\papers\\\
+\\Physics\[Dash]based Preconditioner for CHD problems\\\\img\\\\\>\""}], 
+  ";"}]], "Input",
+ CellChangeTimes->{{3.705673534456477*^9, 3.705673542236668*^9}, {
+  3.7056737365513487`*^9, 3.7056737385288897`*^9}}],
+
+Cell[BoxData[
+ RowBox[{"Export", "[", 
+  RowBox[{
+   RowBox[{"pth", "<>", "\"\<transfer_lb_0.pdf\>\""}], ","}], "]"}]], "Input",
+ CellChangeTimes->{{3.7056725600231023`*^9, 3.7056726050359945`*^9}, 
+   3.705672698667579*^9, {3.705673004441008*^9, 3.705673042890563*^9}, 
+   3.7056730771533375`*^9, 3.7056735222442656`*^9, {3.7056735561107535`*^9, 
+   3.7056736065973916`*^9}, {3.705673684952169*^9, 3.7056737153028755`*^9}, {
+   3.705673782887621*^9, 3.705673797001661*^9}, {3.70567394357672*^9, 
+   3.7056739442890234`*^9}, 3.705674096933407*^9, {3.7056753538768587`*^9, 
+   3.7056754359226294`*^9}, {3.705676116500701*^9, 3.7056761935615945`*^9}, {
+   3.705676642723251*^9, 3.705676649330903*^9}, 3.705676682731165*^9}],
+
+Cell[BoxData[
+ RowBox[{"Export", "[", 
+  RowBox[{
+   RowBox[{"pth", "<>", "\"\<transfer_pattern.svg\>\""}], ","}], 
+  "]"}]], "Input",
+ CellChangeTimes->{{3.70567411902662*^9, 3.7056741253742123`*^9}, {
+   3.705674191241437*^9, 3.7056742085255184`*^9}, {3.7056762578671274`*^9, 
+   3.7056762833807*^9}, 3.70567668455895*^9}]
 }, Open  ]]
 },
-WindowSize->{775, 561},
-WindowMargins->{{287, Automatic}, {Automatic, 54}},
+WindowSize->{1366, 685},
+WindowMargins->{{-8, Automatic}, {Automatic, -8}},
 FrontEndVersion->"10.4 for Microsoft Windows (64-bit) (February 25, 2016)",
 StyleDefinitions->"Default.nb"
 ]
@@ -451,17 +529,39 @@ CellTagsIndex->{}
 *)
 (*NotebookFileOutline
 Notebook[{
-Cell[558, 20, 254, 5, 31, "Input"],
-Cell[815, 27, 188, 4, 31, "Input"],
-Cell[1006, 33, 382, 9, 52, "Input"],
+Cell[558, 20, 495, 11, 52, "Input"],
+Cell[1056, 33, 188, 4, 31, "Input"],
 Cell[CellGroupData[{
-Cell[1413, 46, 399, 7, 31, "Input"],
-Cell[1815, 55, 12382, 299, 409, "Output"]
-}, Open  ]],
-Cell[14212, 357, 178, 4, 31, "Input"],
+Cell[1269, 41, 107, 1, 63, "Section"],
+Cell[1379, 44, 831, 12, 31, "Input"],
+Cell[2213, 58, 505, 11, 52, "Input"],
+Cell[2721, 71, 288, 7, 31, "Input"],
+Cell[3012, 80, 282, 6, 31, "Input"],
+Cell[3297, 88, 672, 14, 31, "Input"]
+}, Closed]],
 Cell[CellGroupData[{
-Cell[14415, 365, 326, 7, 31, "Input"],
-Cell[14744, 374, 2809, 60, 447, "Output"]
+Cell[4006, 107, 145, 2, 49, "Section"],
+Cell[4154, 111, 428, 10, 52, "Input"],
+Cell[4585, 123, 367, 11, 52, "Input"],
+Cell[4955, 136, 1057, 25, 52, "Input"],
+Cell[6015, 163, 1009, 24, 72, "Input"],
+Cell[7027, 189, 936, 22, 72, "Input"],
+Cell[7966, 213, 430, 9, 31, "Input"],
+Cell[8399, 224, 124, 2, 31, InheritFromParent]
+}, Closed]],
+Cell[CellGroupData[{
+Cell[8560, 231, 110, 1, 49, "Section"],
+Cell[8673, 234, 2135, 54, 112, "Input"],
+Cell[10811, 290, 455, 13, 31, "Input"],
+Cell[11269, 305, 6565, 154, 492, "Input"],
+Cell[17837, 461, 366, 6, 31, "Input"],
+Cell[18206, 469, 213, 5, 31, "Input"]
+}, Closed]],
+Cell[CellGroupData[{
+Cell[18456, 479, 98, 1, 49, "Section"],
+Cell[18557, 482, 340, 8, 31, "Input"],
+Cell[18900, 492, 721, 11, 31, "Input"],
+Cell[19624, 505, 324, 7, 31, "Input"]
 }, Open  ]]
 }
 ]

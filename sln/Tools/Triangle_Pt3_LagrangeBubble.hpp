@@ -69,4 +69,16 @@ public:
 	std::vector<LocalIndex> getBndryDOFsLocalIndicies(AbstractMesh<2, 3> const & mesh, LocalIndex b) const final {
 		return Triangle_P1_Lagrange::instance().getBndryDOFsLocalIndicies(mesh, b);
 	}
+	std::vector<double> getNodalValues(ScalarField2D const & f, AbstractMesh<2, 3> const & mesh, Index e) const final {
+		auto nodes = getDOFsNodes(mesh, e);
+		std::vector<double> values(nodes.size());
+		std::transform(nodes.begin(), nodes.end(), values.begin(), [&](Node2D const & p) { return f(p); });
+		values.back() -= (values[0] + values[1] + values[2]) / 3.;
+		return values;
+	}
+	void prolongate(CSCMatrix<double>& P, AbstractMesh<2, 3> const & cMesh, AbstractMesh<2, 3> const & fMesh) const final {
+		// ignore bubbles:
+		// “Treatments of Discontinuity and Bubble Functions in the Multigrid Method”
+		Triangle_P1_Lagrange::instance().prolongate(P, cMesh, fMesh);
+	}
 };

@@ -1,6 +1,8 @@
 #pragma once
 #include "AbstractFiniteElement.hpp"
 #include "Triangulation.hpp"
+// prolongation
+#include "CSCMatrix.hpp"
 
 /*
 	Alexander Žilyakov, Jan 2017
@@ -68,5 +70,30 @@ public:
 		auto T = dynamic_cast<Triangulation const *>(&mesh);
 		if (T) return { b };
 		throw std::invalid_argument("FE interpolant is not defined on this mesh");
+	}
+	void prolongate(CSCMatrix<double>& P, AbstractMesh<2, 3> const & cMesh, AbstractMesh<2, 3> const & fMesh) const final {
+		std::unordered_map<Index, Index> freq;
+		auto chop = [](double x) { return fabs(x) < 1e-10 ? 0. : x; };
+		for (Index ci = 0; ci < cMesh.numbOfElements(); ++ci) {
+			auto shapes = getShapesOf(cMesh.getElement(ci));
+			auto nodes = getDOFsNodes(fMesh, ci);
+			auto rows = getDOFsNumeration(cMesh, ci),
+			     cols = getDOFsNumeration(fMesh, ci);
+			for (LocalIndex j = 0; j < cols.size(); ++j) {
+				++freq[cols[j]];
+				for (LocalIndex i = 0; i < rows.size(); ++i)
+					P(rows[i], cols[j]) += .5 * chop(shapes[i](nodes[j]));
+			}
+			for (Index fi : fMesh.getFineNeighborsIndicies(ci)) {
+				cols = getDOFsNumeration(fMesh, fi);
+				nodes = getDOFsNodes(fMesh, fi);
+				for (LocalIndex j = 0; j < cols.size(); ++j) {
+					++freq[cols[j]];
+					for (LocalIndex i = 0; i < rows.size(); ++i)
+						P(rows[i], cols[j]) += .5 * chop(shapes[i](nodes[j]));
+				}
+			}
+		}			
+		for (auto const & kvp : freq) if (kvp.second == 1) P.modifyColumn(kvp.first, [&](double& val) { return val *= 2.; });
 	}
 };

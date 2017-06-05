@@ -41,6 +41,7 @@ class Multigrid {
 	TransferType _transfer; // type of transfer operators (prolongations and restrictions)
 	std::vector<double> _b; // fine rhs vector
 	std::vector<TMatrix> _A; // system matrices
+	DenseMatrix<double> _LU; // decomposition for coarse grid matrix
 	std::vector<CSCMatrix<double>>  _P_Hh; // transfer operators matrices
 	// for L2—projections transfer operators
 	std::vector<SymmetricCSlCMatrix<double>> _M_HH;
@@ -60,58 +61,6 @@ class Multigrid {
 			return _P_Hh[meshLevel - 1] * u;
 		if (_transfer == TransferType::L2)
 			return ProjectionSolvers::Krylov::CG(_M_HH[meshLevel - 1], _M_Hh[meshLevel - 1] * u);
-	}
-	void _conformProlongationAssembler   (CSCMatrix<double>& P, Triangulation const & fMesh, Triangulation const & cMesh, TriangularScalarFiniteElement const & FE) const {
-		for (Index ci = 0; ci < cMesh.numbOfElements(); ++ci) {
-			auto shapes = FE.getShapesOf(cMesh.getElement(ci));
-			auto nodes  = FE.getDOFsNodes(fMesh, ci);
-			auto rows   = FE.getDOFsNumeration(cMesh, ci),
-			     cols   = FE.getDOFsNumeration(fMesh, ci);
-			for (LocalIndex j = 0; j < cols.size(); ++j)
-				for (LocalIndex i = 0; i < rows.size(); ++i)
-					P(rows[i], cols[j]) = shapes[i](nodes[j]);
-			for (Index fi : fMesh.getNeighborsIndicies(ci)) {
-				cols  = FE.getDOFsNumeration(fMesh, fi);
-				nodes = FE.getDOFsNodes(fMesh, fi);
-				for (LocalIndex j = 0; j < cols.size(); ++j)
-					for (LocalIndex i = 0; i < rows.size(); ++i)
-						P(rows[i], cols[j]) = shapes[i](nodes[j]);
-			}
-		}
-	}
-	void _nonConformProlongationAssembler(CSCMatrix<double>& P, Triangulation const & fMesh, Triangulation const & cMesh, TriangularScalarFiniteElement const & FE) const {
-		for (Index ci = 0; ci < cMesh.numbOfElements(); ++ci) {
-			auto shapes = FE.getShapesOf(cMesh.getElement(ci));
-			auto nodes = FE.getDOFsNodes(fMesh, ci);
-			auto cDOFs = FE.getDOFsNumeration(cMesh, ci), // =: rows
-				 iDOFs = FE.getDOFsNumeration(fMesh, ci); // =: cols
-			// (1) assemble internal dofs (dofs inside new fine triangle w/ index = ci)
-			for (LocalIndex j = 0; j < iDOFs.size(); ++j)
-				for (LocalIndex i = 0; i < cDOFs.size(); ++i)
-					P(cDOFs[i], iDOFs[j]) = shapes[i](nodes[j]);
-			// (2) assemble external dofs (dofs inside each of 3 new fine triangles, index != ci, setdiff w/ internal dofs)
-			for (Index fi : fMesh.getNeighborsIndicies(ci)) {
-				nodes = FE.getDOFsNodes(fMesh, fi);
-				// all fine dofs
-				auto fDOFs = FE.getDOFsNumeration(fMesh, fi);
-				// external dofs = all fine dofs – internal dofs
-				std::vector<LocalIndex> eDOFsLocalIndicies;
-				eDOFsLocalIndicies.reserve(fDOFs.size());
-				for (LocalIndex i = 0; i < fDOFs.size(); ++i)
-					if (std::find(iDOFs.begin(), iDOFs.end(), fDOFs[i]) == iDOFs.end())
-						eDOFsLocalIndicies.emplace_back(i);
-				// assemble
-				for (LocalIndex j : eDOFsLocalIndicies)
-					for (LocalIndex i = 0; i < cDOFs.size(); ++i)
-						P(cDOFs[i], fDOFs[j]) += .5 * shapes[i](nodes[j]);
-				// bndry dofs
-				for (LocalIndex i : { 1, 2 })
-					if (fMesh.getNeighborsIndicies(fi)[i] < 0) 
-						for (LocalIndex j : FE.getBndryDOFsLocalIndicies(fMesh, i))
-							for (LocalIndex i = 0; i < cDOFs.size(); ++i)
-								P(cDOFs[i], fDOFs[j]) = shapes[i](nodes[j]);
-			}
-		}
 	}
 public:
 	Multigrid(
@@ -150,19 +99,8 @@ public:
 					_A.emplace_back(boost::get<0>(system));
 				logger.end();
 				if (transfer == TransferType::canonical) {
-					logger.beg("build pattern of prolongation matrix");
-						CSCMatrix<double> P(FE.numbOfDOFs(cMesh), FE.numbOfDOFs(fMesh));
-						P.generatePatternFrom(createDOFsConnectivityList(
-							cMesh, fMesh, FE
-						));
-					logger.end();
 					logger.beg("assemble prolongation matrix");
-						if (FE.isConform())
-							_conformProlongationAssembler   (P, fMesh, cMesh, FE);
-						else
-							_nonConformProlongationAssembler(P, fMesh, cMesh, FE);
-						//P.exportHarwellBoeing("Mathematica/postprocessing/P"+std::to_string(currentMeshLevel-1)+".rra");
-						_P_Hh.emplace_back(P);
+						_P_Hh.emplace_back(FE.prolongate(cMesh, fMesh));
 					logger.end();
 				}
 				else if (transfer == TransferType::L2) {
@@ -196,6 +134,9 @@ public:
 				));
 			logger.end();
 		}
+		logger.beg("decompose coarse grid matrix");
+			(_LU = _A.front()).decompose();
+		logger.end();
 		// fine rhs
 		_b = boost::get<1>(system);
 	}
@@ -271,7 +212,8 @@ public:
 			logger.buf << "system size = " << A.getOrder();
 			logger.log();
 			logger.beg("compute exact soln");
-				auto z = A.GaussElimination(f);
+				// auto z = A.GaussElimination(f);
+				auto z = _LU.backSubst(_LU.forwSubst(f, 0.));
 				logger.buf << "residual norm = " << norm(_A.front() * z - f);
 				logger.log();
 			logger.end();

@@ -10,10 +10,10 @@
 NotebookFileLineBreakTest
 NotebookFileLineBreakTest
 NotebookDataPosition[       158,          7]
-NotebookDataLength[     73648,       1748]
-NotebookOptionsPosition[     72931,       1720]
-NotebookOutlinePosition[     73278,       1735]
-CellTagsIndexPosition[     73235,       1732]
+NotebookDataLength[     74416,       1769]
+NotebookOptionsPosition[     73585,       1737]
+NotebookOutlinePosition[     73932,       1752]
+CellTagsIndexPosition[     73889,       1749]
 WindowFrame->Normal*)
 
 (* Beginning of Notebook Content *)
@@ -1710,6 +1710,23 @@ Cell[BoxData[
    3.705517006949952*^9}]
 }, Open  ]],
 
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"Export", "[", 
+  RowBox[{"\"\<divgrad_time_3.svg\>\"", ",", 
+   RowBox[{"Show", "[", 
+    RowBox[{"%153", ",", 
+     RowBox[{"ImageSize", "\[Rule]", "320"}]}], "]"}]}], "]"}]], "Input",
+ CellChangeTimes->{{3.705584402489983*^9, 3.7055844653775606`*^9}, {
+  3.7055845926276197`*^9, 3.7055845928076925`*^9}, {3.7055851103294473`*^9, 
+  3.705585110429371*^9}, {3.70558518166116*^9, 3.705585183407344*^9}}],
+
+Cell[BoxData["\<\"divgrad_time_3.svg\"\>"], "Output",
+ CellChangeTimes->{3.705584422949833*^9, 3.705584469180625*^9, 
+  3.705584643356349*^9, 3.7055851131467285`*^9, 3.705585185678987*^9}]
+}, Open  ]],
+
 Cell[BoxData[
  RowBox[{"Graphics`PlotMarkers", "[", "]"}]], "Input",
  CellChangeTimes->{{3.7055168726419177`*^9, 3.705516872649923*^9}}]
@@ -1747,9 +1764,13 @@ Cell[29170, 793, 2937, 72, 152, "Input"],
 Cell[32110, 867, 9318, 190, 216, "Output"],
 Cell[41431, 1059, 31223, 650, 213, "Output"]
 }, Open  ]],
-Cell[72669, 1712, 136, 2, 31, "Input"]
+Cell[CellGroupData[{
+Cell[72691, 1714, 426, 8, 31, "Input"],
+Cell[73120, 1724, 188, 2, 88, "Output"]
 }, Open  ]],
-Cell[72820, 1717, 107, 1, 63, "Section"]
+Cell[73323, 1729, 136, 2, 31, "Input"]
+}, Open  ]],
+Cell[73474, 1734, 107, 1, 63, "Section"]
 }
 ]
 *)

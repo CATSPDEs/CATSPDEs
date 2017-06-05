@@ -1,5 +1,5 @@
 2
-1
+2
 0
 0
 1
@@ -21,8 +21,10 @@
 	(1) Poisson w/ inhom. Robin BCs
 	(2) Diffusion-Reaction w/ mixed Dirichlet and Robin BCs
 2. mesh type
-	(0) uniform.ntn
-	(1) nonuniform.ntn
+	(0) rct_uniform.ntn
+	(1) crs_uniform.ntn
+	(2) arb_uniform.ntn
+	(3) non_uniform.ntn
 3. refine initial mesh n times, n
 4. choose finite element
 	(0) Lagrange P1
@@ -34,6 +36,7 @@
 	(1) Krylov solver w/ MG as an inner iteration
 	(2) Krylov method as stand-alone solver
 	(3) Smoother
+	(4) Krylov method w/ ILDL^T(0) preconditioner
 7. max numb of iterations
 8. set eps for solver
 9. stopping criterion

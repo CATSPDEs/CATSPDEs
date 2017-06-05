@@ -1,10 +1,16 @@
+4
 1
-2
-0 2 
+3
+0 1 6 
 
 1. choose finite element
 	(0) Lagrange P0
 	(1) Lagrange P1
 	(2) Lagrange P2
-2. numb of elements to refine
-3. indicies of elements to refine
+	(3) Crouzeix-Raviart
+	(4) Lagrange P1 Bubble
+2. choose func
+	(0) sine
+	(1) dome
+3. numb of elements to refine
+4. indicies of elements to refine

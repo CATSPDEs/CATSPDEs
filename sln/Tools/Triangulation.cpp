@@ -45,6 +45,7 @@ Triangulation& Triangulation::import(std::istream& from) {
 		from >> _ribs.first >> _nodes >> _elements >> _neighbors >> _ribs.second;
 	}
 	else throw std::invalid_argument("unknown mesh type");
+	_fineNeighborsIndicies.resize(numbOfElements());
 	return *this;
 }
 

@@ -19,7 +19,7 @@ public:
 		if (FE.numbOfDOFs(mesh) != DOFs.size()) throw std::invalid_argument("invalid numb of DOFs");
 	}
 	FEInterpolant(
-		ScalarField<D> const & f, AbstractFiniteElement<D, N, M> const & FE, AbstractMesh<D, N> const & mesh, 
+		Mapping<D, M> const & f, AbstractFiniteElement<D, N, M> const & FE, AbstractMesh<D, N> const & mesh, 
 		boost::optional<Index&> activeElementIndex = boost::none
 	)
 		: _DOFs(FE.numbOfDOFs(mesh))
@@ -29,10 +29,10 @@ public:
 		Index activeElementIndexScoped;
 		Index& e = activeElementIndex.value_or(activeElementIndexScoped);
 		for (e = 0; e < mesh.numbOfElements(); ++e) {
-			auto nodes = FE.getDOFsNodes(mesh, e);
+			auto values = FE.getNodalValues(f, mesh, e);
 			auto indicies = FE.getDOFsNumeration(mesh, e);
 			for (Index i = 0; i < indicies.size(); ++i)
-				_DOFs[indicies[i]] = f(nodes[i]);
+				_DOFs[indicies[i]] = values[i];
 		}
 	}
 	auto& DOFs() { return _DOFs; }
