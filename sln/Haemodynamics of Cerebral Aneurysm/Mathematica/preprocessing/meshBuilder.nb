@@ -1,0 +1,564 @@
+(* Content-type: application/vnd.wolfram.mathematica *)
+
+(*** Wolfram Notebook File ***)
+(* http://www.wolfram.com/nb *)
+
+(* CreatedBy='Mathematica 10.4' *)
+
+(*CacheID: 234*)
+(* Internal cache information:
+NotebookFileLineBreakTest
+NotebookFileLineBreakTest
+NotebookDataPosition[       158,          7]
+NotebookDataLength[     20477,        556]
+NotebookOptionsPosition[     19054,        506]
+NotebookOutlinePosition[     19401,        521]
+CellTagsIndexPosition[     19358,        518]
+WindowFrame->Normal*)
+
+(* Beginning of Notebook Content *)
+Notebook[{
+Cell[BoxData[
+ RowBox[{"ClearAll", "[", "\"\<Global`*\>\"", "]"}]], "Input",
+ CellChangeTimes->{{3.6921768074986553`*^9, 3.6921768160334883`*^9}}],
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{"dir", "=", 
+   RowBox[{"NotebookDirectory", "[", "]"}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"SetDirectory", "@", "dir"}], ";"}]}], "Input"],
+
+Cell[CellGroupData[{
+
+Cell["Defining Domain and Mesh for Cerebral Aneurism", "Title",
+ CellChangeTimes->{{3.692176221660466*^9, 3.6921762422876277`*^9}}],
+
+Cell[CellGroupData[{
+
+Cell["Inputs", "Section",
+ CellChangeTimes->{{3.692176278124495*^9, 3.692176280317713*^9}}],
+
+Cell["\<\
+We difine our geometry in terms of \[ScriptCapitalR]s for length units, \
+\[ScriptCapitalR] := radius of the vessel, meters.  \
+\>", "Text",
+ CellChangeTimes->{{3.692176291740844*^9, 3.692176348104714*^9}}],
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{
+   RowBox[{"\[ScriptCapitalL]", "=", "16"}], ";"}], 
+  RowBox[{"(*", " ", 
+   RowBox[{"length", " ", "of", " ", "the", " ", "vessel"}], " ", 
+   "*)"}]}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"\[ScriptCapitalD]", "=", "4"}], ";"}], 
+  RowBox[{"(*", " ", 
+   RowBox[{"diameter", " ", "of", " ", "the", " ", "aneurysm"}], " ", 
+   "*)"}]}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"\[ScriptCapitalN]", "=", "4"}], ";"}], 
+  RowBox[{"(*", 
+   RowBox[{
+    RowBox[{" ", 
+     RowBox[{"length", " ", "of", " ", "the", " ", "aneurism"}], 
+     "\[CloseCurlyQuote]"}], "s", " ", 
+    RowBox[{"\[OpenCurlyDoubleQuote]", "neck", "\[CloseCurlyDoubleQuote]"}]}],
+    " ", "*)"}]}]}], "Input",
+ CellChangeTimes->{{3.6921762813842907`*^9, 3.6921762818464003`*^9}, {
+   3.6921763779922695`*^9, 3.6921765030322123`*^9}, {3.692176699904684*^9, 
+   3.6921767025028644`*^9}, {3.692177568942031*^9, 3.6921775705286703`*^9}, {
+   3.6921782034076376`*^9, 3.692178214405679*^9}, 3.692178247463559*^9, {
+   3.692179121588162*^9, 3.6921791228986645`*^9}, {3.6921791721469603`*^9, 
+   3.6921791723014326`*^9}, {3.6921792862220616`*^9, 
+   3.6921792863930693`*^9}, {3.6932878658530593`*^9, 
+   3.6932878740949383`*^9}, {3.6932882921225758`*^9, 
+   3.6932883013764377`*^9}, {3.6932883796705065`*^9, 3.693288380022338*^9}, {
+   3.693288617315858*^9, 3.693288617876748*^9}, {3.6932886654719253`*^9, 
+   3.6932886657175937`*^9}, {3.6932886998500023`*^9, 3.693288712391965*^9}, {
+   3.6932889181906924`*^9, 3.693288918344944*^9}, {3.693288972139679*^9, 
+   3.693288972323939*^9}, {3.705778411034177*^9, 3.7057784448292446`*^9}, {
+   3.7057804875690145`*^9, 3.705780491287403*^9}, 3.705780575419813*^9, {
+   3.7057813458792973`*^9, 3.705781346018441*^9}, {3.705781413299492*^9, 
+   3.705781413458103*^9}, {3.7057905827211447`*^9, 3.705790584718208*^9}}]
+}, Closed]],
+
+Cell[CellGroupData[{
+
+Cell["Analytic Domain \[CapitalOmega]", "Section",
+ CellChangeTimes->{{3.6921765194081244`*^9, 3.692176527165725*^9}, {
+  3.692179125171427*^9, 3.6921791266002855`*^9}}],
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{"vessel", "=", 
+   RowBox[{"Rectangle", "[", 
+    RowBox[{
+     RowBox[{"{", 
+      RowBox[{
+       RowBox[{"-", 
+        FractionBox["\[ScriptCapitalL]", "2"]}], ",", 
+       RowBox[{"-", "1"}]}], "}"}], ",", 
+     RowBox[{"{", 
+      RowBox[{
+       FractionBox["\[ScriptCapitalL]", "2"], ",", "1"}], "}"}]}], "]"}]}], 
+  ";"}], "\n", 
+ RowBox[{
+  RowBox[{"aneurysm", "=", 
+   RowBox[{"Disk", "[", 
+    RowBox[{
+     RowBox[{"{", 
+      RowBox[{"0", ",", 
+       RowBox[{"1", "+", 
+        FractionBox["\[ScriptCapitalD]", "2"]}]}], "}"}], ",", 
+     FractionBox["\[ScriptCapitalD]", "2"]}], "]"}]}], ";"}]}], "Input",
+ CellChangeTimes->{{3.692037681555167*^9, 3.6920377326809688`*^9}, {
+   3.6920378223910575`*^9, 3.692037825014763*^9}, {3.692038264688923*^9, 
+   3.6920382889972353`*^9}, {3.6920389124750843`*^9, 
+   3.6920389155561967`*^9}, {3.692176540324993*^9, 3.692176558863632*^9}, 
+   3.6921766661970115`*^9}],
+
+Cell[BoxData[
+ RowBox[{"RegionPlot", "[", 
+  RowBox[{
+   RowBox[{"RegionUnion", "[", 
+    RowBox[{"vessel", ",", "aneurysm"}], "]"}], ",", 
+   RowBox[{"AspectRatio", "\[Rule]", "Automatic"}], ",", 
+   RowBox[{"Frame", "\[Rule]", "None"}]}], "]"}]], "Input",
+ CellChangeTimes->{3.6921766811973324`*^9}],
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{"\[ScriptR]", "=", 
+   FractionBox[
+    SuperscriptBox["\[ScriptCapitalN]", "2"], 
+    RowBox[{"8", " ", "\[ScriptCapitalD]"}]]}], ";"}], "\n", 
+ RowBox[{
+  RowBox[{"neck", "=", 
+   RowBox[{"RegionDifference", "[", "\[IndentingNewLine]", 
+    RowBox[{
+     RowBox[{"RegionUnion", "[", "\[IndentingNewLine]", 
+      RowBox[{
+       RowBox[{"Rectangle", "[", 
+        RowBox[{
+         RowBox[{"{", 
+          RowBox[{
+           RowBox[{"-", 
+            FractionBox["\[ScriptCapitalN]", "2"]}], ",", "0"}], "}"}], ",", 
+         RowBox[{"{", 
+          RowBox[{
+           FractionBox["\[ScriptCapitalN]", "2"], ",", 
+           RowBox[{"1", "+", "\[ScriptR]"}]}], "}"}]}], "]"}], ",", 
+       "\[IndentingNewLine]", 
+       RowBox[{"Triangle", "[", 
+        RowBox[{"{", 
+         RowBox[{
+          RowBox[{"{", 
+           RowBox[{
+            FractionBox["\[ScriptCapitalN]", "2"], ",", 
+            RowBox[{"1", "+", "\[ScriptR]"}]}], "}"}], ",", 
+          RowBox[{"{", 
+           RowBox[{"0", ",", 
+            RowBox[{"1", "+", 
+             FractionBox["\[ScriptCapitalD]", "2"]}]}], "}"}], ",", 
+          RowBox[{"{", 
+           RowBox[{
+            RowBox[{"-", 
+             FractionBox["\[ScriptCapitalN]", "2"]}], ",", 
+            RowBox[{"1", "+", "\[ScriptR]"}]}], "}"}]}], "}"}], "]"}]}], 
+      "\[IndentingNewLine]", "]"}], ",", "\[IndentingNewLine]", 
+     RowBox[{"RegionUnion", "[", "\[IndentingNewLine]", 
+      RowBox[{
+       RowBox[{"Disk", "[", 
+        RowBox[{
+         RowBox[{"{", 
+          RowBox[{
+           FractionBox["\[ScriptCapitalN]", "2"], ",", 
+           RowBox[{"1", "+", "\[ScriptR]"}]}], "}"}], ",", "\[ScriptR]"}], 
+        "]"}], ",", "\[IndentingNewLine]", 
+       RowBox[{"Disk", "[", 
+        RowBox[{
+         RowBox[{"{", 
+          RowBox[{
+           RowBox[{"-", 
+            FractionBox["\[ScriptCapitalN]", "2"]}], ",", 
+           RowBox[{"1", "+", "\[ScriptR]"}]}], "}"}], ",", "\[ScriptR]"}], 
+        "]"}]}], "\[IndentingNewLine]", "]"}]}], "]"}]}], ";"}]}], "Input",
+ CellChangeTimes->{{3.692176621039692*^9, 3.692176656609598*^9}, {
+   3.69217669069503*^9, 3.6921767100262814`*^9}, {3.6921767470567856`*^9, 
+   3.6921768005461216`*^9}, 3.692176830686142*^9, 3.6921775066678524`*^9, 
+   3.6921775812825003`*^9}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"\[CapitalOmega]", "=", 
+   RowBox[{"RegionUnion", "[", 
+    RowBox[{"vessel", ",", "neck", ",", "aneurysm"}], "]"}]}], ";"}]], "Input",
+ CellChangeTimes->{{3.6921775092855244`*^9, 3.6921775399033117`*^9}}],
+
+Cell[BoxData[
+ RowBox[{"plot", "=", 
+  RowBox[{"RegionPlot", "[", 
+   RowBox[{"\[CapitalOmega]", ",", 
+    RowBox[{"AspectRatio", "\[Rule]", "Automatic"}], ",", 
+    "\[IndentingNewLine]", 
+    RowBox[{"PlotStyle", "\[Rule]", "LightRed"}], ",", 
+    RowBox[{"BoundaryStyle", "\[Rule]", "Red"}], ",", "\[IndentingNewLine]", 
+    RowBox[{"PlotRange", "\[Rule]", 
+     RowBox[{"{", 
+      RowBox[{
+       RowBox[{"{", 
+        RowBox[{
+         RowBox[{
+          RowBox[{"-", 
+           FractionBox["\[ScriptCapitalL]", "2"]}], "-", "1"}], ",", 
+         RowBox[{
+          FractionBox["\[ScriptCapitalL]", "2"], "+", "1"}]}], "}"}], ",", 
+       RowBox[{"{", 
+        RowBox[{
+         RowBox[{"-", "2"}], ",", 
+         RowBox[{"2", "+", "\[ScriptCapitalD]"}]}], "}"}]}], "}"}]}], ",", 
+    "\[IndentingNewLine]", 
+    RowBox[{"Axes", "\[Rule]", "True"}]}], "\[IndentingNewLine]", 
+   "]"}]}]], "Input",
+ CellChangeTimes->{{3.692176879198886*^9, 3.692176927205494*^9}, {
+   3.692177026329607*^9, 3.6921770358835964`*^9}, 3.692177374633355*^9, {
+   3.6921774207533054`*^9, 3.6921774578323393`*^9}, {3.692177489059963*^9, 
+   3.692177492935981*^9}, {3.692177543752339*^9, 3.692177545887336*^9}, {
+   3.693289206207868*^9, 3.6932894587190466`*^9}, {3.6932896619306726`*^9, 
+   3.69328970034285*^9}, 3.6932897651517973`*^9, {3.6932898966531973`*^9, 
+   3.6932899020754986`*^9}, {3.6932899432514095`*^9, 3.693289967467078*^9}, {
+   3.693290035041425*^9, 3.6932900451487293`*^9}, {3.6932901369907055`*^9, 
+   3.6932901572976027`*^9}, {3.6932902300975275`*^9, 
+   3.6932902304702744`*^9}, {3.6932902710148306`*^9, 
+   3.6932902742697067`*^9}, {3.693290312061226*^9, 3.6932905203463364`*^9}, {
+   3.6932914262128243`*^9, 3.6932914370909777`*^9}, {3.6932915292671847`*^9, 
+   3.693291543105567*^9}, {3.705790741910287*^9, 3.7057907429243584`*^9}}]
+}, Closed]],
+
+Cell[CellGroupData[{
+
+Cell["Compute Skeleton Nodes", "Section",
+ CellChangeTimes->{{3.7057906587077684`*^9, 3.7057906684276867`*^9}}],
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{"phi0", "=", 
+   RowBox[{"-", 
+    RowBox[{"ArcSin", "[", 
+     FractionBox[
+      RowBox[{
+       RowBox[{"\[ScriptCapitalD]", "/", "2"}], "-", "\[ScriptR]"}], 
+      RowBox[{
+       RowBox[{"\[ScriptCapitalD]", "/", "2"}], "+", "\[ScriptR]"}]], 
+     "]"}]}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"phi1", "=", 
+   RowBox[{
+    RowBox[{"ArcSin", "[", 
+     FractionBox[
+      RowBox[{
+       RowBox[{"\[ScriptCapitalD]", "/", "2"}], "-", "\[ScriptR]"}], 
+      RowBox[{
+       RowBox[{"\[ScriptCapitalD]", "/", "2"}], "+", "\[ScriptR]"}]], "]"}], 
+    "+", "Pi"}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"curve1", "[", "t_", "]"}], ":=", 
+  RowBox[{
+   RowBox[{"{", 
+    RowBox[{
+     RowBox[{
+      RowBox[{"\[ScriptCapitalD]", "/", "2"}], 
+      RowBox[{"Cos", "[", 
+       RowBox[{"phi0", "+", 
+        RowBox[{
+         RowBox[{"(", 
+          RowBox[{"phi1", "-", "phi0"}], ")"}], "t"}]}], "]"}]}], ",", 
+     RowBox[{
+      RowBox[{"\[ScriptCapitalD]", "/", "2"}], " ", 
+      RowBox[{"Sin", "[", 
+       RowBox[{"phi0", "+", 
+        RowBox[{
+         RowBox[{"(", 
+          RowBox[{"phi1", "-", "phi0"}], ")"}], "t"}]}], "]"}]}]}], "}"}], 
+   "+", 
+   RowBox[{"{", 
+    RowBox[{"0", ",", 
+     RowBox[{"1", "+", 
+      FractionBox["\[ScriptCapitalD]", "2"]}]}], 
+    "}"}]}]}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"skeletonNodes1", "=", 
+   RowBox[{"Table", "[", 
+    RowBox[{
+     RowBox[{"curve1", "[", "t", "]"}], ",", 
+     RowBox[{"{", 
+      RowBox[{"t", ",", "0", ",", "1", ",", 
+       RowBox[{"1", "/", "15"}]}], "}"}]}], "]"}]}], ";"}]}], "Input",
+ CellChangeTimes->{{3.7057934281262627`*^9, 3.7057935711024055`*^9}, {
+   3.7057937348268757`*^9, 3.7057937648093643`*^9}, {3.705793847083703*^9, 
+   3.705793847530762*^9}, 3.7057944014628344`*^9, {3.705795359227482*^9, 
+   3.7057953750521297`*^9}, {3.7057954853503523`*^9, 3.705795502151252*^9}, {
+   3.7057956001012397`*^9, 3.7057956009775763`*^9}, {3.7057956520169888`*^9, 
+   3.7057956521487246`*^9}, {3.7057956984871454`*^9, 3.7057957234606595`*^9}}],
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{"psi0", "=", "phi0"}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"psi1", "=", 
+   RowBox[{"Pi", "/", "2"}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"curve2", "[", "t_", "]"}], ":=", 
+  RowBox[{
+   RowBox[{"{", 
+    RowBox[{
+     RowBox[{"\[ScriptR]", " ", 
+      RowBox[{"Cos", "[", 
+       RowBox[{"psi0", "+", 
+        RowBox[{
+         RowBox[{"(", 
+          RowBox[{"psi1", "-", "psi0"}], ")"}], "t"}]}], "]"}]}], ",", 
+     RowBox[{
+      RowBox[{"-", "\[ScriptR]"}], " ", 
+      RowBox[{"Sin", "[", 
+       RowBox[{"psi0", "+", 
+        RowBox[{
+         RowBox[{"(", 
+          RowBox[{"psi1", "-", "psi0"}], ")"}], "t"}]}], "]"}]}]}], "}"}], 
+   "+", 
+   RowBox[{"{", 
+    RowBox[{
+     RowBox[{"-", 
+      FractionBox["\[ScriptCapitalN]", "2"]}], ",", 
+     RowBox[{"1", "+", "\[ScriptR]"}]}], "}"}]}]}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"skeletonNodes2", "=", 
+   RowBox[{"Table", "[", 
+    RowBox[{
+     RowBox[{"curve2", "[", "t", "]"}], ",", 
+     RowBox[{"{", 
+      RowBox[{"t", ",", 
+       RowBox[{"{", 
+        RowBox[{
+         RowBox[{"1", "/", "2"}], ",", "1"}], "}"}]}], "}"}]}], "]"}]}], 
+  ";"}]}], "Input",
+ CellChangeTimes->{{3.7057906707110953`*^9, 3.705790766609206*^9}, {
+   3.705790979709771*^9, 3.705791009741066*^9}, {3.7057925802799144`*^9, 
+   3.705792652980542*^9}, 3.7057928301363497`*^9, {3.705793865671465*^9, 
+   3.7057939672670527`*^9}, 3.7057940212300587`*^9, {3.7057940777080154`*^9, 
+   3.7057940778488655`*^9}, 3.7057941607649927`*^9, {3.705794239337081*^9, 
+   3.705794247361735*^9}, {3.7057942873685083`*^9, 3.7057942902609863`*^9}, {
+   3.705794326780983*^9, 3.7057943289982386`*^9}, {3.7057943862305546`*^9, 
+   3.70579440832193*^9}, {3.705794460917218*^9, 3.7057944868076334`*^9}, {
+   3.705794680264641*^9, 3.705794687334179*^9}}],
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{"curve3", "[", "t_", "]"}], ":=", 
+  RowBox[{
+   RowBox[{"{", 
+    RowBox[{
+     RowBox[{"{", 
+      RowBox[{
+       RowBox[{"-", "1"}], ",", "0"}], "}"}], ",", 
+     RowBox[{"{", 
+      RowBox[{"0", ",", "1"}], "}"}]}], "}"}], ".", 
+   RowBox[{"curve2", "[", 
+    RowBox[{"1", "-", "t"}], "]"}]}]}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"skeletonNodes3", "=", 
+   RowBox[{"Table", "[", 
+    RowBox[{
+     RowBox[{"curve3", "[", "t", "]"}], ",", 
+     RowBox[{"{", 
+      RowBox[{"t", ",", 
+       RowBox[{"{", 
+        RowBox[{"0", ",", 
+         RowBox[{"1", "/", "2"}]}], "}"}]}], "}"}]}], "]"}]}], 
+  ";"}]}], "Input",
+ CellChangeTimes->{{3.7057944896375947`*^9, 3.705794506265497*^9}, {
+   3.7057945391327624`*^9, 3.705794540518423*^9}, 3.7057945916308107`*^9, 
+   3.705794629405088*^9, {3.7057946958967004`*^9, 3.705794701029683*^9}, {
+   3.7057951146217065`*^9, 3.7057951148291397`*^9}, {3.70579520130486*^9, 
+   3.7057952429049644`*^9}}],
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{"skeletonNodes", "=", 
+   RowBox[{"Join", "[", "\[IndentingNewLine]", 
+    RowBox[{
+     RowBox[{"{", 
+      RowBox[{
+       RowBox[{"{", 
+        RowBox[{
+         RowBox[{
+          RowBox[{"-", "\[ScriptCapitalL]"}], "/", "2"}], ",", "1"}], "}"}], 
+       ",", 
+       RowBox[{"{", 
+        RowBox[{
+         RowBox[{
+          RowBox[{"-", "\[ScriptCapitalL]"}], "/", "2"}], ",", 
+         RowBox[{"-", "1"}]}], "}"}], ",", 
+       RowBox[{"{", 
+        RowBox[{
+         RowBox[{"\[ScriptCapitalL]", "/", "2"}], ",", 
+         RowBox[{"-", "1"}]}], "}"}], ",", 
+       RowBox[{"{", 
+        RowBox[{
+         RowBox[{"\[ScriptCapitalL]", "/", "2"}], ",", "1"}], "}"}]}], "}"}], 
+     ",", "\[IndentingNewLine]", "skeletonNodes3", ",", "skeletonNodes1", ",",
+      "skeletonNodes2"}], "\[IndentingNewLine]", "]"}]}], ";"}], "\n", 
+ RowBox[{"Show", "[", 
+  RowBox[{"plot", ",", 
+   RowBox[{"ListPlot", "@", "skeletonNodes"}], ",", 
+   RowBox[{"AspectRatio", "\[Rule]", "Automatic"}]}], "]"}]}], "Input",
+ CellChangeTimes->{{3.705790809939084*^9, 3.705790813536055*^9}, {
+   3.7057908488051257`*^9, 3.7057908821683955`*^9}, {3.705791045417515*^9, 
+   3.705791083198651*^9}, {3.7057911200897903`*^9, 3.705791123265936*^9}, {
+   3.705791751264141*^9, 3.705791758648497*^9}, {3.7057921120827713`*^9, 
+   3.7057921125349913`*^9}, {3.7057922453661985`*^9, 
+   3.7057922956036825`*^9}, {3.7057923257632694`*^9, 3.7057923290976105`*^9}, 
+   3.705792384795738*^9, 3.705794113150218*^9, {3.705794205591791*^9, 
+   3.705794220866273*^9}, {3.7057945153437037`*^9, 3.7057945154522905`*^9}, {
+   3.705794549969474*^9, 3.7057945862444153`*^9}, {3.7057947181595535`*^9, 
+   3.705794766846382*^9}, {3.7057948182431364`*^9, 3.705794925065745*^9}, {
+   3.7057950151502457`*^9, 3.705795082516694*^9}, 3.705795129461547*^9, {
+   3.7057952517022696`*^9, 3.705795252241158*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"region", "=", 
+   RowBox[{"Polygon", "@", "skeletonNodes"}]}], ";"}]], "Input",
+ CellChangeTimes->{{3.7058219926236815`*^9, 3.7058219978407574`*^9}}]
+}, Closed]],
+
+Cell[CellGroupData[{
+
+Cell["Export Coarse Mesh", "Section",
+ CellChangeTimes->{{3.7059264017020435`*^9, 3.7059264062501416`*^9}}],
+
+Cell[BoxData[
+ RowBox[{"NotebookEvaluate", "[", 
+  RowBox[{
+  "dir", "<>", "\"\<../../../Tools/Mathematica/triangulation.nb\>\""}], 
+  "]"}]], "Input"],
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{"\[ScriptCapitalT]", "=", 
+   RowBox[{"create\[ScriptCapitalT]fromRegion", "[", 
+    RowBox[{"region", ",", "1."}], "]"}]}], ";"}], "\n", 
+ RowBox[{"highlight", "[", 
+  RowBox[{"\[ScriptCapitalT]", ",", 
+   RowBox[{"{", "\"\<trianglesNumn\>\"", "}"}], ",", "0"}], "]"}]}], "Input",
+ CellChangeTimes->{{3.705794955361882*^9, 3.7057949563044167`*^9}, {
+  3.705822005059661*^9, 3.7058220059775333`*^9}, {3.705926712690612*^9, 
+  3.7059267188769045`*^9}, {3.7059354110778093`*^9, 3.7059355360624294`*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"\[ScriptCapitalT]", "[", "\"\<triangles\>\"", "]"}], "[", 
+  RowBox[{"[", "22", "]"}], "]"}]], "Input",
+ CellChangeTimes->{{3.705926737052219*^9, 3.7059267515720205`*^9}}],
+
+Cell[BoxData[
+ RowBox[{"export", "[", 
+  RowBox[{"\[ScriptCapitalT]", ",", "\"\<mesh_coarse\>\""}], "]"}]], "Input"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["Fine Mesh \[ScriptCapitalT]", "Section",
+ CellChangeTimes->{{3.6921776104830675`*^9, 3.6921776173537054`*^9}, {
+  3.705764826657261*^9, 3.705764827716467*^9}}],
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{"\[ScriptCapitalT]", "=", 
+   RowBox[{"create\[ScriptCapitalT]fromRegion", "[", 
+    RowBox[{"region", ",", ".2"}], "]"}]}], ";"}], "\n", 
+ RowBox[{"highlight", "[", 
+  RowBox[{"\[ScriptCapitalT]", ",", 
+   RowBox[{"{", "}"}], ",", "0"}], "]"}]}], "Input",
+ CellChangeTimes->{{3.7057771912212553`*^9, 3.705777514651661*^9}, {
+   3.7057775756919527`*^9, 3.70577762169746*^9}, {3.7057785272252326`*^9, 
+   3.705778532678342*^9}, {3.7057786215147867`*^9, 3.705778647407894*^9}, {
+   3.705779682574979*^9, 3.7057797538734245`*^9}, {3.7057798421510754`*^9, 
+   3.705779867057094*^9}, {3.7057799159141254`*^9, 3.705779924656535*^9}, {
+   3.705785216491988*^9, 3.7057852402892265`*^9}, {3.7057853746431875`*^9, 
+   3.705785380300597*^9}, {3.7057856709582605`*^9, 3.705785678611273*^9}, 
+   3.7057862939209538`*^9, {3.705786401599338*^9, 3.7057864099622884`*^9}, {
+   3.705786768253271*^9, 3.7057868447222347`*^9}, {3.7057872333897605`*^9, 
+   3.705787283475517*^9}, {3.7059264712229204`*^9, 3.705926489493275*^9}}],
+
+Cell[BoxData[
+ RowBox[{"export", "[", 
+  RowBox[{"\[ScriptCapitalT]", ",", "\"\<mesh_fine\>\""}], "]"}]], "Input",
+ CellChangeTimes->{{3.70576485357977*^9, 3.705764872728842*^9}, {
+  3.7057854066225367`*^9, 3.7057854080831747`*^9}, {3.705926499551776*^9, 
+  3.7059264999347715`*^9}}]
+}, Open  ]]
+}, Open  ]]
+},
+WindowSize->{1366, 685},
+WindowMargins->{{-8, Automatic}, {Automatic, -8}},
+FrontEndVersion->"10.4 for Microsoft Windows (64-bit) (February 25, 2016)",
+StyleDefinitions->"Default.nb"
+]
+(* End of Notebook Content *)
+
+(* Internal cache information *)
+(*CellTagsOutline
+CellTagsIndex->{}
+*)
+(*CellTagsIndex
+CellTagsIndex->{}
+*)
+(*NotebookFileOutline
+Notebook[{
+Cell[558, 20, 146, 2, 31, "Input"],
+Cell[707, 24, 192, 5, 52, "Input"],
+Cell[CellGroupData[{
+Cell[924, 33, 131, 1, 90, "Title"],
+Cell[CellGroupData[{
+Cell[1080, 38, 91, 1, 63, "Section"],
+Cell[1174, 41, 216, 4, 30, "Text"],
+Cell[1393, 47, 1892, 38, 72, "Input"]
+}, Closed]],
+Cell[CellGroupData[{
+Cell[3322, 90, 169, 2, 49, "Section"],
+Cell[3494, 94, 955, 27, 97, "Input"],
+Cell[4452, 123, 301, 7, 31, "Input"],
+Cell[4756, 132, 2315, 60, 382, "Input"],
+Cell[7074, 194, 240, 5, 31, "Input"],
+Cell[7317, 201, 1839, 37, 154, "Input"]
+}, Closed]],
+Cell[CellGroupData[{
+Cell[9193, 243, 111, 1, 49, "Section"],
+Cell[9307, 246, 2096, 59, 172, "Input"],
+Cell[11406, 307, 1849, 49, 117, "Input"],
+Cell[13258, 358, 987, 28, 52, "Input"],
+Cell[14248, 388, 1893, 41, 112, "Input"],
+Cell[16144, 431, 184, 4, 31, "Input"]
+}, Closed]],
+Cell[CellGroupData[{
+Cell[16365, 440, 107, 1, 49, "Section"],
+Cell[16475, 443, 151, 4, 31, "Input"],
+Cell[16629, 449, 536, 10, 52, "Input"],
+Cell[17168, 461, 206, 4, 31, "Input"],
+Cell[17377, 467, 116, 2, 31, "Input"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[17530, 474, 165, 2, 63, "Section"],
+Cell[17698, 478, 1042, 17, 52, "Input"],
+Cell[18743, 497, 283, 5, 31, "Input"]
+}, Open  ]]
+}, Open  ]]
+}
+]
+*)
+

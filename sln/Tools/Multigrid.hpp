@@ -28,7 +28,7 @@ using Assembler = std::function<
 
 template <typename TMatrix>
 using Smoother = std::function<std::vector<double>(
-	TMatrix& /* system matrix */, std::vector<double> const & /* rhs */, std::vector<double> const & /* initial guess */
+	TMatrix& /* system matrix */, std::vector<double> const & /* rhs */, std::vector<double> const & /* initial guess */, Index /* mesh level */
 )>;
 
 enum class TransferType { canonical, L2 };
@@ -161,7 +161,7 @@ public:
 					//	logger.wrn("export z_0");
 					//	output << z_0 <<"\n";
 					//}
-					auto z = smoother(A, f, z_0);
+					auto z = smoother(A, f, z_0, meshLevel);
 					//if (meshLevel == _A.size() - 1) {
 					//	logger.wrn("export smoothed z");
 					//	output << z << "\n";
@@ -197,7 +197,7 @@ public:
 					//}
 				logger.end();
 				logger.beg("smooth the residual (post-smoothing)");
-					z = smoother(A, f, z);
+					z = smoother(A, f, z, meshLevel);
 					//if (meshLevel == _A.size() - 1) {
 					//	logger.wrn("export post-smoothed z");
 					//	output << z <<"\n";

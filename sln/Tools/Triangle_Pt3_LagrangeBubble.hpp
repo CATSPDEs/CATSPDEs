@@ -8,7 +8,7 @@
 class Triangle_Pt3_LagrangeBubble 
 	: public TriangularScalarFiniteElement {
 	// singleton
-	Triangle_Pt3_LagrangeBubble() : AbstractFiniteElement { 3., true } {}
+	Triangle_Pt3_LagrangeBubble() : AbstractFiniteElement { 1./*3.*/, true } {}
 	Triangle_Pt3_LagrangeBubble(Triangle_Pt3_LagrangeBubble const &);
 	Triangle_Pt3_LagrangeBubble& operator=(Triangle_Pt3_LagrangeBubble const &);
 public:

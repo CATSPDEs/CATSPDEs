@@ -5,7 +5,7 @@ SegmentMesh& SegmentMesh::refine(Index numbOfRefinements) {
 }
 
 std::vector<Index> SegmentMesh::getFineNeighborsIndicies(Index e) const {
-	std::logic_error("not implemented");
+	throw std::logic_error("not implemented");
 }
 
 SegmentMesh& SegmentMesh::import(std::istream & from) {

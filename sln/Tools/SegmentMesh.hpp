@@ -9,6 +9,8 @@ class SegmentMesh
 	: public AbstractMesh<1, 2> {
 	// Inherited via AbstractMesh
 public:
+	SegmentMesh() {}
+	SegmentMesh(std::vector<double> const & nodes) : AbstractMesh(nodes, {}) {}
 	// redefine
 	Index numbOfElements() const final { return _nodes.size() - 1; }
 	std::array<Index, 2> getNodesIndicies(Index e) const { return { e, e + 1 }; }

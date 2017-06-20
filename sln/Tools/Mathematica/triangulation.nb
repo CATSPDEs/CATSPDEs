@@ -10,10 +10,10 @@
 NotebookFileLineBreakTest
 NotebookFileLineBreakTest
 NotebookDataPosition[       158,          7]
-NotebookDataLength[     49236,       1207]
-NotebookOptionsPosition[     47528,       1143]
-NotebookOutlinePosition[     47873,       1158]
-CellTagsIndexPosition[     47830,       1155]
+NotebookDataLength[     49837,       1219]
+NotebookOptionsPosition[     47959,       1150]
+NotebookOutlinePosition[     48474,       1170]
+CellTagsIndexPosition[     48431,       1167]
 WindowFrame->Normal*)
 
 (* Beginning of Notebook Content *)
@@ -36,11 +36,10 @@ stuff with it (e.g. visualize, draw nodes / elements numeration, plot FEM\
 \[Dash]solution, compute ",
  Cell[BoxData[
   FormBox[
-   SubscriptBox["L", "2"], TraditionalForm]],
-  FormatType->"TraditionalForm"],
- "\[Dash]norms of errors in element\[Dash]wise fation etc.)\n\nRoutines \
+   SubscriptBox["L", "2"], TraditionalForm]]],
+ "\[Dash]norms of errors in element\[Dash]wise fashion etc.)\n\nRoutines \
 listed below can help with post\[Dash]processing. Also it is possible to \
-generate analytic (symbolic) region with Mathematica (i.g. using ",
+generate analytic (symbolic) region with Mathematica (e.g. using ",
  StyleBox["Disk[]",
   FontWeight->"Bold"],
  ") of any shape, convert it to CATSPDEs format (",
@@ -58,7 +57,7 @@ Interpolant Visualization",
   FontWeight->"Bold"],
  " project, for one.\n\nOur mesh data structure is based on \
 \[OpenCurlyDoubleQuote]Nodes and Triangles\[CloseCurlyDoubleQuote] format \
-(yet it is more extendable\[LongDash]one can enumerate ribs (\
+(yet it is more flexible\[LongDash]one can enumerate ribs (\
 \[OpenCurlyDoubleQuote]Nodes, Simple Ribs, and Triangles\
 \[CloseCurlyDoubleQuote]), organize refinement that respects boundary \
 curvature etc.). \nCheck out ",
@@ -73,7 +72,9 @@ type ",
 }], "Text",
  CellChangeTimes->{{3.6845928019848084`*^9, 3.6845935259835443`*^9}, {
   3.6845935745139303`*^9, 3.684593851792105*^9}, {3.684593888410251*^9, 
-  3.684594054376603*^9}}],
+  3.684594054376603*^9}, {3.7068370971862373`*^9, 3.7068370972362714`*^9}, {
+  3.7068372688493557`*^9, 3.7068372691878448`*^9}, {3.7068373031019096`*^9, 
+  3.7068373049054804`*^9}, {3.706837363409482*^9, 3.706837363811695*^9}}],
 
 Cell[CellGroupData[{
 
@@ -252,6 +253,10 @@ Cell[BoxData[
         RowBox[{
         "\"\<MaxBoundaryCellMeasure\>\"", "\[Rule]", 
          "maxBoundaryCellMeasure"}], ",", "\[IndentingNewLine]", 
+        RowBox[{"(*", 
+         RowBox[{
+          RowBox[{"\"\<SteinerPoints\>\"", "\[Rule]", "False"}], ","}], 
+         "*)"}], "\[IndentingNewLine]", 
         RowBox[{"\"\<MeshOrder\>\"", "\[Rule]", "1"}], ",", 
         RowBox[{"\"\<MeshElementType\>\"", "\[Rule]", "TriangleElement"}]}], 
        "]"}]}], ";", "\[IndentingNewLine]", 
@@ -392,7 +397,9 @@ Cell[BoxData[
    3.6845201001996326`*^9}, {3.684594182071188*^9, 3.68459451193808*^9}, 
    3.6845954667229347`*^9, {3.6864869853669405`*^9, 3.686487012284938*^9}, {
    3.6868290579681063`*^9, 3.686829071145713*^9}, {3.6905505571801586`*^9, 
-   3.6905505579758053`*^9}, {3.6905536566333017`*^9, 3.690553714655213*^9}}],
+   3.6905505579758053`*^9}, {3.6905536566333017`*^9, 3.690553714655213*^9}, {
+   3.7057785968164015`*^9, 3.7057785989226785`*^9}, {3.7057852892725463`*^9, 
+   3.7057852928862658`*^9}}],
 
 Cell[BoxData[
  RowBox[{
@@ -743,7 +750,7 @@ Cell[BoxData[
       RowBox[{"\[ScriptCapitalT]", "[", 
        RowBox[{"[", "\"\<triangles\>\"", "]"}], "]"}], "+", "1"}], "]"}]}], 
    "]"}]}]], "Input"]
-}, Closed]],
+}, Open  ]],
 
 Cell[CellGroupData[{
 
@@ -1141,8 +1148,13 @@ Cell[BoxData[
 }, Open  ]]
 }, Open  ]]
 },
-WindowSize->{1350, 676},
-WindowMargins->{{0, Automatic}, {Automatic, 0}},
+WindowSize->{1366, 685},
+WindowMargins->{{-8, Automatic}, {Automatic, -8}},
+PrintingCopies->1,
+PrintingPageRange->{32000, 32000},
+PrintingOptions->{"Magnification"->1.,
+"PaperOrientation"->"Portrait",
+"PaperSize"->{595.3199999999999, 841.92}},
 FrontEndVersion->"10.4 for Microsoft Windows (64-bit) (February 25, 2016)",
 StyleDefinitions->"Default.nb"
 ]
@@ -1159,53 +1171,53 @@ CellTagsIndex->{}
 Notebook[{
 Cell[CellGroupData[{
 Cell[580, 22, 225, 5, 144, "Title"],
-Cell[808, 29, 2003, 46, 239, "Text"],
+Cell[808, 29, 2171, 47, 239, "Text"],
 Cell[CellGroupData[{
-Cell[2836, 79, 102, 1, 63, "Section"],
+Cell[3004, 80, 102, 1, 63, "Section"],
 Cell[CellGroupData[{
-Cell[2963, 84, 262, 8, 45, "Subsection"],
-Cell[3228, 94, 1204, 27, 132, "Input"]
+Cell[3131, 85, 262, 8, 45, "Subsection"],
+Cell[3396, 95, 1204, 27, 132, "Input"]
 }, Open  ]],
 Cell[CellGroupData[{
-Cell[4469, 126, 320, 9, 45, "Subsection"],
-Cell[4792, 137, 1003, 27, 72, "Input"]
+Cell[4637, 127, 320, 9, 45, "Subsection"],
+Cell[4960, 138, 1003, 27, 72, "Input"]
 }, Open  ]],
 Cell[CellGroupData[{
-Cell[5832, 169, 142, 1, 43, "Subsection"],
-Cell[5977, 172, 745, 16, 72, "Input"]
+Cell[6000, 170, 142, 1, 43, "Subsection"],
+Cell[6145, 173, 745, 16, 72, "Input"]
 }, Open  ]],
 Cell[CellGroupData[{
-Cell[6759, 193, 134, 1, 43, "Subsection"],
-Cell[6896, 196, 706, 20, 68, "Input"]
+Cell[6927, 194, 134, 1, 43, "Subsection"],
+Cell[7064, 197, 706, 20, 76, "Input"]
 }, Open  ]]
 }, Open  ]],
 Cell[CellGroupData[{
-Cell[7651, 222, 165, 2, 63, "Section"],
+Cell[7819, 223, 165, 2, 63, "Section"],
 Cell[CellGroupData[{
-Cell[7841, 228, 167, 2, 43, "Subsection"],
-Cell[8011, 232, 74, 2, 31, "Input"],
-Cell[8088, 236, 6282, 158, 342, "Input"],
-Cell[14373, 396, 1789, 41, 152, "Input"]
+Cell[8009, 229, 167, 2, 43, "Subsection"],
+Cell[8179, 233, 74, 2, 31, "Input"],
+Cell[8256, 237, 6545, 164, 374, "Input"],
+Cell[14804, 403, 1789, 41, 152, "Input"]
 }, Open  ]],
 Cell[CellGroupData[{
-Cell[16199, 442, 213, 3, 43, "Subsection"],
-Cell[16415, 447, 8324, 174, 852, "Input"]
+Cell[16630, 449, 213, 3, 43, "Subsection"],
+Cell[16846, 454, 8324, 174, 852, "Input"]
 }, Open  ]],
 Cell[CellGroupData[{
-Cell[24776, 626, 162, 2, 43, "Subsection"],
-Cell[24941, 630, 4347, 89, 452, "Input"]
+Cell[25207, 633, 162, 2, 43, "Subsection"],
+Cell[25372, 637, 4347, 89, 452, "Input"]
 }, Open  ]]
 }, Open  ]],
 Cell[CellGroupData[{
-Cell[29337, 725, 108, 1, 63, "Section"],
+Cell[29768, 732, 108, 1, 63, "Section"],
 Cell[CellGroupData[{
-Cell[29470, 730, 128, 1, 43, "Subsection"],
-Cell[29601, 733, 399, 11, 31, "Input"]
-}, Closed]],
+Cell[29901, 737, 128, 1, 43, "Subsection"],
+Cell[30032, 740, 399, 11, 31, "Input"]
+}, Open  ]],
 Cell[CellGroupData[{
-Cell[30037, 749, 125, 1, 35, "Subsection"],
-Cell[30165, 752, 3637, 87, 319, "Input"],
-Cell[33805, 841, 13683, 297, 992, "Input"]
+Cell[30468, 756, 125, 1, 43, "Subsection"],
+Cell[30596, 759, 3637, 87, 332, "Input"],
+Cell[34236, 848, 13683, 297, 992, "Input"]
 }, Open  ]]
 }, Open  ]]
 }, Open  ]]

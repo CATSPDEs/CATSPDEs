@@ -67,6 +67,9 @@
     <Filter Include="Matrices\Implementations\Sparse">
       <UniqueIdentifier>{02304811-3522-49f3-b075-77a6e3693a1b}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Finite Elements\Hermite Family">
+      <UniqueIdentifier>{c10bbad3-8466-4fea-837b-25c91100370c}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AbstractSparseMatrix.hpp">
@@ -251,6 +254,9 @@
     </ClInclude>
     <ClInclude Include="DenseDecompositionStrategy.hpp">
       <Filter>Matrices\Implementations\Dense</Filter>
+    </ClInclude>
+    <ClInclude Include="Segment_P3_Hermite.hpp">
+      <Filter>Finite Elements\Hermite Family</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

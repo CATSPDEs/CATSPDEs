@@ -1,0 +1,45 @@
+0.01
+1
+1
+1
+0
+2
+300
+10
+1e-10
+0
+4
+0
+4
+0
+y
+
+1. set time step
+2. final time frame number
+3. mesh type
+	(0) mesh_fine.ntn
+	(1) mesh_coarse.ntn
+4. numb of mesh levels
+5. choose FE pair
+	(0) Taylor-Hood
+	(1) MINI
+6. choose precond for BiCGStab
+	(0) I
+	(1) P_BD
+	(2) P_BT
+7. max numb of iterations for outer solver
+8. log every nth iteration, n
+9. set eps for solver
+10. stopping criterion
+	(0) absolute
+	(1) relative
+11. numb of iterations for inner solver
+12. choose smoother
+	(0) forwSOR
+	(1) SSOR
+	(2) ILU(0)
+13. numb of smoothing iters
+14. set recursive calls type
+	(0) V-cycle
+	(1) W-cycle
+15. export matrix blocks

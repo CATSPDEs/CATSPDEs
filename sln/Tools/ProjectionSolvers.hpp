@@ -385,7 +385,7 @@ namespace ProjectionSolvers {
 				}
 			}
 			logFinalResidual(norm_r_0, norm_r, i > n ? n : i, n);
-			if (i > n) logger.wrn("BiCGStab exceeded max numb of iterations");
+			if (i > n) logger.wrn("PBiCGStab exceeded max numb of iterations");
 			return x;
 		}
 
