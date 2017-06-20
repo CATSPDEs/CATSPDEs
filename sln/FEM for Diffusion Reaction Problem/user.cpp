@@ -37,10 +37,13 @@ int main() {
 			ScalarField2D diffusion, reaction, force,
 				NeumannValue, RobinCoefficient, DirichletCondition;
 			Predicate2D   naturalBCsPredicate, strongBCsPredicate;
+			double diffusionJmp = 1.;
+			logger.inp("set diffusion jump", diffusionJmp);
 			auto problemIndex = logger.opt("choose problem", {
 				"Laplace w/ hom. Dirichlet BCs (zero analytical soln)",
 				"Poisson w/ inhom. Robin BCs",
-				"Diffusion-Reaction w/ mixed Dirichlet and Robin BCs"
+				"Diffusion-Reaction w/ mixed Dirichlet and Robin BCs",
+				"Poisson w/ jumps and hom Robin BCs"
 			});
 			if (problemIndex == 0) {
 				// Laplace,
@@ -91,6 +94,28 @@ int main() {
 				naturalBCsPredicate = [](Node2D const & p) { return p[0] == 1. || p[1] == 0.; }; // _|-part of square
 				strongBCsPredicate = [](Node2D const & p) { return p[0] == 0. || p[1] == 1.; }; // Г-part
 			}
+			else if (problemIndex == 3) {
+				Quadrilateral2D 
+					k1 { 
+						{ { .2, .2 },{ .8, .2 },{ .8, .8 },{ .2, .8 } } 
+					},
+					f1 {
+						{ {0., 1.}, { 0., .9 }, { .1, .9 }, { .1, 1. } }
+					},
+					f2 {
+						{ {1., 0.}, { 1, .1 },{ .9, .1 },{ .9, 0 } }
+					};
+				diffusion = [=](Node2D const & p) { return nodeInElement(k1, p) ? diffusionJmp : 1.; };
+				force = [=](Node2D const & p) { 
+					if (nodeInElement(f1, p)) return 1.;
+					if (nodeInElement(f2, p)) return -1.;
+					return 0.; 
+				};
+				reaction = DirichletCondition = NeumannValue = [&](Node2D const & p) { return 0.; };
+				RobinCoefficient = [](Node2D const) { return 1.; };
+				naturalBCsPredicate = [](Node2D const &) { return true; }; 
+				strongBCsPredicate = [](Node2D const &) { return false; }; 
+			}
 			// PDE
 			DiffusionReactionEqn2D PDE { diffusion, reaction, force };
 			// BCs
@@ -100,16 +125,16 @@ int main() {
 			}, DirichletBC { DirichletCondition, strongBCsPredicate };
 			// mesh
 			Index initialRefCount;
-			vector<string> meshType { "rct_uniform.ntn", "crs_uniform.ntn", "arb_uniform.ntn", "non_uniform.ntn" };
+			vector<string> meshType { "rct_uniform.ntn", "crs_uniform.ntn", "arb_uniform.ntn", "non_uniform.ntn", "jmp_mesh.nt" };
 			auto meshTypeIndex = logger.opt("mesh type", meshType);
 			logger.inp("refine initial mesh n times, n", initialRefCount);
 			logger.beg("import initial mesh");
 				Triangulation Omega;
 				Omega.import(iPath + meshType[meshTypeIndex]).refine(initialRefCount);
-				Omega.enumerateRibs();
+				Omega.computeNeighbors().enumerateRibs();
 			logger.end();
 			// FE
-			vector<TriangularScalarFiniteElement*> FEs{
+			vector<TriangularScalarFiniteElement*> FEs {
 				&Triangle_P1_Lagrange::instance(),
 				&Triangle_P2_Lagrange::instance(),
 				&Triangle_P1_CrouzeixRaviart::instance()

@@ -1,18 +1,43 @@
-1e+10
 1
+1
+100
+1
+1
+1
+1
+10000
+1e-12
+1
+2
 0
 1
-1
-0.3
 n
 
-1. set current density J_z
-2. choose finite element
+1. mesh type
+	(0) mesh_good.nt
+	(1) mesh_coarse.nt
+	(2) mesh_nonconform.nt
+2. set current density J_z
+3. set iron permeability mu_roof_iron
+4. choose solving technique
+	(0) MG
+	(1) P_MG CG
+	(2) P_ILU(0) CG
+	(3) CG
+5. choose finite element
 	(0) Lagrange P1
 	(1) Lagrange P2
 	(2) Crouzeix-Raviart P1
-3. numb of mesh levels (refinements)
-4. log every nth iteration of Krylov solver, n
-5. log every nth Picard iteration, n
-6. relaxation for Picard
-7. solve non-linear problem
+6. numb of mesh levels (refinements)
+7. log every nth iteration of the solver, n
+8. max numb of iterations
+9. set eps for solver
+10. stopping criterion
+	(0) absolute
+	(1) relative
+11. numb of pre- and post-smoothing iterations
+12. set recursive calls type
+	(0) V-cycle
+	(1) W-cycle
+13. numb of iterations for inner solver
+14. solve non-linear problem

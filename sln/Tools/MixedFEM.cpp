@@ -25,7 +25,8 @@ namespace FEM {
 			VectorBoundaryCondition2D const & NeumannBC, // natural (Neumann) BC,
 			VectorBoundaryCondition2D const & DirichletBC, // strong (Dirichlet) BC
 			TriangularScalarFiniteElement const & velocityFE, // for each velocity component
-			TriangularScalarFiniteElement const & pressureFE// for pressure
+			TriangularScalarFiniteElement const & pressureFE, // for pressure
+			boost::optional<Index&> activeElementIndex
 		) {
 			// logger
 			auto& logger = SingletonLogger::instance();
@@ -146,7 +147,10 @@ namespace FEM {
 			logger.end();
 			// assemble
 			logger.beg("assemble system matrix and rhs vector");
-				for (Index t = 0; t < Omega.numbOfElements(); ++t) {
+				// index of the active element
+				Index activeElementIndexScoped;
+				Index& t = activeElementIndex.value_or(activeElementIndexScoped);
+				for (t = 0; t < Omega.numbOfElements(); ++t) {
 					enodes = Omega.getElement(t);
 					mnodes = midNodes(enodes);
 					ribs = ribsOf(enodes);

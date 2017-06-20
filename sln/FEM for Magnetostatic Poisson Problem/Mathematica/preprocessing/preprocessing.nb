@@ -10,10 +10,10 @@
 NotebookFileLineBreakTest
 NotebookFileLineBreakTest
 NotebookDataPosition[       158,          7]
-NotebookDataLength[     81279,       1756]
-NotebookOptionsPosition[     78917,       1680]
-NotebookOutlinePosition[     79262,       1695]
-CellTagsIndexPosition[     79219,       1692]
+NotebookDataLength[     91414,       1998]
+NotebookOptionsPosition[     88572,       1906]
+NotebookOutlinePosition[     88917,       1921]
+CellTagsIndexPosition[     88874,       1918]
 WindowFrame->Normal*)
 
 (* Beginning of Notebook Content *)
@@ -73,7 +73,8 @@ Cell[BoxData[{
  RowBox[{
   RowBox[{"r", "=", ".002"}], ";"}], "\[IndentingNewLine]", 
  RowBox[{
-  RowBox[{"s", "=", ".02"}], ";", " ", 
+  RowBox[{
+   RowBox[{"s", "=", ".02"}], ";"}], " ", 
   RowBox[{"(*", " ", 
    RowBox[{
    "\:0448\:0438\:0440\:0438\:043d\:0430", " ", 
@@ -1334,12 +1335,15 @@ Cell[BoxData[{
 
 Cell[CellGroupData[{
 
-Cell["\:0421\:0435\:0442\:043a\:0430", "Subsubsection",
- CellChangeTimes->{{3.698053674759952*^9, 3.6980536761383533`*^9}}],
+Cell["\:0421\:0435\:0442\:043a\:0430 (\:0441 \:0438\:0437\:043c\:0435\:043b\
+\:044c\:0447\:0435\:043d\:0438\:0435\:043c \:0431\:043b\:0438\:0437 \:0440\
+\:0430\:0437\:0440\:044b\:0432\:043e\:0432)", "Subsubsection",
+ CellChangeTimes->{{3.698053674759952*^9, 3.6980536761383533`*^9}, {
+  3.7057472369869976`*^9, 3.7057472637289915`*^9}}],
 
 Cell[BoxData[{
  RowBox[{
-  RowBox[{"elementMesh", "=", 
+  RowBox[{"elementMeshGood", "=", 
    RowBox[{"ToElementMesh", "[", 
     RowBox[{"boundaryMesh", ",", 
      RowBox[{"\"\<MeshOrder\>\"", "\[Rule]", "1"}], ",", 
@@ -1353,8 +1357,9 @@ Cell[BoxData[{
      RowBox[{"\"\<MaxCellMeasure\>\"", "\[Rule]", "\[Infinity]"}]}], "]"}]}], 
   ";"}], "\[IndentingNewLine]", 
  RowBox[{
-  RowBox[{"frame", "=", 
-   RowBox[{"elementMesh", "[", "\"\<Wireframe\>\"", "]"}]}], ";"}]}], "Input",
+  RowBox[{"frameGood", "=", 
+   RowBox[{"elementMeshGood", "[", "\"\<Wireframe\>\"", "]"}]}], 
+  ";"}]}], "Input",
  CellChangeTimes->{{3.698053690352598*^9, 3.698053695781229*^9}, {
   3.698053727956212*^9, 3.6980537544512386`*^9}, {3.6980540078014765`*^9, 
   3.698054008262784*^9}, {3.6980560669043894`*^9, 3.6980560927539387`*^9}, {
@@ -1365,7 +1370,9 @@ Cell[BoxData[{
   3.699008772607257*^9, 3.699008879878428*^9}, {3.6990089111421256`*^9, 
   3.699008949533993*^9}, {3.6990103152155685`*^9, 3.6990103573709106`*^9}, {
   3.69901041835952*^9, 3.699010419075495*^9}, {3.699010772808814*^9, 
-  3.6990107732205925`*^9}, {3.6990232860589232`*^9, 3.6990232872907395`*^9}}],
+  3.6990107732205925`*^9}, {3.6990232860589232`*^9, 3.6990232872907395`*^9}, {
+  3.7057471357868834`*^9, 3.7057471525188613`*^9}, {3.705747410960701*^9, 
+  3.7057474117973733`*^9}}],
 
 Cell[BoxData[
  RowBox[{"Show", "[", 
@@ -1374,7 +1381,7 @@ Cell[BoxData[
    SubscriptBox["p\[CapitalOmega]", "left"], ",", 
    SubscriptBox["p\[CapitalOmega]", "right"], ",", 
    SubscriptBox["p\[CapitalOmega]", "magnet"], ",", 
-   SubscriptBox["p\[CapitalOmega]", "field"], ",", "frame", ",", 
+   SubscriptBox["p\[CapitalOmega]", "field"], ",", "frameGood", ",", 
    RowBox[{"ImageSize", "\[Rule]", "400"}]}], "]"}]], "Input",
  CellChangeTimes->{{3.698737999050212*^9, 3.698738028107156*^9}, {
    3.6987380614315834`*^9, 3.6987380879965944`*^9}, {3.698738215888658*^9, 
@@ -1388,7 +1395,7 @@ Cell[BoxData[
    3.6989956187094903`*^9}, {3.6989958186341877`*^9, 3.6989958194482183`*^9}, 
    3.6990021066939573`*^9, {3.699002218162292*^9, 3.6990022240967765`*^9}, {
    3.6990189594813175`*^9, 3.699019002226989*^9}, {3.6990192168102756`*^9, 
-   3.6990192502922897`*^9}}],
+   3.6990192502922897`*^9}, {3.7057471636539135`*^9, 3.7057471653956366`*^9}}],
 
 Cell[BoxData[
  RowBox[{
@@ -1399,11 +1406,12 @@ Cell[BoxData[
     " ", "mesh"}], " ", "*)"}], "\[IndentingNewLine]", 
   RowBox[{
    RowBox[{
-    RowBox[{"\[ScriptCapitalT]", "=", 
-     RowBox[{"create\[ScriptCapitalT]fromElementMesh", "@", "elementMesh"}]}],
-     ";"}], "\[IndentingNewLine]", 
+    RowBox[{"meshGood", "=", 
+     RowBox[{
+     "create\[ScriptCapitalT]fromElementMesh", "@", "elementMeshGood"}]}], 
+    ";"}], "\[IndentingNewLine]", 
    RowBox[{"export", "[", 
-    RowBox[{"\[ScriptCapitalT]", ",", "\"\<mesh\>\"", ",", 
+    RowBox[{"meshGood", ",", "\"\<mesh_good\>\"", ",", 
      RowBox[{"<|", 
       RowBox[{"\"\<format\>\"", "\[Rule]", "\"\<NT\>\""}], "|>"}]}], 
     "]"}]}]}]], "Input",
@@ -1411,12 +1419,230 @@ Cell[BoxData[
   3.698054322632666*^9, 3.6980543526851645`*^9}, {3.69805438358022*^9, 
   3.698054386333229*^9}, {3.6988371287102194`*^9, 3.6988371290911207`*^9}, {
   3.6989971326392927`*^9, 3.698997133875617*^9}, {3.6990211597955947`*^9, 
-  3.699021175853612*^9}}],
+  3.699021175853612*^9}, {3.7057471736882677`*^9, 3.7057472140550084`*^9}, {
+  3.705747466407776*^9, 3.7057474671114626`*^9}}]
+}, Closed]],
+
+Cell[CellGroupData[{
+
+Cell["\:0421\:0435\:0442\:043a\:0430 (\:0433\:0440\:0443\:0431\:0430\:044f)", \
+"Subsubsection",
+ CellChangeTimes->{{3.698053674759952*^9, 3.6980536761383533`*^9}, {
+  3.7057472369869976`*^9, 3.7057472766482773`*^9}}],
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{"elementMeshCoarse", "=", 
+   RowBox[{"ToElementMesh", "[", 
+    RowBox[{"boundaryMesh", ",", 
+     RowBox[{"\"\<MeshOrder\>\"", "\[Rule]", "1"}], ",", 
+     RowBox[{"\"\<MaxCellMeasure\>\"", "\[Rule]", "\[Infinity]"}]}], "]"}]}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"frameCoarse", "=", 
+   RowBox[{"elementMeshCoarse", "[", "\"\<Wireframe\>\"", "]"}]}], 
+  ";"}]}], "Input",
+ CellChangeTimes->CompressedData["
+1:eJxTTMoPSmViYGAQBmIQXePh7V7V+9rxyv8fYNpr5j9vEN1T4OcPojct/ZkH
+ondlcOSD6EMfYgqqgbSLwoxiEC3EuDvjRN9rxxSLpEwQfemWh+4FIN0zJ9gQ
+RDu4/BRW6n/tuEj7tjqIdnHxuukOpOs+VYBpq5jTP0A0z+ObYHqOTES+D5DO
+WbapCEQvy5u8AESLyvxZC6K9e55sBNEVYhu3gegPT9MSfYF0w73VaSDaoNE7
+D0SXZCWB6XMPZ84C0RL8y8H05kcHtwUD6b2+L8G0mt7P62pzXjs2zxK4BaJf
+/Sl4BaI7xBXfgmiTzc3fQbSW0BYwDQChBqC3
+  "]],
 
 Cell[BoxData[
- RowBox[{"numbOf\[ScriptN]", "@", "\[ScriptCapitalT]"}]], "Input",
- CellChangeTimes->{{3.6988390860687723`*^9, 3.698839092912401*^9}}]
-}, Closed]]
+ RowBox[{"Show", "[", 
+  RowBox[{"p\[CapitalOmega]", ",", 
+   SubscriptBox["p\[CapitalOmega]", "default"], ",", 
+   SubscriptBox["p\[CapitalOmega]", "left"], ",", 
+   SubscriptBox["p\[CapitalOmega]", "right"], ",", 
+   SubscriptBox["p\[CapitalOmega]", "magnet"], ",", 
+   SubscriptBox["p\[CapitalOmega]", "field"], ",", "frameCoarse", ",", 
+   RowBox[{"ImageSize", "\[Rule]", "400"}]}], "]"}]], "Input",
+ CellChangeTimes->{{3.698737999050212*^9, 3.698738028107156*^9}, {
+   3.6987380614315834`*^9, 3.6987380879965944`*^9}, {3.698738215888658*^9, 
+   3.6987382317325673`*^9}, {3.6987383319517355`*^9, 
+   3.6987383475216913`*^9}, {3.6987383935877857`*^9, 3.698738398786989*^9}, {
+   3.698738690574376*^9, 3.698738701390464*^9}, {3.6987391153438373`*^9, 
+   3.6987391439654007`*^9}, {3.698739291496337*^9, 3.698739298821004*^9}, {
+   3.6987440974886265`*^9, 3.6987441001948905`*^9}, {3.698744160511631*^9, 
+   3.6987441606902494`*^9}, {3.69874483015165*^9, 3.6987448320096617`*^9}, {
+   3.698993139325713*^9, 3.6989931458500896`*^9}, {3.6989956179684253`*^9, 
+   3.6989956187094903`*^9}, {3.6989958186341877`*^9, 3.6989958194482183`*^9}, 
+   3.6990021066939573`*^9, {3.699002218162292*^9, 3.6990022240967765`*^9}, {
+   3.6990189594813175`*^9, 3.699019002226989*^9}, {3.6990192168102756`*^9, 
+   3.6990192502922897`*^9}, {3.7057471636539135`*^9, 
+   3.7057471653956366`*^9}, {3.705747312481495*^9, 3.705747315226093*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"(*", 
+   RowBox[{
+    RowBox[{" ", 
+     RowBox[{"export", " ", "CATS"}], "\[CloseCurlyQuote]"}], " ", "PDEs", 
+    " ", "mesh"}], " ", "*)"}], "\[IndentingNewLine]", 
+  RowBox[{
+   RowBox[{
+    RowBox[{"meshCoarse", "=", 
+     RowBox[{
+     "create\[ScriptCapitalT]fromElementMesh", "@", "elementMeshCoarse"}]}], 
+    ";"}], "\[IndentingNewLine]", 
+   RowBox[{"export", "[", 
+    RowBox[{"meshCoarse", ",", "\"\<mesh_coarse\>\"", ",", 
+     RowBox[{"<|", 
+      RowBox[{"\"\<format\>\"", "\[Rule]", "\"\<NT\>\""}], "|>"}]}], 
+    "]"}]}]}]], "Input",
+ CellChangeTimes->{{3.6980541994588027`*^9, 3.698054214919259*^9}, {
+  3.698054322632666*^9, 3.6980543526851645`*^9}, {3.69805438358022*^9, 
+  3.698054386333229*^9}, {3.6988371287102194`*^9, 3.6988371290911207`*^9}, {
+  3.6989971326392927`*^9, 3.698997133875617*^9}, {3.6990211597955947`*^9, 
+  3.699021175853612*^9}, {3.7057471736882677`*^9, 3.7057472140550084`*^9}, {
+  3.705747434520685*^9, 3.7057474540209074`*^9}}]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["\:0421\:0435\:0442\:043a\:0430 (\:043d\:0435\:043a\:043e\:043d\:0444\
+\:043e\:0440\:043c\:043d\:0430\:044f \:043a \:0440\:0430\:0437\:0440\:044b\
+\:0432\:0430\:043c)", "Subsubsection",
+ CellChangeTimes->{{3.7057573440675664`*^9, 3.705757362089332*^9}}],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{"meshNonconform", "=", 
+   RowBox[{"create\[ScriptCapitalT]fromRegion", "[", 
+    RowBox[{
+     RowBox[{"Rectangle", "[", 
+      RowBox[{
+       RowBox[{"{", 
+        RowBox[{
+         RowBox[{"-", "s"}], ",", "0"}], "}"}], ",", 
+       RowBox[{"{", 
+        RowBox[{
+         RowBox[{"b", "+", "s"}], ",", 
+         RowBox[{"a", "+", "s"}]}], "}"}]}], "]"}], ",", ".001"}], "]"}]}], 
+  ";"}], "\n", 
+ RowBox[{"highlight", "[", 
+  RowBox[{"meshNonconform", ",", 
+   RowBox[{"{", "}"}], ",", "0"}], "]"}]}], "Input",
+ CellChangeTimes->{{3.7057574918570633`*^9, 3.7057575444422617`*^9}, {
+  3.7057576073052797`*^9, 3.705757668283807*^9}, {3.7057578762777233`*^9, 
+  3.705757902366315*^9}, {3.705757960114545*^9, 3.7057582244144306`*^9}, {
+  3.705758936368472*^9, 3.705758937601446*^9}, {3.705759906492735*^9, 
+  3.7057599223593187`*^9}}],
+
+Cell[BoxData[
+ GraphicsBox[
+  TagBox[
+   DynamicModuleBox[{Typeset`mesh = HoldComplete[
+     MeshRegion[{{-0.02, 0.}, {-0.02, 0.04}, {-0.02, 0.08}, {
+      0.02666666666666667, 0.}, {0.02666666666666667, 0.08}, {
+      0.07333333333333333, 0.}, {0.07333333333333333, 0.08}, {
+      0.12000000000000001`, 0.}, {0.12000000000000001`, 0.04}, {
+      0.12000000000000001`, 0.08}, {0.05, 0.04}, {0.015, 
+      0.04638888888888889}, {0.085, 0.03361111111111111}, {
+      0.0033333333333333375`, 0.018793246839654023`}, {0.09666666666666668, 
+      0.061206753160345975`}}, {
+       Polygon[{{4, 14, 1}, {9, 15, 13}, {12, 3, 2}, {4, 11, 12}, {3, 12, 
+        5}, {7, 5, 11}, {6, 11, 4}, {13, 11, 6}, {8, 9, 13}, {2, 14, 12}, {15,
+         10, 7}, {11, 13, 7}, {9, 10, 15}, {8, 13, 6}, {4, 12, 14}, {5, 12, 
+        11}, {7, 13, 15}, {2, 1, 14}}]}, 
+      Properties -> {{
+         1, {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 
+          19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32}} -> (
+         MeshCellStyle -> {
+           GrayLevel[0], 
+           GrayLevel[0], 
+           GrayLevel[0], 
+           GrayLevel[0], 
+           GrayLevel[0], 
+           GrayLevel[0], 
+           GrayLevel[0], 
+           GrayLevel[0], 
+           GrayLevel[0], 
+           GrayLevel[0], 
+           GrayLevel[0], 
+           GrayLevel[0], 
+           GrayLevel[0], 
+           GrayLevel[0], 
+           GrayLevel[0], 
+           GrayLevel[0], 
+           GrayLevel[0], 
+           GrayLevel[0], 
+           GrayLevel[0], 
+           GrayLevel[0], 
+           GrayLevel[0], 
+           GrayLevel[0], 
+           GrayLevel[0], 
+           GrayLevel[0], 
+           GrayLevel[0], 
+           GrayLevel[0], 
+           GrayLevel[0], 
+           GrayLevel[0], 
+           GrayLevel[0], 
+           GrayLevel[0], 
+           GrayLevel[0], 
+           GrayLevel[0]}), {1, Default} -> (MeshCellStyle -> Automatic)}, 
+      Method -> {
+       "EliminateUnusedCoordinates" -> True, "DeleteDuplicateCoordinates" -> 
+        Automatic, "VertexAlias" -> Identity, "CheckOrientation" -> Automatic,
+         "CoplanarityTolerance" -> Automatic, "CheckIntersections" -> 
+        Automatic, "BoundaryNesting" -> Automatic, "SeparateBoundaries" -> 
+        False, "TJunction" -> Automatic, "PropagateMarkers" -> True, 
+        "ZeroTest" -> Automatic, "Hash" -> 4260046852968347687}, {
+      PlotRange -> All, PlotTheme -> "Lines"}]]}, 
+    TagBox[
+     GraphicsComplexBox[{{-0.02, 0.}, {-0.02, 0.04}, {-0.02, 0.08}, {
+      0.02666666666666667, 0.}, {0.02666666666666667, 0.08}, {
+      0.07333333333333333, 0.}, {0.07333333333333333, 0.08}, {
+      0.12000000000000001`, 0.}, {0.12000000000000001`, 0.04}, {
+      0.12000000000000001`, 0.08}, {0.05, 0.04}, {0.015, 
+      0.04638888888888889}, {0.085, 0.03361111111111111}, {
+      0.0033333333333333375`, 0.018793246839654023`}, {0.09666666666666668, 
+      0.061206753160345975`}}, 
+      {Hue[0.6, 0.3, 0.95], EdgeForm[Hue[0.6, 0.3, 0.75]], 
+       LineBox[{{4, 14}, {14, 1}, {1, 4}, {9, 15}, {15, 13}, {13, 9}, {12, 
+        3}, {3, 2}, {2, 12}, {4, 11}, {11, 12}, {12, 4}, {12, 5}, {5, 3}, {7, 
+        5}, {5, 11}, {11, 7}, {6, 11}, {4, 6}, {13, 11}, {6, 13}, {8, 9}, {13,
+         8}, {2, 14}, {14, 12}, {15, 10}, {10, 7}, {7, 15}, {13, 7}, {9, 
+        10}, {6, 8}, {2, 1}}], 
+       {GrayLevel[0], 
+        LineBox[{{4, 14}, {14, 1}, {1, 4}, {9, 15}, {15, 13}, {13, 9}, {12, 
+         3}, {3, 2}, {2, 12}, {4, 11}, {11, 12}, {12, 4}, {12, 5}, {5, 3}, {7,
+          5}, {5, 11}, {11, 7}, {6, 11}, {4, 6}, {13, 11}, {6, 13}, {8, 9}, {
+         13, 8}, {2, 14}, {14, 12}, {15, 10}, {10, 7}, {7, 15}, {13, 7}, {9, 
+         10}, {6, 8}, {2, 1}}]}}],
+     MouseAppearanceTag["LinkHand"]],
+    AllowKernelInitialization->False],
+   "MeshGraphics",
+   AutoDelete->True,
+   Editable->False,
+   Selectable->False],
+  DefaultBaseStyle->{
+   "Graphics", FrontEnd`GraphicsHighlightColor -> Hue[0.1, 1, 0.7]},
+  PlotRange->All]], "Output",
+ CellChangeTimes->{{3.705758923729851*^9, 3.7057589628286505`*^9}, {
+  3.705759909368012*^9, 3.7057599424440813`*^9}}]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"export", "[", 
+  RowBox[{"meshNonconform", ",", "\"\<mesh_nonconform\>\"", ",", 
+   RowBox[{"<|", 
+    RowBox[{"\"\<format\>\"", "\[Rule]", "\"\<NT\>\""}], "|>"}]}], 
+  "]"}]], "Input",
+ CellChangeTimes->{{3.705758241197155*^9, 3.7057582487165017`*^9}}],
+
+Cell[BoxData["\<\"mesh_nonconform.nt\"\>"], "Output",
+ CellChangeTimes->{{3.705758945376953*^9, 3.7057589646256247`*^9}, {
+  3.705759928892091*^9, 3.705759943934782*^9}}]
+}, Open  ]]
+}, Open  ]]
 }, Open  ]]
 }, Open  ]],
 
@@ -1678,7 +1904,7 @@ Cell[BoxData[{
 }, Closed]]
 }, Closed]]
 },
-WindowSize->{1357, 676},
+WindowSize->{1347, 676},
 WindowMargins->{{0, Automatic}, {Automatic, 0}},
 FrontEndVersion->"10.4 for Microsoft Windows (64-bit) (February 25, 2016)",
 StyleDefinitions->"Default.nb"
@@ -1696,66 +1922,82 @@ CellTagsIndex->{}
 Notebook[{
 Cell[558, 20, 143, 2, 31, "Input"],
 Cell[704, 24, 257, 5, 31, "Input"],
-Cell[964, 31, 264, 6, 52, "Input"],
+Cell[964, 31, 264, 6, 109, "Input"],
 Cell[CellGroupData[{
 Cell[1253, 41, 188, 2, 63, "Section"],
 Cell[CellGroupData[{
 Cell[1466, 47, 334, 4, 43, "Subsection"],
-Cell[1803, 53, 3289, 60, 172, "Input"],
-Cell[5095, 115, 39579, 659, 417, "Input"]
+Cell[1803, 53, 3303, 61, 172, "Input"],
+Cell[5109, 116, 39579, 659, 417, "Input"]
 }, Closed]],
 Cell[CellGroupData[{
-Cell[44711, 779, 195, 2, 35, "Subsection"],
+Cell[44725, 780, 195, 2, 35, "Subsection"],
 Cell[CellGroupData[{
-Cell[44931, 785, 206, 2, 34, "Subsubsection"],
-Cell[45140, 789, 143, 2, 31, "Input"],
-Cell[45286, 793, 6942, 194, 352, "Input"],
-Cell[52231, 989, 4856, 109, 172, "Input"]
+Cell[44945, 786, 206, 2, 34, "Subsubsection"],
+Cell[45154, 790, 143, 2, 31, "Input"],
+Cell[45300, 794, 6942, 194, 389, "Input"],
+Cell[52245, 990, 4856, 109, 172, "Input"]
 }, Closed]],
 Cell[CellGroupData[{
-Cell[57124, 1103, 238, 3, 28, "Subsubsection"],
-Cell[57365, 1108, 140, 2, 31, "Input"],
-Cell[57508, 1112, 397, 8, 73, "Input"],
-Cell[57908, 1122, 142, 3, 31, "Input"],
-Cell[58053, 1127, 938, 22, 52, "Input"],
-Cell[58994, 1151, 849, 25, 52, "Input"],
-Cell[59846, 1178, 1338, 31, 52, "Input"],
-Cell[61187, 1211, 1208, 29, 54, "Input"],
-Cell[62398, 1242, 1936, 51, 154, "Input"],
-Cell[64337, 1295, 1555, 36, 68, "Input"]
+Cell[57138, 1104, 238, 3, 28, "Subsubsection"],
+Cell[57379, 1109, 140, 2, 31, "Input"],
+Cell[57522, 1113, 397, 8, 77, "Input"],
+Cell[57922, 1123, 142, 3, 31, "Input"],
+Cell[58067, 1128, 938, 22, 52, "Input"],
+Cell[59008, 1152, 849, 25, 52, "Input"],
+Cell[59860, 1179, 1338, 31, 52, "Input"],
+Cell[61201, 1212, 1208, 29, 54, "Input"],
+Cell[62412, 1243, 1936, 51, 154, "Input"],
+Cell[64351, 1296, 1555, 36, 76, "Input"]
 }, Closed]],
 Cell[CellGroupData[{
-Cell[65929, 1336, 123, 1, 28, "Subsubsection"],
-Cell[66055, 1339, 1480, 28, 68, "Input"],
-Cell[67538, 1369, 1326, 21, 33, "Input"],
-Cell[68867, 1392, 900, 21, 72, "Input"],
-Cell[69770, 1415, 148, 2, 31, "Input"]
-}, Closed]]
+Cell[65943, 1337, 336, 4, 28, "Subsubsection"],
+Cell[66282, 1343, 1599, 31, 76, "Input"],
+Cell[67884, 1376, 1380, 21, 33, "Input"],
+Cell[69267, 1399, 998, 23, 72, "Input"]
+}, Closed]],
+Cell[CellGroupData[{
+Cell[70302, 1427, 217, 3, 28, "Subsubsection"],
+Cell[70522, 1432, 813, 19, 52, "Input"],
+Cell[71338, 1453, 1432, 22, 33, "Input"],
+Cell[72773, 1477, 1006, 23, 72, "Input"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[73816, 1505, 258, 3, 34, "Subsubsection"],
+Cell[CellGroupData[{
+Cell[74099, 1512, 870, 22, 52, "Input"],
+Cell[74972, 1536, 4102, 91, 227, "Output"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[79111, 1632, 277, 6, 31, "Input"],
+Cell[79391, 1640, 170, 2, 31, "Output"]
+}, Open  ]]
+}, Open  ]]
 }, Open  ]]
 }, Open  ]],
 Cell[CellGroupData[{
-Cell[69979, 1424, 577, 14, 72, "Section"],
-Cell[70559, 1440, 197, 4, 41, "Input"],
-Cell[70759, 1446, 221, 5, 42, "Input"],
-Cell[70983, 1453, 193, 4, 41, "Input"],
-Cell[71179, 1459, 625, 14, 31, "Input"],
-Cell[71807, 1475, 337, 8, 52, "Input"],
+Cell[79634, 1650, 577, 14, 82, "Section"],
+Cell[80214, 1666, 197, 4, 43, "Input"],
+Cell[80414, 1672, 221, 5, 44, "Input"],
+Cell[80638, 1679, 193, 4, 43, "Input"],
+Cell[80834, 1685, 625, 14, 31, "Input"],
+Cell[81462, 1701, 337, 8, 52, "Input"],
 Cell[CellGroupData[{
-Cell[72169, 1487, 158, 2, 43, "Subsection"],
-Cell[72330, 1491, 416, 11, 31, "Input"]
+Cell[81824, 1713, 158, 2, 43, "Subsection"],
+Cell[81985, 1717, 416, 11, 31, "Input"]
 }, Closed]],
 Cell[CellGroupData[{
-Cell[72783, 1507, 164, 2, 35, "Subsection"],
-Cell[72950, 1511, 147, 3, 31, "Input"],
-Cell[73100, 1516, 147, 3, 31, "Input"],
-Cell[73250, 1521, 960, 26, 48, "Input"],
-Cell[74213, 1549, 760, 19, 55, "Input"]
+Cell[82438, 1733, 164, 2, 35, "Subsection"],
+Cell[82605, 1737, 147, 3, 31, "Input"],
+Cell[82755, 1742, 147, 3, 31, "Input"],
+Cell[82905, 1747, 960, 26, 48, "Input"],
+Cell[83868, 1775, 760, 19, 55, "Input"]
 }, Closed]],
 Cell[CellGroupData[{
-Cell[75010, 1573, 207, 2, 35, "Subsection"],
-Cell[75220, 1577, 1018, 27, 52, "Input"],
-Cell[76241, 1606, 2112, 55, 141, "Input"],
-Cell[78356, 1663, 533, 13, 52, "Input"]
+Cell[84665, 1799, 207, 2, 35, "Subsection"],
+Cell[84875, 1803, 1018, 27, 52, "Input"],
+Cell[85896, 1832, 2112, 55, 141, "Input"],
+Cell[88011, 1889, 533, 13, 52, "Input"]
 }, Closed]]
 }, Closed]]
 }

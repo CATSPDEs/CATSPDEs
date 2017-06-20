@@ -28,7 +28,8 @@ namespace FEM {
 			VectorBoundaryCondition2D const &, // natural BC,
 			VectorBoundaryCondition2D const &, // essential BC;
 			TriangularScalarFiniteElement const &, // for each velocity component
-			TriangularScalarFiniteElement const & // for pressure
+			TriangularScalarFiniteElement const &, // for pressure
+			boost::optional<Index&> activeElementIndex = boost::none // index of the active element	
 		);
 
 	}

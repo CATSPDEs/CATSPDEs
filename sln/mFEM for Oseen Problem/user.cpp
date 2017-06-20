@@ -1,5 +1,4 @@
-﻿#include <random> // for initial guess
-#include "SingletonLogger.hpp"
+﻿#include "SingletonLogger.hpp"
 #include "MixedFEM.hpp"
 #include "constants.hpp"
 #include "SymmetricBlockMatrix.hpp" // for saddle point matrix
@@ -23,6 +22,7 @@ using std::string;
 using std::vector;
 using boost::get;
 
+#include <random> // for initial guess
 auto shuffle(Index n) {
 	std::random_device rd;
 	std::mt19937 gen(rd());
@@ -227,10 +227,8 @@ int main() {
 			logger.inp("log every nth iteration, n", i_log);
 			auto blockSymmetryType = (BlockSymmetryType)logger.opt("block symmetry type", { "symmetric (indefinite matrix)", "antisymmetric (positive definite matrix)" });		
 		logger.end();
-
-		// TODO: choose method
-
-		logger.beg("set inner solver data (BD-preconditioner)");
+		logger.beg("set inner solver data");
+			auto precondIndex = logger.opt("choose precond for BiCGStab", { "I", "P_BD", "P_BT" });
 			auto Jacobi = Smoothers::relaxedJacobi;
 			vector<decltype(Jacobi)> smoothers {
 				Smoothers::relaxedJacobi,
@@ -243,7 +241,7 @@ int main() {
 			logger.inp("numb of pre- and post-smoothing iterations", nu);
 			double omega;
 			logger.inp("relaxation parameter", omega);
-			Smoother<CSlCMatrix<double>> smoother = [&](CSlCMatrix<double>& A, vector<double> const & b, vector<double> const & x_0) {
+			Smoother<CSlCMatrix<double>> smoother = [&](CSlCMatrix<double>& A, vector<double> const & b, vector<double> const & x_0, Index) {
 				return smoothers[smoothersIndex](A, b, x_0, omega, nu, 0., StoppingCriterion::absolute, 0);
 			};
 			auto gamma = logger.opt("set recursive calls type", { "V-cycle", "W-cycle" });
@@ -252,15 +250,19 @@ int main() {
 			logger.inp("numb of iterations for inner solver", numbOfInnerIterations);
 			auto transfer = (TransferType)logger.opt("grid transfer type", { "canonical", "L2" });
 		logger.end();
+		CSlCMatrix<double> A11;
+		CSCMatrix<double> B1, B2;
+		vector<double> b;
 		logger.beg("build preconditioner");
-			
-			//Omega.refine(numbOfMeshLevels);
-			
 			logger.beg("(1) MG for Laplace block");
 				Multigrid<CSlCMatrix<double>> MG {
 					*velocityFE, Omega, numbOfMeshLevels,
 					[&](Triangulation const & Omega) {
 						auto system = Mixed::assembleSystem(PDE, Omega, NeumannBC, DirichletBC, *velocityFE, *pressureFE);
+						A11 = get<0>(system);
+						B1  = get<1>(system);
+						B2  = get<2>(system);
+						b   = get<3>(system);
 						return get<0>(system); // return Laplace block
 					},
 					transfer
@@ -285,16 +287,11 @@ int main() {
 				);
 			logger.end();
 		logger.end();
-		logger.beg("assemble saddle point system");
-			auto system = Mixed::assembleSystem(PDE, Omega, NeumannBC, DirichletBC, *velocityFE, *pressureFE);
-			auto& A11 = get<0>(system), &A22 = A11;
-			auto& B1  = get<1>(system), &B2  = get<2>(system);
-			auto& b   = get<3>(system);
-			if (blockSymmetryType == BlockSymmetryType::antisymmetric)
-				for (Index i = 2 * A11.getOrder(); i < b.size(); ++i)
-					b[i] = -b[i];
+		logger.beg("define saddle point matrix");
+			Index n = A11.getOrder(), m = B1.numbOfRows();
+			if (blockSymmetryType == BlockSymmetryType::antisymmetric) for (Index i = 2 * n; i < b.size(); ++i) b[i] = -b[i];
 			SymmetricBlockMatrix<double> SaddlePointMatrix {
-				{ &A11, &A22, nullptr }, // diag
+				{ &A11, &A11, nullptr }, // diag
 				{ // lval
 					nullptr,
 					&B1, &B2
@@ -303,56 +300,66 @@ int main() {
 			};
 		logger.end();
 		logger.beg("solve");
-			Preconditioner BlockDiagonalPreconditioner = [&](vector<double> const & x) {
-				vector<double>
-					x1(x.begin(), x.begin() + A11.getOrder()),
-					x2(x.begin() + A11.getOrder(), x.begin() + 2 * A11.getOrder()),
-					x3(x.begin() + 2 * A11.getOrder(), x.end()),
-					y1(A11.getOrder()), 
-					y2(A11.getOrder()), 
-					y3(pressureMassMatrix.getOrder());
-				// (1) Laplace block
-				logger.mute = true;
-				for (Index i = 0; i < numbOfInnerIterations; ++i) {
-					y1 = MG(numbOfMeshLevels, x1, y1, smoother, gamma);
-					y2 = MG(numbOfMeshLevels, x2, y2, smoother, gamma);
+			vector<Preconditioner> P {
+				/* I  */ [ ](vector<double> const & x) { return x; },
+				/* BD */ [&](vector<double> const & x) {
+					vector<double>
+						x1(x.begin(), x.begin() + n),
+						x2(x.begin() + n, x.begin() + 2 * n),
+						x3(x.begin() + 2 * n, x.end()),
+						y1(n),
+						y2(n);
+					// (1) Laplace block
+					logger.mute = true;
+					for (Index i = 0; i < numbOfInnerIterations; ++i) {
+						y1 = MG(numbOfMeshLevels, x1, y1, smoother, gamma);
+						y2 = MG(numbOfMeshLevels, x2, y2, smoother, gamma);
+					}
+					logger.mute = false;
+					// (2) Schur complement
+					auto y3 = pressureMassMatrix.diagSubst(x3);
+					if (blockSymmetryType == BlockSymmetryType::antisymmetric) y3 *= -1.;
+					// final vector
+					vector<double> y;
+					y.reserve(2 * n + m);
+					y.insert(y.end(), y1.begin(), y1.end());
+					y.insert(y.end(), y2.begin(), y2.end());
+					y.insert(y.end(), y3.begin(), y3.end());
+					return y;
+				},
+				/* BT */ [&](vector<double> const & x) {
+					vector<double>
+						x1(x.begin(), x.begin() + n),
+						x2(x.begin() + n, x.begin() + 2 * n),
+						x3(x.begin() + 2 * n, x.end()),
+						y1(n), y2(n);
+					// (1) Schur complement
+					auto y3 = pressureMassMatrix.diagSubst(x3);
+					if (blockSymmetryType == BlockSymmetryType::antisymmetric) y3 *= -1.;
+					// (1) Laplace block
+					auto f1 = x1 - B1.t() * y3;
+					auto f2 = x2 - B2.t() * y3;
+					logger.mute = true;
+					for (Index i = 0; i < numbOfInnerIterations; ++i) {
+						y1 = MG(numbOfMeshLevels, f1, y1, smoother, gamma);
+						y2 = MG(numbOfMeshLevels, f2, y2, smoother, gamma);
+					}
+					logger.mute = false;
+					// final vector
+					vector<double> y;
+					y.reserve(2 * n + m);
+					y.insert(y.end(), y1.begin(), y1.end());
+					y.insert(y.end(), y2.begin(), y2.end());
+					y.insert(y.end(), y3.begin(), y3.end());
+					return y;
 				}
-				logger.mute = false;
-				// (2) Schur complement
-				y3 = pressureMassMatrix.diagSubst(x3);
-				if (blockSymmetryType == BlockSymmetryType::antisymmetric) y3 *= -1.;
-				// final vector
-				vector<double> y;
-				y.reserve(SaddlePointMatrix.getOrder());
-				y.insert(y.end(), y1.begin(), y1.end());
-				y.insert(y.end(), y2.begin(), y2.end());
-				y.insert(y.end(), y3.begin(), y3.end());
-				return y;
 			};
-			
 			auto x = Krylov::PBiCGStab(
-				BlockDiagonalPreconditioner,
+				P[precondIndex],
 				SaddlePointMatrix, b, 
-				//shuffle(SaddlePointMatrix.getOrder()),
 				boost::none,
 				maxNumbOfIterations, eps, stop, i_log
 			);
-
-			//auto x = Krylov::BiCGStab(
-			//	SaddlePointMatrix, b, 
-			//	/*shuffle(SaddlePointMatrix.getOrder())*/ boost::none, 
-			//	maxNumbOfIterations, eps, stop, i_log
-			//);
-
-			//CSCMatrix<double> SPM;
-			//SPM.importHarwellBoeing(oPath + "system/SPM.rua");
-			//DenseMatrix<double> SPMd{ SPM };
-			//import(b, oPath + "system/b.dat");
-			//x = Krylov::CG(SaddlePointMatrix, b, boost::none, 10000, eps, stop, 10, 0);
-			//x = Krylov::CG(SaddlePointMatrix, b/*, shuffle(SaddlePointMatrix.getOrder()), eps, stop, i_log*/);
-			//x = Krylov::BiCGStab(SaddlePointMatrix, b);
-			//logger.buf << norm(b - SaddlePointMatrix * x);
-			//logger.log();
 		logger.end();
 		logger.beg("export soln vector");
 			export(x, oPath + "x.dat");

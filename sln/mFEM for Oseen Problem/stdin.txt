@@ -1,21 +1,22 @@
-6
+4
 2
 0
-1
+0
 2
-1
+2
 1e-12
 1
-1000
-0
+100000
+100
 1
+2
 1
 2
 1
 0
 1
 0
-y
+n
 
 1. analytic soln
 	(0) linear velocity, const pressure
@@ -51,18 +52,22 @@ y
 11. block symmetry type
 	(0) symmetric (indefinite matrix)
 	(1) antisymmetric (positive definite matrix)
-12. smoothing technique
+12. choose precond for BiCGStab
+	(0) I
+	(1) P_BD
+	(2) P_BT
+13. smoothing technique
 	(0) relaxed Jacobi
 	(1) forward SOR
 	(2) backward SOR
 	(3) SSOR
-13. numb of pre- and post-smoothing iterations
-14. relaxation parameter
-15. set recursive calls type
+14. numb of pre- and post-smoothing iterations
+15. relaxation parameter
+16. set recursive calls type
 	(0) V-cycle
 	(1) W-cycle
-16. numb of iterations for inner solver
-17. grid transfer type
+17. numb of iterations for inner solver
+18. grid transfer type
 	(0) canonical
 	(1) L2
-18. export matrix blocks
+19. export matrix blocks

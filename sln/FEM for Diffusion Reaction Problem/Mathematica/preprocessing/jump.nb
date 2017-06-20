@@ -1,0 +1,241 @@
+(* Content-type: application/vnd.wolfram.mathematica *)
+
+(*** Wolfram Notebook File ***)
+(* http://www.wolfram.com/nb *)
+
+(* CreatedBy='Mathematica 10.4' *)
+
+(*CacheID: 234*)
+(* Internal cache information:
+NotebookFileLineBreakTest
+NotebookFileLineBreakTest
+NotebookDataPosition[       158,          7]
+NotebookDataLength[      8068,        231]
+NotebookOptionsPosition[      7452,        205]
+NotebookOutlinePosition[      7799,        220]
+CellTagsIndexPosition[      7756,        217]
+WindowFrame->Normal*)
+
+(* Beginning of Notebook Content *)
+Notebook[{
+Cell[BoxData[
+ RowBox[{"Needs", "[", "\"\<NDSolve`FEM`\>\"", "]"}]], "Input"],
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{"region", "=", 
+   RowBox[{"{", 
+    RowBox[{
+     RowBox[{"{", 
+      RowBox[{"0", ",", "0"}], "}"}], ",", 
+     RowBox[{"{", 
+      RowBox[{"1", ",", "0"}], "}"}], ",", 
+     RowBox[{"{", 
+      RowBox[{"1", ",", "1"}], "}"}], ",", 
+     RowBox[{"{", 
+      RowBox[{"0", ",", "1"}], "}"}]}], "}"}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"jump", "=", 
+   RowBox[{"{", 
+    RowBox[{
+     RowBox[{"{", 
+      RowBox[{".2", ",", ".2"}], "}"}], ",", 
+     RowBox[{"{", 
+      RowBox[{".8", ",", ".2"}], "}"}], ",", 
+     RowBox[{"{", 
+      RowBox[{".8", ",", ".8"}], "}"}], ",", 
+     RowBox[{"{", 
+      RowBox[{".2", ",", ".8"}], "}"}]}], "}"}]}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"f1", "=", 
+   RowBox[{"{", 
+    RowBox[{
+     RowBox[{"{", 
+      RowBox[{"0", ",", ".9"}], "}"}], ",", 
+     RowBox[{"{", 
+      RowBox[{".1", ",", ".9"}], "}"}], ",", 
+     RowBox[{"{", 
+      RowBox[{".1", ",", "1"}], "}"}]}], "}"}]}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"f2", "=", 
+   RowBox[{"{", 
+    RowBox[{
+     RowBox[{"{", 
+      RowBox[{"1", ",", ".1"}], "}"}], ",", 
+     RowBox[{"{", 
+      RowBox[{".9", ",", ".1"}], "}"}], ",", 
+     RowBox[{"{", 
+      RowBox[{".9", ",", "0"}], "}"}]}], "}"}]}], ";"}]}], "Input",
+ CellChangeTimes->{{3.7057512691411*^9, 3.705751298758143*^9}, {
+  3.7057514659852057`*^9, 3.7057514911031713`*^9}, {3.7057515297025447`*^9, 
+  3.7057515298167963`*^9}, {3.705751693235716*^9, 3.7057517296714153`*^9}, {
+  3.705751847436717*^9, 3.7057519406484175`*^9}, {3.7057519779064827`*^9, 
+  3.7057520090754375`*^9}}],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{"bMesh", "=", 
+   RowBox[{"ToBoundaryMesh", "[", 
+    RowBox[{
+     RowBox[{"\"\<Coordinates\>\"", "\[Rule]", " ", 
+      RowBox[{"Join", "[", 
+       RowBox[{"region", ",", "jump", ",", "f1", ",", "f2"}], "]"}]}], ",", 
+     RowBox[{"\"\<BoundaryElements\>\"", "\[Rule]", 
+      RowBox[{"LineElement", "/@", 
+       RowBox[{"{", "\[IndentingNewLine]", 
+        RowBox[{
+         RowBox[{"{", 
+          RowBox[{
+           RowBox[{"{", 
+            RowBox[{"1", ",", "2"}], "}"}], ",", 
+           RowBox[{"{", 
+            RowBox[{"2", ",", "3"}], "}"}], ",", 
+           RowBox[{"{", 
+            RowBox[{"3", ",", "4"}], "}"}], ",", 
+           RowBox[{"{", 
+            RowBox[{"4", ",", "1"}], "}"}]}], "}"}], ",", 
+         "\[IndentingNewLine]", 
+         RowBox[{"{", 
+          RowBox[{
+           RowBox[{"{", 
+            RowBox[{"5", ",", "6"}], "}"}], ",", 
+           RowBox[{"{", 
+            RowBox[{"6", ",", "7"}], "}"}], ",", 
+           RowBox[{"{", 
+            RowBox[{"7", ",", "8"}], "}"}], ",", 
+           RowBox[{"{", 
+            RowBox[{"8", ",", "5"}], "}"}]}], "}"}], ",", 
+         "\[IndentingNewLine]", 
+         RowBox[{"{", 
+          RowBox[{
+           RowBox[{"{", 
+            RowBox[{"9", ",", "10"}], "}"}], ",", 
+           RowBox[{"{", 
+            RowBox[{"10", ",", "11"}], "}"}]}], "}"}], ",", 
+         "\[IndentingNewLine]", 
+         RowBox[{"{", 
+          RowBox[{
+           RowBox[{"{", 
+            RowBox[{"12", ",", "13"}], "}"}], ",", 
+           RowBox[{"{", 
+            RowBox[{"13", ",", "14"}], "}"}]}], "}"}]}], 
+        "\[IndentingNewLine]", "}"}]}]}]}], "]"}]}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{"bMesh", "[", "\"\<Wireframe\>\"", "]"}]}], "Input",
+ CellChangeTimes->{{3.705751749435258*^9, 3.705751822194398*^9}, {
+  3.7057519457916584`*^9, 3.705751967339205*^9}, {3.705752013780919*^9, 
+  3.705752031258432*^9}}],
+
+Cell[BoxData[
+ GraphicsBox[
+  {EdgeForm[GrayLevel[0]], FaceForm[None], 
+   GraphicsComplexBox[{{0., 0.}, {1., 0.}, {1., 1.}, {0., 1.}, {0.2, 0.2}, {
+    0.8, 0.2}, {0.8, 0.8}, {0.2, 0.8}, {0., 0.9}, {0.1, 0.9}, {0.1, 1.}, {1., 
+    0.1}, {0.9, 0.1}, {0.9, 
+    0.}}, {LineBox[{{1, 2}, {2, 3}, {3, 4}, {4, 1}}], 
+     LineBox[{{5, 6}, {6, 7}, {7, 8}, {8, 5}}], LineBox[{{9, 10}, {10, 11}}], 
+     LineBox[{{12, 13}, {13, 14}}]}]}]], "Output",
+ CellChangeTimes->{{3.7057518155301085`*^9, 3.7057518234117804`*^9}, 
+   3.705751859293806*^9, 3.7057519686952343`*^9, 3.705752032528576*^9}]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{"eMesh", "=", 
+   RowBox[{"ToElementMesh", "[", 
+    RowBox[{"bMesh", ",", 
+     RowBox[{"\"\<MeshOrder\>\"", "\[Rule]", "1"}], ",", 
+     RowBox[{"\"\<MaxCellMeasure\>\"", "\[Rule]", "\[Infinity]"}]}], "]"}]}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{"eMesh", "[", "\"\<Wireframe\>\"", "]"}]}], "Input",
+ CellChangeTimes->{{3.7057520683487544`*^9, 3.7057520878285675`*^9}}],
+
+Cell[BoxData[
+ GraphicsBox[
+  {EdgeForm[GrayLevel[0]], FaceForm[None], GraphicsComplexBox[CompressedData["
+1:eJxTTMoPSmViYGDQBWIQjR18sMfOxxSfNRMETqLRL3HwMcVhJp09AwJvoOI7
+7dH56O7ApQ7Gh5kLEX+I4X6Iujv2MBq7vx7anwPLX8HQD5F/ag+j0fWfheo7
+AwE47H9hD6PR9Z+D6oO5A3v4PYS7H3t4P4S7A7v+p2g0Qj+qvovwcJ0NDWcT
+YxB4Dqdh4qjxcdEeTM28CRdP5t6WwL1th/0hsZyDYjmPofofQ9Whxx8sfm5A
+zXtsf5F77wXuvdfsNcqS1MuSbtrLbT3H4/DwkT0jVD0A87NJwA==
+    "], PolygonBox[{{16, 1, 5}, {14, 13, 25}, {31, 43, 27}, {20, 40, 36}, {7, 
+     3, 15}, {4, 9, 10}, {10, 11, 4}, {23, 35, 19}, {40, 28, 32}, {36, 10, 
+     24}, {31, 32, 43}, {7, 15, 27}, {14, 2, 13}, {43, 32, 28}, {13, 2, 12}, {
+     37, 21, 25}, {43, 45, 27}, {38, 26, 22}, {18, 3, 7}, {38, 13, 26}, {18, 
+     30, 42}, {11, 10, 23}, {35, 10, 8}, {45, 34, 30}, {37, 13, 6}, {5, 1, 
+     17}, {45, 43, 44}, {39, 15, 19}, {10, 9, 24}, {41, 17, 21}, {13, 12, 
+     26}, {8, 31, 35}, {44, 5, 29}, {16, 5, 28}, {5, 17, 29}, {33, 41, 37}, {
+     7, 27, 30}, {18, 7, 30}, {39, 19, 35}, {8, 32, 31}, {24, 20, 36}, {32, 
+     36, 40}, {41, 21, 37}, {6, 34, 33}, {13, 38, 6}, {42, 34, 38}, {35, 23, 
+     10}, {39, 35, 31}, {32, 8, 36}, {10, 36, 8}, {13, 37, 25}, {6, 33, 37}, {
+     42, 38, 22}, {34, 6, 38}, {31, 27, 39}, {15, 39, 27}, {20, 16, 40}, {16, 
+     28, 40}, {33, 29, 41}, {17, 41, 29}, {18, 42, 22}, {30, 34, 42}, {28, 44,
+      43}, {34, 45, 33}, {5, 44, 28}, {45, 29, 33}, {45, 30, 27}, {45, 44, 
+     29}}]]}]], "Output",
+ CellChangeTimes->{3.7057520890285587`*^9}]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{"mesh", "=", 
+   RowBox[{"create\[ScriptCapitalT]fromElementMesh", "@", "eMesh"}]}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"SetDirectory", "@", 
+   RowBox[{"NotebookDirectory", "[", "]"}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{"export", "[", 
+  RowBox[{"mesh", ",", "\"\<jmp_mesh\>\"", ",", 
+   RowBox[{"<|", 
+    RowBox[{"\"\<format\>\"", "\[Rule]", "\"\<NT\>\""}], "|>"}]}], 
+  "]"}]}], "Input",
+ CellChangeTimes->{{3.705752117604924*^9, 3.705752127780959*^9}, {
+  3.7057521705734615`*^9, 3.7057521965142064`*^9}}],
+
+Cell[BoxData["\<\"jmp_mesh.nt\"\>"], "Output",
+ CellChangeTimes->{3.705752219979988*^9}]
+}, Open  ]]
+},
+WindowSize->{775, 561},
+WindowMargins->{{287, Automatic}, {Automatic, 54}},
+FrontEndVersion->"10.4 for Microsoft Windows (64-bit) (February 25, 2016)",
+StyleDefinitions->"Default.nb"
+]
+(* End of Notebook Content *)
+
+(* Internal cache information *)
+(*CellTagsOutline
+CellTagsIndex->{}
+*)
+(*CellTagsIndex
+CellTagsIndex->{}
+*)
+(*NotebookFileOutline
+Notebook[{
+Cell[558, 20, 77, 1, 31, "Input"],
+Cell[638, 23, 1625, 51, 92, "Input"],
+Cell[CellGroupData[{
+Cell[2288, 78, 1927, 52, 172, "Input"],
+Cell[4218, 132, 583, 10, 374, "Output"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[4838, 147, 412, 9, 52, "Input"],
+Cell[5253, 158, 1484, 22, 374, "Output"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[6774, 185, 571, 14, 72, "Input"],
+Cell[7348, 201, 88, 1, 88, "Output"]
+}, Open  ]]
+}
+]
+*)
+
+(* End of internal cache information *)
+
