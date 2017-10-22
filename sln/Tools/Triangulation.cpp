@@ -21,6 +21,49 @@ SignedIndex Triangulation::_neighbor2edge(SignedIndex i) const {
 	return - i - 2;
 }
 
+Triangulation::Triangulation(Node2D const & lb, Node2D const & rt, Index ndx, Index ndy) {
+	/*
+		author: 
+			Alexander Zhiliakov, May 2016
+		edited:
+			Oct 2017
+		comments:
+			here we construct dummy rect triangulation
+			w/ left bottom point @lb and right top point @rt
+			elements will be right-angled triangles
+			@ndx = numb of INTERVALS on x-axis and
+			@ndy = ″ on y-axis,
+			it will look something like this:
+					 ________(3,2)
+					| /| /| /|
+					|/_|/_|/_|
+					| /| /| /|
+					|/_|/_|/_|
+				(0,0)  
+	*/
+	Node2D diag = rt - lb;
+	// so x-projection of size is width of our rect and y-projection is height
+	if (diag[0] <= 0 || diag[1] <= 0) throw std::invalid_argument("invalid rect");
+	if (ndx * ndy == 0) throw std::invalid_argument("invalid numb of elements");
+	double dx = diag[0] / ndx, // legs sizes 
+	       dy = diag[1] / ndy;
+	Index nx = ndx + 1, // numb of NODES on x-axis and
+	      ny = ndy + 1; // on y-axis, 
+	_nodes.resize(nx * ny); // so numb of points is nx * ny
+	for (Index i = 0; i < ny; ++i)
+		for (Index j = 0; j < nx; ++j) 
+			_nodes[i * nx + j] = lb + Node2D { j * dx, i * dy }; // compute nodes
+	_elements.resize(2 * ndx * ndy);
+
+	for (Index i = 0; i < ndy; ++i)
+		for (Index j = 0; j < ndx; ++j) {
+			Index k = i * ndx + j; // index of current rectangle
+			Index n = i * nx + j; // index of left bottom node of this rectangle
+			_elements[2 * k] = { n, n + 1, n + nx };
+			_elements[2 * k + 1] = { n + 1, n + 1 + nx, n + nx };
+		}
+}
+
 Triangulation& Triangulation::import(std::istream& from) {
 	std::string meshType;
 	from >> meshType;
@@ -91,6 +134,7 @@ Triangulation& Triangulation::refine(Index numbOfRefinements) {
 		Index n = numbOfElements();
 		_fineNeighborsIndicies.resize(n);
 		for (i = 0; i < n; ++i) {
+			if (_ghostElements.find(i) != _ghostElements.end()) continue;
 			auto nodesIndicies = getNodesIndicies(i);
 			auto neighborsIndicies = getNeighborsIndicies(i);
 			std::array<Index, 3> redNodesIndicies;
@@ -174,9 +218,10 @@ Triangulation& Triangulation::refine(Indicies& redList) {
 	// start with empty vector of fine neighbors
 	_fineNeighborsIndicies = std::vector<std::vector<Index>>(numbOfElements());
 	while (redListIter != redList.end()) {
+		if (_ghostElements.find(i = *redListIter) != _ghostElements.end()) continue;
 		// well, since this iteration
 		// _elements[i] sholuld not ever be added to redList again
-		greenMap[i = *redListIter] = 3; 
+		greenMap[i] = 3; 
 		// we will need ith nodes and neighbors later
 		auto nodesIndicies = getNodesIndicies(i);
 		auto neighborsIndicies = getNeighborsIndicies(i);

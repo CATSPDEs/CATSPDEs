@@ -1,8 +1,10 @@
 #pragma once
 #include <fstream>
+#include <set>
 #include "Element.hpp"
 #include "Parameters.hpp"
 #include "vector.hpp"
+#include "Predicate.hpp"
 
 /*
 	Alexander Žilyakov, Oct 2016
@@ -19,6 +21,7 @@ protected:
 	// vector of arrays of indicies of nodes that span an element of the meash at hand 
 	// e.g triangle, rectangle, simplex etc.
 	// (i.e. T-matrix or connectivity matrix)
+	std::set<Index> _ghostElements;
 public:
 	AbstractMesh() {}
 	AbstractMesh(std::vector<Node<D>> const & nodes, std::vector<std::array<Index, N>> const & elements)

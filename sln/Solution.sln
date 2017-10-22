@@ -31,6 +31,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Prolongation for Geometric 
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Haemodynamics of Cerebral Aneurysm", "Haemodynamics of Cerebral Aneurysm\Haemodynamics of Cerebral Aneurysm.vcxproj", "{87C52103-BDC2-45F3-8A08-99BF6079B52C}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Ghost Elements", "Ghost Elements\Ghost Elements.vcxproj", "{BB93AF18-046F-4B9D-92C4-811FBE1D1CEC}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -151,6 +153,14 @@ Global
 		{87C52103-BDC2-45F3-8A08-99BF6079B52C}.Release|x64.Build.0 = Release|x64
 		{87C52103-BDC2-45F3-8A08-99BF6079B52C}.Release|x86.ActiveCfg = Release|Win32
 		{87C52103-BDC2-45F3-8A08-99BF6079B52C}.Release|x86.Build.0 = Release|Win32
+		{BB93AF18-046F-4B9D-92C4-811FBE1D1CEC}.Debug|x64.ActiveCfg = Debug|x64
+		{BB93AF18-046F-4B9D-92C4-811FBE1D1CEC}.Debug|x64.Build.0 = Debug|x64
+		{BB93AF18-046F-4B9D-92C4-811FBE1D1CEC}.Debug|x86.ActiveCfg = Debug|Win32
+		{BB93AF18-046F-4B9D-92C4-811FBE1D1CEC}.Debug|x86.Build.0 = Debug|Win32
+		{BB93AF18-046F-4B9D-92C4-811FBE1D1CEC}.Release|x64.ActiveCfg = Release|x64
+		{BB93AF18-046F-4B9D-92C4-811FBE1D1CEC}.Release|x64.Build.0 = Release|x64
+		{BB93AF18-046F-4B9D-92C4-811FBE1D1CEC}.Release|x86.ActiveCfg = Release|Win32
+		{BB93AF18-046F-4B9D-92C4-811FBE1D1CEC}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

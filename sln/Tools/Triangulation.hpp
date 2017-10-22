@@ -45,6 +45,7 @@ public:
 		, _curves(curves)
 		, _edges(edges)
 	{}
+	Triangulation(Node2D const &, Node2D const &, Index ndx = 1, Index ndy = 1);
 	// get numb of ribs 
 	Index numbOfRibs() const {
 		return _ribs.first;
@@ -82,6 +83,16 @@ public:
 
 	Node2D getRibNode(Index, LocalIndex, double) const;
 	
+	Triangulation& truncate(Predicate2D const p) {
+		for (Index e = 0; e < numbOfElements(); ++e)
+			if (!p(centroid(getElement(e)))) _ghostElements.insert(e);
+		if (!_neighbors.size()) computeNeighbors();
+		for (Index e = 0; e < numbOfElements(); ++e)
+			for (auto& n : _neighbors[e])
+				if (n >= 0 && _ghostElements.find(n) != _ghostElements.end()) n = -1;
+		return *this;
+	}
+
 	/* 
 	(I) model domains constructors
 	*/

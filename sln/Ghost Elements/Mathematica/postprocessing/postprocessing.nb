@@ -1,0 +1,2135 @@
+(* Content-type: application/vnd.wolfram.mathematica *)
+
+(*** Wolfram Notebook File ***)
+(* http://www.wolfram.com/nb *)
+
+(* CreatedBy='Mathematica 10.4' *)
+
+(*CacheID: 234*)
+(* Internal cache information:
+NotebookFileLineBreakTest
+NotebookFileLineBreakTest
+NotebookDataPosition[       158,          7]
+NotebookDataLength[    125355,       2127]
+NotebookOptionsPosition[    124232,       2093]
+NotebookOutlinePosition[    124576,       2108]
+CellTagsIndexPosition[    124533,       2105]
+WindowFrame->Normal*)
+
+(* Beginning of Notebook Content *)
+Notebook[{
+Cell[BoxData[
+ RowBox[{"NotebookEvaluate", "[", 
+  RowBox[{
+   RowBox[{"NotebookDirectory", "[", "]"}], "<>", 
+   "\"\<../../../Tools/Mathematica/triangulation.nb\>\""}], "]"}]], "Input",
+ CellChangeTimes->{{3.6930619025264792`*^9, 3.693061905874056*^9}, {
+  3.7176879454404545`*^9, 
+  3.7176879501213236`*^9}},ExpressionUUID->"161c39a2-df6c-4cfd-bc83-\
+c2e6a8a76305"],
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{"dir", "=", 
+   RowBox[{"NotebookDirectory", "[", "]"}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"SetDirectory", "@", "dir"}], ";"}]}], "Input",
+ CellChangeTimes->{{3.6929905676220913`*^9, 3.692990593827036*^9}, {
+  3.705786483380122*^9, 3.7057864847663035`*^9}, {3.7176879687286158`*^9, 
+  3.7176879732759805`*^9}},ExpressionUUID->"83fbd57d-9cc5-4783-a426-\
+e5f576a0b86d"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{"\[ScriptCapitalR]", "=", 
+   RowBox[{"import", "[", "\"\<rect.nt\>\"", "]"}]}], ";"}], "\n", 
+ RowBox[{"highlight", "[", 
+  RowBox[{"\[ScriptCapitalR]", ",", 
+   RowBox[{"{", "\"\<trianglesNumn\>\"", "}"}], ",", "0"}], "]"}]}], "Input",
+ CellChangeTimes->{{3.7176879910033426`*^9, 3.717688042208868*^9}, 
+   3.7176898430701895`*^9, {3.7176927105648985`*^9, 
+   3.7176927177954097`*^9}},ExpressionUUID->"066f25f1-6a7d-4654-ac49-\
+b9a138645348"],
+
+Cell[BoxData[
+ GraphicsBox[
+  TagBox[
+   DynamicModuleBox[{Typeset`mesh = HoldComplete[
+     MeshRegion[CompressedData["
+1:eJx1kEEKgzAQRUUQSiAQBCEEhPQYXTlnKPQCha57r96nR3DfTTZdtVUnMK84
+IMPLd+ZFj9f7+dY2TXP6Pr++U2IxgCM4g7Vek92nHMARnMF/90IP4AjOYK0D
+zpUDOIIzWIv3CDs9gnPly1LztPbn1stkzzvR/LGUq3Mr92LnB+QJ+QjvDG/Z
+5t7wl+rX3PpL9ds8IR/F7td7tnhPvZ1obr9fz3ux8wPyhHwUu3/Gf1W/xx4H
+v4ffwe/hd/B7+QDgFuni
+      "], {
+       Polygon[{{1, 2, 6}, {2, 7, 6}, {2, 3, 7}, {3, 8, 7}, {3, 4, 8}, {4, 9, 
+        8}, {4, 5, 9}, {5, 10, 9}, {6, 7, 11}, {7, 12, 11}, {7, 8, 12}, {8, 
+        13, 12}, {8, 9, 13}, {9, 14, 13}, {9, 10, 14}, {10, 15, 14}, {11, 12, 
+        16}, {12, 17, 16}, {12, 13, 17}, {13, 18, 17}, {13, 14, 18}, {14, 19, 
+        18}, {14, 15, 19}, {15, 20, 19}, {16, 17, 21}, {17, 22, 21}, {17, 18, 
+        22}, {18, 23, 22}, {18, 19, 23}, {19, 24, 23}, {19, 20, 24}, {20, 25, 
+        24}}], 
+       Point[{{26}, {27}, {28}, {29}, {30}, {31}, {32}, {33}, {34}, {35}, {
+        36}, {37}, {38}, {39}, {40}, {41}, {42}, {43}, {44}, {45}, {46}, {
+        47}, {48}, {49}, {50}, {51}, {52}, {53}, {54}, {55}, {56}, {57}}]}, 
+      Properties -> {{0, 26} -> (MeshCellStyle -> RGBColor[0, 
+           Rational[2, 3], 0]), {0, 27} -> (MeshCellStyle -> RGBColor[0, 
+           Rational[2, 3], 0]), {0, 28} -> (MeshCellStyle -> RGBColor[0, 
+           Rational[2, 3], 0]), {0, 29} -> (MeshCellStyle -> RGBColor[0, 
+           Rational[2, 3], 0]), {0, 30} -> (MeshCellStyle -> RGBColor[0, 
+           Rational[2, 3], 0]), {0, 31} -> (MeshCellStyle -> RGBColor[0, 
+           Rational[2, 3], 0]), {0, 32} -> (MeshCellStyle -> RGBColor[0, 
+           Rational[2, 3], 0]), {0, 33} -> (MeshCellStyle -> RGBColor[0, 
+           Rational[2, 3], 0]), {0, 34} -> (MeshCellStyle -> RGBColor[0, 
+           Rational[2, 3], 0]), {0, 35} -> (MeshCellStyle -> RGBColor[0, 
+           Rational[2, 3], 0]), {0, 36} -> (MeshCellStyle -> RGBColor[0, 
+           Rational[2, 3], 0]), {0, 37} -> (MeshCellStyle -> RGBColor[0, 
+           Rational[2, 3], 0]), {0, 38} -> (MeshCellStyle -> RGBColor[0, 
+           Rational[2, 3], 0]), {0, 39} -> (MeshCellStyle -> RGBColor[0, 
+           Rational[2, 3], 0]), {0, 40} -> (MeshCellStyle -> RGBColor[0, 
+           Rational[2, 3], 0]), {0, 41} -> (MeshCellStyle -> RGBColor[0, 
+           Rational[2, 3], 0]), {0, 42} -> (MeshCellStyle -> RGBColor[0, 
+           Rational[2, 3], 0]), {0, 43} -> (MeshCellStyle -> RGBColor[0, 
+           Rational[2, 3], 0]), {0, 44} -> (MeshCellStyle -> RGBColor[0, 
+           Rational[2, 3], 0]), {0, 45} -> (MeshCellStyle -> RGBColor[0, 
+           Rational[2, 3], 0]), {0, 46} -> (MeshCellStyle -> RGBColor[0, 
+           Rational[2, 3], 0]), {0, 47} -> (MeshCellStyle -> RGBColor[0, 
+           Rational[2, 3], 0]), {0, 48} -> (MeshCellStyle -> RGBColor[0, 
+           Rational[2, 3], 0]), {0, 49} -> (MeshCellStyle -> RGBColor[0, 
+           Rational[2, 3], 0]), {0, 50} -> (MeshCellStyle -> RGBColor[0, 
+           Rational[2, 3], 0]), {0, 51} -> (MeshCellStyle -> RGBColor[0, 
+           Rational[2, 3], 0]), {0, 52} -> (MeshCellStyle -> RGBColor[0, 
+           Rational[2, 3], 0]), {0, 53} -> (MeshCellStyle -> RGBColor[0, 
+           Rational[2, 3], 0]), {0, 54} -> (MeshCellStyle -> RGBColor[0, 
+           Rational[2, 3], 0]), {0, 55} -> (MeshCellStyle -> RGBColor[0, 
+           Rational[2, 3], 0]), {0, 56} -> (MeshCellStyle -> RGBColor[0, 
+           Rational[2, 3], 0]), {0, 57} -> (MeshCellStyle -> RGBColor[0, 
+           Rational[2, 3], 0]), {0, Default} -> (MeshCellStyle -> 
+         Automatic), {1, 1} -> (MeshCellStyle -> GrayLevel[0]), {1, 2} -> (
+         MeshCellStyle -> GrayLevel[0]), {1, 3} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 4} -> (MeshCellStyle -> GrayLevel[0]), {1, 5} -> (
+         MeshCellStyle -> GrayLevel[0]), {1, 6} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 7} -> (MeshCellStyle -> GrayLevel[0]), {1, 8} -> (
+         MeshCellStyle -> GrayLevel[0]), {1, 9} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 10} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         11} -> (MeshCellStyle -> GrayLevel[0]), {1, 12} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 13} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         14} -> (MeshCellStyle -> GrayLevel[0]), {1, 15} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 16} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         17} -> (MeshCellStyle -> GrayLevel[0]), {1, 18} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 19} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         20} -> (MeshCellStyle -> GrayLevel[0]), {1, 21} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 22} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         23} -> (MeshCellStyle -> GrayLevel[0]), {1, 24} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 25} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         26} -> (MeshCellStyle -> GrayLevel[0]), {1, 27} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 28} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         29} -> (MeshCellStyle -> GrayLevel[0]), {1, 30} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 31} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         32} -> (MeshCellStyle -> GrayLevel[0]), {1, 33} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 34} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         35} -> (MeshCellStyle -> GrayLevel[0]), {1, 36} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 37} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         38} -> (MeshCellStyle -> GrayLevel[0]), {1, 39} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 40} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         41} -> (MeshCellStyle -> GrayLevel[0]), {1, 42} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 43} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         44} -> (MeshCellStyle -> GrayLevel[0]), {1, 45} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 46} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         47} -> (MeshCellStyle -> GrayLevel[0]), {1, 48} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 49} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         50} -> (MeshCellStyle -> GrayLevel[0]), {1, 51} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 52} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         53} -> (MeshCellStyle -> GrayLevel[0]), {1, 54} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 55} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         56} -> (MeshCellStyle -> GrayLevel[0]), {1, Default} -> (
+         MeshCellStyle -> Automatic), {0, 26} -> (MeshCellLabel -> Style[0, 
+           RGBColor[0, 
+            Rational[2, 3], 0]]), {0, 27} -> (MeshCellLabel -> Style[1, 
+           RGBColor[0, 
+            Rational[2, 3], 0]]), {0, 28} -> (MeshCellLabel -> Style[2, 
+           RGBColor[0, 
+            Rational[2, 3], 0]]), {0, 29} -> (MeshCellLabel -> Style[3, 
+           RGBColor[0, 
+            Rational[2, 3], 0]]), {0, 30} -> (MeshCellLabel -> Style[4, 
+           RGBColor[0, 
+            Rational[2, 3], 0]]), {0, 31} -> (MeshCellLabel -> Style[5, 
+           RGBColor[0, 
+            Rational[2, 3], 0]]), {0, 32} -> (MeshCellLabel -> Style[6, 
+           RGBColor[0, 
+            Rational[2, 3], 0]]), {0, 33} -> (MeshCellLabel -> Style[7, 
+           RGBColor[0, 
+            Rational[2, 3], 0]]), {0, 34} -> (MeshCellLabel -> Style[8, 
+           RGBColor[0, 
+            Rational[2, 3], 0]]), {0, 35} -> (MeshCellLabel -> Style[9, 
+           RGBColor[0, 
+            Rational[2, 3], 0]]), {0, 36} -> (MeshCellLabel -> Style[10, 
+           RGBColor[0, 
+            Rational[2, 3], 0]]), {0, 37} -> (MeshCellLabel -> Style[11, 
+           RGBColor[0, 
+            Rational[2, 3], 0]]), {0, 38} -> (MeshCellLabel -> Style[12, 
+           RGBColor[0, 
+            Rational[2, 3], 0]]), {0, 39} -> (MeshCellLabel -> Style[13, 
+           RGBColor[0, 
+            Rational[2, 3], 0]]), {0, 40} -> (MeshCellLabel -> Style[14, 
+           RGBColor[0, 
+            Rational[2, 3], 0]]), {0, 41} -> (MeshCellLabel -> Style[15, 
+           RGBColor[0, 
+            Rational[2, 3], 0]]), {0, 42} -> (MeshCellLabel -> Style[16, 
+           RGBColor[0, 
+            Rational[2, 3], 0]]), {0, 43} -> (MeshCellLabel -> Style[17, 
+           RGBColor[0, 
+            Rational[2, 3], 0]]), {0, 44} -> (MeshCellLabel -> Style[18, 
+           RGBColor[0, 
+            Rational[2, 3], 0]]), {0, 45} -> (MeshCellLabel -> Style[19, 
+           RGBColor[0, 
+            Rational[2, 3], 0]]), {0, 46} -> (MeshCellLabel -> Style[20, 
+           RGBColor[0, 
+            Rational[2, 3], 0]]), {0, 47} -> (MeshCellLabel -> Style[21, 
+           RGBColor[0, 
+            Rational[2, 3], 0]]), {0, 48} -> (MeshCellLabel -> Style[22, 
+           RGBColor[0, 
+            Rational[2, 3], 0]]), {0, 49} -> (MeshCellLabel -> Style[23, 
+           RGBColor[0, 
+            Rational[2, 3], 0]]), {0, 50} -> (MeshCellLabel -> Style[24, 
+           RGBColor[0, 
+            Rational[2, 3], 0]]), {0, 51} -> (MeshCellLabel -> Style[25, 
+           RGBColor[0, 
+            Rational[2, 3], 0]]), {0, 52} -> (MeshCellLabel -> Style[26, 
+           RGBColor[0, 
+            Rational[2, 3], 0]]), {0, 53} -> (MeshCellLabel -> Style[27, 
+           RGBColor[0, 
+            Rational[2, 3], 0]]), {0, 54} -> (MeshCellLabel -> Style[28, 
+           RGBColor[0, 
+            Rational[2, 3], 0]]), {0, 55} -> (MeshCellLabel -> Style[29, 
+           RGBColor[0, 
+            Rational[2, 3], 0]]), {0, 56} -> (MeshCellLabel -> Style[30, 
+           RGBColor[0, 
+            Rational[2, 3], 0]]), {0, 57} -> (MeshCellLabel -> Style[31, 
+           RGBColor[0, 
+            Rational[2, 3], 0]]), {0, Default} -> (MeshCellLabel -> 
+         Automatic)}, 
+      Method -> {
+       "EliminateUnusedCoordinates" -> True, "DeleteDuplicateCoordinates" -> 
+        Automatic, "DeleteDuplicateCells" -> Automatic, "VertexAlias" -> 
+        Identity, "CheckOrientation" -> Automatic, "CoplanarityTolerance" -> 
+        Automatic, "CheckIntersections" -> Automatic, "BoundaryNesting" -> 
+        Automatic, "SeparateBoundaries" -> Automatic, "TJunction" -> 
+        Automatic, "PropagateMarkers" -> True, "ZeroTest" -> Automatic, 
+        "Hash" -> 3407259948880773194}, {
+      PlotRange -> All, PlotTheme -> "Lines"}]]}, 
+    TagBox[GraphicsComplexBox[CompressedData["
+1:eJx1kEEKgzAQRUUQSiAQBCEEhPQYXTlnKPQCha57r96nR3DfTTZdtVUnMK84
+IMPLd+ZFj9f7+dY2TXP6Pr++U2IxgCM4g7Vek92nHMARnMF/90IP4AjOYK0D
+zpUDOIIzWIv3CDs9gnPly1LztPbn1stkzzvR/LGUq3Mr92LnB+QJ+QjvDG/Z
+5t7wl+rX3PpL9ds8IR/F7td7tnhPvZ1obr9fz3ux8wPyhHwUu3/Gf1W/xx4H
+v4ffwe/hd/B7+QDgFuni
+      "], 
+      {Hue[0.6, 0.3, 0.95], EdgeForm[Hue[0.6, 0.3, 0.75]], 
+       PointBox[{26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 
+        41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57}], 
+       LineBox[CompressedData["
+1:eJw1zMkNwjAURdEwZSDOaBKHJV1QByVQAPS/A0sni6Orb+n58f6+PseiKJ5/
+uQfNSva3itJ9otKa/T5Ta8N+X2j0SuOPltIdaP0RtCPYdtrT+bfXgd5mpHVP
+jLaTzky2s0Zm/0a9EW0WRvfKYrtqYrVNupH8u+mdfP8AI44Hnw==
+        "]], 
+       {GrayLevel[0], 
+        LineBox[{{1, 2}, {2, 6}, {6, 1}, {2, 7}, {7, 6}, {2, 3}, {3, 7}, {3, 
+         8}, {8, 7}, {3, 4}, {4, 8}, {4, 9}, {9, 8}, {4, 5}, {5, 9}, {5, 
+         10}, {10, 9}, {7, 11}, {11, 6}, {7, 12}, {12, 11}, {8, 12}, {8, 
+         13}, {13, 12}, {9, 13}, {9, 14}, {14, 13}, {10, 14}, {10, 15}, {15, 
+         14}, {12, 16}, {16, 11}, {12, 17}, {17, 16}, {13, 17}, {13, 18}, {18,
+          17}, {14, 18}, {14, 19}, {19, 18}, {15, 19}, {15, 20}, {20, 19}, {
+         17, 21}, {21, 16}, {17, 22}, {22, 21}, {18, 22}, {18, 23}, {23, 
+         22}, {19, 23}, {19, 24}, {24, 23}, {20, 24}, {20, 25}, {25, 24}}]}, {{
+         {RGBColor[0, 
+           Rational[2, 3], 0], PointBox[{26}]}, InsetBox[
+          StyleBox["0",
+           StripOnInput->False,
+           LineColor->RGBColor[0, 
+             Rational[2, 3], 0],
+           FrontFaceColor->RGBColor[0, 
+             Rational[2, 3], 0],
+           BackFaceColor->RGBColor[0, 
+             Rational[2, 3], 0],
+           GraphicsColor->RGBColor[0, 
+             Rational[2, 3], 0],
+           FontColor->RGBColor[0, 
+             Rational[2, 3], 0]], 
+          Offset[{2, 2}, {0.6666666666666666, 0.3333333333333333}], 
+          ImageScaled[{0, 0}],
+          BaseStyle->"Graphics"]}, {
+         {RGBColor[0, 
+           Rational[2, 3], 0], PointBox[{27}]}, InsetBox[
+          StyleBox["1",
+           StripOnInput->False,
+           LineColor->RGBColor[0, 
+             Rational[2, 3], 0],
+           FrontFaceColor->RGBColor[0, 
+             Rational[2, 3], 0],
+           BackFaceColor->RGBColor[0, 
+             Rational[2, 3], 0],
+           GraphicsColor->RGBColor[0, 
+             Rational[2, 3], 0],
+           FontColor->RGBColor[0, 
+             Rational[2, 3], 0]], 
+          Offset[{2, 2}, {1.3333333333333333, 0.6666666666666666}], 
+          ImageScaled[{0, 0}],
+          BaseStyle->"Graphics"]}, {
+         {RGBColor[0, 
+           Rational[2, 3], 0], PointBox[{28}]}, InsetBox[
+          StyleBox["2",
+           StripOnInput->False,
+           LineColor->RGBColor[0, 
+             Rational[2, 3], 0],
+           FrontFaceColor->RGBColor[0, 
+             Rational[2, 3], 0],
+           BackFaceColor->RGBColor[0, 
+             Rational[2, 3], 0],
+           GraphicsColor->RGBColor[0, 
+             Rational[2, 3], 0],
+           FontColor->RGBColor[0, 
+             Rational[2, 3], 0]], 
+          Offset[{2, 2}, {2.6666666666666665, 0.3333333333333333}], 
+          ImageScaled[{0, 0}],
+          BaseStyle->"Graphics"]}, {
+         {RGBColor[0, 
+           Rational[2, 3], 0], PointBox[{29}]}, InsetBox[
+          StyleBox["3",
+           StripOnInput->False,
+           LineColor->RGBColor[0, 
+             Rational[2, 3], 0],
+           FrontFaceColor->RGBColor[0, 
+             Rational[2, 3], 0],
+           BackFaceColor->RGBColor[0, 
+             Rational[2, 3], 0],
+           GraphicsColor->RGBColor[0, 
+             Rational[2, 3], 0],
+           FontColor->RGBColor[0, 
+             Rational[2, 3], 0]], 
+          Offset[{2, 2}, {3.333333333333333, 0.6666666666666666}], 
+          ImageScaled[{0, 0}],
+          BaseStyle->"Graphics"]}, {
+         {RGBColor[0, 
+           Rational[2, 3], 0], PointBox[{30}]}, InsetBox[
+          StyleBox["4",
+           StripOnInput->False,
+           LineColor->RGBColor[0, 
+             Rational[2, 3], 0],
+           FrontFaceColor->RGBColor[0, 
+             Rational[2, 3], 0],
+           BackFaceColor->RGBColor[0, 
+             Rational[2, 3], 0],
+           GraphicsColor->RGBColor[0, 
+             Rational[2, 3], 0],
+           FontColor->RGBColor[0, 
+             Rational[2, 3], 0]], 
+          Offset[{2, 2}, {4.666666666666666, 0.3333333333333333}], 
+          ImageScaled[{0, 0}],
+          BaseStyle->"Graphics"]}, {
+         {RGBColor[0, 
+           Rational[2, 3], 0], PointBox[{31}]}, InsetBox[
+          StyleBox["5",
+           StripOnInput->False,
+           LineColor->RGBColor[0, 
+             Rational[2, 3], 0],
+           FrontFaceColor->RGBColor[0, 
+             Rational[2, 3], 0],
+           BackFaceColor->RGBColor[0, 
+             Rational[2, 3], 0],
+           GraphicsColor->RGBColor[0, 
+             Rational[2, 3], 0],
+           FontColor->RGBColor[0, 
+             Rational[2, 3], 0]], 
+          Offset[{2, 2}, {5.333333333333333, 0.6666666666666666}], 
+          ImageScaled[{0, 0}],
+          BaseStyle->"Graphics"]}, {
+         {RGBColor[0, 
+           Rational[2, 3], 0], PointBox[{32}]}, InsetBox[
+          StyleBox["6",
+           StripOnInput->False,
+           LineColor->RGBColor[0, 
+             Rational[2, 3], 0],
+           FrontFaceColor->RGBColor[0, 
+             Rational[2, 3], 0],
+           BackFaceColor->RGBColor[0, 
+             Rational[2, 3], 0],
+           GraphicsColor->RGBColor[0, 
+             Rational[2, 3], 0],
+           FontColor->RGBColor[0, 
+             Rational[2, 3], 0]], 
+          Offset[{2, 2}, {6.666666666666666, 0.3333333333333333}], 
+          ImageScaled[{0, 0}],
+          BaseStyle->"Graphics"]}, {
+         {RGBColor[0, 
+           Rational[2, 3], 0], PointBox[{33}]}, InsetBox[
+          StyleBox["7",
+           StripOnInput->False,
+           LineColor->RGBColor[0, 
+             Rational[2, 3], 0],
+           FrontFaceColor->RGBColor[0, 
+             Rational[2, 3], 0],
+           BackFaceColor->RGBColor[0, 
+             Rational[2, 3], 0],
+           GraphicsColor->RGBColor[0, 
+             Rational[2, 3], 0],
+           FontColor->RGBColor[0, 
+             Rational[2, 3], 0]], 
+          Offset[{2, 2}, {7.333333333333333, 0.6666666666666666}], 
+          ImageScaled[{0, 0}],
+          BaseStyle->"Graphics"]}, {
+         {RGBColor[0, 
+           Rational[2, 3], 0], PointBox[{34}]}, InsetBox[
+          StyleBox["8",
+           StripOnInput->False,
+           LineColor->RGBColor[0, 
+             Rational[2, 3], 0],
+           FrontFaceColor->RGBColor[0, 
+             Rational[2, 3], 0],
+           BackFaceColor->RGBColor[0, 
+             Rational[2, 3], 0],
+           GraphicsColor->RGBColor[0, 
+             Rational[2, 3], 0],
+           FontColor->RGBColor[0, 
+             Rational[2, 3], 0]], 
+          Offset[{2, 2}, {0.6666666666666666, 1.3333333333333333}], 
+          ImageScaled[{0, 0}],
+          BaseStyle->"Graphics"]}, {
+         {RGBColor[0, 
+           Rational[2, 3], 0], PointBox[{35}]}, InsetBox[
+          StyleBox["9",
+           StripOnInput->False,
+           LineColor->RGBColor[0, 
+             Rational[2, 3], 0],
+           FrontFaceColor->RGBColor[0, 
+             Rational[2, 3], 0],
+           BackFaceColor->RGBColor[0, 
+             Rational[2, 3], 0],
+           GraphicsColor->RGBColor[0, 
+             Rational[2, 3], 0],
+           FontColor->RGBColor[0, 
+             Rational[2, 3], 0]], 
+          Offset[{2, 2}, {1.3333333333333333, 1.6666666666666665}], 
+          ImageScaled[{0, 0}],
+          BaseStyle->"Graphics"]}, {
+         {RGBColor[0, 
+           Rational[2, 3], 0], PointBox[{36}]}, InsetBox[
+          StyleBox["10",
+           StripOnInput->False,
+           LineColor->RGBColor[0, 
+             Rational[2, 3], 0],
+           FrontFaceColor->RGBColor[0, 
+             Rational[2, 3], 0],
+           BackFaceColor->RGBColor[0, 
+             Rational[2, 3], 0],
+           GraphicsColor->RGBColor[0, 
+             Rational[2, 3], 0],
+           FontColor->RGBColor[0, 
+             Rational[2, 3], 0]], 
+          Offset[{2, 2}, {2.6666666666666665, 1.3333333333333333}], 
+          ImageScaled[{0, 0}],
+          BaseStyle->"Graphics"]}, {
+         {RGBColor[0, 
+           Rational[2, 3], 0], PointBox[{37}]}, InsetBox[
+          StyleBox["11",
+           StripOnInput->False,
+           LineColor->RGBColor[0, 
+             Rational[2, 3], 0],
+           FrontFaceColor->RGBColor[0, 
+             Rational[2, 3], 0],
+           BackFaceColor->RGBColor[0, 
+             Rational[2, 3], 0],
+           GraphicsColor->RGBColor[0, 
+             Rational[2, 3], 0],
+           FontColor->RGBColor[0, 
+             Rational[2, 3], 0]], 
+          Offset[{2, 2}, {3.333333333333333, 1.6666666666666665}], 
+          ImageScaled[{0, 0}],
+          BaseStyle->"Graphics"]}, {
+         {RGBColor[0, 
+           Rational[2, 3], 0], PointBox[{38}]}, InsetBox[
+          StyleBox["12",
+           StripOnInput->False,
+           LineColor->RGBColor[0, 
+             Rational[2, 3], 0],
+           FrontFaceColor->RGBColor[0, 
+             Rational[2, 3], 0],
+           BackFaceColor->RGBColor[0, 
+             Rational[2, 3], 0],
+           GraphicsColor->RGBColor[0, 
+             Rational[2, 3], 0],
+           FontColor->RGBColor[0, 
+             Rational[2, 3], 0]], 
+          Offset[{2, 2}, {4.666666666666666, 1.3333333333333333}], 
+          ImageScaled[{0, 0}],
+          BaseStyle->"Graphics"]}, {
+         {RGBColor[0, 
+           Rational[2, 3], 0], PointBox[{39}]}, InsetBox[
+          StyleBox["13",
+           StripOnInput->False,
+           LineColor->RGBColor[0, 
+             Rational[2, 3], 0],
+           FrontFaceColor->RGBColor[0, 
+             Rational[2, 3], 0],
+           BackFaceColor->RGBColor[0, 
+             Rational[2, 3], 0],
+           GraphicsColor->RGBColor[0, 
+             Rational[2, 3], 0],
+           FontColor->RGBColor[0, 
+             Rational[2, 3], 0]], 
+          Offset[{2, 2}, {5.333333333333333, 1.6666666666666665}], 
+          ImageScaled[{0, 0}],
+          BaseStyle->"Graphics"]}, {
+         {RGBColor[0, 
+           Rational[2, 3], 0], PointBox[{40}]}, InsetBox[
+          StyleBox["14",
+           StripOnInput->False,
+           LineColor->RGBColor[0, 
+             Rational[2, 3], 0],
+           FrontFaceColor->RGBColor[0, 
+             Rational[2, 3], 0],
+           BackFaceColor->RGBColor[0, 
+             Rational[2, 3], 0],
+           GraphicsColor->RGBColor[0, 
+             Rational[2, 3], 0],
+           FontColor->RGBColor[0, 
+             Rational[2, 3], 0]], 
+          Offset[{2, 2}, {6.666666666666666, 1.3333333333333333}], 
+          ImageScaled[{0, 0}],
+          BaseStyle->"Graphics"]}, {
+         {RGBColor[0, 
+           Rational[2, 3], 0], PointBox[{41}]}, InsetBox[
+          StyleBox["15",
+           StripOnInput->False,
+           LineColor->RGBColor[0, 
+             Rational[2, 3], 0],
+           FrontFaceColor->RGBColor[0, 
+             Rational[2, 3], 0],
+           BackFaceColor->RGBColor[0, 
+             Rational[2, 3], 0],
+           GraphicsColor->RGBColor[0, 
+             Rational[2, 3], 0],
+           FontColor->RGBColor[0, 
+             Rational[2, 3], 0]], 
+          Offset[{2, 2}, {7.333333333333333, 1.6666666666666665}], 
+          ImageScaled[{0, 0}],
+          BaseStyle->"Graphics"]}, {
+         {RGBColor[0, 
+           Rational[2, 3], 0], PointBox[{42}]}, InsetBox[
+          StyleBox["16",
+           StripOnInput->False,
+           LineColor->RGBColor[0, 
+             Rational[2, 3], 0],
+           FrontFaceColor->RGBColor[0, 
+             Rational[2, 3], 0],
+           BackFaceColor->RGBColor[0, 
+             Rational[2, 3], 0],
+           GraphicsColor->RGBColor[0, 
+             Rational[2, 3], 0],
+           FontColor->RGBColor[0, 
+             Rational[2, 3], 0]], 
+          Offset[{2, 2}, {0.6666666666666666, 2.333333333333333}], 
+          ImageScaled[{0, 0}],
+          BaseStyle->"Graphics"]}, {
+         {RGBColor[0, 
+           Rational[2, 3], 0], PointBox[{43}]}, InsetBox[
+          StyleBox["17",
+           StripOnInput->False,
+           LineColor->RGBColor[0, 
+             Rational[2, 3], 0],
+           FrontFaceColor->RGBColor[0, 
+             Rational[2, 3], 0],
+           BackFaceColor->RGBColor[0, 
+             Rational[2, 3], 0],
+           GraphicsColor->RGBColor[0, 
+             Rational[2, 3], 0],
+           FontColor->RGBColor[0, 
+             Rational[2, 3], 0]], 
+          Offset[{2, 2}, {1.3333333333333333, 2.6666666666666665}], 
+          ImageScaled[{0, 0}],
+          BaseStyle->"Graphics"]}, {
+         {RGBColor[0, 
+           Rational[2, 3], 0], PointBox[{44}]}, InsetBox[
+          StyleBox["18",
+           StripOnInput->False,
+           LineColor->RGBColor[0, 
+             Rational[2, 3], 0],
+           FrontFaceColor->RGBColor[0, 
+             Rational[2, 3], 0],
+           BackFaceColor->RGBColor[0, 
+             Rational[2, 3], 0],
+           GraphicsColor->RGBColor[0, 
+             Rational[2, 3], 0],
+           FontColor->RGBColor[0, 
+             Rational[2, 3], 0]], 
+          Offset[{2, 2}, {2.6666666666666665, 2.333333333333333}], 
+          ImageScaled[{0, 0}],
+          BaseStyle->"Graphics"]}, {
+         {RGBColor[0, 
+           Rational[2, 3], 0], PointBox[{45}]}, InsetBox[
+          StyleBox["19",
+           StripOnInput->False,
+           LineColor->RGBColor[0, 
+             Rational[2, 3], 0],
+           FrontFaceColor->RGBColor[0, 
+             Rational[2, 3], 0],
+           BackFaceColor->RGBColor[0, 
+             Rational[2, 3], 0],
+           GraphicsColor->RGBColor[0, 
+             Rational[2, 3], 0],
+           FontColor->RGBColor[0, 
+             Rational[2, 3], 0]], 
+          Offset[{2, 2}, {3.333333333333333, 2.6666666666666665}], 
+          ImageScaled[{0, 0}],
+          BaseStyle->"Graphics"]}, {
+         {RGBColor[0, 
+           Rational[2, 3], 0], PointBox[{46}]}, InsetBox[
+          StyleBox["20",
+           StripOnInput->False,
+           LineColor->RGBColor[0, 
+             Rational[2, 3], 0],
+           FrontFaceColor->RGBColor[0, 
+             Rational[2, 3], 0],
+           BackFaceColor->RGBColor[0, 
+             Rational[2, 3], 0],
+           GraphicsColor->RGBColor[0, 
+             Rational[2, 3], 0],
+           FontColor->RGBColor[0, 
+             Rational[2, 3], 0]], 
+          Offset[{2, 2}, {4.666666666666666, 2.333333333333333}], 
+          ImageScaled[{0, 0}],
+          BaseStyle->"Graphics"]}, {
+         {RGBColor[0, 
+           Rational[2, 3], 0], PointBox[{47}]}, InsetBox[
+          StyleBox["21",
+           StripOnInput->False,
+           LineColor->RGBColor[0, 
+             Rational[2, 3], 0],
+           FrontFaceColor->RGBColor[0, 
+             Rational[2, 3], 0],
+           BackFaceColor->RGBColor[0, 
+             Rational[2, 3], 0],
+           GraphicsColor->RGBColor[0, 
+             Rational[2, 3], 0],
+           FontColor->RGBColor[0, 
+             Rational[2, 3], 0]], 
+          Offset[{2, 2}, {5.333333333333333, 2.6666666666666665}], 
+          ImageScaled[{0, 0}],
+          BaseStyle->"Graphics"]}, {
+         {RGBColor[0, 
+           Rational[2, 3], 0], PointBox[{48}]}, InsetBox[
+          StyleBox["22",
+           StripOnInput->False,
+           LineColor->RGBColor[0, 
+             Rational[2, 3], 0],
+           FrontFaceColor->RGBColor[0, 
+             Rational[2, 3], 0],
+           BackFaceColor->RGBColor[0, 
+             Rational[2, 3], 0],
+           GraphicsColor->RGBColor[0, 
+             Rational[2, 3], 0],
+           FontColor->RGBColor[0, 
+             Rational[2, 3], 0]], 
+          Offset[{2, 2}, {6.666666666666666, 2.333333333333333}], 
+          ImageScaled[{0, 0}],
+          BaseStyle->"Graphics"]}, {
+         {RGBColor[0, 
+           Rational[2, 3], 0], PointBox[{49}]}, InsetBox[
+          StyleBox["23",
+           StripOnInput->False,
+           LineColor->RGBColor[0, 
+             Rational[2, 3], 0],
+           FrontFaceColor->RGBColor[0, 
+             Rational[2, 3], 0],
+           BackFaceColor->RGBColor[0, 
+             Rational[2, 3], 0],
+           GraphicsColor->RGBColor[0, 
+             Rational[2, 3], 0],
+           FontColor->RGBColor[0, 
+             Rational[2, 3], 0]], 
+          Offset[{2, 2}, {7.333333333333333, 2.6666666666666665}], 
+          ImageScaled[{0, 0}],
+          BaseStyle->"Graphics"]}, {
+         {RGBColor[0, 
+           Rational[2, 3], 0], PointBox[{50}]}, InsetBox[
+          StyleBox["24",
+           StripOnInput->False,
+           LineColor->RGBColor[0, 
+             Rational[2, 3], 0],
+           FrontFaceColor->RGBColor[0, 
+             Rational[2, 3], 0],
+           BackFaceColor->RGBColor[0, 
+             Rational[2, 3], 0],
+           GraphicsColor->RGBColor[0, 
+             Rational[2, 3], 0],
+           FontColor->RGBColor[0, 
+             Rational[2, 3], 0]], 
+          Offset[{2, 2}, {0.6666666666666666, 3.333333333333333}], 
+          ImageScaled[{0, 0}],
+          BaseStyle->"Graphics"]}, {
+         {RGBColor[0, 
+           Rational[2, 3], 0], PointBox[{51}]}, InsetBox[
+          StyleBox["25",
+           StripOnInput->False,
+           LineColor->RGBColor[0, 
+             Rational[2, 3], 0],
+           FrontFaceColor->RGBColor[0, 
+             Rational[2, 3], 0],
+           BackFaceColor->RGBColor[0, 
+             Rational[2, 3], 0],
+           GraphicsColor->RGBColor[0, 
+             Rational[2, 3], 0],
+           FontColor->RGBColor[0, 
+             Rational[2, 3], 0]], 
+          Offset[{2, 2}, {1.3333333333333333, 3.6666666666666665}], 
+          ImageScaled[{0, 0}],
+          BaseStyle->"Graphics"]}, {
+         {RGBColor[0, 
+           Rational[2, 3], 0], PointBox[{52}]}, InsetBox[
+          StyleBox["26",
+           StripOnInput->False,
+           LineColor->RGBColor[0, 
+             Rational[2, 3], 0],
+           FrontFaceColor->RGBColor[0, 
+             Rational[2, 3], 0],
+           BackFaceColor->RGBColor[0, 
+             Rational[2, 3], 0],
+           GraphicsColor->RGBColor[0, 
+             Rational[2, 3], 0],
+           FontColor->RGBColor[0, 
+             Rational[2, 3], 0]], 
+          Offset[{2, 2}, {2.6666666666666665, 3.333333333333333}], 
+          ImageScaled[{0, 0}],
+          BaseStyle->"Graphics"]}, {
+         {RGBColor[0, 
+           Rational[2, 3], 0], PointBox[{53}]}, InsetBox[
+          StyleBox["27",
+           StripOnInput->False,
+           LineColor->RGBColor[0, 
+             Rational[2, 3], 0],
+           FrontFaceColor->RGBColor[0, 
+             Rational[2, 3], 0],
+           BackFaceColor->RGBColor[0, 
+             Rational[2, 3], 0],
+           GraphicsColor->RGBColor[0, 
+             Rational[2, 3], 0],
+           FontColor->RGBColor[0, 
+             Rational[2, 3], 0]], 
+          Offset[{2, 2}, {3.333333333333333, 3.6666666666666665}], 
+          ImageScaled[{0, 0}],
+          BaseStyle->"Graphics"]}, {
+         {RGBColor[0, 
+           Rational[2, 3], 0], PointBox[{54}]}, InsetBox[
+          StyleBox["28",
+           StripOnInput->False,
+           LineColor->RGBColor[0, 
+             Rational[2, 3], 0],
+           FrontFaceColor->RGBColor[0, 
+             Rational[2, 3], 0],
+           BackFaceColor->RGBColor[0, 
+             Rational[2, 3], 0],
+           GraphicsColor->RGBColor[0, 
+             Rational[2, 3], 0],
+           FontColor->RGBColor[0, 
+             Rational[2, 3], 0]], 
+          Offset[{2, 2}, {4.666666666666666, 3.333333333333333}], 
+          ImageScaled[{0, 0}],
+          BaseStyle->"Graphics"]}, {
+         {RGBColor[0, 
+           Rational[2, 3], 0], PointBox[{55}]}, InsetBox[
+          StyleBox["29",
+           StripOnInput->False,
+           LineColor->RGBColor[0, 
+             Rational[2, 3], 0],
+           FrontFaceColor->RGBColor[0, 
+             Rational[2, 3], 0],
+           BackFaceColor->RGBColor[0, 
+             Rational[2, 3], 0],
+           GraphicsColor->RGBColor[0, 
+             Rational[2, 3], 0],
+           FontColor->RGBColor[0, 
+             Rational[2, 3], 0]], 
+          Offset[{2, 2}, {5.333333333333333, 3.6666666666666665}], 
+          ImageScaled[{0, 0}],
+          BaseStyle->"Graphics"]}, {
+         {RGBColor[0, 
+           Rational[2, 3], 0], PointBox[{56}]}, InsetBox[
+          StyleBox["30",
+           StripOnInput->False,
+           LineColor->RGBColor[0, 
+             Rational[2, 3], 0],
+           FrontFaceColor->RGBColor[0, 
+             Rational[2, 3], 0],
+           BackFaceColor->RGBColor[0, 
+             Rational[2, 3], 0],
+           GraphicsColor->RGBColor[0, 
+             Rational[2, 3], 0],
+           FontColor->RGBColor[0, 
+             Rational[2, 3], 0]], 
+          Offset[{2, 2}, {6.666666666666666, 3.333333333333333}], 
+          ImageScaled[{0, 0}],
+          BaseStyle->"Graphics"]}, {
+         {RGBColor[0, 
+           Rational[2, 3], 0], PointBox[{57}]}, InsetBox[
+          StyleBox["31",
+           StripOnInput->False,
+           LineColor->RGBColor[0, 
+             Rational[2, 3], 0],
+           FrontFaceColor->RGBColor[0, 
+             Rational[2, 3], 0],
+           BackFaceColor->RGBColor[0, 
+             Rational[2, 3], 0],
+           GraphicsColor->RGBColor[0, 
+             Rational[2, 3], 0],
+           FontColor->RGBColor[0, 
+             Rational[2, 3], 0]], 
+          Offset[{2, 2}, {7.333333333333333, 3.6666666666666665}], 
+          ImageScaled[{0, 0}],
+          BaseStyle->"Graphics"]}}}],
+     MouseAppearanceTag["LinkHand"]],
+    AllowKernelInitialization->False],
+   "MeshGraphics",
+   AutoDelete->True,
+   Editable->False,
+   Selectable->False],
+  DefaultBaseStyle->{
+   "MeshGraphics", FrontEnd`GraphicsHighlightColor -> Hue[0.1, 1, 0.7]},
+  ImageSize->{550., Automatic},
+  PlotRange->All]], "Output",
+ CellChangeTimes->{{3.7176880555951953`*^9, 3.717688063636042*^9}, 
+   3.717689167416459*^9, 3.717689455496146*^9, 3.717689845762223*^9, 
+   3.7176899213426957`*^9, 3.717690568226225*^9, 3.7176916558765955`*^9, 
+   3.7176917921646147`*^9, 3.7176918883445315`*^9, 
+   3.717692719461218*^9},ExpressionUUID->"a5a1101c-2db2-474b-8827-\
+134e4a21c96f"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{"\[ScriptCapitalU]", "=", 
+   RowBox[{"import", "[", "\"\<uniform.nt\>\"", "]"}]}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{"highlight", "[", 
+  RowBox[{"\[ScriptCapitalU]", ",", 
+   RowBox[{"{", "}"}], ",", "0"}], "]"}]}], "Input",
+ CellChangeTimes->{{3.7176880729035645`*^9, 3.7176880860727887`*^9}, {
+  3.7176882487129602`*^9, 
+  3.717688254990099*^9}},ExpressionUUID->"6e81953f-7bb0-4bac-9c9e-\
+23f6894e5663"],
+
+Cell[BoxData[
+ GraphicsBox[
+  TagBox[
+   DynamicModuleBox[{Typeset`mesh = HoldComplete[
+     MeshRegion[CompressedData["
+1:eJx1lk1qwzAQRkMoJZQSTAhBBGPUk9Rn6BEKXfeqOUKWXmahhRazaAt5Ab8y
+A0U8z4+kb5yp3z6/P762m83m8vv3tyY2r3EQF3EVY7f3dT14EBdxFf87l9ZB
+XMRVjO30HB7ERVzFmM8xJGsRVzH3vur+sHW5+fm8jt8ljMHuD/HHhDHY/SR+
+TBiD3X/ft+vePbk3a9d9ze5T1/3Mfr+67mP2++fzPhG3WfMtOSf+UVwSv99X
+13/V/jC6X3Re+Kq1J7wof9G9L7rnRf6rzmlelA8fVO8oxk+9U8KL8uGz6o1i
+/NSbEl6Uv0jHJv1aonO2hvJD+jbp1+Tv0tscyg/p26Rfk79Lb3MoP6Rvk35N
+/i69zaH8kL7b+/Ob+JroZH5WPsz5qDeK8VNvSph6o5jzvWj/F/n9+/fvG8vm
+ruMXxT14XsfD+D0XPfc9J7O55flB/UH+QX7yvR/M+4qdEvZ8oX6Rv8hPvveD
+eR+wKWHPH+pX+av85Hs/f2c09cvzKBQf6ncTh+r5uwWmP55PoX42cai//j8K
+o7/nU6hfTRzqH/UOYvT1fAr1o4lD/aHeWYxt74yeMHoyH7AHz+t4GL+/m/wd
+iR7kT2LOS70iroqv8lOP/c5ijPnGeT3v9orfzz+RqQT5
+      "], {
+       Polygon[CompressedData["
+1:eJwBIgTd+yFib1JiAgAAAFsBAAADAAAAQkNERUZHSElKS0xNTk9QUVJTVFVW
+V1hZWltcXV5fYGFiY2RlZmdoaWprbG1ub3BxcnN0dXZ3DA0RDRIRDQ4SDhMS
+eHl6e3x9fn+AERYVERIWEhcWEhMXExgXExQYFBkYQoGCQ4OERIWGRYSHRoiJ
+R4qFSIeLSYyNSo6IS42PTJCRTZKOTo+TT5SVUJaQUZWXUpiZU5qWVJebVZyd
+Vp6YV52fWKChWaKeWqOKW4mkXKWmXaSnXqipX6qlYKeSYZGrYqyoY6utZK6v
+ZbCsZq2aZ5mxaLKuabGzarS1a7aybLOibaG3bri0b7e5cLq7cby4cr2qc6m+
+dL/Adb7BdsLDd8S/eMW8ebvGesfIe8bJfMrLfczHfs3Ef8POgM/QGkRDG0JE
+HENCHUdGGkVHHkZFH0pJHkhKIElIIU1MH0tNIkxLI1BPIk5QJE9OJVNSI1FT
+JlJRJ1ZVJlRWKFVUKVlYJ1dZKlhXK1xbLFpcHVtaLV9eK11fLl5dL2JhLmBi
+IWFgMGVkL2NlMWRjMmhnMWZoJWdmM2tqMmlrNGppNW5tNGxuKW1sNnFwNW9x
+N3BvOHRzOXJ0LXNyOnd2OHV3O3Z1PHp5PXh6Nnl4Pn18PHt9P3x7QIB/QX6A
+On9+AYKBHEKCG4FCAoSDGkOEHINDBoaFG0SGGoVEAoeEHkWHGoRFB4mIHUaJ
+HohGBoWKGkeFHYpHAouHIEiLHodIA42MH0mNIIxJB4iOHkqIH45KA4+NIkuP
+H41LCJGQIUyRIpBMB46SH02OIZJNA5OPJE6TIo9OBJWUI0+VJJRPCJCWIlCQ
+I5ZQBJeVJlGXI5VRCZmYJVKZJphSCJaaI1OWJZpTBJuXKFSbJpdUBZ2cJ1Wd
+KJxVCZieJlaYJ55WBZ+dKlefJ51XCqGgKVihKqBYCZ6iJ1meKaJZBoqjHVqK
+LKNaB6SJK1ukHYlbC6alLFymK6VcB6ekLl2nK6RdDKmoLV6pLqheC6WqK1+l
+LapfB5KnIWCSLqdgCKuRL2GrIZFhDKisLmKoL6xiCK2rMWOtL6tjDa+uMGSv
+Ma5kDKywL2WsMLBlCJqtJWaaMa1mCbGZMmexJZlnDa6yMWiuMrJoCbOxNGmz
+MrFpDrW0M2q1NLRqDbK2MmuyM7ZrCaKzKWyiNLNsCrehNW23KaFtDrS4NG60
+NbhuCrm3N2+5NbdvD7u6NnC7N7pwDri8NXG4NrxxC6q9LXKqOb1yDL6pOHO+
+LalzEMC/OXTAOL90DMG+O3XBOL51EcPCOnbDO8J2EL/EOHe/OsR3DrzFNni8
+PcV4D8a7PHnGNrt5E8jHPXrIPMd6D8nGP3vJPMZ7FMvKPnzLP8p8E8fMPH3H
+Psx9EMTNOn7EQc1+Ec7DQH/OOsN/FdDPQYDQQM+AvDitXg==
+        "]]}, 
+      Properties -> {{1, 1} -> (MeshCellStyle -> GrayLevel[0]), {1, 2} -> (
+         MeshCellStyle -> GrayLevel[0]), {1, 3} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 4} -> (MeshCellStyle -> GrayLevel[0]), {1, 5} -> (
+         MeshCellStyle -> GrayLevel[0]), {1, 6} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 7} -> (MeshCellStyle -> GrayLevel[0]), {1, 8} -> (
+         MeshCellStyle -> GrayLevel[0]), {1, 9} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 10} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         11} -> (MeshCellStyle -> GrayLevel[0]), {1, 12} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 13} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         14} -> (MeshCellStyle -> GrayLevel[0]), {1, 15} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 16} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         17} -> (MeshCellStyle -> GrayLevel[0]), {1, 18} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 19} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         20} -> (MeshCellStyle -> GrayLevel[0]), {1, 21} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 22} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         23} -> (MeshCellStyle -> GrayLevel[0]), {1, 24} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 25} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         26} -> (MeshCellStyle -> GrayLevel[0]), {1, 27} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 28} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         29} -> (MeshCellStyle -> GrayLevel[0]), {1, 30} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 31} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         32} -> (MeshCellStyle -> GrayLevel[0]), {1, 33} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 34} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         35} -> (MeshCellStyle -> GrayLevel[0]), {1, 36} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 37} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         38} -> (MeshCellStyle -> GrayLevel[0]), {1, 39} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 40} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         41} -> (MeshCellStyle -> GrayLevel[0]), {1, 42} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 43} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         44} -> (MeshCellStyle -> GrayLevel[0]), {1, 45} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 46} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         47} -> (MeshCellStyle -> GrayLevel[0]), {1, 48} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 49} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         50} -> (MeshCellStyle -> GrayLevel[0]), {1, 51} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 52} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         53} -> (MeshCellStyle -> GrayLevel[0]), {1, 54} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 55} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         56} -> (MeshCellStyle -> GrayLevel[0]), {1, 57} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 58} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         59} -> (MeshCellStyle -> GrayLevel[0]), {1, 60} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 61} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         62} -> (MeshCellStyle -> GrayLevel[0]), {1, 63} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 64} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         65} -> (MeshCellStyle -> GrayLevel[0]), {1, 66} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 67} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         68} -> (MeshCellStyle -> GrayLevel[0]), {1, 69} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 70} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         71} -> (MeshCellStyle -> GrayLevel[0]), {1, 72} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 73} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         74} -> (MeshCellStyle -> GrayLevel[0]), {1, 75} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 76} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         77} -> (MeshCellStyle -> GrayLevel[0]), {1, 78} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 79} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         80} -> (MeshCellStyle -> GrayLevel[0]), {1, 81} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 82} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         83} -> (MeshCellStyle -> GrayLevel[0]), {1, 84} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 85} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         86} -> (MeshCellStyle -> GrayLevel[0]), {1, 87} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 88} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         89} -> (MeshCellStyle -> GrayLevel[0]), {1, 90} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 91} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         92} -> (MeshCellStyle -> GrayLevel[0]), {1, 93} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 94} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         95} -> (MeshCellStyle -> GrayLevel[0]), {1, 96} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 97} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         98} -> (MeshCellStyle -> GrayLevel[0]), {1, 99} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 100} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         101} -> (MeshCellStyle -> GrayLevel[0]), {1, 102} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 103} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         104} -> (MeshCellStyle -> GrayLevel[0]), {1, 105} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 106} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         107} -> (MeshCellStyle -> GrayLevel[0]), {1, 108} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 109} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         110} -> (MeshCellStyle -> GrayLevel[0]), {1, 111} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 112} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         113} -> (MeshCellStyle -> GrayLevel[0]), {1, 114} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 115} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         116} -> (MeshCellStyle -> GrayLevel[0]), {1, 117} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 118} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         119} -> (MeshCellStyle -> GrayLevel[0]), {1, 120} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 121} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         122} -> (MeshCellStyle -> GrayLevel[0]), {1, 123} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 124} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         125} -> (MeshCellStyle -> GrayLevel[0]), {1, 126} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 127} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         128} -> (MeshCellStyle -> GrayLevel[0]), {1, 129} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 130} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         131} -> (MeshCellStyle -> GrayLevel[0]), {1, 132} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 133} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         134} -> (MeshCellStyle -> GrayLevel[0]), {1, 135} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 136} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         137} -> (MeshCellStyle -> GrayLevel[0]), {1, 138} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 139} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         140} -> (MeshCellStyle -> GrayLevel[0]), {1, 141} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 142} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         143} -> (MeshCellStyle -> GrayLevel[0]), {1, 144} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 145} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         146} -> (MeshCellStyle -> GrayLevel[0]), {1, 147} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 148} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         149} -> (MeshCellStyle -> GrayLevel[0]), {1, 150} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 151} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         152} -> (MeshCellStyle -> GrayLevel[0]), {1, 153} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 154} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         155} -> (MeshCellStyle -> GrayLevel[0]), {1, 156} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 157} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         158} -> (MeshCellStyle -> GrayLevel[0]), {1, 159} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 160} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         161} -> (MeshCellStyle -> GrayLevel[0]), {1, 162} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 163} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         164} -> (MeshCellStyle -> GrayLevel[0]), {1, 165} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 166} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         167} -> (MeshCellStyle -> GrayLevel[0]), {1, 168} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 169} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         170} -> (MeshCellStyle -> GrayLevel[0]), {1, 171} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 172} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         173} -> (MeshCellStyle -> GrayLevel[0]), {1, 174} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 175} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         176} -> (MeshCellStyle -> GrayLevel[0]), {1, 177} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 178} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         179} -> (MeshCellStyle -> GrayLevel[0]), {1, 180} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 181} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         182} -> (MeshCellStyle -> GrayLevel[0]), {1, 183} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 184} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         185} -> (MeshCellStyle -> GrayLevel[0]), {1, 186} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 187} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         188} -> (MeshCellStyle -> GrayLevel[0]), {1, 189} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 190} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         191} -> (MeshCellStyle -> GrayLevel[0]), {1, 192} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 193} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         194} -> (MeshCellStyle -> GrayLevel[0]), {1, 195} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 196} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         197} -> (MeshCellStyle -> GrayLevel[0]), {1, 198} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 199} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         200} -> (MeshCellStyle -> GrayLevel[0]), {1, 201} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 202} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         203} -> (MeshCellStyle -> GrayLevel[0]), {1, 204} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 205} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         206} -> (MeshCellStyle -> GrayLevel[0]), {1, 207} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 208} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         209} -> (MeshCellStyle -> GrayLevel[0]), {1, 210} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 211} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         212} -> (MeshCellStyle -> GrayLevel[0]), {1, 213} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 214} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         215} -> (MeshCellStyle -> GrayLevel[0]), {1, 216} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 217} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         218} -> (MeshCellStyle -> GrayLevel[0]), {1, 219} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 220} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         221} -> (MeshCellStyle -> GrayLevel[0]), {1, 222} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 223} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         224} -> (MeshCellStyle -> GrayLevel[0]), {1, 225} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 226} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         227} -> (MeshCellStyle -> GrayLevel[0]), {1, 228} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 229} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         230} -> (MeshCellStyle -> GrayLevel[0]), {1, 231} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 232} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         233} -> (MeshCellStyle -> GrayLevel[0]), {1, 234} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 235} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         236} -> (MeshCellStyle -> GrayLevel[0]), {1, 237} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 238} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         239} -> (MeshCellStyle -> GrayLevel[0]), {1, 240} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 241} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         242} -> (MeshCellStyle -> GrayLevel[0]), {1, 243} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 244} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         245} -> (MeshCellStyle -> GrayLevel[0]), {1, 246} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 247} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         248} -> (MeshCellStyle -> GrayLevel[0]), {1, 249} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 250} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         251} -> (MeshCellStyle -> GrayLevel[0]), {1, 252} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 253} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         254} -> (MeshCellStyle -> GrayLevel[0]), {1, 255} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 256} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         257} -> (MeshCellStyle -> GrayLevel[0]), {1, 258} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 259} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         260} -> (MeshCellStyle -> GrayLevel[0]), {1, 261} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 262} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         263} -> (MeshCellStyle -> GrayLevel[0]), {1, 264} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 265} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         266} -> (MeshCellStyle -> GrayLevel[0]), {1, 267} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 268} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         269} -> (MeshCellStyle -> GrayLevel[0]), {1, 270} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 271} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         272} -> (MeshCellStyle -> GrayLevel[0]), {1, 273} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 274} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         275} -> (MeshCellStyle -> GrayLevel[0]), {1, 276} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 277} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         278} -> (MeshCellStyle -> GrayLevel[0]), {1, 279} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 280} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         281} -> (MeshCellStyle -> GrayLevel[0]), {1, 282} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 283} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         284} -> (MeshCellStyle -> GrayLevel[0]), {1, 285} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 286} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         287} -> (MeshCellStyle -> GrayLevel[0]), {1, 288} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 289} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         290} -> (MeshCellStyle -> GrayLevel[0]), {1, 291} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 292} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         293} -> (MeshCellStyle -> GrayLevel[0]), {1, 294} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 295} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         296} -> (MeshCellStyle -> GrayLevel[0]), {1, 297} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 298} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         299} -> (MeshCellStyle -> GrayLevel[0]), {1, 300} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 301} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         302} -> (MeshCellStyle -> GrayLevel[0]), {1, 303} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 304} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         305} -> (MeshCellStyle -> GrayLevel[0]), {1, 306} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 307} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         308} -> (MeshCellStyle -> GrayLevel[0]), {1, 309} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 310} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         311} -> (MeshCellStyle -> GrayLevel[0]), {1, 312} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 313} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         314} -> (MeshCellStyle -> GrayLevel[0]), {1, 315} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 316} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         317} -> (MeshCellStyle -> GrayLevel[0]), {1, 318} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 319} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         320} -> (MeshCellStyle -> GrayLevel[0]), {1, 321} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 322} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         323} -> (MeshCellStyle -> GrayLevel[0]), {1, 324} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 325} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         326} -> (MeshCellStyle -> GrayLevel[0]), {1, 327} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 328} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         329} -> (MeshCellStyle -> GrayLevel[0]), {1, 330} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 331} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         332} -> (MeshCellStyle -> GrayLevel[0]), {1, 333} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 334} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         335} -> (MeshCellStyle -> GrayLevel[0]), {1, 336} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 337} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         338} -> (MeshCellStyle -> GrayLevel[0]), {1, 339} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 340} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         341} -> (MeshCellStyle -> GrayLevel[0]), {1, 342} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 343} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         344} -> (MeshCellStyle -> GrayLevel[0]), {1, 345} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 346} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         347} -> (MeshCellStyle -> GrayLevel[0]), {1, 348} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 349} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         350} -> (MeshCellStyle -> GrayLevel[0]), {1, 351} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 352} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         353} -> (MeshCellStyle -> GrayLevel[0]), {1, 354} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 355} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         356} -> (MeshCellStyle -> GrayLevel[0]), {1, 357} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 358} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         359} -> (MeshCellStyle -> GrayLevel[0]), {1, 360} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 361} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         362} -> (MeshCellStyle -> GrayLevel[0]), {1, 363} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 364} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         365} -> (MeshCellStyle -> GrayLevel[0]), {1, 366} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 367} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         368} -> (MeshCellStyle -> GrayLevel[0]), {1, 369} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 370} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         371} -> (MeshCellStyle -> GrayLevel[0]), {1, 372} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 373} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         374} -> (MeshCellStyle -> GrayLevel[0]), {1, 375} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 376} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         377} -> (MeshCellStyle -> GrayLevel[0]), {1, 378} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 379} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         380} -> (MeshCellStyle -> GrayLevel[0]), {1, 381} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 382} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         383} -> (MeshCellStyle -> GrayLevel[0]), {1, 384} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 385} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         386} -> (MeshCellStyle -> GrayLevel[0]), {1, 387} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 388} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         389} -> (MeshCellStyle -> GrayLevel[0]), {1, 390} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 391} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         392} -> (MeshCellStyle -> GrayLevel[0]), {1, 393} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 394} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         395} -> (MeshCellStyle -> GrayLevel[0]), {1, 396} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 397} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         398} -> (MeshCellStyle -> GrayLevel[0]), {1, 399} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 400} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         401} -> (MeshCellStyle -> GrayLevel[0]), {1, 402} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 403} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         404} -> (MeshCellStyle -> GrayLevel[0]), {1, 405} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 406} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         407} -> (MeshCellStyle -> GrayLevel[0]), {1, 408} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 409} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         410} -> (MeshCellStyle -> GrayLevel[0]), {1, 411} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 412} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         413} -> (MeshCellStyle -> GrayLevel[0]), {1, 414} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 415} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         416} -> (MeshCellStyle -> GrayLevel[0]), {1, 417} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 418} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         419} -> (MeshCellStyle -> GrayLevel[0]), {1, 420} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 421} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         422} -> (MeshCellStyle -> GrayLevel[0]), {1, 423} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 424} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         425} -> (MeshCellStyle -> GrayLevel[0]), {1, 426} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 427} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         428} -> (MeshCellStyle -> GrayLevel[0]), {1, 429} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 430} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         431} -> (MeshCellStyle -> GrayLevel[0]), {1, 432} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 433} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         434} -> (MeshCellStyle -> GrayLevel[0]), {1, 435} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 436} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         437} -> (MeshCellStyle -> GrayLevel[0]), {1, 438} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 439} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         440} -> (MeshCellStyle -> GrayLevel[0]), {1, 441} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 442} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         443} -> (MeshCellStyle -> GrayLevel[0]), {1, 444} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 445} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         446} -> (MeshCellStyle -> GrayLevel[0]), {1, 447} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 448} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         449} -> (MeshCellStyle -> GrayLevel[0]), {1, 450} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 451} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         452} -> (MeshCellStyle -> GrayLevel[0]), {1, 453} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 454} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         455} -> (MeshCellStyle -> GrayLevel[0]), {1, 456} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 457} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         458} -> (MeshCellStyle -> GrayLevel[0]), {1, 459} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 460} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         461} -> (MeshCellStyle -> GrayLevel[0]), {1, 462} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 463} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         464} -> (MeshCellStyle -> GrayLevel[0]), {1, 465} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 466} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         467} -> (MeshCellStyle -> GrayLevel[0]), {1, 468} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 469} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         470} -> (MeshCellStyle -> GrayLevel[0]), {1, 471} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 472} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         473} -> (MeshCellStyle -> GrayLevel[0]), {1, 474} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 475} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         476} -> (MeshCellStyle -> GrayLevel[0]), {1, 477} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 478} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         479} -> (MeshCellStyle -> GrayLevel[0]), {1, 480} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 481} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         482} -> (MeshCellStyle -> GrayLevel[0]), {1, 483} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 484} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         485} -> (MeshCellStyle -> GrayLevel[0]), {1, 486} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 487} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         488} -> (MeshCellStyle -> GrayLevel[0]), {1, 489} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 490} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         491} -> (MeshCellStyle -> GrayLevel[0]), {1, 492} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 493} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         494} -> (MeshCellStyle -> GrayLevel[0]), {1, 495} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 496} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         497} -> (MeshCellStyle -> GrayLevel[0]), {1, 498} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 499} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         500} -> (MeshCellStyle -> GrayLevel[0]), {1, 501} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 502} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         503} -> (MeshCellStyle -> GrayLevel[0]), {1, 504} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 505} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         506} -> (MeshCellStyle -> GrayLevel[0]), {1, 507} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 508} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         509} -> (MeshCellStyle -> GrayLevel[0]), {1, 510} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 511} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         512} -> (MeshCellStyle -> GrayLevel[0]), {1, 513} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 514} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         515} -> (MeshCellStyle -> GrayLevel[0]), {1, 516} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 517} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         518} -> (MeshCellStyle -> GrayLevel[0]), {1, 519} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 520} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         521} -> (MeshCellStyle -> GrayLevel[0]), {1, 522} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 523} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         524} -> (MeshCellStyle -> GrayLevel[0]), {1, 525} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 526} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         527} -> (MeshCellStyle -> GrayLevel[0]), {1, 528} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 529} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         530} -> (MeshCellStyle -> GrayLevel[0]), {1, 531} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 532} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         533} -> (MeshCellStyle -> GrayLevel[0]), {1, 534} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 535} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         536} -> (MeshCellStyle -> GrayLevel[0]), {1, 537} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 538} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         539} -> (MeshCellStyle -> GrayLevel[0]), {1, 540} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 541} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         542} -> (MeshCellStyle -> GrayLevel[0]), {1, 543} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 544} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         545} -> (MeshCellStyle -> GrayLevel[0]), {1, 546} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 547} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         548} -> (MeshCellStyle -> GrayLevel[0]), {1, 549} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 550} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         551} -> (MeshCellStyle -> GrayLevel[0]), {1, 552} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 553} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         554} -> (MeshCellStyle -> GrayLevel[0]), {1, 555} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 556} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         557} -> (MeshCellStyle -> GrayLevel[0]), {1, 558} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 559} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         560} -> (MeshCellStyle -> GrayLevel[0]), {1, Default} -> (
+         MeshCellStyle -> Automatic)}, 
+      Method -> {
+       "EliminateUnusedCoordinates" -> True, "DeleteDuplicateCoordinates" -> 
+        Automatic, "DeleteDuplicateCells" -> Automatic, "VertexAlias" -> 
+        Identity, "CheckOrientation" -> Automatic, "CoplanarityTolerance" -> 
+        Automatic, "CheckIntersections" -> Automatic, "BoundaryNesting" -> 
+        Automatic, "SeparateBoundaries" -> Automatic, "TJunction" -> 
+        Automatic, "PropagateMarkers" -> True, "ZeroTest" -> Automatic, 
+        "Hash" -> 9046453502949758736}, {
+      PlotRange -> All, PlotTheme -> "Lines"}]]}, 
+    TagBox[GraphicsComplexBox[CompressedData["
+1:eJx1lk1qwzAQRkMoJZQSTAhBBGPUk9Rn6BEKXfeqOUKWXmahhRazaAt5Ab8y
+A0U8z4+kb5yp3z6/P762m83m8vv3tyY2r3EQF3EVY7f3dT14EBdxFf87l9ZB
+XMRVjO30HB7ERVzFmM8xJGsRVzH3vur+sHW5+fm8jt8ljMHuD/HHhDHY/SR+
+TBiD3X/ft+vePbk3a9d9ze5T1/3Mfr+67mP2++fzPhG3WfMtOSf+UVwSv99X
+13/V/jC6X3Re+Kq1J7wof9G9L7rnRf6rzmlelA8fVO8oxk+9U8KL8uGz6o1i
+/NSbEl6Uv0jHJv1aonO2hvJD+jbp1+Tv0tscyg/p26Rfk79Lb3MoP6Rvk35N
+/i69zaH8kL7b+/Ob+JroZH5WPsz5qDeK8VNvSph6o5jzvWj/F/n9+/fvG8vm
+ruMXxT14XsfD+D0XPfc9J7O55flB/UH+QX7yvR/M+4qdEvZ8oX6Rv8hPvveD
+eR+wKWHPH+pX+av85Hs/f2c09cvzKBQf6ncTh+r5uwWmP55PoX42cai//j8K
+o7/nU6hfTRzqH/UOYvT1fAr1o4lD/aHeWYxt74yeMHoyH7AHz+t4GL+/m/wd
+iR7kT2LOS70iroqv8lOP/c5ijPnGeT3v9orfzz+RqQT5
+      "], 
+      {Hue[0.6, 0.3, 0.95], EdgeForm[Hue[0.6, 0.3, 0.75]], 
+       LineBox[CompressedData["
+1:eJxNl/1/j1Ucxk/Pzw9UI2uxtLTaNNFqq83jNE3T1jRh2kxb05gwYRqSkiRJ
+kiTRSpIkSSIlWon0J3Vfr/O+Xq/zw3vf63t9zjn3vfv+nuv+3Plzu+oXXh5C
+KMn+6HNCxkSYBPKqMibDkyCvOmMKPAXyajKmwtMgrzZjGjwD8uoy6uFZkNeQ
+MR2eA3mNGTPgeZA3M2MWzAZ5TRlz4AWQ15zRAnNBXmvGPHgR5LVltMNLIK8j
+Yz68DPI6MxbAQpDXlbEIXgF5izOWwFKQ152xDF4FeTdm3AQDwN5AGMD3m2Eg
+n7eBvi/PWAErQV5Pxip4DeT1ZqyGNdDLsXLgDhjAMXL4HAQ5HH8Qn4PB32+H
+wXzeCfqu3+RaeB38210Hb4B/y+vhTZBXlYx7C/xb3wBvg3/7G8HryatO5r8D
+3hub4F3wXtkMPo68mmTce+C9tAXeB++treD15NUm8z8A771t8CF4L24HH0de
+XTLuI/Be3QEfg/fuTvB68hqS+Z+A9/Yu+BS813eDjyOvMRn3GTgL9sDn4GzY
+C15PnjJhH/h+Ojt8v78AZ0kffAnympJxX4GzZj98Dc6eA+D15DUn830/5bUk
+9/sbcFYdBB9HXmsy7ltwlh2C78DZdhi8nry2ZL7vp7PP9/t7cBYeAR9HXkcy
+7gdwVh6FH8HZeQy8nrzOZL7vp7PV9/sncNYeBx9HXlcy7mdwFp+AX8DZfBK8
+njxl8inw/XR2+37/Cs7y0/AbyOtOxv0Ozvoz8Ac4+8+C15OnrD4HPl9nuv+f
+P8EZ3w9/gbyeZNzf4GfAefgH/Ey4AF5Pnp4FF8Hn62eG/59/wc+QS/AfyBsS
+Yk5PROeGmPOT0HdRm4DOCzGPJ6M1pwpP+m5qVeihIebuFLS8ajzpYdSq0fkh
+5utUtObU4EnfQ60GPTzEHJ2GlleLJ30vtVp0QYh5WY/WnDo86fuo1aFHhJiL
+09HyGvCk76fWgC4MMf9moDWnEU/6AWqN6AdDzLlZ6KIQc3I2Oo/aTHRxiHk2
+B605TXjSI6k1oR8KMbda0PKa8UZyjVvwpEtCzKd5aM1pxZMeRa0V/XCIOdSO
+lteGN4pr3I4nPTrEvJmP1pwOPOkx1DrQj4SYKwvQ8jrxxnCNF+BJl4aYH4vQ
+mtOFJ/0otS70YyHmxBJ0WYg5sxRdTG0xujzEPFiG1pxuPOnHqXWjnwhx369A
+V4SYGyvRpdSWoytD3N+r0JrTgyc9lloPelyI+3g1enyIObAGXU6tF31ZiL3c
+2kRrX+fi6R1Fvdq6RA9hjLyrQ+zt1ic6lzHrmeM+Tfv7mhCf9RsSnUdN3kbW
+yUNrvvu7YRlXhNirbUr0UGryNrPuULTGuC/T/r82xGf7lkTnU5O3lfn5aM13
+P6e8uDLE3mxboodTk7eddYejNcZ9mPLhuhCf5TsSXUBN3k7mF6A13/2b8uSq
+EHuxXYkeQU3ebtYdgdYY923Kl+tDfHbvSXQhNXl7mV+I3sf9KELr2rj/Ur7c
+EGJv1pfoImp9jHefpXzRu5Ke1fsTXUxN3gHWKUbrWri/Ut4cZJ616u6blC96
+71KvdSjRJdTkHWZ+CVr/q/sl5c0R5lmr7j5I+aL3OPVORxM9mpq8Y8wfjdY1
+dv+jvDnOPGvV3Rcpf24JsXc4kehSavJOMr8UfYrrVYbW/+b+Rvlza4i9z+lE
+l1E7zXj3QconvTuqVziT6HJq8s6yTjn6HOdTgdY5u59RPum9Ur1Of6IrqPUz
+3n2P8kvvnep1zie6kpq8C6xTib7I+YxH65zd54wL8X1Yvc2lRI+nJu9/D63J
+Rw==
+        "]], 
+       {GrayLevel[0], LineBox[CompressedData["
+1:eJwBcQSO+yFib1JiAgAAADACAAACAAAAQkNDRERCRUZGR0dFSElJSkpIS0xM
+TU1LTk9PUFBOUVJSU1NRVFVVVlZUV1hYWVlXWltbXFxaXV5eX19dYGFhYmJg
+Y2RkZWVjZmdnaGhmaWpqa2tpbG1tbm5sb3BwcXFvcnNzdHRydXZ2d3d1DA0N
+EREMDRISEQ0ODhIOExMSeHl5enp4e3x8fX17fn9/gIB+ERYWFRUREhYSFxcW
+ExcTGBgXExQUGBQZGRhCgYGCgkJDg4OEhENEhYWGhkRFhISHh0VGiIiJiUZH
+ioqFhUdIh4eLi0hJjIyNjUlKjo6IiEpLjY2Pj0tMkJCRkUxNkpKOjk1Oj4+T
+k05PlJSVlU9QlpaQkFBRlZWXl1FSmJiZmVJTmpqWllNUl5ebm1RVnJydnVVW
+np6YmFZXnZ2fn1dYoKChoVhZoqKenllao6OKilpbiYmkpFtcpaWmplxdpKSn
+p11eqKipqV5fqqqlpV9gp6eSkmBhkZGrq2FirKyoqGJjq6utrWNkrq6vr2Rl
+sLCsrGVmra2ammZnmZmxsWdosrKurmhpsbGzs2lqtLS1tWprtraysmtss7Oi
+omxtoaG3t21uuLi0tG5vt7e5uW9wurq7u3BxvLy4uHFyvb2qqnJzqam+vnN0
+v7/AwHR1vr7BwXV2wsLDw3Z3xMS/v3d4xcW8vHh5u7vGxnl6x8fIyHp7xsbJ
+yXt8ysrLy3x9zMzHx31+zc3ExH5/w8POzn+Az8/Q0IAaREMaG0JEGxxDQhwd
+R0YdGkVHGh5GRR4fSkkfHkhKHiBJSCAhTUwhH0tNHyJMSyIjUE8jIk5QIiRP
+TiQlU1IlI1FTIyZSUSYnVlUnJlRWJihVVCgpWVgpJ1dZJypYVyorXFsrLFpc
+LB1bWh0tX14tK11fKy5eXS4vYmEvLmBiLiFhYCEwZWQwL2NlLzFkYzEyaGcy
+MWZoMSVnZiUza2ozMmlrMjRqaTQ1bm01NGxuNCltbCk2cXA2NW9xNTdwbzc4
+dHM4OXJ0OS1zci06d3Y6OHV3ODt2dTs8enk8PXh6PTZ5eDY+fXw+PHt9PD98
+ez9AgH9AQX6AQTp/fjoBgoEBghwbgQKEgwKEGhyDBoaFBoYbGoUCh4ceB4mI
+B4kdHoiKBh2KAouLIAONjAONHyCMjgcfjgOPjyIIkZAIkSEikJIHIZIDk5Mk
+BJWUBJUjJJSWCCOWBJeXJgmZmAmZJSaYmgglmgSbmygFnZwFnSconJ4JJ54F
+n58qCqGgCqEpKqCiCSmiowYsowekpCsLpqULpiwrpQenpy4MqagMqS0uqKoL
+LaoIq6svrAwvrAitrTENr64NrzAxrrAMMLAJsbEysg0ysgmzszQOtbQOtTM0
+tLYNM7YKt7c1uA41uAq5uTcPu7oPuzY3urwONry9Czm9DL6+OBDAvxDAOTi/
+DMHBOxHDwhHDOjvCxBA6xMUOPcUPxsY8E8jHE8g9PMcPyck/FMvKFMs+P8rM
+Ez7MzRBBzRHOzkAV0M8V0EFAz2LCyTs=
+         "]]}}],
+     MouseAppearanceTag["LinkHand"]],
+    AllowKernelInitialization->False],
+   "MeshGraphics",
+   AutoDelete->True,
+   Editable->False,
+   Selectable->False],
+  DefaultBaseStyle->{
+   "MeshGraphics", FrontEnd`GraphicsHighlightColor -> Hue[0.1, 1, 0.7]},
+  ImageSize->{555., Automatic},
+  PlotRange->All]], "Output",
+ CellChangeTimes->{{3.7176882498515043`*^9, 3.7176882563621044`*^9}, 
+   3.7176891687506256`*^9, 3.717689457432685*^9, 3.71768949576472*^9, 
+   3.7176898483681073`*^9, 3.7176899227708845`*^9, 3.7176905695957265`*^9, 
+   3.7176916571800222`*^9, 3.71769179342138*^9, 
+   3.717691889695134*^9},ExpressionUUID->"fb4ef356-ef3d-4be7-ad79-\
+9e37c275810f"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{"\[ScriptCapitalN]", "=", 
+   RowBox[{"import", "[", "\"\<nonuniform.nt\>\"", "]"}]}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{"highlight", "[", 
+  RowBox[{"\[ScriptCapitalN]", ",", 
+   RowBox[{"{", "}"}], ",", "0"}], "]"}]}], "Input",
+ CellChangeTimes->{{3.717692219536189*^9, 
+  3.717692229294621*^9}},ExpressionUUID->"32360552-023b-4a40-bb01-\
+ca337a4b1154"],
+
+Cell[BoxData[
+ GraphicsBox[
+  TagBox[
+   DynamicModuleBox[{Typeset`mesh = HoldComplete[
+     MeshRegion[CompressedData["
+1:eJx1101u2zAQhmHZbuL8NKkQBIFgGIbai9Rn6BEKZN2r+gheaqkFF1pwURTI
+F0BPwdkIr7+ZITmkRvT3339+vW+7rvux6bp/z4ad19jDAzzCsfnnOl+4hwd4
+hP+bF88eHuARjt3xe7iHB3iEY86jbzwHeISz7ivrD1uX2d/Pa/+7BsfC7k/8
+XxscC7uf8T82OBZ2/13vwrqXxrrzXFiv7D4trE/2fC2sR/b8Od8v8evWPDfm
+Gf0IDw3d82r+r4wfTt0vzDd85bk0eCJ+Yt0X1nlBvzJPeSI+/EK+Vzh68r01
+eCI+fCDfEY6efKcGT8RP1LFQv9Koc+tZia/Ut1C/gr5Qb7kSX6lvoX4FfaHe
+ciW+Ut9C/Qr6Qr3lSnylvtuP32f42qiTfEt8OPNLviMcPflODU6+I5z5PTD+
+A7rvv+93rNV39Z/w++Tz2j8c3b5o37dPtvqW/SP5e/QePfGOF855jb012P6S
+/AP6gJ54xwvnPMRODbb/JP+IPqIn3vG8ZxT2y35U8a/sd4Er+by3hLM/9qfK
+fha4sr9+R8Opv/2psl8Fruxf8r3Aqa/9qbIfBa7sT/Id4Nj2g1PPcOqZ/hD7
+5PPaPxzde5P3yNQj8Sc4802+AR7xH9GTL+Md4Fj6W+Zrv3vGP5z3YIf/Dj3z
+K9QzfMP44cQ/kv8RPfPNe7rBf4Oe+SzopTFf42/hzPcKV/JV6rPA0ffoe3S/
+V9En9Ak9870n/h7d8xC9oJdG/DP8xHjhmfW37rmy/tmfubGfe3T5Bn/7pBz/
+xHse/a7K+qd+Mxzz/HkPsJ95nvxuWJ8d7L0j9YrJvq/h5NnAO9jz7b3a/3PJ
+7/8g/9fErGfqX6l3YX+S/xvxcs5zxn86/wWafGyW
+      "], {
+       Polygon[CompressedData["
+1:eJxNmHmcj1UUxs9rGYkiS2WYGUNIigiVhMq+G2vWsc3YxtiStb1UitKiKJU2
+Sfu+obTviyIijK2xjKK0Uedxvn/44/m88zy/e+5933ufe84hc1h+1vhiZlaU
+mBX356WOyxytHW0cbR3tHO0dHRwdHZ0cnR1dHF0d3RzdHT0cWY6ejl6O3o4+
+jr6Ofo7LHf0dAxwDHYMcgx1DHNmOoY5hjuGOEY6RjhxHrmOUY7RjjGOsY5wj
+zzHeke+Y4Jjo+MbxreM7x1rH944fHGUdJzlO4VnhuL9PhutZkb+nOaY7Zjhm
+OmY5ZjvWOdY7fiT+VEdl/q4A1/O04/6uCNfz9OP+rgTXswp/a/+vdVzHOVzv
+uIHzuNFxE+cibQ7nc7PjFs7pVsa15/e5nNttjts5v3nEdEKbz3ne4biTc13A
+uK78fhfnfLfjHs77XmJ6oC20OP/7HPdb+GAR43rx+2ILXzzgeNDCH0uI6Yv2
+kIVfHnY8YuGbpYyTfx7lOwfw3Y9Z+OlxxxMWvpL2pIW/ljmesvDZcsZl87u+
+cyjf/bSF/1YQMxztGQs/Put4zsKXzzMuh9/1nbl89wsWfn2RmNFoL1n492XH
+KxY+fpVx4/hd35nHd79m4e/XiclHe8PC72863rLw/duM2+DY6PjJscmx2fGz
+Y4tjq2Obo8Cx3bHDsdOxy7Hb8Yuj0LHHwv8fMO901vnQ4j585PjY4l5I+8Ti
+fnzq+MzinnzOuL2OfY79jiLHAcevjt8cBx2HHKkW/pbfq1rcAfFqaOJpFv5u
+y/g28HQ08QwLf3dAbw+vjiaeaeHvzozvBK+BJl7Twt/d0LvCz0ATr2Xh7yzG
+94DXRhOvY+Hv3ui94Geiide18Hc/xveFn4UmXs/C3/L72RZ3YCB7MgB+joW/
+BzN+ELw+mngDC38PRc+GZ6KJn2vh7xGMHw5viCbeyMLfueg58Fpo4udZ+HsM
+40fDG6OJN7Hwdx76OHhdNPGmFv6ewPh8+Plo4sr5vzv+sMj9hx1/WtSAvxx/
+W9SCfxz/WtSEI46jFrXhP4d5/Wtu4W/5/WKLOzCDd5gOb2Hhb/ld42fCW6KJ
+q0YkPl+xJGpFcX+WSKJmlPRnSnJsuWM5XrlePr8UXhVNXHVZeV41QJ6/DF4N
+TTzFoibcSGxreCpaa+aZQ6zuRRt4Kpp4KYtcqrogX7WFp6O1ZS3NeSux7eBp
+aO1Yay7zV7e4c3OZZw5cfYbqjmqS7mAHeHW0DryP1p1HbEd4BlpH5plPrO5p
+J3gGmvgJFrlddUo+7wyvgdaZtTTnAmK7wDPRurDWXcyvPNAVXgNNvIRFHVSN
+VE7oBj8DrRvvo3XvJbY7vCZad+ZZSKzyRg94TTTx0ha1RnVT9y4LXhsti7U0
+5yJie8JrofVkrcXMr7zUC14bTbykRV1WzVaO6g0/E60376N1lxDbB14HrQ/z
+PESs8ltfeB008RMtat/DFnmgH/wstH6spTmXEns5vC6auLwqT6pXkD/7w89G
+68+5q0+Qz5UzB8DT0MTLWPQUjxM7EF4PbSDzPEms8uogeD00cfUTZZLoQ5SP
+T04iZ9fnt8HMd0ISayp2CJqepZPoXbTWAuaXP7Ph9dGyOXf1LfK5cvhQeCaa
+eFnWXUHsMHgDtGHM8wyxyvPD4Q3QxNU/qydSn6PaMQLeEG0Ea2nO54kdCT8X
+bSRrLWJ++TMH3hAth3NXHyWfq6bkwmuh5fI+WvdFYkfBG6GNYp6XiFXdGQ1v
+hCaufwuoR1PfpVo2Bt4YbQxrac5XiR0LPw9tLGstZX75cxy8MZq4PK++Tj5X
+jcuD10XL43207uvEjoc3QRvPPG8Qq/qYD2+CJl7OopdT76i6NgF+PtoE1tKc
+bxM7Ed4UTVx9Zqkk/Kp+U/5UrVXfqdp7YhL9pzxfNok+9KQk6rT6UdVk3YEt
+eid/lk+iPz0lifqtPlX1vEIS/armqJhE31opiZqt/vUo86qPrezPU5PoZ09L
+ot6rr1WxPT2J/rZKEusVMrf6APW76gtSk/h2feMHfO80+MVo09jDD9k39QDT
+4U3RxPXvO/XIHxE7A94cbQbzfEKs+oeZ8OZo4vq3oXpq9dbqPWbBW6LNYi3N
++Tmxs+Et0MTVh1dN4vv38a3qRdSXqzeplkR/rv1LS6JPT0+ij1G/rp5Fe6q+
+PcOf1ZPo3zOT6G/Ux6vfqeGYZNF7qRebbNGfiU9BE7/CovdSLzbVoj8TvxJN
+/CqLnkk91NUWfZX4NWjik/CcPPgOvhRfjraBd5Dn5EHl303wlWibeDd5Th5c
+ZeFL8dVoW3hneW47sQXwd9EK+BZ5Th58z8KX4mvQdvKN8pw8+L6FL/ewbiFc
+366z0Vl9wfntZ/w+uPZEZ3OA+YvgX6IVsVc6G53VVxbnJ/41mvgFFnftd/bh
+G/hkNPELLe71Yfb8W/gUNHHVM93rv4j9Dj4JTbyZxV37h31YC5+Ktpb30b0+
+wp5/D78STfwih5EHFPsDXOP/g7ey8KQ8rH1YB9e+SRO/xML/8rD2fD1c44vT
+v+udU7gviv0RrvEl6etVs5ULS1GnN8DlSWkb2B/tQ2nuyEb4crSN7LNyp/ZW
+sT/BJ7Hf4qqnyofKrfLhJri8XYa8ewFnp9yos9gMX4m2mfdRDtYZKfZn+GTO
+Tby8RW5WzlxtcQ/E5dVy5O8L8YByt/ywFb4abSvvo3wrXyl2G3wKXtvGd1Wk
+XuhOFcBX8n0FnLvOtxJnvR3+Ltp21tI3HuV7d8CvwEfix/7vLomaobuzE647
+W5l60gxPKu/JY7vga9B28T6qLUbsbvhU/LibPSxH7tW3/wLXXa5CXdI7H2FP
+5PNC+Cq0Qt5HeVv3RbF74Br/L7w8c1Zl/r1w5RBpe5lHvk3Fw/vg7zOfuO6F
+akIJYvfDNb4EdUN7mEbNVc4pgq9hL8VbWdy1dO7OAbjGp1NnmrGfKcT+Ctf4
+FOqP/o9VNUe1R7nrN7hyWgZ1Se+sO5vJ/T0I1/hM6pXeRzWqGLGH4BpfjDqm
+nlt3UvdXfbnuhu7FMjyqO6aeXPdH9/Z/WV+5nw==
+        "]]}, 
+      Properties -> {{1, 1} -> (MeshCellStyle -> GrayLevel[0]), {1, 2} -> (
+         MeshCellStyle -> GrayLevel[0]), {1, 3} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 4} -> (MeshCellStyle -> GrayLevel[0]), {1, 5} -> (
+         MeshCellStyle -> GrayLevel[0]), {1, 6} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 7} -> (MeshCellStyle -> GrayLevel[0]), {1, 8} -> (
+         MeshCellStyle -> GrayLevel[0]), {1, 9} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 10} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         11} -> (MeshCellStyle -> GrayLevel[0]), {1, 12} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 13} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         14} -> (MeshCellStyle -> GrayLevel[0]), {1, 15} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 16} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         17} -> (MeshCellStyle -> GrayLevel[0]), {1, 18} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 19} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         20} -> (MeshCellStyle -> GrayLevel[0]), {1, 21} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 22} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         23} -> (MeshCellStyle -> GrayLevel[0]), {1, 24} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 25} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         26} -> (MeshCellStyle -> GrayLevel[0]), {1, 27} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 28} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         29} -> (MeshCellStyle -> GrayLevel[0]), {1, 30} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 31} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         32} -> (MeshCellStyle -> GrayLevel[0]), {1, 33} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 34} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         35} -> (MeshCellStyle -> GrayLevel[0]), {1, 36} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 37} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         38} -> (MeshCellStyle -> GrayLevel[0]), {1, 39} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 40} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         41} -> (MeshCellStyle -> GrayLevel[0]), {1, 42} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 43} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         44} -> (MeshCellStyle -> GrayLevel[0]), {1, 45} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 46} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         47} -> (MeshCellStyle -> GrayLevel[0]), {1, 48} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 49} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         50} -> (MeshCellStyle -> GrayLevel[0]), {1, 51} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 52} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         53} -> (MeshCellStyle -> GrayLevel[0]), {1, 54} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 55} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         56} -> (MeshCellStyle -> GrayLevel[0]), {1, 57} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 58} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         59} -> (MeshCellStyle -> GrayLevel[0]), {1, 60} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 61} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         62} -> (MeshCellStyle -> GrayLevel[0]), {1, 63} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 64} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         65} -> (MeshCellStyle -> GrayLevel[0]), {1, 66} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 67} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         68} -> (MeshCellStyle -> GrayLevel[0]), {1, 69} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 70} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         71} -> (MeshCellStyle -> GrayLevel[0]), {1, 72} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 73} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         74} -> (MeshCellStyle -> GrayLevel[0]), {1, 75} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 76} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         77} -> (MeshCellStyle -> GrayLevel[0]), {1, 78} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 79} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         80} -> (MeshCellStyle -> GrayLevel[0]), {1, 81} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 82} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         83} -> (MeshCellStyle -> GrayLevel[0]), {1, 84} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 85} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         86} -> (MeshCellStyle -> GrayLevel[0]), {1, 87} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 88} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         89} -> (MeshCellStyle -> GrayLevel[0]), {1, 90} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 91} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         92} -> (MeshCellStyle -> GrayLevel[0]), {1, 93} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 94} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         95} -> (MeshCellStyle -> GrayLevel[0]), {1, 96} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 97} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         98} -> (MeshCellStyle -> GrayLevel[0]), {1, 99} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 100} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         101} -> (MeshCellStyle -> GrayLevel[0]), {1, 102} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 103} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         104} -> (MeshCellStyle -> GrayLevel[0]), {1, 105} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 106} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         107} -> (MeshCellStyle -> GrayLevel[0]), {1, 108} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 109} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         110} -> (MeshCellStyle -> GrayLevel[0]), {1, 111} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 112} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         113} -> (MeshCellStyle -> GrayLevel[0]), {1, 114} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 115} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         116} -> (MeshCellStyle -> GrayLevel[0]), {1, 117} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 118} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         119} -> (MeshCellStyle -> GrayLevel[0]), {1, 120} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 121} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         122} -> (MeshCellStyle -> GrayLevel[0]), {1, 123} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 124} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         125} -> (MeshCellStyle -> GrayLevel[0]), {1, 126} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 127} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         128} -> (MeshCellStyle -> GrayLevel[0]), {1, 129} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 130} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         131} -> (MeshCellStyle -> GrayLevel[0]), {1, 132} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 133} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         134} -> (MeshCellStyle -> GrayLevel[0]), {1, 135} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 136} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         137} -> (MeshCellStyle -> GrayLevel[0]), {1, 138} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 139} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         140} -> (MeshCellStyle -> GrayLevel[0]), {1, 141} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 142} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         143} -> (MeshCellStyle -> GrayLevel[0]), {1, 144} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 145} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         146} -> (MeshCellStyle -> GrayLevel[0]), {1, 147} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 148} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         149} -> (MeshCellStyle -> GrayLevel[0]), {1, 150} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 151} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         152} -> (MeshCellStyle -> GrayLevel[0]), {1, 153} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 154} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         155} -> (MeshCellStyle -> GrayLevel[0]), {1, 156} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 157} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         158} -> (MeshCellStyle -> GrayLevel[0]), {1, 159} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 160} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         161} -> (MeshCellStyle -> GrayLevel[0]), {1, 162} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 163} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         164} -> (MeshCellStyle -> GrayLevel[0]), {1, 165} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 166} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         167} -> (MeshCellStyle -> GrayLevel[0]), {1, 168} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 169} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         170} -> (MeshCellStyle -> GrayLevel[0]), {1, 171} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 172} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         173} -> (MeshCellStyle -> GrayLevel[0]), {1, 174} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 175} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         176} -> (MeshCellStyle -> GrayLevel[0]), {1, 177} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 178} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         179} -> (MeshCellStyle -> GrayLevel[0]), {1, 180} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 181} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         182} -> (MeshCellStyle -> GrayLevel[0]), {1, 183} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 184} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         185} -> (MeshCellStyle -> GrayLevel[0]), {1, 186} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 187} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         188} -> (MeshCellStyle -> GrayLevel[0]), {1, 189} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 190} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         191} -> (MeshCellStyle -> GrayLevel[0]), {1, 192} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 193} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         194} -> (MeshCellStyle -> GrayLevel[0]), {1, 195} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 196} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         197} -> (MeshCellStyle -> GrayLevel[0]), {1, 198} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 199} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         200} -> (MeshCellStyle -> GrayLevel[0]), {1, 201} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 202} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         203} -> (MeshCellStyle -> GrayLevel[0]), {1, 204} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 205} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         206} -> (MeshCellStyle -> GrayLevel[0]), {1, 207} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 208} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         209} -> (MeshCellStyle -> GrayLevel[0]), {1, 210} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 211} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         212} -> (MeshCellStyle -> GrayLevel[0]), {1, 213} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 214} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         215} -> (MeshCellStyle -> GrayLevel[0]), {1, 216} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 217} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         218} -> (MeshCellStyle -> GrayLevel[0]), {1, 219} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 220} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         221} -> (MeshCellStyle -> GrayLevel[0]), {1, 222} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 223} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         224} -> (MeshCellStyle -> GrayLevel[0]), {1, 225} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 226} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         227} -> (MeshCellStyle -> GrayLevel[0]), {1, 228} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 229} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         230} -> (MeshCellStyle -> GrayLevel[0]), {1, 231} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 232} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         233} -> (MeshCellStyle -> GrayLevel[0]), {1, 234} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 235} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         236} -> (MeshCellStyle -> GrayLevel[0]), {1, 237} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 238} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         239} -> (MeshCellStyle -> GrayLevel[0]), {1, 240} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 241} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         242} -> (MeshCellStyle -> GrayLevel[0]), {1, 243} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 244} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         245} -> (MeshCellStyle -> GrayLevel[0]), {1, 246} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 247} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         248} -> (MeshCellStyle -> GrayLevel[0]), {1, 249} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 250} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         251} -> (MeshCellStyle -> GrayLevel[0]), {1, 252} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 253} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         254} -> (MeshCellStyle -> GrayLevel[0]), {1, 255} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 256} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         257} -> (MeshCellStyle -> GrayLevel[0]), {1, 258} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 259} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         260} -> (MeshCellStyle -> GrayLevel[0]), {1, 261} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 262} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         263} -> (MeshCellStyle -> GrayLevel[0]), {1, 264} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 265} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         266} -> (MeshCellStyle -> GrayLevel[0]), {1, 267} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 268} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         269} -> (MeshCellStyle -> GrayLevel[0]), {1, 270} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 271} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         272} -> (MeshCellStyle -> GrayLevel[0]), {1, 273} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 274} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         275} -> (MeshCellStyle -> GrayLevel[0]), {1, 276} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 277} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         278} -> (MeshCellStyle -> GrayLevel[0]), {1, 279} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 280} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         281} -> (MeshCellStyle -> GrayLevel[0]), {1, 282} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 283} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         284} -> (MeshCellStyle -> GrayLevel[0]), {1, 285} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 286} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         287} -> (MeshCellStyle -> GrayLevel[0]), {1, 288} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 289} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         290} -> (MeshCellStyle -> GrayLevel[0]), {1, 291} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 292} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         293} -> (MeshCellStyle -> GrayLevel[0]), {1, 294} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 295} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         296} -> (MeshCellStyle -> GrayLevel[0]), {1, 297} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 298} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         299} -> (MeshCellStyle -> GrayLevel[0]), {1, 300} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 301} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         302} -> (MeshCellStyle -> GrayLevel[0]), {1, 303} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 304} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         305} -> (MeshCellStyle -> GrayLevel[0]), {1, 306} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 307} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         308} -> (MeshCellStyle -> GrayLevel[0]), {1, 309} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 310} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         311} -> (MeshCellStyle -> GrayLevel[0]), {1, 312} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 313} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         314} -> (MeshCellStyle -> GrayLevel[0]), {1, 315} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 316} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         317} -> (MeshCellStyle -> GrayLevel[0]), {1, 318} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 319} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         320} -> (MeshCellStyle -> GrayLevel[0]), {1, 321} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 322} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         323} -> (MeshCellStyle -> GrayLevel[0]), {1, 324} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 325} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         326} -> (MeshCellStyle -> GrayLevel[0]), {1, 327} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 328} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         329} -> (MeshCellStyle -> GrayLevel[0]), {1, 330} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 331} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         332} -> (MeshCellStyle -> GrayLevel[0]), {1, 333} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 334} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         335} -> (MeshCellStyle -> GrayLevel[0]), {1, 336} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 337} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         338} -> (MeshCellStyle -> GrayLevel[0]), {1, 339} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 340} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         341} -> (MeshCellStyle -> GrayLevel[0]), {1, 342} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 343} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         344} -> (MeshCellStyle -> GrayLevel[0]), {1, 345} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 346} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         347} -> (MeshCellStyle -> GrayLevel[0]), {1, 348} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 349} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         350} -> (MeshCellStyle -> GrayLevel[0]), {1, 351} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 352} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         353} -> (MeshCellStyle -> GrayLevel[0]), {1, 354} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 355} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         356} -> (MeshCellStyle -> GrayLevel[0]), {1, 357} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 358} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         359} -> (MeshCellStyle -> GrayLevel[0]), {1, 360} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 361} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         362} -> (MeshCellStyle -> GrayLevel[0]), {1, 363} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 364} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         365} -> (MeshCellStyle -> GrayLevel[0]), {1, 366} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 367} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         368} -> (MeshCellStyle -> GrayLevel[0]), {1, 369} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 370} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         371} -> (MeshCellStyle -> GrayLevel[0]), {1, 372} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 373} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         374} -> (MeshCellStyle -> GrayLevel[0]), {1, 375} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 376} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         377} -> (MeshCellStyle -> GrayLevel[0]), {1, 378} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 379} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         380} -> (MeshCellStyle -> GrayLevel[0]), {1, 381} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 382} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         383} -> (MeshCellStyle -> GrayLevel[0]), {1, 384} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 385} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         386} -> (MeshCellStyle -> GrayLevel[0]), {1, 387} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 388} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         389} -> (MeshCellStyle -> GrayLevel[0]), {1, 390} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 391} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         392} -> (MeshCellStyle -> GrayLevel[0]), {1, 393} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 394} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         395} -> (MeshCellStyle -> GrayLevel[0]), {1, 396} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 397} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         398} -> (MeshCellStyle -> GrayLevel[0]), {1, 399} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 400} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         401} -> (MeshCellStyle -> GrayLevel[0]), {1, 402} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 403} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         404} -> (MeshCellStyle -> GrayLevel[0]), {1, 405} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 406} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         407} -> (MeshCellStyle -> GrayLevel[0]), {1, 408} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 409} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         410} -> (MeshCellStyle -> GrayLevel[0]), {1, 411} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 412} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         413} -> (MeshCellStyle -> GrayLevel[0]), {1, 414} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 415} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         416} -> (MeshCellStyle -> GrayLevel[0]), {1, 417} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 418} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         419} -> (MeshCellStyle -> GrayLevel[0]), {1, 420} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 421} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         422} -> (MeshCellStyle -> GrayLevel[0]), {1, 423} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 424} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         425} -> (MeshCellStyle -> GrayLevel[0]), {1, 426} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 427} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         428} -> (MeshCellStyle -> GrayLevel[0]), {1, 429} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 430} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         431} -> (MeshCellStyle -> GrayLevel[0]), {1, 432} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 433} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         434} -> (MeshCellStyle -> GrayLevel[0]), {1, 435} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 436} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         437} -> (MeshCellStyle -> GrayLevel[0]), {1, 438} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 439} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         440} -> (MeshCellStyle -> GrayLevel[0]), {1, 441} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 442} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         443} -> (MeshCellStyle -> GrayLevel[0]), {1, 444} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 445} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         446} -> (MeshCellStyle -> GrayLevel[0]), {1, 447} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 448} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         449} -> (MeshCellStyle -> GrayLevel[0]), {1, 450} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 451} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         452} -> (MeshCellStyle -> GrayLevel[0]), {1, 453} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 454} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         455} -> (MeshCellStyle -> GrayLevel[0]), {1, 456} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 457} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         458} -> (MeshCellStyle -> GrayLevel[0]), {1, 459} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 460} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         461} -> (MeshCellStyle -> GrayLevel[0]), {1, 462} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 463} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         464} -> (MeshCellStyle -> GrayLevel[0]), {1, 465} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 466} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         467} -> (MeshCellStyle -> GrayLevel[0]), {1, 468} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 469} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         470} -> (MeshCellStyle -> GrayLevel[0]), {1, 471} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 472} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         473} -> (MeshCellStyle -> GrayLevel[0]), {1, 474} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 475} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         476} -> (MeshCellStyle -> GrayLevel[0]), {1, 477} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 478} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         479} -> (MeshCellStyle -> GrayLevel[0]), {1, 480} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 481} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         482} -> (MeshCellStyle -> GrayLevel[0]), {1, 483} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 484} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         485} -> (MeshCellStyle -> GrayLevel[0]), {1, 486} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 487} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         488} -> (MeshCellStyle -> GrayLevel[0]), {1, 489} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 490} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         491} -> (MeshCellStyle -> GrayLevel[0]), {1, 492} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 493} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         494} -> (MeshCellStyle -> GrayLevel[0]), {1, 495} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 496} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         497} -> (MeshCellStyle -> GrayLevel[0]), {1, 498} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 499} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         500} -> (MeshCellStyle -> GrayLevel[0]), {1, 501} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 502} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         503} -> (MeshCellStyle -> GrayLevel[0]), {1, 504} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 505} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         506} -> (MeshCellStyle -> GrayLevel[0]), {1, 507} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 508} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         509} -> (MeshCellStyle -> GrayLevel[0]), {1, 510} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 511} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         512} -> (MeshCellStyle -> GrayLevel[0]), {1, 513} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 514} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         515} -> (MeshCellStyle -> GrayLevel[0]), {1, 516} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 517} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         518} -> (MeshCellStyle -> GrayLevel[0]), {1, 519} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 520} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         521} -> (MeshCellStyle -> GrayLevel[0]), {1, 522} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 523} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         524} -> (MeshCellStyle -> GrayLevel[0]), {1, 525} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 526} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         527} -> (MeshCellStyle -> GrayLevel[0]), {1, 528} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 529} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         530} -> (MeshCellStyle -> GrayLevel[0]), {1, 531} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 532} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         533} -> (MeshCellStyle -> GrayLevel[0]), {1, 534} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 535} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         536} -> (MeshCellStyle -> GrayLevel[0]), {1, 537} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 538} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         539} -> (MeshCellStyle -> GrayLevel[0]), {1, 540} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 541} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         542} -> (MeshCellStyle -> GrayLevel[0]), {1, 543} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 544} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         545} -> (MeshCellStyle -> GrayLevel[0]), {1, 546} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 547} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         548} -> (MeshCellStyle -> GrayLevel[0]), {1, 549} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 550} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         551} -> (MeshCellStyle -> GrayLevel[0]), {1, 552} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 553} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         554} -> (MeshCellStyle -> GrayLevel[0]), {1, 555} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 556} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         557} -> (MeshCellStyle -> GrayLevel[0]), {1, 558} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 559} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         560} -> (MeshCellStyle -> GrayLevel[0]), {1, 561} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 562} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         563} -> (MeshCellStyle -> GrayLevel[0]), {1, 564} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 565} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         566} -> (MeshCellStyle -> GrayLevel[0]), {1, 567} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 568} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         569} -> (MeshCellStyle -> GrayLevel[0]), {1, 570} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 571} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         572} -> (MeshCellStyle -> GrayLevel[0]), {1, 573} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 574} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         575} -> (MeshCellStyle -> GrayLevel[0]), {1, 576} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 577} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         578} -> (MeshCellStyle -> GrayLevel[0]), {1, 579} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 580} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         581} -> (MeshCellStyle -> GrayLevel[0]), {1, 582} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 583} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         584} -> (MeshCellStyle -> GrayLevel[0]), {1, 585} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 586} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         587} -> (MeshCellStyle -> GrayLevel[0]), {1, 588} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 589} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         590} -> (MeshCellStyle -> GrayLevel[0]), {1, 591} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 592} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         593} -> (MeshCellStyle -> GrayLevel[0]), {1, 594} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 595} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         596} -> (MeshCellStyle -> GrayLevel[0]), {1, 597} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 598} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         599} -> (MeshCellStyle -> GrayLevel[0]), {1, 600} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 601} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         602} -> (MeshCellStyle -> GrayLevel[0]), {1, 603} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 604} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         605} -> (MeshCellStyle -> GrayLevel[0]), {1, 606} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 607} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         608} -> (MeshCellStyle -> GrayLevel[0]), {1, 609} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 610} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         611} -> (MeshCellStyle -> GrayLevel[0]), {1, 612} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 613} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         614} -> (MeshCellStyle -> GrayLevel[0]), {1, 615} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 616} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         617} -> (MeshCellStyle -> GrayLevel[0]), {1, 618} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 619} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         620} -> (MeshCellStyle -> GrayLevel[0]), {1, 621} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 622} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         623} -> (MeshCellStyle -> GrayLevel[0]), {1, 624} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 625} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         626} -> (MeshCellStyle -> GrayLevel[0]), {1, 627} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 628} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         629} -> (MeshCellStyle -> GrayLevel[0]), {1, 630} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 631} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         632} -> (MeshCellStyle -> GrayLevel[0]), {1, 633} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 634} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         635} -> (MeshCellStyle -> GrayLevel[0]), {1, 636} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 637} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         638} -> (MeshCellStyle -> GrayLevel[0]), {1, 639} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 640} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         641} -> (MeshCellStyle -> GrayLevel[0]), {1, 642} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 643} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         644} -> (MeshCellStyle -> GrayLevel[0]), {1, 645} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 646} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         647} -> (MeshCellStyle -> GrayLevel[0]), {1, 648} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 649} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         650} -> (MeshCellStyle -> GrayLevel[0]), {1, 651} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 652} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         653} -> (MeshCellStyle -> GrayLevel[0]), {1, 654} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 655} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         656} -> (MeshCellStyle -> GrayLevel[0]), {1, 657} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 658} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         659} -> (MeshCellStyle -> GrayLevel[0]), {1, 660} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 661} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         662} -> (MeshCellStyle -> GrayLevel[0]), {1, 663} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 664} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         665} -> (MeshCellStyle -> GrayLevel[0]), {1, 666} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 667} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         668} -> (MeshCellStyle -> GrayLevel[0]), {1, 669} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 670} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         671} -> (MeshCellStyle -> GrayLevel[0]), {1, 672} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 673} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         674} -> (MeshCellStyle -> GrayLevel[0]), {1, 675} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 676} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         677} -> (MeshCellStyle -> GrayLevel[0]), {1, 678} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 679} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         680} -> (MeshCellStyle -> GrayLevel[0]), {1, 681} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 682} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         683} -> (MeshCellStyle -> GrayLevel[0]), {1, 684} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 685} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         686} -> (MeshCellStyle -> GrayLevel[0]), {1, 687} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 688} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         689} -> (MeshCellStyle -> GrayLevel[0]), {1, 690} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 691} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         692} -> (MeshCellStyle -> GrayLevel[0]), {1, 693} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 694} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         695} -> (MeshCellStyle -> GrayLevel[0]), {1, 696} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 697} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         698} -> (MeshCellStyle -> GrayLevel[0]), {1, 699} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 700} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         701} -> (MeshCellStyle -> GrayLevel[0]), {1, 702} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 703} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         704} -> (MeshCellStyle -> GrayLevel[0]), {1, 705} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 706} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         707} -> (MeshCellStyle -> GrayLevel[0]), {1, 708} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 709} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         710} -> (MeshCellStyle -> GrayLevel[0]), {1, 711} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 712} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         713} -> (MeshCellStyle -> GrayLevel[0]), {1, 714} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 715} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         716} -> (MeshCellStyle -> GrayLevel[0]), {1, 717} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 718} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         719} -> (MeshCellStyle -> GrayLevel[0]), {1, 720} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 721} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         722} -> (MeshCellStyle -> GrayLevel[0]), {1, 723} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 724} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         725} -> (MeshCellStyle -> GrayLevel[0]), {1, 726} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 727} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         728} -> (MeshCellStyle -> GrayLevel[0]), {1, 729} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 730} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         731} -> (MeshCellStyle -> GrayLevel[0]), {1, 732} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 733} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         734} -> (MeshCellStyle -> GrayLevel[0]), {1, 735} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 736} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         737} -> (MeshCellStyle -> GrayLevel[0]), {1, 738} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 739} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         740} -> (MeshCellStyle -> GrayLevel[0]), {1, 741} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 742} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         743} -> (MeshCellStyle -> GrayLevel[0]), {1, 744} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 745} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         746} -> (MeshCellStyle -> GrayLevel[0]), {1, 747} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 748} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         749} -> (MeshCellStyle -> GrayLevel[0]), {1, 750} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 751} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         752} -> (MeshCellStyle -> GrayLevel[0]), {1, 753} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 754} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         755} -> (MeshCellStyle -> GrayLevel[0]), {1, 756} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 757} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         758} -> (MeshCellStyle -> GrayLevel[0]), {1, 759} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 760} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         761} -> (MeshCellStyle -> GrayLevel[0]), {1, 762} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 763} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         764} -> (MeshCellStyle -> GrayLevel[0]), {1, 765} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 766} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         767} -> (MeshCellStyle -> GrayLevel[0]), {1, 768} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 769} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         770} -> (MeshCellStyle -> GrayLevel[0]), {1, 771} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 772} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         773} -> (MeshCellStyle -> GrayLevel[0]), {1, 774} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 775} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         776} -> (MeshCellStyle -> GrayLevel[0]), {1, 777} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 778} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         779} -> (MeshCellStyle -> GrayLevel[0]), {1, 780} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 781} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         782} -> (MeshCellStyle -> GrayLevel[0]), {1, 783} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 784} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         785} -> (MeshCellStyle -> GrayLevel[0]), {1, 786} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 787} -> (MeshCellStyle -> GrayLevel[0]), {1, 
+         788} -> (MeshCellStyle -> GrayLevel[0]), {1, 789} -> (MeshCellStyle -> 
+         GrayLevel[0]), {1, 790} -> (MeshCellStyle -> GrayLevel[0]), {
+         1, Default} -> (MeshCellStyle -> Automatic)}, 
+      Method -> {
+       "EliminateUnusedCoordinates" -> True, "DeleteDuplicateCoordinates" -> 
+        Automatic, "DeleteDuplicateCells" -> Automatic, "VertexAlias" -> 
+        Identity, "CheckOrientation" -> Automatic, "CoplanarityTolerance" -> 
+        Automatic, "CheckIntersections" -> Automatic, "BoundaryNesting" -> 
+        Automatic, "SeparateBoundaries" -> Automatic, "TJunction" -> 
+        Automatic, "PropagateMarkers" -> True, "ZeroTest" -> Automatic, 
+        "Hash" -> 7304405285027323606}, {
+      PlotRange -> All, PlotTheme -> "Lines"}]]}, 
+    TagBox[GraphicsComplexBox[CompressedData["
+1:eJx1101u2zAQhmHZbuL8NKkQBIFgGIbai9Rn6BEKZN2r+gheaqkFF1pwURTI
+F0BPwdkIr7+ZITmkRvT3339+vW+7rvux6bp/z4ad19jDAzzCsfnnOl+4hwd4
+hP+bF88eHuARjt3xe7iHB3iEY86jbzwHeISz7ivrD1uX2d/Pa/+7BsfC7k/8
+XxscC7uf8T82OBZ2/13vwrqXxrrzXFiv7D4trE/2fC2sR/b8Od8v8evWPDfm
+Gf0IDw3d82r+r4wfTt0vzDd85bk0eCJ+Yt0X1nlBvzJPeSI+/EK+Vzh68r01
+eCI+fCDfEY6efKcGT8RP1LFQv9Koc+tZia/Ut1C/gr5Qb7kSX6lvoX4FfaHe
+ciW+Ut9C/Qr6Qr3lSnylvtuP32f42qiTfEt8OPNLviMcPflODU6+I5z5PTD+
+A7rvv+93rNV39Z/w++Tz2j8c3b5o37dPtvqW/SP5e/QePfGOF855jb012P6S
+/AP6gJ54xwvnPMRODbb/JP+IPqIn3vG8ZxT2y35U8a/sd4Er+by3hLM/9qfK
+fha4sr9+R8Opv/2psl8Fruxf8r3Aqa/9qbIfBa7sT/Id4Nj2g1PPcOqZ/hD7
+5PPaPxzde5P3yNQj8Sc4802+AR7xH9GTL+Md4Fj6W+Zrv3vGP5z3YIf/Dj3z
+K9QzfMP44cQ/kv8RPfPNe7rBf4Oe+SzopTFf42/hzPcKV/JV6rPA0ffoe3S/
+V9En9Ak9870n/h7d8xC9oJdG/DP8xHjhmfW37rmy/tmfubGfe3T5Bn/7pBz/
+xHse/a7K+qd+Mxzz/HkPsJ95nvxuWJ8d7L0j9YrJvq/h5NnAO9jz7b3a/3PJ
+7/8g/9fErGfqX6l3YX+S/xvxcs5zxn86/wWafGyW
+      "], 
+      {Hue[0.6, 0.3, 0.95], EdgeForm[Hue[0.6, 0.3, 0.75]], 
+       LineBox[CompressedData["
+1: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
+yMHtWau1zHX+acx/MEHWWQ==
+        "]], 
+       {GrayLevel[0], LineBox[CompressedData["
+1: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
+yMHtWau1zHX+acx/MEHWWQ==
+         "]]}}],
+     MouseAppearanceTag["LinkHand"]],
+    AllowKernelInitialization->False],
+   "MeshGraphics",
+   AutoDelete->True,
+   Editable->False,
+   Selectable->False],
+  DefaultBaseStyle->{
+   "MeshGraphics", FrontEnd`GraphicsHighlightColor -> Hue[0.1, 1, 0.7]},
+  ImageSize->{559., Automatic},
+  PlotRange->All]], "Output",
+ CellChangeTimes->{
+  3.7176922311986294`*^9},ExpressionUUID->"91a7d1c1-dc5f-491a-80df-\
+2d4abe38fe26"]
+}, Open  ]]
+},
+WindowSize->{1366, 685},
+WindowMargins->{{-8, Automatic}, {Automatic, -8}},
+FrontEndVersion->"11.1 for Microsoft Windows (64-bit) (April 18, 2017)",
+StyleDefinitions->"Default.nb"
+]
+(* End of Notebook Content *)
+
+(* Internal cache information *)
+(*CellTagsOutline
+CellTagsIndex->{}
+*)
+(*CellTagsIndex
+CellTagsIndex->{}
+*)
+(*NotebookFileOutline
+Notebook[{
+Cell[558, 20, 368, 8, 30, "Input", "ExpressionUUID" -> \
+"161c39a2-df6c-4cfd-bc83-c2e6a8a76305"],
+Cell[929, 30, 421, 9, 50, "Input", "ExpressionUUID" -> \
+"83fbd57d-9cc5-4783-a426-e5f576a0b86d"],
+Cell[CellGroupData[{
+Cell[1375, 43, 479, 10, 50, "Input", "ExpressionUUID" -> \
+"066f25f1-6a7d-4654-ac49-b9a138645348"],
+Cell[1857, 55, 32374, 750, 301, "Output", "ExpressionUUID" -> \
+"a5a1101c-2db2-474b-8827-134e4a21c96f"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[34268, 810, 451, 11, 50, "Input", "ExpressionUUID" -> \
+"6e81953f-7bb0-4bac-9c9e-23f6894e5663"],
+Cell[34722, 823, 36699, 517, 303, "Output", "ExpressionUUID" -> \
+"fb4ef356-ef3d-4be7-ad79-9e37c275810f"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[71458, 1345, 399, 10, 50, "Input", "ExpressionUUID" -> \
+"32360552-023b-4a40-bb01-ca337a4b1154"],
+Cell[71860, 1357, 52356, 733, 305, "Output", "ExpressionUUID" -> \
+"91a7d1c1-dc5f-491a-80df-2d4abe38fe26"]
+}, Open  ]]
+}
+]
+*)
+
