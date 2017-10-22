@@ -1,29 +1,19 @@
 #pragma once
 #include "SingletonLogger.hpp"
 #include "Mapping.hpp"
-#include "Element.hpp"
 
-// D := dimension of mesh (nodes) 
-// N := numb of nodes in an element
-
-template <LocalIndex D, LocalIndex N>
+template <LocalIndex NODE_DIM>
 class AbstractQuadratureRule {
 protected:
-	Element<D, N> _domainOfIntegration;
-	std::vector<std::vector<Node<D>>> _nodes;
-	std::vector<std::vector<double>>  _weights;
+	std::vector<std::vector<Node<NODE_DIM>>> const _nodes;
+	std::vector<std::vector<double>> const _weights;
 public:
 	AbstractQuadratureRule(
-		Element<D, N> const & d, 
-		std::vector<std::vector<Node<D>>> const & n, 
-		std::vector<std::vector<double>>  const & w
-	) : _domainOfIntegration(d), _nodes(n), _weights(w)
+		std::vector<std::vector<Node<NODE_DIM>>> const & nodes,
+		std::vector<std::vector<double>>  const & weights
+	) : _nodes(nodes), _weights(weights)
 	{}
 	virtual ~AbstractQuadratureRule() {}
-	// usually we invent quadrature rule for so-called master elements
-	auto domainOfIntegration() const {
-		return _domainOfIntegration;
-	}
 	// max degree of polynomials we can integrate exactly
 	auto maxDeg() const {
 		return _nodes.size() - 1;
@@ -31,7 +21,7 @@ public:
 	auto getQuadratureNodes(LocalIndex deg) const {
 		return _nodes[checkDeg(deg)];
 	}
-	double computeQuadrature(ScalarField<D> const & f, LocalIndex deg = 1) const {
+	double computeQuadrature(ScalarField<NODE_DIM> const & f, LocalIndex deg = 1) const {
 		deg = checkDeg(deg);
 		std::vector<double> images(_nodes[deg].size());
 		std::transform(_nodes[deg].begin(), _nodes[deg].end(), images.begin(), [&](auto const & p) {

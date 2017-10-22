@@ -1,14 +1,12 @@
 #pragma once
 #include "AbstractQuadratureRule.hpp"
 
+// quad rule for master triangle spanned by {0., 0.}, {1., 0.}, {0., 1.}
 class MasterTriangleQuadratureRule 
-	: public AbstractQuadratureRule<2, 3> {
+	: public AbstractQuadratureRule<2> {
 	// singleton
 	MasterTriangleQuadratureRule() : AbstractQuadratureRule {
-		// (1) element (master triangle)
-		{ { {0., 0.}, {1., 0.}, {0., 1.} } },
-		// (2) nodes (n := polynomial order)
-		{
+		{ // (1) nodes (n := polynomial order)
 			{ // n = 0
 				{ 1/3., 1/3. }
 			},
@@ -58,7 +56,7 @@ class MasterTriangleQuadratureRule
 				{ .05314504984482, .63650249912140 }
 			}
 		},
-		{ // weights
+		{ // (2) weights
 			// n = 0
 			{ 1/2. },
 			// n = 1

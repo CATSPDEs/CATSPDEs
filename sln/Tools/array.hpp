@@ -100,6 +100,18 @@ inline std::array<T, 3> crossProduct(std::array<T, 2> const & u, std::array<T, 2
 	return { 0., 0., u[0] * v[1] - u[1] * v[0] };
 }
 
+// set all elems to zero (so we can treat array<T, 1> and double the same way, see below)
+template <typename T, Index N>
+inline void zeroOut(std::array<T, N>& u) {
+	u.fill(0.);
+}
+
+// ″
+template <typename T, Index N>
+inline void setX(std::array<T, N>& u, T const & val) {
+	u[0] = val;
+}
+
 // hash for arrays
 // so one can use them as a key in maps or sets
 namespace std {
@@ -127,4 +139,12 @@ using SmartArray = typename ArrayTypedef<T, D>::type;
 
 inline double norm(double u) {
 	return fabs(u);
+}
+
+inline void zeroOut(double& u) {
+	u = 0.;
+}
+
+inline void setX(double& u, double val) {
+	u = val;
 }

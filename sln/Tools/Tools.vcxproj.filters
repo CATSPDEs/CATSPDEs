@@ -13,9 +13,6 @@
     <Filter Include="Utilities">
       <UniqueIdentifier>{817dbbc9-4738-4524-8c28-f43a2b3bf409}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Meshes">
-      <UniqueIdentifier>{6ed50528-e528-4884-abd6-31c918082dc4}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Common">
       <UniqueIdentifier>{cca77161-f3a4-44a8-8c8d-13e3de612ab0}</UniqueIdentifier>
     </Filter>
@@ -55,12 +52,6 @@
     <Filter Include="Solvers\Nonlinear &amp; SLAE Solvers">
       <UniqueIdentifier>{18568653-13c2-4725-b4ee-34c082a5eccb}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Meshes\2D">
-      <UniqueIdentifier>{c17f61b4-efe3-4565-b502-81b20402b00b}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Meshes\1D">
-      <UniqueIdentifier>{75bb3f1f-d88c-4d81-8d87-24bbc4390990}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Matrices\Implementations\Dense">
       <UniqueIdentifier>{bb74ab8c-8d6e-4d1c-a2a0-c46e84f16416}</UniqueIdentifier>
     </Filter>
@@ -69,6 +60,21 @@
     </Filter>
     <Filter Include="Finite Elements\Hermite Family">
       <UniqueIdentifier>{c10bbad3-8466-4fea-837b-25c91100370c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Geometry">
+      <UniqueIdentifier>{f4975987-76b0-46fd-9784-82d542e36ca7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Geometry\Meshes">
+      <UniqueIdentifier>{6ed50528-e528-4884-abd6-31c918082dc4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Geometry\Meshes\2D">
+      <UniqueIdentifier>{c17f61b4-efe3-4565-b502-81b20402b00b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Geometry\Meshes\1D">
+      <UniqueIdentifier>{75bb3f1f-d88c-4d81-8d87-24bbc4390990}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Geometry\Elements">
+      <UniqueIdentifier>{b1ec9c0c-9deb-4f0d-b5ad-a3eb48ef90d7}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -82,7 +88,7 @@
       <Filter>Utilities</Filter>
     </ClInclude>
     <ClInclude Include="CurvilinearEdge.hpp">
-      <Filter>Meshes\2D</Filter>
+      <Filter>Geometry\Meshes\2D</Filter>
     </ClInclude>
     <ClInclude Include="DiffusionReactionEqn.hpp">
       <Filter>PDEs</Filter>
@@ -100,7 +106,7 @@
       <Filter>PDEs</Filter>
     </ClInclude>
     <ClInclude Include="Triangulation.hpp">
-      <Filter>Meshes\2D</Filter>
+      <Filter>Geometry\Meshes\2D</Filter>
     </ClInclude>
     <ClInclude Include="constants.hpp">
       <Filter>Common</Filter>
@@ -142,7 +148,7 @@
       <Filter>Matrices</Filter>
     </ClInclude>
     <ClInclude Include="AbstractMesh.hpp">
-      <Filter>Meshes</Filter>
+      <Filter>Geometry\Meshes</Filter>
     </ClInclude>
     <ClInclude Include="Index.hpp">
       <Filter>Common</Filter>
@@ -223,7 +229,7 @@
       <Filter>Finite Elements</Filter>
     </ClInclude>
     <ClInclude Include="SegmentMesh.hpp">
-      <Filter>Meshes\1D</Filter>
+      <Filter>Geometry\Meshes\1D</Filter>
     </ClInclude>
     <ClInclude Include="Segment_P1_Lagrange.hpp">
       <Filter>Finite Elements\Lagrange Family</Filter>
@@ -258,6 +264,21 @@
     <ClInclude Include="Segment_P3_Hermite.hpp">
       <Filter>Finite Elements\Hermite Family</Filter>
     </ClInclude>
+    <ClInclude Include="AbstractElement.hpp">
+      <Filter>Geometry\Elements</Filter>
+    </ClInclude>
+    <ClInclude Include="SegmentElement.hpp">
+      <Filter>Geometry\Elements</Filter>
+    </ClInclude>
+    <ClInclude Include="TriangleElement.hpp">
+      <Filter>Geometry\Elements</Filter>
+    </ClInclude>
+    <ClInclude Include="QuadrilateralElement.hpp">
+      <Filter>Geometry\Elements</Filter>
+    </ClInclude>
+    <ClInclude Include="MasterNodeQuadratureRule.hpp">
+      <Filter>Quadrature Rules</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="SingletonLogger.cpp">
@@ -273,7 +294,7 @@
       <Filter>Matrices\Implementations\To Refactor</Filter>
     </ClCompile>
     <ClCompile Include="Triangulation.cpp">
-      <Filter>Meshes\2D</Filter>
+      <Filter>Geometry\Meshes\2D</Filter>
     </ClCompile>
     <ClCompile Include="FEM_t.cpp">
       <Filter>Solvers\Temp</Filter>
@@ -288,7 +309,7 @@
       <Filter>Solvers\Finite Element Methods</Filter>
     </ClCompile>
     <ClCompile Include="SegmentMesh.cpp">
-      <Filter>Meshes\1D</Filter>
+      <Filter>Geometry\Meshes\1D</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

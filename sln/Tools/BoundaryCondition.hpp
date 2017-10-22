@@ -17,8 +17,16 @@ public:
 	bool    shouldBeEnforcedAt(Node<N> const & p) const { return _p(p); }
 };
 
-	template <LocalIndex M>
-	using BoundaryCondition2D = BoundaryCondition<2, M>;
+template <LocalIndex N>
+using ScalarBoundaryCondition = BoundaryCondition<N, 1>;
 
-		using ScalarBoundaryCondition2D = BoundaryCondition2D<1>;
-		using VectorBoundaryCondition2D = BoundaryCondition2D<2>;
+using ScalarBoundaryCondition1D = ScalarBoundaryCondition<1>;
+using ScalarBoundaryCondition2D = ScalarBoundaryCondition<2>;
+using ScalarBoundaryCondition3D = ScalarBoundaryCondition<3>;
+
+template <LocalIndex N>
+using VectorBoundaryCondition = BoundaryCondition<N, N>;
+
+using VectorBoundaryCondition1D = VectorBoundaryCondition<1>;
+using VectorBoundaryCondition2D = VectorBoundaryCondition<2>;
+using VectorBoundaryCondition3D = VectorBoundaryCondition<3>;

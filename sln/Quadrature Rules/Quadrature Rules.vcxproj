@@ -19,8 +19,8 @@
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{2CFED6A2-985D-436E-9E3F-D14E7BC838C6}</ProjectGuid>
-    <RootNamespace>Tools</RootNamespace>
+    <ProjectGuid>{86BCFF97-FD5F-4BD0-B057-715617E58DEF}</ProjectGuid>
+    <RootNamespace>QuadratureRules</RootNamespace>
     <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
@@ -84,10 +84,11 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>C:\Program Files\boost\boost_1_62_0</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\Tools;C:\Program Files\boost\boost_1_62_0</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
+      <SubSystem>Console</SubSystem>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -111,94 +112,18 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>C:\Program Files\boost\boost_1_62_0</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\Tools;C:\Program Files\boost\boost_1_62_0</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
+      <SubSystem>Console</SubSystem>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="AbstractElement.hpp" />
-    <ClInclude Include="AbstractFEMatrix.hpp" />
-    <ClInclude Include="AbstractFiniteElement.hpp" />
-    <ClInclude Include="AbstractMatrix.hpp" />
-    <ClInclude Include="AbstractPreconditioner.hpp" />
-    <ClInclude Include="AbstractQuadratureRule.hpp" />
-    <ClInclude Include="array.hpp" />
-    <ClInclude Include="constants.hpp" />
-    <ClInclude Include="CSCMatrix.hpp" />
-    <ClInclude Include="CSlCMatrix.hpp" />
-    <ClInclude Include="CSlRMatrix.hpp" />
-    <ClInclude Include="CurvilinearEdge.hpp" />
-    <ClInclude Include="DenseDecompositionStrategy.hpp" />
-    <ClInclude Include="DenseMatrix.hpp" />
-    <ClInclude Include="DivGradFEM.hpp" />
-    <ClInclude Include="Element.hpp" />
-    <ClInclude Include="FEInterpolant.hpp" />
-    <ClInclude Include="FEM_t.hpp" />
-    <ClInclude Include="AbstractHarwellBoeingMatrix.hpp" />
-    <ClInclude Include="HarwellBoeingHeader.hpp" />
-    <ClInclude Include="HyperbolicPDE.hpp" />
-    <ClInclude Include="AbstractMultipliableMatrix.hpp" />
-    <ClInclude Include="Index.hpp" />
-    <ClInclude Include="InitialConditions.hpp" />
-    <ClInclude Include="AbstractTransposeMultipliableMatrix.hpp" />
-    <ClInclude Include="L2Projection.hpp" />
-    <ClInclude Include="Mapping.hpp" />
-    <ClInclude Include="MasterNodeQuadratureRule.hpp" />
-    <ClInclude Include="MasterSegmentQuadratureRule.hpp" />
-    <ClInclude Include="Multigrid.hpp" />
-    <ClInclude Include="NonlinearSolvers.hpp" />
-    <ClInclude Include="QuadrilateralElement.hpp" />
-    <ClInclude Include="SegmentElement.hpp" />
-    <ClInclude Include="SegmentMesh.hpp" />
-    <ClInclude Include="Segment_P1_Lagrange.hpp" />
-    <ClInclude Include="Segment_P3_Hermite.hpp" />
-    <ClInclude Include="SmartMapping.hpp" />
-    <ClInclude Include="MasterTriangleQuadratureRule.hpp" />
-    <ClInclude Include="MixedFEM.hpp" />
-    <ClInclude Include="OseenProblem.hpp" />
-    <ClInclude Include="ProjectionSolvers.hpp" />
-    <ClInclude Include="Node.hpp" />
-    <ClInclude Include="DiffusionReactionEqn.hpp" />
-    <ClInclude Include="AbstractMesh.hpp" />
-    <ClInclude Include="AbstractSparseMatrix.hpp" />
-    <ClInclude Include="BandMatrix.hpp" />
-    <ClInclude Include="BoundaryCondition.hpp" />
-    <ClInclude Include="CSRMatrix.hpp" />
-    <ClInclude Include="AbstractMapping.hpp" />
-    <ClInclude Include="Parameters.hpp" />
-    <ClInclude Include="Predicate.hpp" />
-    <ClInclude Include="rlutil.h" />
-    <ClInclude Include="SingletonLogger.hpp" />
-    <ClInclude Include="BlockMatrix.hpp" />
-    <ClInclude Include="SymmetricBlockMatrix.hpp" />
-    <ClInclude Include="SymmetricMatrix.hpp" />
-    <ClInclude Include="SymmetricCSlCMatrix.hpp" />
-    <ClInclude Include="SymmetricCSlRMatrix.hpp" />
-    <ClInclude Include="TimeFrames.hpp" />
-    <ClInclude Include="TriangleElement.hpp" />
-    <ClInclude Include="Triangle_P0_Lagrange.hpp" />
-    <ClInclude Include="Triangle_P1_CrouzeixRaviart.hpp" />
-    <ClInclude Include="Triangle_P1_Lagrange.hpp" />
-    <ClInclude Include="Triangle_P2_Lagrange.hpp" />
-    <ClInclude Include="Triangle_Pt3_LagrangeBubble.hpp" />
-    <ClInclude Include="Triangulation.hpp" />
-    <ClInclude Include="vector.hpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClCompile Include="BandMatrix.cpp" />
-    <ClCompile Include="CSlRMatrix.cpp" />
-    <ClCompile Include="DivGradFEM.cpp" />
-    <ClCompile Include="FEM_t.cpp" />
-    <ClCompile Include="L2Projection.cpp" />
-    <ClCompile Include="MixedFEM.cpp" />
-    <ClCompile Include="SegmentMesh.cpp" />
-    <ClCompile Include="SingletonLogger.cpp" />
-    <ClCompile Include="SymmetricCSlRMatrix.cpp" />
-    <ClCompile Include="Triangulation.cpp" />
+    <ClCompile Include="..\Tools\SingletonLogger.cpp" />
+    <ClCompile Include="user.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

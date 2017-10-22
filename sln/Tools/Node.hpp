@@ -7,5 +7,6 @@
 template <LocalIndex D> 
 using Node = SmartArray<double, D>;
 
+	using Void   = Node<0>;
 	using Node2D = Node<2>;
 	using Node3D = Node<3>;
