@@ -86,12 +86,7 @@ int main() {
 			double mu_roof_iron = 1000.;
 			logger.inp("set iron permeability mu_roof_iron", mu_roof_iron);
 			// vacuum permeability
-			
-			// right value:
-			// double const mu_0 = 4. * PI * 1e-7; 
-			// for testing:
-			double const mu_0 = 1.;
-			
+			double const mu_0 = 4. * PI * 1e-7; 
 			ScalarField2D 
 				diffusion = [&](Node2D const & p) { // linear case
 					double mu_roof = magnet(p) ? mu_roof_iron : 1.;
@@ -123,11 +118,6 @@ int main() {
 			export(forceInterp.DOFs(), oPath + "force.dat");
 			Omega.export(oPath + "mesh_0.ntnr", { { "format", "NTNR" } });
 		logger.end();
-		//logger.beg("refine mesh");
-		//	Omega.refine(numbOfMeshLevels);
-		//logger.end();
-		
-		
 		logger.beg("set solver data");
 			// method of solving SLAE
 			auto method = logger.opt("choose solving technique", {
@@ -182,7 +172,7 @@ int main() {
 							},
 							TransferType::canonical
 					};
-					auto smoother = [&](SymmetricCSlCMatrix<double>& A, vector<double> const & b, vector<double> const & x_0) {
+					auto smoother = [&](SymmetricCSlCMatrix<double>& A, vector<double> const & b, vector<double> const & x_0, Index) {
 						return Smoothers::SSOR(A, b, x_0, 1., nu, 0., StoppingCriterion::absolute, 0);
 					};
 				logger.end();
@@ -191,7 +181,7 @@ int main() {
 					auto& b = MG.b();
 					x_linear = shuffle(A.getOrder());
 					// initial residual
-					double r_0 = norm(b - A * x_linear), r = r_0, r_new;
+					double r_0 = norm(b - A * x_linear), r = r_0, r_new = r_0;
 					logInitialResidual(r_0, maxNumbOfIterations);
 					// MG as a stand-alone iteration
 					Index i;
@@ -218,7 +208,7 @@ int main() {
 							},
 							TransferType::canonical
 					};
-					auto smoother = [&](SymmetricCSlCMatrix<double>& A, vector<double> const & b, vector<double> const & x_0) {
+					auto smoother = [&](SymmetricCSlCMatrix<double>& A, vector<double> const & b, vector<double> const & x_0, Index) {
 						return Smoothers::SSOR(A, b, x_0, 1., nu, 0., StoppingCriterion::absolute, 0);
 					};
 					Index n = MG.A().getOrder();
@@ -298,118 +288,96 @@ int main() {
 		logger.end();
 		/* */
 		if (logger.yes("solve non-linear problem")) {
-			//logger.beg("set non-linear solver data");
-			//	Index i_log_picard;
-			//	logger.inp("log every nth Picard iteration, n", i_log_picard);
-			//	double omega;
-			//	logger.inp("relaxation for Picard", omega);
-			//logger.end();
-			//logger.beg("build interpolant for mu_roof_iron");
-			//	SegmentMesh BnValues;
-			//	BnValues.import(iPath + "Bn_values.dat");
-			//	double Bn_min = BnValues.getNodes().front(), Bn_max = BnValues.getNodes().back();
-			//	vector<double> muValues(BnValues.numbOfNodes());
-			//	import(muValues, iPath + "mu_values.dat");
-			//	SegmentFEInterpolant mu_roof_iron_interp { muValues, Segment_P1_Lagrange::instance(), BnValues };
-			//	// relative permeability of iron as a function of ||B||
-			//	auto mu_roof_iron = [&](double Bn) {
-			//		// (1) extrapolation
-			//		if (Bn < Bn_min) 
-			//			return muValues.front();
-			//		if (Bn > Bn_max) 
-			//			return Bn * muValues.back() / (Bn_max + Bn * muValues.back() - Bn_max * muValues.back());
-			//		// (2) healthy case
-			//		return mu_roof_iron_interp(Bn);
-			//	};
-			//logger.end();
-			//logger.beg("build preconditioner and initial guess");
-			//	Preconditioner N;
-			//	std::shared_ptr<decltype(MG)> MGN;
-			//	vector<double> x_initial;
-			//	if (true/*J_z <= 10e+5*/) { // linear case is a good approximation
-			//		logger.log("linear initial approximation");
-			//		N = P;
-			//		x_initial = x_linear;
-			//	}
-			//	else if (J_z <= 10e+7) {
-			//		Index activeElementIndex;
-			//		TriangularScalarFEInterpolant x_linear_interp11 { x_linear, FE, Omega };
-			//		PoissonEqn.diffusionTerm() = [&](Node2D const & p) {
-			//			double mu_roof = magnet(p)
-			//				? mu_roof_iron(norm(x_linear_interp11.grad(p, activeElementIndex)))
-			//				: 1.;
-			//			return 1. / mu_roof;
-			//		};
-			//		MGN = std::make_shared<decltype(MG)>(decltype(MG) {
-			//			FE, OmegaInitial, numbOfMeshLevels,
-			//			[&](Triangulation const & Omega) {
-			//				return assembleSystem(PoissonEqn, Omega, RobinBC, DirichletBC, FE);
-			//			},
-			//			TransferType::canonical
-			//		});
-			//		N = [&](vector<double> const & x) {
-			//			vector<double> y(n);
-			//			auto cond = logger.mute;
-			//			logger.mute = true;
-			//			y = (*MGN)(numbOfMeshLevels, x, y, smoother, 2);
-			//			logger.mute = cond;
-			//			return y;
-			//		};
-			//		x_initial = Krylov::PCG(N, MGN->A(), MGN->b(), boost::none, 0, 1e-12, StoppingCriterion::relative, i_log);
-			//	}
-			//	else {
-			//		
-			//	}
-			//logger.end();
-			//logger.beg("solve non-linear problem");
-			//	auto phi = [&](vector<double> const & x_old, double& r_norm) {
-
-			//		logger.mute = true;
-
-			//		Index activeElementIndex;
-			//		TriangularScalarFEInterpolant x_old_interp { x_old, FE, Omega };
-			//		PoissonEqn.diffusionTerm() = [&](Node2D const & p) {
-			//			double mu_roof = magnet(p) 
-			//				? mu_roof_iron(norm(x_old_interp.grad(p, activeElementIndex)))
-			//				: 1.;
-			//			return 1. / mu_roof;
-			//		};
-			//		logger.beg("assemble system");
-			//			auto system = assembleSystem(PoissonEqn, Omega, RobinBC, DirichletBC, FE, activeElementIndex);
-			//			auto& A = get<0>(system);
-			//			auto& b = get<1>(system);
-			//		logger.end();
-			//		logger.beg("compute new approximation");
-			//			//auto x_new = Krylov::PCG(N, A, b, x_old, 50, 10e-12, StoppingCriterion::relative, i_log);
-			//			auto x_new = Krylov::CG(A, b, x_old, 0, 1e-12, StoppingCriterion::relative, i_log);
-			//		logger.end();
-
-			//		logger.mute = false;
-
-			//		r_norm = norm(b - A * x_old);
-			//		return x_new;
-			//	};
-			//	auto x_nonlinear = PicardIteration(phi, x_initial, omega, 100, 1e-7);
-			//logger.end();
-			//logger.beg("compute interpolant for magnetic field");
-			//	TriangularScalarFEInterpolant x_nonlinear_interp { x_nonlinear, FE, Omega };
-			//	auto B_nonlinear = [&](Node2D const & p) -> Node2D {
-			//		return rotate * x_nonlinear_interp.grad(p, activeElementIndex);
-			//	};
-			//	auto Bx_nonlinear = [&](Node2D const & p) { return B_nonlinear(p)[0]; };
-			//	auto By_nonlinear = [&](Node2D const & p) { return B_nonlinear(p)[1]; };
-			//	auto Bn_nonlinear = [&](Node2D const & p) { return norm(B_nonlinear(p)); };
-			//	TriangularScalarFEInterpolant 
-			//		Bx_nonlinear_interp { Bx_nonlinear, FE, Omega, activeElementIndex },
-			//		By_nonlinear_interp { By_nonlinear, FE, Omega, activeElementIndex },
-			//		Bn_nonlinear_interp { Bn_nonlinear, FE, Omega, activeElementIndex };
-			//logger.end();
-			//logger.beg("export soln vector");
-			//	export(x_nonlinear, oPath + "x_nonlinear.dat");
-			//	export(Bx_nonlinear_interp.DOFs(), oPath + "Bx_nonlinear.dat");
-			//	export(By_nonlinear_interp.DOFs(), oPath + "By_nonlinear.dat");
-			//	export(Bn_nonlinear_interp.DOFs(), oPath + "Bn_nonlinear.dat");
-			//logger.end();
+			logger.beg("set non-linear solver data");
+				auto nmethod = logger.opt("non-linear method", {
+					"Fixed Point",
+					"Anderson Mixing"
+				});
+			logger.end();
+			logger.beg("build interpolant for mu_roof_iron");
+				SegmentMesh BnValues;
+				BnValues.import(iPath + "Bn_values.dat");
+				double Bn_min = BnValues.getNodes().front(), Bn_max = BnValues.getNodes().back();
+				vector<double> muValues(BnValues.numbOfNodes());
+				import(muValues, iPath + "mu_values.dat");
+				SegmentFEInterpolant mu_roof_iron_interp { muValues, Segment_P1_Lagrange::instance(), BnValues };
+				// relative permeability of iron as a function of ||B||
+				auto mu_roof_iron = [&](double Bn) {
+					// (1) extrapolation
+					if (Bn < Bn_min) 
+						return muValues.front();
+					if (Bn > Bn_max) 
+						return Bn * muValues.back() / (Bn_max + Bn * muValues.back() - Bn_max * muValues.back());
+					// (2) healthy case
+					return mu_roof_iron_interp(Bn);
+				};
+			logger.end();
+			logger.beg("solve non-linear problem");
+				FixedPointData fp;
+				SymmetricCSlCMatrix<double> A;
+				vector<double> b;
+				// residual, f(x) := b - A(x).x
+				fp.f = [&](vector<double> const & x) {
+					logger.mute = true;
+					Index activeElementIndex;
+					TriangularScalarFEInterpolant x_interp { x, FE, Omega };
+					PoissonEqn.diffusionTerm() = [&](Node2D const & p) {
+						double mu_roof = magnet(p) 
+							? mu_roof_iron(norm(x_interp.grad(p, activeElementIndex)))
+							: 1.;
+						return 1. / mu_roof;
+					};
+					logger.beg("assemble system");
+						auto system = assembleSystem(PoissonEqn, Omega, RobinBC, DirichletBC, FE, activeElementIndex);
+						A = get<0>(system);
+						b = get<1>(system);
+					logger.end();
+					logger.mute = false;
+					return b - A * x;
+				};
+				// iteration operator, g(x) := [A(x)]^(-1) . b
+				fp.g = [&](vector<double> const & x) {
+					logger.mute = true;
+					logger.beg("build ILU(0)");
+						auto LDLT = A;
+						LDLT.decompose();
+						auto P = [&](vector<double> const & x) {
+							return LDLT.backSubst(LDLT.diagSubst(LDLT.forwSubst(x, 0.)), 0.);
+						};
+					logger.end();
+					logger.beg("compute new approximation");
+						auto g = Krylov::PCG(P, A, b, x, 0, 10e-10, StoppingCriterion::relative);
+					logger.end();
+					logger.mute = false;
+					return g;
+				};
+				// solve
+				decltype(x_linear) x_nonlinear;
+				if (nmethod == 0) x_nonlinear = FixedPointMethod(fp, x_linear, 100, 1e-8);
+				else {
+					auto x_initial = FixedPointMethod(fp, x_linear, 50, 1e-4);
+					x_nonlinear = AndersonMixingMethod(fp, x_initial, 10, 50, 1e-8);
+				}
+			logger.end();
+			logger.beg("compute interpolant for magnetic field");
+				TriangularScalarFEInterpolant x_nonlinear_interp { x_nonlinear, FE, Omega };
+				auto B_nonlinear = [&](Node2D const & p) -> Node2D {
+					return rotate * x_nonlinear_interp.grad(p, activeElementIndex);
+				};
+				auto Bx_nonlinear = [&](Node2D const & p) { return B_nonlinear(p)[0]; };
+				auto By_nonlinear = [&](Node2D const & p) { return B_nonlinear(p)[1]; };
+				auto Bn_nonlinear = [&](Node2D const & p) { return norm(B_nonlinear(p)); };
+				TriangularScalarFEInterpolant 
+					Bx_nonlinear_interp { Bx_nonlinear, FE, Omega, activeElementIndex },
+					By_nonlinear_interp { By_nonlinear, FE, Omega, activeElementIndex },
+					Bn_nonlinear_interp { Bn_nonlinear, FE, Omega, activeElementIndex };
+			logger.end();
+			logger.beg("export soln vector");
+				export(x_nonlinear, oPath + "x_nonlinear.dat");
+				export(Bx_nonlinear_interp.DOFs(), oPath + "Bx_nonlinear.dat");
+				export(By_nonlinear_interp.DOFs(), oPath + "By_nonlinear.dat");
+				export(Bn_nonlinear_interp.DOFs(), oPath + "Bn_nonlinear.dat");
+			logger.end();
 		}
 		/* */
 		logger.beg("export mesh");

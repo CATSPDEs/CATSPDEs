@@ -1,17 +1,18 @@
-1
-1
-100
-1
-1
-1
-1
+0
+1e+08
+1000
+2
+0
+0
+50
 10000
 1e-12
 1
 2
 0
 1
-n
+y
+1
 
 1. mesh type
 	(0) mesh_good.nt
@@ -41,3 +42,6 @@ n
 	(1) W-cycle
 13. numb of iterations for inner solver
 14. solve non-linear problem
+15. non-linear method
+	(0) Fixed Point
+	(1) Anderson Mixing
