@@ -1,5 +1,4 @@
 #pragma once
-#include <boost/optional/optional.hpp>
 #include <boost/circular_buffer.hpp>
 #include "DenseMatrix.hpp"
 #include "Mapping.hpp"
@@ -33,20 +32,10 @@ namespace NonlinearSolvers {
 			logger.log("stop Fixed Point method");
 			return x;
 		}
-		decltype(x) x_trial, g;
-		decltype(r_norm) r_norm_new, omega;
 		Index i;
 		for (i = 1; i <= n; ++i) {
-			omega = 1.;
-			r_norm_new = r_norm + 1.;
-			g = fp.g(x);
-			while (r_norm_new > r_norm && omega > 1e-10) {
-				x_trial = omega * g + (1. - omega) * x;
-				r_norm_new = norm(fp.f(x_trial));
-				omega /= 2.;
-			}
-			x = x_trial;
-			r_norm = r_norm_new;
+			x = fp.g(x);
+			r_norm = norm(fp.f(x));
 			logFixedPoint(r_norm, i, n);
 			if (r_norm < eps) break;
 		}
@@ -56,11 +45,11 @@ namespace NonlinearSolvers {
 	}
 	
 	inline std::vector<double> AndersonMixingMethod(
-		FixedPointData const & fp,
-		std::vector<double> const & x_0,
-		Index m = 0,
-		Index n = 100, // max numb of iters
-		double eps = 1e-7
+			FixedPointData const & fp,
+			std::vector<double> const & x_0,
+			Index m = 0,
+			Index n = 100, // max numb of iters
+			double eps = 1e-7
 		) {
 		auto& logger = SingletonLogger::instance();
 		if (m == 0) {

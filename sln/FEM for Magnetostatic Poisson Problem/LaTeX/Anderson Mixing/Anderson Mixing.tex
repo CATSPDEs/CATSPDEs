@@ -1,0 +1,194 @@
+\documentclass{beamer}
+\usetheme{Warsaw}
+\setbeamertemplate{footline}[frame number]
+\setbeamertemplate{headline}{}
+\setbeamercovered{transparent}
+\usepackage[english]{babel}
+\usepackage[utf8]{inputenc}
+
+\title[Anderson’s Mixing]{Anderson’s Mixing for Nonlinear Magnetostatic Poisson Problem}
+\author{Alexander Zhiliakov}
+\institute[UH] {
+	Department of Mathematics \\
+	University of Houston
+}
+\date[\today]{Math\,6376 Numerical Linear Algebra, \today}
+
+% sub figures / grids of pictures
+\usepackage{subcaption} 
+\graphicspath{{../img/}} % includegraphics path
+\newcommand{\includegraphicsw}[2][1.]{\includegraphics[width=#1\linewidth]{#2}}
+% tables
+\let\oldtabular\tabular
+\renewcommand{\tabular}[1][1.5]{\def\arraystretch{#1}\oldtabular}
+\usepackage{multirow}
+\usepackage{colortbl}
+% \coloneqq
+\usepackage{mathtools}
+% math commands for convinience
+\DeclareMathOperator{\argmin}{arg\,min}
+% bold vectors
+\newcommand{\vect}[1]{\boldsymbol{\mathbf{#1}}}
+
+\begin{document}
+
+	\begin{frame}
+		\titlepage
+	\end{frame}
+
+	\section{Problem Description}
+
+	\begin{frame}{Problem Description}
+		\begin{figure}
+			\centering
+			\includegraphicsw[.6]{magnet.png}
+			\caption{$z$ cross-section: iron magnet (gray), copper wires (red \& blue)}
+		\end{figure}
+		Problem: given current density $\vect J = (0, 0, J_z)$, $J_z \coloneqq \pm j \left[A\,m^{-2}\right]$ in wires, and magnetic permeability $\mu \left[N\,A^{-2}\right]$ of the magnet, find resulting magnetic field $\vect B \left[T\right]$
+	\end{frame}
+
+	\begin{frame}{Magnetic Permeability}
+		One may write $\mu = \mu_0\,\hat\mu$ with $\mu_0 \coloneqq 4\,\pi\,10^{-7} \left[N\,A^{-2}\right]$ permeability of vacuum. If we assume $\hat\mu_{\text{iron}} = 1000$, resulting problem will be \textbf{linear}. However, in reality $\hat\mu_{\text{iron}}$ depends on $\vect B$: 
+		\begin{figure}
+			\centering
+			\begin{subfigure}{.45\linewidth}
+				\centering
+				\includegraphicsw{interp.pdf}
+				\caption{$\hat\mu_{\text{iron}} = \hat{\mu}_{\text{iron}}(||\vect B||)$}
+			\end{subfigure}%
+			\hfill
+			\begin{subfigure}{.45\linewidth}
+				\centering
+				\includegraphicsw{extrap.pdf}
+				\caption{Extrapolated part}
+			\end{subfigure}
+		\end{figure}
+		In this case we end up with \textbf{nonlinear} problem.
+	\end{frame}
+
+	\begin{frame}{Mathematical Model}
+		\begin{enumerate}
+			\item Start with Maxwell’s equations $\nabla\times\frac{1}{\mu} \vect B = \vect J$, $\nabla\cdot\vect B = 0$
+			\item Introduce vector potential $\vect A$ via $\vect B = \nabla\times\vect A$ and rewrite (1) as $\nabla\times\frac{1}{\mu}\nabla\times\vect A = \vect J$
+			\item Assume that magnet is very long in $z$-direction and note that only $z$-component $J_z$ of $\vect J$ is nonzero and $J_z = J_z(x, y)$; then (2) simplifies to Poisson problem $-\nabla\cdot(\frac{1}{\mu}\nabla A_z) = J_z$  
+			\item Equip (3) with appropriate boundary conditions and discretize using e.g finite elements; then we have to solve
+			\begin{itemize}
+				\item Linear system $\vect S\,\vect x = \vect b$ $\left[\mu = \mu(x, y)\right]$ or
+				\item Nonlinear system $\vect S(\vect x)\,\vect x = \vect b$ $\left[\mu = \mu(||\vect B|| = ||\nabla A_z||)\right]$
+			\end{itemize} 
+		\end{enumerate}
+	\end{frame}
+
+	\begin{frame}{Linear Post–processing}
+		\begin{figure}
+			\centering
+			\caption{$A_z$}
+			\begin{subfigure}{.45\linewidth}
+				\centering
+				\includegraphicsw{l06.png}
+				\caption{$|J_z| = 10^6\,A\,m^{-2}$}
+			\end{subfigure}%
+			\hfill
+			\begin{subfigure}{.45\linewidth}
+				\centering
+				\includegraphicsw{l11.png}
+				\caption{$|J_z| = 10^{11}\,A\,m^{-2}$}
+			\end{subfigure}
+		\end{figure}
+		For linear problem ($\hat\mu_{\text{iron}} = 1000$) only scaling changes as we change current density
+	\end{frame}
+	
+	\section{Nonlinear Solvers}
+	
+	\begin{frame}{Nonlinear Solvers (1/2)}
+		We need to solve $f(x) = 0$ ($x = g(x)$):
+		\vfill
+		\begin{itemize}
+			\item \textbf{Fixed Point Method}: 
+			$$
+				x^{(k+1)} = g(x^{(k)})
+			$$
+			\item \textbf{Anderson’s Mixing}: 
+			$$
+				x^{(k+1)} = \sum_{i=0}^m \alpha_i\,g(x^{(k-i)})
+			$$
+			with $\vect\alpha = \argmin_{\sum_{i=0}^m \alpha_i = 1} || \sum_{i=0}^m \alpha_i\,f(x^{(k-i)}) ||_2$. 
+		\end{itemize}
+		\vfill
+		This unconstrained minimization problem may be written as a small least-squares problem. We solve it (e.g using Gaussian elimination or (better) Householder reflections) at each iteration  
+	\end{frame}
+
+	\begin{frame}{Nonlinear Solvers (2/2)}
+		In our case $\vect f(\vect x) \coloneqq \vect x - \vect S(\vect x)\,\vect x$. For the iteration function we may choose
+		\begin{itemize}
+			\item $\vect g(\vect x) \coloneqq \vect S^{-1}(\vect x)\,\vect b$ (Simplified Newton’s method / Picard’s method) or
+			\item $\vect g_\omega(\vect x) \coloneqq \omega\,\vect S^{-1}(\vect x)\,\vect b + (1 - \omega)\,\vect x$ with $0 < \omega \le 1$ (relaxed version).
+		\end{itemize}
+		In practice, especially for strong nonlinearities, $\vect g$ rarely satisfies contraction property. Thus we need to introduce a relaxation parameter~$\omega$ 
+	\end{frame}
+	
+	\section{Numerical Results}
+	
+	\begin{frame}{Fixed Point vs. Anderson’s Mixing}
+		\begin{table}\centering\small
+			\caption{Numb of iterations / execution time for different methods} 
+			\begin{tabular}[1.3]{ | c | c | c | >{\columncolor[gray]{0.9}}c | >{\columncolor[gray]{0.9}}c | >{\columncolor[gray]{0.9}}c | c | }
+				\hline
+				$|J_z|$ & $10^6$ & $10^7 $& $10^8$ & $10^9$ &$10^{10}$ & $10^{11}$ \\
+				\hline
+				\multirow{2}{*}{Picard} 
+					& 1 & 6 & --- & --- & 203 & 7 \\
+					& 0.4\,s & 1.3\,s & --- & --- & 25.2\,s & 1\,s \\
+				\hline
+				\multirow{2}{*}{Relaxed Picard} 
+					& 1 & 6 & 84 & 70 & 164 & 7 \\
+					& 0.5\,s & 2\,s & 71\,s & 52.4\,s & 54.3\,s & 2.6\,s \\
+				\hline
+				\multirow{2}{*}{Anderson’s Mixing} 
+					& 1+0 & 0+4 & 22+20 & 21+21 & 35+6 & 4+2 \\
+					& 0.7\,s & 1\,s & 20\,s & 14.5\,s & 11.4\,s & 1.9\,s \\
+				\hline
+			\end{tabular}
+		\end{table}
+		We used linear Lagrange elements with a mesh from the first slide (362 DOFs). We stopped when $\vect f(\vect x^{(k)}) < 10^{-8}$. For Anderson’s Mixing $k = i + j$ means $i$ \textit{relaxed} Picard’s iterations ($\vect f(\vect x^{(i)}) < 10^{-4}$) and $j$ \textit{accelerated} Picard’s iterations. We used numb of mixings $m = 10$.    
+	\end{frame}
+
+	\begin{frame}{Nonlinear Post–processing}
+	   	\begin{figure}
+	   		\centering
+	   		\begin{subfigure}{.42\linewidth}
+	   			\centering
+	   			\includegraphicsw{a_nonlinear_6.png}
+	   		\end{subfigure}%
+	   		\hfill
+	   		\begin{subfigure}{.42\linewidth}
+	   			\centering
+	   			\includegraphicsw{a_nonlinear_7.png}
+	   		\end{subfigure}%
+	   		\par\bigskip
+	   		\begin{subfigure}{.42\linewidth}
+	   			\centering
+	   			\includegraphicsw{a_nonlinear_8.png}
+	   		\end{subfigure}%
+	   		\hfill
+	   		\begin{subfigure}{.42\linewidth}
+	   			\centering
+	   			\includegraphicsw{a_nonlinear_9.png}
+	   		\end{subfigure}%
+	   		\par\bigskip
+	   		\begin{subfigure}{.42\linewidth}
+	   			\centering
+	   			\includegraphicsw{a_nonlinear_10.png}
+	   		\end{subfigure}%
+	   		\hfill
+	   		\begin{subfigure}{.42\linewidth}
+	   			\centering
+	   			\includegraphicsw{a_nonlinear_11.png}
+	   		\end{subfigure}
+	   		\caption{$|J_z| = 10^6, 10^7, \dots, 10^{11}\,A\,m^{-2}$}
+	   	\end{figure}
+	\end{frame}
+
+\end{document}
+
+

@@ -27,18 +27,6 @@ using namespace FEM::DivGrad;
 using namespace ProjectionSolvers;
 using namespace NonlinearSolvers;
 
-// shuffle initial guess 
-// in order to introduce all possible freq in the error, thus test MG
-#include <random>
-auto shuffle(Index n) {
-	std::random_device rd;
-	std::mt19937 gen(rd());
-	std::uniform_real_distribution<> dis(-1., 1.);
-	vector<double> x(n);
-	for (auto& el : x) el = dis(gen);
-	return x;
-}
-
 int main() {
 	string iPath("Mathematica/preprocessing/"), oPath("Mathematica/postprocessing/");
 	auto& logger = SingletonLogger::instance();
@@ -179,7 +167,6 @@ int main() {
 				logger.beg("solve w/ MG");
 					auto& A = MG.A();
 					auto& b = MG.b();
-					x_linear = shuffle(A.getOrder());
 					// initial residual
 					double r_0 = norm(b - A * x_linear), r = r_0, r_new = r_0;
 					logInitialResidual(r_0, maxNumbOfIterations);
@@ -225,7 +212,7 @@ int main() {
 				logger.beg("solve linear problem");
 					auto& A = MG.A();
 					auto& b = MG.b();
-					x_linear = Krylov::PCG(P, A, b, shuffle(A.getOrder()), maxNumbOfIterations, eps, stop, i_log);
+					x_linear = Krylov::PCG(P, A, b, boost::none, maxNumbOfIterations, eps, stop, i_log);
 				logger.end();
 			}
 			else if (method == 2) /* P_ILU(0) CG */ {
@@ -245,7 +232,7 @@ int main() {
 					};
 				logger.end();
 				logger.beg("solve linear problem");
-					x_linear = Krylov::PCG(P, A, b, shuffle(A.getOrder()), maxNumbOfIterations, eps, stop, i_log);
+					x_linear = Krylov::PCG(P, A, b, boost::none, maxNumbOfIterations, eps, stop, i_log);
 				logger.end();
 			}
 			else if (method == 3) /* CG */ {
@@ -258,7 +245,7 @@ int main() {
 					auto& b = get<1>(system);
 				logger.end();
 				logger.beg("solve linear problem");
-					x_linear = Krylov::CG(A, b, shuffle(A.getOrder()), maxNumbOfIterations, eps, stop, i_log);
+					x_linear = Krylov::CG(A, b, boost::none, maxNumbOfIterations, eps, stop, i_log);
 				logger.end();
 			}
 		logger.end();
@@ -288,12 +275,6 @@ int main() {
 		logger.end();
 		/* */
 		if (logger.yes("solve non-linear problem")) {
-			logger.beg("set non-linear solver data");
-				auto nmethod = logger.opt("non-linear method", {
-					"Fixed Point",
-					"Anderson Mixing"
-				});
-			logger.end();
 			logger.beg("build interpolant for mu_roof_iron");
 				SegmentMesh BnValues;
 				BnValues.import(iPath + "Bn_values.dat");
@@ -315,7 +296,7 @@ int main() {
 			logger.beg("solve non-linear problem");
 				FixedPointData fp;
 				SymmetricCSlCMatrix<double> A;
-				vector<double> b;
+				vector<double> b, r;
 				// residual, f(x) := b - A(x).x
 				fp.f = [&](vector<double> const & x) {
 					logger.mute = true;
@@ -333,10 +314,11 @@ int main() {
 						b = get<1>(system);
 					logger.end();
 					logger.mute = false;
-					return b - A * x;
+					r = b - A * x;
+					return r;
 				};
 				// iteration operator, g(x) := [A(x)]^(-1) . b
-				fp.g = [&](vector<double> const & x) {
+				auto g = [&](vector<double> const & x) {
 					logger.mute = true;
 					logger.beg("build ILU(0)");
 						auto LDLT = A;
@@ -346,18 +328,31 @@ int main() {
 						};
 					logger.end();
 					logger.beg("compute new approximation");
-						auto g = Krylov::PCG(P, A, b, x, 0, 10e-10, StoppingCriterion::relative);
+						auto x_new = Krylov::PCG(P, A, b, x, 0, 10e-9, StoppingCriterion::relative);
 					logger.end();
 					logger.mute = false;
-					return g;
+					return x_new;
 				};
+				if (logger.yes("use relaxation"))
+					fp.g = [&](vector<double> const & x) {
+						auto r_norm = norm(r), r_norm_new = r_norm + 1., omega = 1.;
+						auto g_x = g(x), x_new = g_x;
+						while (r_norm_new >= r_norm && omega > 1e-10) {
+							x_new = omega * g_x + (1. - omega) * x;
+							r_norm_new = norm(fp.f(x_new));
+							omega /= 2.;
+						}
+						return x_new;
+					};
+				else fp.g = g;
 				// solve
 				decltype(x_linear) x_nonlinear;
-				if (nmethod == 0) x_nonlinear = FixedPointMethod(fp, x_linear, 100, 1e-8);
-				else {
+				if (logger.yes("use Anderson Mixing")) {
 					auto x_initial = FixedPointMethod(fp, x_linear, 50, 1e-4);
-					x_nonlinear = AndersonMixingMethod(fp, x_initial, 10, 50, 1e-8);
+					fp.g = g;
+					x_nonlinear = AndersonMixingMethod(fp, x_initial, 10, 200, 1e-8);
 				}
+				else x_nonlinear = FixedPointMethod(fp, x_linear, 300, 1e-8);
 			logger.end();
 			logger.beg("compute interpolant for magnetic field");
 				TriangularScalarFEInterpolant x_nonlinear_interp { x_nonlinear, FE, Omega };
