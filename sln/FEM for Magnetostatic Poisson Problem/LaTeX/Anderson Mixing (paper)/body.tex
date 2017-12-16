@@ -1,0 +1,275 @@
+\section{Как решалась задача}
+
+Для дискретизации уравнения Пуассона
+$$
+	\nabla \cdot \left( \frac{1}{\hat{\mu}} \, \nabla A_z \right) = \mu_0 \, J_z,
+$$
+к которому свелась задача магнитостатики~\cite{mke}, мы использовали метод конечных элементов (треугольные Лагранжевы элементы 2-го порядка). Для решения результирующей СЛАУ использовался метод сопряжённых градиентов с многосеточным переобуславливателем.
+
+Для решения нелинейной задачи мы воспользовались методом простой итерации (с релаксацией). Для построения интерполянта~${\hat{\mu}_{\text{iron}} = \hat{\mu}_{\text{iron}}(\norm{\vect B}) \equiv \hat{\mu}_{\text{iron}}(\norm{\nabla A_z})}$ мы использовали Лагранжевы КЭ 1-го порядка (кусочно--линейная интерполяция). График интерполянта представлен на рисунке~\ref{fig:mu}.
+
+Исходный текст программы доступен в модуле \catspdes{} \\
+“\catspdesp{FEM for Magnetostatic Poisson Problem}”.
+
+\begin{figure}[b!]
+	\centering
+	\begin{subfigure}{.45\linewidth}
+		\centering
+		\includegraphicsw{interp.pdf}
+		\caption{${\hat{\mu}_{\text{iron}} = \hat{\mu}_{\text{iron}}(\norm{\vect B})}$}
+		\label{fig:mu:interp}
+	\end{subfigure}%
+	\hfill
+	\begin{subfigure}{.45\linewidth}
+		\centering
+		\includegraphicsw{extrap.pdf}
+		\caption{Область с экстраполяцией}
+		\label{fig:mu:extrap}
+	\end{subfigure}
+	\caption{
+		Интерполянт~${\hat{\mu}_{\text{iron}}}$ для нелинейной задачи
+	}
+	\label{fig:mu}
+\end{figure}
+
+\section{Исследование влияния удалённой границы}
+
+\begin{figure}[h!]
+	\centering
+	\begin{subfigure}{.45\linewidth}
+		\centering
+		\includegraphicsw{s_linear.pdf}
+		\caption{}
+		\label{fig:s:linear}
+	\end{subfigure}%
+	\hfill
+	\begin{subfigure}{.45\linewidth}
+		\centering
+		\includegraphicsw{s_nonlinear.pdf}
+		\caption{}
+		\label{fig:s:nonlinear}
+	\end{subfigure}
+	\caption[Оптимальные размеры области для линейной и нелинейной задач]{
+		Оптимальные размеры области для линейной~(\subref{fig:s:linear}) и нелинейной~(\subref{fig:s:nonlinear}) задач
+	}
+	\label{fig:s}
+\end{figure}
+
+Мы полагаем однородные условия Дирихле на краях бака, --- левом, верхнем и правом, --- «обрезая» магнитное поле (из соображений, что вдали от магнита модуль поля пренебрежительно мал). В действительности действие поля распространяется бесконечно далеко. 
+
+Чтобы подобрать оптимальный размер бака, не нарушающий «физику» магнита, будем исследовать влияние размера бака на среднее значение модуля магнитного поля в области~$\OmegaField$ (показана жёлтым на рисунке~\ref{fig:s:linear}). Результаты представлены в таблице~\ref{tab:s}. И линейную, и нелинейную задачи мы решали при плотности тока~${J_z = 10^{10}\,A\,m^{-2}}$ (при плотности~$\ge 10^{10}$ нелинейное решение сильно отличается от линейного --- см. рисунок~\ref{fig:a_nonlinear}). 
+
+Из таблицы~\ref{tab:s:linear} видно, что \textbf{линейная задача нечувствительна к размерам бака}: решение, полученное при $S = 40\,cm$, отличается от решения, полученного при $S = 2\,cm$, меньше чем на сотую долю процента. \\
+\textbf{Нелинейная же конфигурация очень чувствительна к изменению $S$} (таблица~\ref{tab:s:nonlinear}). При $S = 20\,cm$ относительная разница не превосходит процента, при $S = 2\,cm$ --- превосходит 17\%.
+
+Таким образом, можно предложить следующие оптимальные размеры бака (минимальный размер области + относительная разница < 1\%):
+\begin{itemize}
+	\item линейная задача: $S = 2\,cm$,
+	\item нелинейная задача: $S = 20\,cm$.
+\end{itemize} 
+Области показаны на рисунке~\ref{fig:s}.
+
+\begin{table}[h!]\centering
+	\captionsetup{singlelinecheck=off}
+	\caption[Влияние размера бака на среднее значение модуля магнитного поля в области~$\OmegaField$]{
+		Влияние размера бака на среднее значение модуля магнитного поля в области~$\OmegaField$. Обозначения:   
+		\begin{itemize}
+			\item $S_i \coloneqq$~расстояние от магнита до границы области;
+			\item ${\BMean_i \coloneqq \mathcal m(\norm{\vect B}) \equiv \int_\OmegaField \norm{\vect B} \diff{\vect x} / | \OmegaField |}$, среднее значение модуля магнитного поля;
+			\item ${\delta_i \coloneqq |\BMean_i - \BMean_1| / \BMean_1}$, относительная разница между средними значениями модуля поля на 1-й конфигурации (самый крупный размер бака) и $i$-й
+		\end{itemize}
+	}
+	\captionsetup{singlelinecheck=on}
+	\label{tab:s}
+	\begin{subtable}[t]{.5\linewidth}
+		\centering\caption{Линейный случай}
+		\label{tab:s:linear}
+		\begin{tabular}[1.2]{ | c | c | c | c | }
+			\hline
+			$i$ & $S_i$, $\left[ cm \right]$ & $\BMean_i$, $\left[ T \right]$ & $\delta_i$ \\
+			\hline
+			1 & 40 & 595.335 & 0 \\
+			\hline
+			2 & 2 & 595.311 & .004\% \\
+			\hline
+		\end{tabular}
+	\end{subtable}%
+	\begin{subtable}[t]{.5\linewidth}
+		\centering\caption{Нелинейный случай}
+		\label{tab:s:nonlinear}
+		\begin{tabular}[1.2]{ | c | c | c | c | }
+			\hline
+			$i$ & $S_i$, $\left[ cm \right]$ & $\BMean_i$, $\left[ T \right]$ & $\delta_i$ \\
+			\hline
+			1 & 40 & 13.942 & 0 \\
+			\hline
+			2 & 30 & 13.902 & .3\% \\
+			\hline
+			3 & 20 & 13.803 & <1\% \\
+			\hline
+			4 & 10 & 13.449 & 3.5\% \\
+			\hline
+			5 & 2 & 11.556 & >17\% \\
+			\hline
+		\end{tabular}
+	\end{subtable}
+\end{table}
+
+\clearpage
+
+\section{Магнитное поле в области $\OmegaField$}
+
+\begin{figure}[h]
+	\centering
+	\begin{subfigure}{.49\linewidth}
+		\centering
+		\includegraphicsw{b_linear.pdf}
+	\end{subfigure}%
+	\hfill
+	\begin{subfigure}{.49\linewidth}
+		\centering
+		\includegraphicsw{b_nonlinear.pdf}
+	\end{subfigure}%
+	\par\bigskip
+	\begin{subfigure}{.49\linewidth}
+		\centering
+		\includegraphicsw{b_field_linear.pdf}
+		\caption{}
+		\label{fig:b_field:linear}
+	\end{subfigure}%
+	\hfill
+	\begin{subfigure}{.49\linewidth}
+		\centering
+		\includegraphicsw{b_field_nonlinear.pdf}
+		\caption{}
+		\label{fig:b_field:nonlinear}
+	\end{subfigure}
+	\caption[Магнитное поле в области~$\OmegaField$ для линейной и нелинейной задач]{
+		Магнитное поле в области~$\OmegaField$ для линейной~(\subref{fig:b_field:linear}) и нелинейной задач~(\subref{fig:b_field:nonlinear})
+	}
+	\label{fig:b_field}
+\end{figure}
+
+При плотности тока~${J_z = 10^{10}\,A\,m^{-2}}$ среднеквадратичное \\ отклонение~$\sqrt{\mathcal m(\norm{\vect B} - \BMean)^2}$ составляет
+\begin{itemize}
+	\item 3.2, или .5\% от среднего значения $\BMean$ линейной задачи;
+	\item .13, или 1\% от среднего значения $\BMean$ нелинейной задачи.
+\end{itemize}
+
+Таким образом, \textbf{магнитное поле очень близко к постоянному в области~$\OmegaField$}. Это справедливо для обеих конфигураций.  
+
+\section{Влияние силы тока на магнитное поле}
+
+Будем менять плотность тока и смотреть, как себя ведёт среднее значение~$\BMean$ модуля магнитного поля в области~$\OmegaField$.
+
+Из рисунка~\ref{bj:linear} видно, что для линейной конфигурации характерна линейная зависимость. При малом токе ($\le 10^7$) нелинейная задача ведёт себя как линейная, однако при сильном токе ситуация сильно меняется --- см. рисунки~\ref{bj:nonlinear} и~\ref{bj:both}.
+
+Поведение вектор-потенциала при изменении плотности тока показано на рисунке~\ref{fig:a_nonlinear}.
+
+\vfill
+
+\begin{figure}[h]
+	\centering
+	\begin{subfigure}{.45\linewidth}
+		\centering
+		\includegraphicsw{bj_linear.pdf}
+		\caption{Линейная конфигурация}
+		\label{bj:linear}
+	\end{subfigure}%
+	\hfill
+	\begin{subfigure}{.45\linewidth}
+		\centering
+		\includegraphicsw{bj_nonlinear.pdf}
+		\caption{Нелинейная конфигурация}
+		\label{bj:nonlinear}
+	\end{subfigure}%
+	\par\bigskip
+	\begin{subfigure}{.7\linewidth}
+		\centering
+		\includegraphicsw{bj.pdf}
+		\caption{}
+		\label{bj:both}
+	\end{subfigure}%
+	\caption{
+		Зависимость среднего значения~$\BMean$ модуля магнитного поля в области~$\OmegaField$ от плотности тока~$J_z$
+	}
+	\label{fig:bj}
+\end{figure}
+
+\vfill
+
+\clearpage
+
+\vfill
+
+\begin{figure}
+	\centering
+	\begin{subfigure}{.47\linewidth}
+		\centering
+		\includegraphicsw{a_nonlinear_6.pdf}
+	\end{subfigure}%
+	\hfill
+	\begin{subfigure}{.47\linewidth}
+		\centering
+		\includegraphicsw{a_nonlinear_7.pdf}
+	\end{subfigure}%
+	\par\bigskip
+	\begin{subfigure}{.47\linewidth}
+		\centering
+		\includegraphicsw{a_nonlinear_8.pdf}
+	\end{subfigure}%
+	\hfill
+	\begin{subfigure}{.47\linewidth}
+		\centering
+		\includegraphicsw{a_nonlinear_9.pdf}
+	\end{subfigure}%
+	\par\bigskip
+	\begin{subfigure}{.47\linewidth}
+		\centering
+		\includegraphicsw{a_nonlinear_10.pdf}
+	\end{subfigure}%
+	\hfill
+	\begin{subfigure}{.47\linewidth}
+		\centering
+		\includegraphicsw{a_nonlinear_11.pdf}
+	\end{subfigure}
+	\caption[Изменение вектор--потенциала~$A_z$ нелинейной конфигурации при изменении плотности тока~$J_z$]{
+		Сверху вниз и слева направо: изменение вектор--потенциала~$A_z$ нелинейной конфигурации при изменении плотности тока~${J_z = 10^6, 10^7, \dots, 10^{11}\,A\,m^{-2}}$
+	}
+	\label{fig:a_nonlinear}
+\end{figure}
+
+\vfill
+
+\clearpage
+
+\section{Сравнение решений, полученных в \catspdes{} и \texttt{Telma}}
+
+Для сравнения решений мы записали в файл \texttt{Point} точки области, с которыми ассоциированы степени свободы КЭ--интерполянта на треугольной сетке, и «скормили» его пакету~\texttt{Telma}. Далее, получив результат \texttt{RESB}, с помощью модуля \catspdesp{FEM for Magnetostatic Poisson Problem/postprocessing} мы построили интерполянт для магниного поля; он изображён на рисунке~\ref{fig:telma:b} --- сравните с~\ref{fig:b_field:linear}, полученным нашим решателем. 
+
+Норма разницы~$\Delta \coloneqq \sqrt{\int_\OmegaField \left( \norm{\vect B^{cats}} - \norm{\vect B^{telma}} \right)^2 \diff{\vect x}} = .38$ между модулями полей составила меньше десятой доли процента от среднего значения~$\BMean$, $\Delta / \BMean = .0006 = .06\%$.
+
+\vfill
+
+\begin{figure}[h]
+	\centering
+	\begin{subfigure}{.4\linewidth}
+		\centering
+		\includegraphicsw{a_linear_telma.png}
+		\caption{}
+		\label{fig:telma:a}
+	\end{subfigure}%
+	\hfill
+	\begin{subfigure}{.45\linewidth}
+		\centering
+		\includegraphicsw{b_linear_telma.pdf}
+		\caption{}
+		\label{fig:telma:b}
+	\end{subfigure}
+	\caption[Вектор-потенциал~$A_z$, полученный при решении линейной задачи в пакете \texttt{Telma}, и соответствующее ему магнитное поле~$\vect B$]{
+		Вектор-потенциал~$A_z$~(\subref{fig:s:linear}), полученный при решении линейной задачи в пакете \texttt{Telma}, и соответствующее ему магнитное поле~$\vect B$~(\subref{fig:s:nonlinear}) при плотности тока~$J_z = 10^{10}\,A\,m^{-2}$
+	}
+	\label{fig:telma}
+\end{figure}
+
+\vfill
