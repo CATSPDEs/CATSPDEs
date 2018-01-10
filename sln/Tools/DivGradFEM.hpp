@@ -7,7 +7,7 @@
 #include "DiffusionReactionEqn.hpp"
 #include "BoundaryCondition.hpp"
 // matrix
-#include "SymmetricCSlCMatrix.hpp" // for final linear system matrix
+#include "CSlCMatrix.hpp" // for final linear system matrix
 // FEs
 #include "AbstractFiniteElement.hpp"
 
@@ -43,7 +43,7 @@ namespace FEM {
 		// so we have to assemble and solve n × n linear system, n := numb of nodes of the mesh Omega
 
 		boost::tuple<
-			SymmetricCSlCMatrix<double>, // assembled system matrix and
+			CSlCMatrix<double>, // assembled system matrix and
 			std::vector<double> // rhs vector
 		> assembleSystem(
 			DiffusionReactionEqn2D const &, // (1) PDE,

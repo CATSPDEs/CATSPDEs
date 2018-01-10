@@ -1,0 +1,19 @@
+20
+20
+-3000
+0.1
+0.01
+6000
+50
+0
+1e-08
+
+1. set initial temperature of water
+2. set outside temperature
+3. set heat flux [Watt]
+4. set mean wind velocity
+5. set time step
+6. set max numb of time steps
+7. log every nth iteration of the solver, n
+8. max numb of iterations
+9. set eps for solver

@@ -15,7 +15,7 @@ namespace FEM {
 	namespace DivGrad {
 
 		boost::tuple<
-			SymmetricCSlCMatrix<double>, // system matrix
+			CSlCMatrix<double>, // system matrix
 			std::vector<double> // rhs vector
 		> assembleSystem(
 			DiffusionReactionEqn2D const & PDE,
@@ -70,6 +70,7 @@ namespace FEM {
 			// local matrices
 			SymmetricMatrix<double> localMassMatrix(l),
 			                        localStiffnessMatrix(l);
+			DenseMatrix<double>     localConvectionMatrix(l);
 			std::vector<double>     localLoadVector(l);
 			// for Dirichlet BCs
 			Index2Value<double> ind2val;
@@ -93,28 +94,10 @@ namespace FEM {
 			// jacobian–related, J := jacobian matrix of the mapping T
 			double detJ;
 			DenseMatrix<double> JInverseTranspose;
-
-			// integrands for local matrices
-			//std::vector<ScalarField2D> loadVectorIntegrand(l);
-			//std::vector<std::vector<ScalarField2D>> massMatrixIntegrand(l, loadVectorIntegrand), stiffnessMatrixIntegrand { massMatrixIntegrand };
-			//for (LocalIndex i = 0; i < l; ++i) {
-			//	for (LocalIndex j = i; j < l; ++j) {
-			//		massMatrixIntegrand[i][j] = [&, i, j](Node2D const & p) {
-			//			return PDE.reactionTerm(T(p)) * masterShapes[j](p) * masterShapes[i](p);
-			//		};
-			//		stiffnessMatrixIntegrand[i][j] = [&, i, j](Node2D const & p) {
-			//			return PDE.diffusionTerm(T(p)) * (JInverseTranspose * masterSGrads[j](p)) * (JInverseTranspose * masterSGrads[i](p));
-			//		};
-			//	}
-			//	loadVectorIntegrand[i] = [&, i](Node2D const & p) {
-			//		return PDE.forceTerm(T(p)) * masterShapes[i](p);
-			//	};
-			//}
-
 			// data structures for final linear system A.xi = b:
 			logger.beg("generate matrix pattern");
 				auto n = FE.numbOfDOFs(Omega);
-				SymmetricCSlCMatrix<double> A(n); // system matrix
+				CSlCMatrix<double> A(n); // system matrix
 				std::vector<double> b(n); // load vector
 				A.generatePatternFrom(createDOFsConnectivityList(Omega, FE));
 				logger.buf << "system size = " << n << '\n'
@@ -140,10 +123,6 @@ namespace FEM {
 					// compute local stiffness matrix
 					for (LocalIndex i = 0; i < l; ++i) {
 						for (LocalIndex j = i; j < l; ++j) {
-							
-							//localStiffnessMatrix(i, j) = detJ * qRuleTriangle.computeQuadrature(stiffnessMatrixIntegrand[i][j], deg);
-							//localMassMatrix(i, j) = detJ * qRuleTriangle.computeQuadrature(massMatrixIntegrand[i][j], deg);
-							
 							localStiffnessMatrix(i, j) = detJ * qRuleTriangle.computeQuadrature([&](Node2D const & p) {
 								return PDE.diffusionTerm(T(p)) * (JInverseTranspose * masterSGrads[j](p)) * (JInverseTranspose * masterSGrads[i](p));
 							}, deg);
@@ -151,9 +130,11 @@ namespace FEM {
 								return PDE.reactionTerm(T(p)) * masterShapes[j](p) * masterShapes[i](p);
 							}, deg);
 						}
-						
-						//localLoadVector[i] = detJ * qRuleTriangle.computeQuadrature(loadVectorIntegrand[i], deg);
-						
+						// compute local convection matrix
+						for (LocalIndex j = 0; j < l; ++j)
+							localConvectionMatrix(i, j) = detJ * qRuleTriangle.computeQuadrature([&](Node2D const & p) {
+								return (PDE.convectionTerm(T(p)) * (JInverseTranspose * masterSGrads[j](p))) * masterShapes[i](p);
+							}, deg);
 						localLoadVector[i] = detJ * qRuleTriangle.computeQuadrature([&](Node2D const & p) {
 							return PDE.forceTerm(T(p)) * masterShapes[i](p);
 						}, deg);
@@ -178,8 +159,8 @@ namespace FEM {
 						else logger.wrn("no BCs were prescribed; hom. Neumann was assumed");
 					// to global system
 					for (LocalIndex i = 0; i < l; ++i) {
-						for (LocalIndex j = i; j < l; ++j)
-							A(DOFsNumn[i], DOFsNumn[j]) += localMassMatrix(i, j) + localStiffnessMatrix(i, j);
+						for (LocalIndex j = 0; j < l; ++j)
+							A(DOFsNumn[i], DOFsNumn[j]) += localMassMatrix(i, j) + localStiffnessMatrix(i, j) + localConvectionMatrix(i, j);
 						b[DOFsNumn[i]] += localLoadVector[i];
 					}
 				}

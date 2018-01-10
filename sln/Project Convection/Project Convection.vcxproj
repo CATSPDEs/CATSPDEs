@@ -19,7 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{ABBF0B78-E161-4EBF-89E7-5481D7A3AA92}</ProjectGuid>
+    <ProjectGuid>{895665CD-EDB7-4907-8096-DEC3A1D4B30B}</ProjectGuid>
     <RootNamespace>ProjectConvection</RootNamespace>
     <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
   </PropertyGroup>
@@ -129,6 +129,9 @@
   </ItemGroup>
   <ItemGroup>
     <Library Include="..\Harwell–Boeing IO (FORTRAN Static Library)\x64\Release\Harwell–Boeing IO (FORTRAN Static Library).lib" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="stdin.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
