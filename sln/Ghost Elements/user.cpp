@@ -1,5 +1,6 @@
 #include "SingletonLogger.hpp"
 #include "Triangulation.hpp"
+#include "Triangle_P2_Lagrange.hpp"
 
 using std::vector;
 using std::string;
@@ -14,7 +15,13 @@ int main() {
 				Node2D { 8., 4.}, // right top node
 				4, 4 // numb of horizontal and vertical intervals
 			};
-			Omega.export(oPath + "rect.nt");
+			Omega.enumerateRibs().computeNeighbors();
+			auto& FE = Triangle_P2_Lagrange::instance();
+			SymmetricCSlCMatrix<double> R(FE.numbOfDOFs(Omega));
+			R.generatePatternFrom(createDOFsConnectivityList(Omega, FE)) = 1.;
+			Omega.export(oPath + "rect.ntr", { { "format", "NTR" } });
+			static_cast<CSCMatrix<double>>(static_cast<CSlCMatrix<double>>(R)).exportHarwellBoeing(oPath + "r.rsa");
+
 		logger.end();
 		logger.beg("truncate mesh");
 			// our region is a union of region1, region2, region3, and region4 
@@ -41,8 +48,11 @@ int main() {
 			Omega.truncate(regionPredicate);
 		logger.end();
 		logger.beg("uniform refinement");
-			Omega.refine(2);
-			Omega.export(oPath + "uniform.nt");
+			Omega.refine(1);
+			SymmetricCSlCMatrix<double> U(FE.numbOfDOFs(Omega));
+			U.generatePatternFrom(createDOFsConnectivityList(Omega, FE)) = 1.;
+			Omega.export(oPath + "uniform.ntr", { { "format", "NTR" } });
+			static_cast<CSCMatrix<double>>(static_cast<CSlCMatrix<double>>(U)).exportHarwellBoeing(oPath + "u.rsa");
 		logger.end();
 		logger.beg("non-uniform refinement");
 			// create list of elements that are in the union of region1 and region2
@@ -53,7 +63,10 @@ int main() {
 			}
 			// refine these elements
 			Omega.refine(elems2refine);
-			Omega.export(oPath + "nonuniform.nt");
+			SymmetricCSlCMatrix<double> N(FE.numbOfDOFs(Omega));
+			N.generatePatternFrom(createDOFsConnectivityList(Omega, FE)) = 1.;
+			Omega.export(oPath + "nonuniform.ntr", { { "format", "NTR" } });
+			static_cast<CSCMatrix<double>>(static_cast<CSlCMatrix<double>>(N)).exportHarwellBoeing(oPath + "n.rsa");
 		logger.end();
 	}
 	catch (std::exception const & e) {

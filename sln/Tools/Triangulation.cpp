@@ -1,4 +1,5 @@
 ﻿#include "Triangulation.hpp"
+#include "Triangle_P1_Lagrange.hpp" // for ribs numeration
 
 bool Triangulation::_makeNeighbors(Index t1, Index t2) {
 	// make triangles t1 and t2 neighbors
@@ -100,9 +101,9 @@ void Triangulation::export(std::ostream& to, Parameters const & params) const {
 	else if (format == "NTN") // nodes, triangles, and neighbors
 		to << "NTN\n" << numbOfNodes() << ' ' << numbOfElements() << '\n' << _nodes << _elements << _neighbors;
 	else if (format == "NTNR") // nodes, triangles, neighbors, and ribs
-		to << "NTNR\n" << numbOfNodes() << ' ' << numbOfElements() << ' ' << numbOfRibs() << '\n' << _nodes << _elements << _neighbors << _ribs.second;
+		to << "NTNR\n" << numbOfNodes() << ' ' << numbOfElements() << ' ' << numbOfRibs() << '\n' << _nodes << _elements << _neighbors << getRibsNumeration();
 	else if (format == "NTR") // nodes, triangles, and ribs
-		to << "NTR\n" << numbOfNodes() << ' ' << numbOfElements() << ' ' << numbOfRibs() << '\n' << _nodes << _elements << _ribs.second;
+		to << "NTR\n" << numbOfNodes() << ' ' << numbOfElements() << ' ' << numbOfRibs() << '\n' << _nodes << _elements << getRibsNumeration();
 	else
 		throw std::invalid_argument("unknown mesh format: try NT, NTN, NTNR, or NTR");
 }
@@ -175,7 +176,7 @@ Triangulation& Triangulation::refine(Index numbOfRefinements) {
 			redNeighborsIndicies.clear();
 		}
 	}
-	if (_ribs.first) enumerateRibs();
+	if (_ribsNumeration) enumerateRibs();
 	return *this;
 }
 
@@ -326,7 +327,7 @@ Triangulation& Triangulation::refine(Indicies& redList) {
 		_makeNeighbors(numbOfElements() - 1, redNeighborsIndicies.back());
 		redNeighborsIndicies.clear();
 	}
-	if (_ribs.first) enumerateRibs();
+	if (_ribsNumeration) enumerateRibs();
 	return *this;
 }
 
@@ -397,6 +398,11 @@ Triangulation& Triangulation::computeNeighbors() {
 }
 
 Triangulation& Triangulation::enumerateRibs() {
+	if (_ribsNumeration) delete _ribsNumeration;
+	_ribsNumeration = new SymmetricCSlCMatrix<double>(numbOfNodes());
+	_ribsNumeration->generatePatternFrom(createDOFsConnectivityList(*this, Triangle_P1_Lagrange::instance()));
+	return *this;
+	/*
 	std::vector<std::array<Index, 3>> numeration(numbOfElements());
 	Index currentRibIndex = 0;
 	for (Index i = 0; i < numbOfElements(); ++i)
@@ -414,6 +420,7 @@ Triangulation& Triangulation::enumerateRibs() {
 		}
 	_ribs = { currentRibIndex, numeration };
 	return *this;
+	*/
 }
 
 Node2D Triangulation::getRibNode(Index e, LocalIndex r, double t) const {

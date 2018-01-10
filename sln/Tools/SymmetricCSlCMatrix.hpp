@@ -75,6 +75,8 @@ public:
 	explicit operator CSlCMatrix<T>() const {
 		return { _colptr, _rowind, _lval, _lval, _diag };
 	}
+	//
+	Index lvalIndex(Index, Index) const;
 };
 
 // implementation
@@ -320,4 +322,13 @@ SymmetricCSlCMatrix<T>& SymmetricCSlCMatrix<T>::decompose() {
 		}
 	}
 	return *this;
+}
+
+template <typename T>
+Index SymmetricCSlCMatrix<T>::lvalIndex(Index i, Index j) const {
+	if (i == j || i >= _h || j >= _w) throw std::invalid_argument("no index");
+	if (i < j) std::swap(i, j);
+	for (Index k = _colptr[j]; k < _colptr[j + 1]; ++k)
+		if (_rowind[k] == i) return k;
+	throw std::invalid_argument("no index");
 }

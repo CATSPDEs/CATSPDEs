@@ -3,6 +3,7 @@
 #include "Mapping.hpp"
 #include "AbstractMesh.hpp"
 #include "CurvilinearEdge.hpp"
+#include "SymmetricCSlCMatrix.hpp" // for ribs numeration
 
 /*
 	Alexander Žilyakov, Aug 2016
@@ -19,7 +20,11 @@ class Triangulation
 	// * determine boundary edges [assembly of Robin BCs]
 	// * refine mesh w/o reconstruction [we call it adaptive FEM and it is neat!] 	
 	std::vector<std::array<SignedIndex, 3>> _neighbors;
+
 	std::pair<Index, std::vector<std::array<Index, 3>>> _ribs;
+
+	SymmetricCSlCMatrix<double>* _ribsNumeration = nullptr;
+	
 	// for curvilinear refinement: 
 	std::vector<Curve2D> _curves; // curves that make the boundary
 	std::vector<CurvilinearEdge> _edges;
@@ -31,6 +36,7 @@ class Triangulation
 	bool _makeNeighbors(Index, Index); // make 2 triangles neighbors
 	SignedIndex _neighbor2edge(SignedIndex) const; // mapping between indicies
 public:
+	~Triangulation() { if (_ribsNumeration) delete _ribsNumeration; }
 	Triangulation() {}
 	Triangulation(
 		std::vector<Node2D> const & nodes,
@@ -48,15 +54,25 @@ public:
 	Triangulation(Node2D const &, Node2D const &, Index ndx = 1, Index ndy = 1);
 	// get numb of ribs 
 	Index numbOfRibs() const {
-		return _ribs.first;
+		return _ribsNumeration->nnz() - numbOfNodes();
+		// return _ribs.first;
 	}
 	// get indicies of ribs of tth triangle
 	std::array<Index, 3> getRibsIndicies(Index t) const {
-		return _ribs.second[t];
+		auto nodesIndicies = getNodesIndicies(t);
+		return { 
+			_ribsNumeration->lvalIndex(nodesIndicies[1], nodesIndicies[2]),
+			_ribsNumeration->lvalIndex(nodesIndicies[0], nodesIndicies[2]),
+			_ribsNumeration->lvalIndex(nodesIndicies[0], nodesIndicies[1])
+		};
+		//return _ribs.second[t];
 	}
 	// get ribs numeration
 	std::vector<std::array<Index, 3>> getRibsNumeration() const {
-		return _ribs.second;
+		std::vector<std::array<Index, 3>> res(numbOfRibs());
+		for (Index t = 0; t < numbOfElements(); ++t) res[t] = getRibsIndicies(t);
+		return res;
+		//return _ribs.second;
 	}
 	// get indicies of neighbors of tth triangle
 	std::array<SignedIndex, 3> getNeighborsIndicies(Index t) const {
