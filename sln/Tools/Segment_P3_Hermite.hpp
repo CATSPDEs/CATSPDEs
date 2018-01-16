@@ -17,7 +17,7 @@ public:
 		static Segment_P3_Hermite single;
 		return single;
 	}
-	std::vector<SmartScalarField1D> getShapesOf(Segment1D const & s) const final {
+	std::vector<ScalarField1D> getShapesOf(Segment1D const & s) const final {
 		auto denom = pow(s[0], 4.) - 4 * pow(s[0], 3.) * s[1] + 6. * pow(s[0], 2.) * pow(s[1], 2.) - 4. * s[0] * pow(s[1], 3.) + pow(s[1], 4.);
 		return {
 			[=](double const & p) { 
@@ -54,7 +54,7 @@ public:
 			}
 		};
 	}
-	std::vector<SmartScalarField1D> getSGradsOf(Segment1D const & s) const final {
+	std::vector<ScalarField1D> getSGradsOf(Segment1D const & s) const final {
 		throw std::logic_error("not implemented");
 	}
 	Index numbOfDOFs(AbstractMesh<1, 2> const & mesh) const final {

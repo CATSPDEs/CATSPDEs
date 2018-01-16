@@ -164,7 +164,6 @@
     <ClInclude Include="BandMatrix.hpp" />
     <ClInclude Include="BoundaryCondition.hpp" />
     <ClInclude Include="CSRMatrix.hpp" />
-    <ClInclude Include="AbstractMapping.hpp" />
     <ClInclude Include="Parameters.hpp" />
     <ClInclude Include="Predicate.hpp" />
     <ClInclude Include="rlutil.h" />

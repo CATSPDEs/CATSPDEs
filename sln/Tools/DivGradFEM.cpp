@@ -9,6 +9,8 @@
 #include "MasterSegmentQuadratureRule.hpp"
 // linear shapes for transformation from master to physical triangle
 #include "Triangle_P1_Lagrange.hpp"
+// in order to store computed images of quadrature nodes
+#include "SmartMapping.hpp"
 
 namespace FEM {
 
@@ -39,34 +41,27 @@ namespace FEM {
 				[](double const & s) -> Node2D { return { .5 * (1. + s), 0. }; }
 			};
 			// shapes for transformation T
-			auto lagrangeMasterShapes = Triangle_P1_Lagrange::instance().getShapesOf(master);
+			auto lagrangeMasterShapes = smartify<2, 1>(Triangle_P1_Lagrange::instance().getShapesOf(master));
 			// shapes of FE
-			auto masterShapes = FE.getShapesOf(master);
-			auto masterSGrads = FE.getSGradsOf(master);
+			auto masterShapes = smartify<2, 1>(FE.getShapesOf(master));
+			auto masterSGrads = smartify<2, 2>(FE.getSGradsOf(master));
 			auto l = masterShapes.size();
+			// set up quadrature rules data
 			LocalIndex deg = ceil(3. * FE.deg());
-			logger.buf << "polynomial degree for Gaussian quadrature: " << deg;
+			// quadrature rule for master triangle
+			auto& qRuleTriangle = MasterTriangleQuadratureRule::instance();
+			// ″ for master segment
+			auto& qRuleSegment = MasterSegmentQuadratureRule::instance();
+			Index capacity;
+			logger.buf
+				<< "polynomial degree for Gaussian quadrature: " << deg << '\n'
+				<< "numb of q nodes (per element): " << qRuleTriangle.getQuadratureNodes(deg).size() << '\n'
+				<< "numb of q nodes (per face): " << qRuleSegment.getQuadratureNodes(deg).size() << '\n'
+				<< "=> numb of values to be saved (per shape func): " << (capacity = qRuleTriangle.getQuadratureNodes(deg).size() + 3 * qRuleSegment.getQuadratureNodes(deg).size());
 			logger.log();
-			// set up quadrature rule
-			logger.beg("precompute values of shapes at quadrature nodes");
-				// quadrature rule for master triangle
-				auto& qRuleTriangle = MasterTriangleQuadratureRule::instance();
-				auto qNodesTriangle = qRuleTriangle.getQuadratureNodes(deg);
-				// ″ for master segment
-				auto& qRuleSegment = MasterSegmentQuadratureRule::instance();
-				auto qNodesSegment = qRuleSegment.getQuadratureNodes(deg);
-				// we will also need images of shapes on edges (for quadratures due to Neumann BCs)
-				// so we should compute quadrature nodes on edges, too
-				decltype(qNodesTriangle) qBoundaryNodesTriangle;
-				qBoundaryNodesTriangle.reserve(3 * qNodesSegment.size());
-				for (LocalIndex i : { 0, 1, 2 }) // for each edge of master triangle
-					for (auto const & p : qNodesSegment) // and quadrature node (1D) on master segment,
-						qBoundaryNodesTriangle.emplace_back(r[i](p)); // compute corresponding quadrature node on master triangle (2D) using curves r
-				// so now we are ready to precompute images of q nodes
-				for (auto& s : lagrangeMasterShapes) s.saveImagesOf(qNodesTriangle).saveImagesOf(qBoundaryNodesTriangle);
-				for (auto& s : masterShapes) s.saveImagesOf(qNodesTriangle).saveImagesOf(qBoundaryNodesTriangle);
-				for (auto& g : masterSGrads) g.saveImagesOf(qNodesTriangle);
-			logger.end();
+			for (auto& s : lagrangeMasterShapes) s.capacity() = capacity;
+			for (auto& s : masterShapes) s.capacity() = capacity;
+			for (auto& g : masterSGrads) g.capacity() = capacity;
 			// local matrices
 			SymmetricMatrix<double> localMassMatrix(l),
 			                        localStiffnessMatrix(l);

@@ -17,13 +17,13 @@ public:
 		static Segment_P1_Lagrange single;
 		return single;
 	}
-	std::vector<SmartScalarField1D> getShapesOf(Segment1D const & s) const final {
+	std::vector<ScalarField1D> getShapesOf(Segment1D const & s) const final {
 		return {
 			[=](double const & p) { return (s[1] - p) / length(s); },
 			[=](double const & p) { return (p - s[0]) / length(s); }
 		};
 	}
-	std::vector<SmartScalarField1D> getSGradsOf(Segment1D const & s) const final {
+	std::vector<ScalarField1D> getSGradsOf(Segment1D const & s) const final {
 		throw std::logic_error("not implemented");
 	}
 	Index numbOfDOFs(AbstractMesh<1, 2> const & mesh) const final {

@@ -17,7 +17,7 @@ public:
 		static Triangle_P1_Lagrange single;
 		return single;
 	}
-	std::vector<SmartScalarField2D> getShapesOf(Triangle2D const & t) const final {
+	std::vector<ScalarField2D> getShapesOf(Triangle2D const & t) const final {
 		return {
 			[=](Node2D const & p) { 
 				return ((p[1] - t[1][1])*t[2][0] + p[0] * (t[1][1] - t[2][1]) + t[1][0] * (-p[1] + t[2][1])) / 2. / area(t); 
@@ -30,7 +30,7 @@ public:
 			}
 		};
 	}
-	std::vector<SmartVectorField2D> getSGradsOf(Triangle2D const & t) const final {
+	std::vector<VectorField2D> getSGradsOf(Triangle2D const & t) const final {
 		return {
 			[=](Node2D const &) { 
 				return Node2D { { t[1][1] - t[2][1], -t[1][0] + t[2][0] } } / 2. / area(t);

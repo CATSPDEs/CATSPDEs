@@ -16,7 +16,7 @@ public:
 		static Triangle_Pt3_LagrangeBubble single;
 		return single;
 	}
-	std::vector<SmartScalarField2D> getShapesOf(Triangle2D const & t) const final {
+	std::vector<ScalarField2D> getShapesOf(Triangle2D const & t) const final {
 		auto shapes = Triangle_P1_Lagrange::instance().getShapesOf(t);
 		auto bubble = [=](Node2D const & p) {
 			return 27. * shapes[0](p) * shapes[1](p) * shapes[2](p);
@@ -24,7 +24,7 @@ public:
 		shapes.emplace_back(bubble);
 		return shapes;
 	}
-	std::vector<SmartVectorField2D> getSGradsOf(Triangle2D const & t) const final {
+	std::vector<VectorField2D> getSGradsOf(Triangle2D const & t) const final {
 		auto shapes = Triangle_P1_Lagrange::instance().getShapesOf(t);
 		auto sGrads = Triangle_P1_Lagrange::instance().getSGradsOf(t);
 		auto bGrad = [=](Node2D const & p) {

@@ -153,9 +153,6 @@
     <ClInclude Include="Predicate.hpp">
       <Filter>Common\Mappings</Filter>
     </ClInclude>
-    <ClInclude Include="AbstractMapping.hpp">
-      <Filter>Common\Mappings</Filter>
-    </ClInclude>
     <ClInclude Include="AbstractFiniteElement.hpp">
       <Filter>Finite Elements</Filter>
     </ClInclude>

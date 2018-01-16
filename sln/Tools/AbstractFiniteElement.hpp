@@ -1,8 +1,8 @@
 ﻿#pragma once
 // to get DOFs numn for given mesh
 #include "AbstractMesh.hpp"
-// in order to store computed images of quadrature nodes
-#include "SmartMapping.hpp"
+// for shape funcs
+#include "Mapping.hpp"
 
 // prolongation
 template <typename T> class CSCMatrix;
@@ -24,9 +24,9 @@ public:
 	// get degree of polynomial space of shapes
 	double deg() const { return _deg; };
 	// get shape funcs of an element
-	virtual std::vector<SmartMapping<D, M>>     getShapesOf(Element<D, N> const &) const = 0;
+	virtual std::vector<Mapping<D, M>>     getShapesOf(Element<D, N> const &) const = 0;
 	// get gradients of ″
-	virtual std::vector<SmartMapping<D, D * M>> getSGradsOf(Element<D, N> const &) const = 0;
+	virtual std::vector<Mapping<D, D * M>> getSGradsOf(Element<D, N> const &) const = 0;
 	// DOFs
 	virtual Index numbOfDOFs(AbstractMesh<D, N> const & mesh) const = 0;
 	virtual std::vector<Index>   getDOFsNumeration(AbstractMesh<D, N> const & mesh, Index e) const = 0;

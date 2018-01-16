@@ -17,10 +17,10 @@ public:
 		static Triangle_P0_Lagrange single;
 		return single;
 	}
-	std::vector<SmartScalarField2D> getShapesOf(Triangle2D const &) const final {
+	std::vector<ScalarField2D> getShapesOf(Triangle2D const &) const final {
 		return { [](Node2D const &) { return 1.; } };
 	}
-	std::vector<SmartVectorField2D> getSGradsOf(Triangle2D const &) const final {
+	std::vector<VectorField2D> getSGradsOf(Triangle2D const &) const final {
 		return { [](Node2D const &) -> Node2D { return { 0., 0. }; } };
 	}
 	Index numbOfDOFs(AbstractMesh<2, 3> const & mesh) const final {
