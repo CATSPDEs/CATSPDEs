@@ -27,3 +27,19 @@ using Mapping = std::function<Node<M>(Node<N> const &)>;
 	using Curve3D = Curve<3>;
 
 using Operator = std::function<std::vector<double>(std::vector<double> const &)>;
+
+// default funcs
+
+template <LocalIndex N, LocalIndex M>
+Node<M> zeroMapping(Node<N> const &) {
+	Node<M> res;
+	setValue(res, 0.);
+	return res;
+}
+
+template <LocalIndex N, LocalIndex M>
+Node<M> unityMapping(Node<N> const &) {
+	Node<M> res;
+	setValue(res, 1.);
+	return res;
+}

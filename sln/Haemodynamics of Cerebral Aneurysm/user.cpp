@@ -186,7 +186,7 @@ int main() {
 					);
 				logger.end();
 				logger.beg("(2) pressure mass matrix for Schur complement");
-					DiffusionReactionEqn2D ReactionEqn {
+					ConvectionDiffusionEqn2D ReactionEqn {
 						[](Node2D const &) { return 0.; },
 						[](Node2D const &) { return 1.; },
 						[](Node2D const &) { return 0.; }

@@ -44,7 +44,7 @@ class Multigrid {
 	DenseMatrix<double> _LU; // decomposition for coarse grid matrix
 	std::vector<CSCMatrix<double>>  _P_Hh; // transfer operators matrices
 	// for L2—projections transfer operators
-	std::vector<SymmetricCSlCMatrix<double>> _M_HH;
+	std::vector<CSlCMatrix<double>> _M_HH;
 	std::vector<CSCMatrix<double>> _M_Hh;
 	// helpers
 	Index _numbOfDOFs(Index meshLevel) {
@@ -106,7 +106,7 @@ public:
 				else if (transfer == TransferType::L2) {
 					logger.beg("assemble mass matrices for L2 projection transfer operators");
 						auto mass = FEM::L2ProjectionAssembler(fMesh, cMesh, FE);
-						_M_HH.emplace_back(boost::get<0>(mass));
+						_M_HH.emplace_back(static_cast<CSlCMatrix<double>>(boost::get<0>(mass)));
 						_M_Hh.emplace_back(boost::get<1>(mass));
 					logger.end();
 				}
@@ -116,7 +116,7 @@ public:
 		if (transfer == TransferType::L2) {
 			logger.beg("assemble the finest mass matrix for L2 projection transfer");
 				// PDE, reaction term only
-				DiffusionReactionEqn2D PDE {
+				ConvectionDiffusionEqn2D PDE {
 					[](Node2D const &) { return 0.; },
 					[](Node2D const &) { return 1.; },
 					[](Node2D const &) { return 0.; }

@@ -129,7 +129,7 @@ int main() {
 						//return { 0., 0. };
 						return delta_t * c(p) * rho(p) * wind(p);
 					};
-				DiffusionReactionEqn2D PDE { diffusion, reaction, force, convection };
+				ConvectionDiffusionEqn2D PDE { diffusion, reaction, force, convection };
 				logger.beg("assemble system");
 					auto system = assembleSystem(PDE, Omega, RobinBC, DirichletBC, FE, activeElementIndex);
 					auto& A = get<0>(system);

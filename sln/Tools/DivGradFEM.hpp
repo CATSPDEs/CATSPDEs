@@ -4,7 +4,7 @@
 // mesh
 #include "Triangulation.hpp"
 // PDE
-#include "DiffusionReactionEqn.hpp"
+#include "ConvectionDiffusionEqn.hpp"
 #include "BoundaryCondition.hpp"
 // matrix
 #include "CSlCMatrix.hpp" // for final linear system matrix
@@ -46,7 +46,7 @@ namespace FEM {
 			CSlCMatrix<double>, // assembled system matrix and
 			std::vector<double> // rhs vector
 		> assembleSystem(
-			DiffusionReactionEqn2D const &, // (1) PDE,
+			ConvectionDiffusionEqn2D const &, // (1) PDE,
 			Triangulation const &, // (2) discretized domain (mesh), and BCs to connect (1) and (2):
 			ScalarBoundaryCondition2D const &, // natural BC,
 			ScalarBoundaryCondition2D const &, // essential BC

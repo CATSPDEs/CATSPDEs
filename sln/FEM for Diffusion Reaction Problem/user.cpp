@@ -117,7 +117,7 @@ int main() {
 				strongBCsPredicate = [](Node2D const &) { return false; }; 
 			}
 			// PDE
-			DiffusionReactionEqn2D PDE { diffusion, reaction, force };
+			ConvectionDiffusionEqn2D PDE { diffusion, reaction, force };
 			// BCs
 			ScalarBoundaryCondition2D RobinBC {
 				{ RobinCoefficient, NeumannValue }, // n . (a ∇u) + R u = N

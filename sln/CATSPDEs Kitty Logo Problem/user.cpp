@@ -22,7 +22,7 @@ int main() {
 	try {
 		// import kitty mesh
 		Triangulation Omega(iNodes, iTriangles, iNeighbors);
-		DiffusionReactionEqn PoissonEqn(oneFunc, zeroFunc, f);
+		ConvectionDiffusionEqn PoissonEqn(oneFunc, zeroFunc, f);
 		BoundaryCondition BCs({
 			make_shared<DirichletBC>(oneFunc, fixedBoundary),
 			make_shared<NeumannBC>() // free bndry on right half of kitty’s face

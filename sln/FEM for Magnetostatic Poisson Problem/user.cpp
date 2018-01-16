@@ -85,11 +85,11 @@ int main() {
 					if (nodeInElement(right, p)) return - mu_0 * J_z;
 					return 0.;
 				},
-				reaction = [](Node2D const) { return 0.; },
+				reaction = [](Node2D const &) { return 0.; },
 			    NeumannValue = reaction, RobinCoefficient = reaction, DirichletCondition = reaction;
-				Predicate2D naturalBCsPredicate = [](Node2D const p) { return p[1] == 0.; };
+			Predicate2D naturalBCsPredicate = [](Node2D const & p) { return p[1] == 0.; };
 			// PDE
-			DiffusionReactionEqn2D PoissonEqn { diffusion, reaction, force };
+			ConvectionDiffusionEqn2D PoissonEqn { diffusion, reaction, force };
 			// BCs
 			ScalarBoundaryCondition2D 
 				RobinBC {
@@ -152,50 +152,50 @@ int main() {
 		logger.beg("run method");
 			vector<double> x_linear;
 			if      (method == 0) /* MG */ {
-				logger.beg("set up mg");
-					Multigrid<SymmetricCSlCMatrix<double>> MG {
-							FE, Omega, numbOfMeshLevels,
-							[&](Triangulation const & Omega) {
-								return assembleSystem(PoissonEqn, Omega, RobinBC, DirichletBC, FE);
-							},
-							TransferType::canonical
-					};
-					auto smoother = [&](SymmetricCSlCMatrix<double>& A, vector<double> const & b, vector<double> const & x_0, Index) {
-						return Smoothers::SSOR(A, b, x_0, 1., nu, 0., StoppingCriterion::absolute, 0);
-					};
-				logger.end();
-				logger.beg("solve w/ MG");
-					auto& A = MG.A();
-					auto& b = MG.b();
-					// initial residual
-					double r_0 = norm(b - A * x_linear), r = r_0, r_new = r_0;
-					logInitialResidual(r_0, maxNumbOfIterations);
-					// MG as a stand-alone iteration
-					Index i;
-					for (i = 1; i <= maxNumbOfIterations; ++i) {
-						logger.mute = true;
-						x_linear = MG(numbOfMeshLevels, b, x_linear, smoother, gamma);
-						logger.mute = false;
-						r_new = norm(b - A * x_linear);
-						if (i_log && i % i_log == 0) logResidualReduction(r, r_new, i, maxNumbOfIterations);
-						r = r_new;
-						if (stop == StoppingCriterion::absolute && r < eps) break;
-						else if (stop == StoppingCriterion::relative && r / r_0 < eps) break;
-					}
-					logFinalResidual(r_0, r_new, i > maxNumbOfIterations ? maxNumbOfIterations : i, maxNumbOfIterations);
-					if (i > maxNumbOfIterations) logger.wrn("MG failed");
-				logger.end();
+				//logger.beg("set up mg");
+				//	Multigrid<CSlCMatrix<double>> MG {
+				//			FE, Omega, numbOfMeshLevels,
+				//			[&](Triangulation const & Omega) {
+				//				return assembleSystem(PoissonEqn, Omega, RobinBC, DirichletBC, FE);
+				//			},
+				//			TransferType::canonical
+				//	};
+				//	auto smoother = [&](CSlCMatrix<double>& A, vector<double> const & b, vector<double> const & x_0, Index) {
+				//		return Smoothers::SSOR(A, b, x_0, 1., nu, 0., StoppingCriterion::absolute, 0);
+				//	};
+				//logger.end();
+				//logger.beg("solve w/ MG");
+				//	auto& A = MG.A();
+				//	auto& b = MG.b();
+				//	// initial residual
+				//	double r_0 = norm(b - A * x_linear), r = r_0, r_new = r_0;
+				//	logInitialResidual(r_0, maxNumbOfIterations);
+				//	// MG as a stand-alone iteration
+				//	Index i;
+				//	for (i = 1; i <= maxNumbOfIterations; ++i) {
+				//		logger.mute = true;
+				//		x_linear = MG(numbOfMeshLevels, b, x_linear, smoother, gamma);
+				//		logger.mute = false;
+				//		r_new = norm(b - A * x_linear);
+				//		if (i_log && i % i_log == 0) logResidualReduction(r, r_new, i, maxNumbOfIterations);
+				//		r = r_new;
+				//		if (stop == StoppingCriterion::absolute && r < eps) break;
+				//		else if (stop == StoppingCriterion::relative && r / r_0 < eps) break;
+				//	}
+				//	logFinalResidual(r_0, r_new, i > maxNumbOfIterations ? maxNumbOfIterations : i, maxNumbOfIterations);
+				//	if (i > maxNumbOfIterations) logger.wrn("MG failed");
+				//logger.end();
 			}
 			else if (method == 1) /* P_MG CG */ {
 				logger.beg("build preconditioner");
-					Multigrid<SymmetricCSlCMatrix<double>> MG {
+					Multigrid<CSlCMatrix<double>> MG {
 							FE, Omega, numbOfMeshLevels,
 							[&](Triangulation const & Omega) {
 								return assembleSystem(PoissonEqn, Omega, RobinBC, DirichletBC, FE);
 							},
 							TransferType::canonical
 					};
-					auto smoother = [&](SymmetricCSlCMatrix<double>& A, vector<double> const & b, vector<double> const & x_0, Index) {
+					auto smoother = [&](CSlCMatrix<double>& A, vector<double> const & b, vector<double> const & x_0, Index) {
 						return Smoothers::SSOR(A, b, x_0, 1., nu, 0., StoppingCriterion::absolute, 0);
 					};
 					Index n = MG.A().getOrder();
@@ -295,14 +295,14 @@ int main() {
 			logger.end();
 			logger.beg("solve non-linear problem");
 				FixedPointData fp;
-				SymmetricCSlCMatrix<double> A;
+				CSlCMatrix<double> A;
 				vector<double> b, r;
 				// residual, f(x) := b - A(x).x
 				fp.f = [&](vector<double> const & x) {
 					logger.mute = true;
 					Index activeElementIndex;
 					TriangularScalarFEInterpolant x_interp { x, FE, Omega };
-					PoissonEqn.diffusionTerm() = [&](Node2D const & p) {
+					PoissonEqn.diffusion() = [&](Node2D const & p) {
 						double mu_roof = magnet(p) 
 							? mu_roof_iron(norm(x_interp.grad(p, activeElementIndex)))
 							: 1.;

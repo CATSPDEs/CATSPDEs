@@ -18,7 +18,7 @@ namespace FEM {
 			CSlCMatrix<double>, // system matrix
 			std::vector<double> // rhs vector
 		> assembleSystem(
-			DiffusionReactionEqn2D const & PDE,
+			ConvectionDiffusionEqn2D const & PDE,
 			Triangulation const & Omega,
 			ScalarBoundaryCondition2D const & RobinBC,
 			ScalarBoundaryCondition2D const & DirichletBC,
@@ -124,19 +124,19 @@ namespace FEM {
 					for (LocalIndex i = 0; i < l; ++i) {
 						for (LocalIndex j = i; j < l; ++j) {
 							localStiffnessMatrix(i, j) = detJ * qRuleTriangle.computeQuadrature([&](Node2D const & p) {
-								return PDE.diffusionTerm(T(p)) * (JInverseTranspose * masterSGrads[j](p)) * (JInverseTranspose * masterSGrads[i](p));
+								return PDE.diffusion(T(p)) * (JInverseTranspose * masterSGrads[j](p)) * (JInverseTranspose * masterSGrads[i](p));
 							}, deg);
 							localMassMatrix(i, j) = detJ * qRuleTriangle.computeQuadrature([&](Node2D const & p) {
-								return PDE.reactionTerm(T(p)) * masterShapes[j](p) * masterShapes[i](p);
+								return PDE.reaction(T(p)) * masterShapes[j](p) * masterShapes[i](p);
 							}, deg);
 						}
 						// compute local convection matrix
 						for (LocalIndex j = 0; j < l; ++j)
 							localConvectionMatrix(i, j) = detJ * qRuleTriangle.computeQuadrature([&](Node2D const & p) {
-								return (PDE.convectionTerm(T(p)) * (JInverseTranspose * masterSGrads[j](p))) * masterShapes[i](p);
+								return (PDE.convection(T(p)) * (JInverseTranspose * masterSGrads[j](p))) * masterShapes[i](p);
 							}, deg);
 						localLoadVector[i] = detJ * qRuleTriangle.computeQuadrature([&](Node2D const & p) {
-							return PDE.forceTerm(T(p)) * masterShapes[i](p);
+							return PDE.force(T(p)) * masterShapes[i](p);
 						}, deg);
 					}
 					// assemble boundary data

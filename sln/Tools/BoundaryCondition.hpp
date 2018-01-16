@@ -5,7 +5,7 @@
 template <LocalIndex N, LocalIndex M>
 class BoundaryCondition {
 	std::vector<Mapping<N, M>>  _f;
-	Predicate<N>                 _p;
+	Predicate<N>                _p;
 public:
 	explicit BoundaryCondition(Mapping<N, M> const & f, Predicate<N> const & p = constTrue<N>)
 		: _f({ f })

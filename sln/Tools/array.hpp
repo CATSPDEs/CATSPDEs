@@ -117,6 +117,12 @@ namespace std {
 	};
 };
 
+// to work with Node<1> and Node<(D > 1)> in the same manner (see below)
+template <typename T, Index N>
+void setValue(std::array<T, N>& a, T const & val) {
+	a.fill(val);
+}
+
 // we want std::array<T, 1> to be just T, not std::array<T, 1>
 // so here goes some magic
 template <typename T, Index D> struct ArrayTypedef       { typedef std::array<T, D> type; };
@@ -127,4 +133,8 @@ using SmartArray = typename ArrayTypedef<T, D>::type;
 
 inline double norm(double u) {
 	return fabs(u);
+}
+
+inline void setValue(double& u, double val) {
+	u = val;
 }

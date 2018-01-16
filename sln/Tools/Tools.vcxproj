@@ -158,7 +158,7 @@
     <ClInclude Include="OseenProblem.hpp" />
     <ClInclude Include="ProjectionSolvers.hpp" />
     <ClInclude Include="Node.hpp" />
-    <ClInclude Include="DiffusionReactionEqn.hpp" />
+    <ClInclude Include="ConvectionDiffusionEqn.hpp" />
     <ClInclude Include="AbstractMesh.hpp" />
     <ClInclude Include="AbstractSparseMatrix.hpp" />
     <ClInclude Include="BandMatrix.hpp" />
